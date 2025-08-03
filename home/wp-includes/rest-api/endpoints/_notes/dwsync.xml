@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="class-wp-rest-application-passwords-controller.php" server="191.101.235.83" local="133925970927753692" remote="133905231600000000" Dst="0" />
+<file name="class-wp-rest-autosaves-controller.php" server="191.101.235.83" local="133925970927753692" remote="133905231600000000" Dst="0" />
+<file name="class-wp-rest-block-directory-controller.php" server="191.101.235.83" local="133925970927818949" remote="133905231600000000" Dst="0" />
+<file name="class-wp-rest-attachments-controller.php" server="191.101.235.83" local="133925970927904268" remote="133905231600000000" Dst="0" />
+<file name="class-wp-rest-block-patterns-controller.php" server="191.101.235.83" local="133925970938007610" remote="133905231600000000" Dst="0" />
+<file name="class-wp-rest-block-renderer-controller.php" server="191.101.235.83" local="133925970938077579" remote="133905231600000000" Dst="0" />
+<file name="class-wp-rest-block-pattern-categories-controller.php" server="191.101.235.83" local="133925970938167627" remote="133905231600000000" Dst="0" />
+<file name="class-wp-rest-block-types-controller.php" server="191.101.235.83" local="133925970938177627" remote="133905231600000000" Dst="0" />
+<file name="class-wp-rest-blocks-controller.php" server="191.101.235.83" local="133925970938237659" remote="133905231600000000" Dst="0" />
+<file name="class-wp-rest-comments-controller.php" server="191.101.235.83" local="133925970938397569" remote="133905231600000000" Dst="0" />
+<file name="class-wp-rest-edit-site-export-controller.php" server="191.101.235.83" local="133925970938407589" remote="133905231600000000" Dst="0" />
+<file name="class-wp-rest-font-collections-controller.php" server="191.101.235.83" local="133925970938407589" remote="133905231600000000" Dst="0" />
+<file name="class-wp-rest-controller.php" server="191.101.235.83" local="133925970938507612" remote="133905231600000000" Dst="0" />
+<file name="class-wp-rest-font-faces-controller.php" server="191.101.235.83" local="133925970938677485" remote="133905231600000000" Dst="0" />
+<file name="class-wp-rest-menu-locations-controller.php" server="191.101.235.83" local="133925970938687491" remote="133905231600000000" Dst="0" />
+<file name="class-wp-rest-font-families-controller.php" server="191.101.235.83" local="133925970938847636" remote="133905231600000000" Dst="0" />
+<file name="class-wp-rest-global-styles-revisions-controller.php" server="191.101.235.83" local="133925970938847636" remote="133905231600000000" Dst="0" />
+<file name="class-wp-rest-menu-items-controller.php" server="191.101.235.83" local="133925970938857624" remote="133905231600000000" Dst="0" />
+<file name="class-wp-rest-navigation-fallback-controller.php" server="191.101.235.83" local="133925970938857624" remote="133905231600000000" Dst="0" />
+<file name="class-wp-rest-global-styles-controller.php" server="191.101.235.83" local="133925970938972987" remote="133905231600000000" Dst="0" />
+<file name="class-wp-rest-menus-controller.php" server="191.101.235.83" local="133925970938983049" remote="133905231600000000" Dst="0" />
+<file name="class-wp-rest-pattern-directory-controller.php" server="191.101.235.83" local="133925970938983049" remote="133905231600000000" Dst="0" />
+<file name="class-wp-rest-plugins-controller.php" server="191.101.235.83" local="133925970939062994" remote="133905231600000000" Dst="0" />
+<file name="class-wp-rest-post-statuses-controller.php" server="191.101.235.83" local="133925970939123005" remote="133905231600000000" Dst="0" />
+<file name="class-wp-rest-post-types-controller.php" server="191.101.235.83" local="133925970939182970" remote="133905231600000000" Dst="0" />
+<file name="class-wp-rest-revisions-controller.php" server="191.101.235.83" local="133925970939323022" remote="133905231600000000" Dst="0" />
+<file name="class-wp-rest-search-controller.php" server="191.101.235.83" local="133925970939423001" remote="133905231600000000" Dst="0" />
+<file name="class-wp-rest-posts-controller.php" server="191.101.235.83" local="133925970939532974" remote="133905231600000000" Dst="0" />
+<file name="class-wp-rest-settings-controller.php" server="191.101.235.83" local="133925970949387480" remote="133905231600000000" Dst="0" />
+<file name="class-wp-rest-template-autosaves-controller.php" server="191.101.235.83" local="133925970949657455" remote="133905231600000000" Dst="0" />
+<file name="class-wp-rest-sidebars-controller.php" server="191.101.235.83" local="133925970949922737" remote="133905231600000000" Dst="0" />
+<file name="class-wp-rest-site-health-controller.php" server="191.101.235.83" local="133925970949932738" remote="133905231600000000" Dst="0" />
+<file name="class-wp-rest-taxonomies-controller.php" server="191.101.235.83" local="133925970949932738" remote="133905231600000000" Dst="0" />
+<file name="class-wp-rest-template-revisions-controller.php" server="191.101.235.83" local="133925970949932738" remote="133905231600000000" Dst="0" />
+<file name="class-wp-rest-templates-controller.php" server="191.101.235.83" local="133925970949942749" remote="133905231600000000" Dst="0" />
+<file name="class-wp-rest-themes-controller.php" server="191.101.235.83" local="133925970950174649" remote="133905231600000000" Dst="0" />
+<file name="class-wp-rest-url-details-controller.php" server="191.101.235.83" local="133925970950174649" remote="133905231600000000" Dst="0" />
+<file name="class-wp-rest-widget-types-controller.php" server="191.101.235.83" local="133925970950174649" remote="133905231600000000" Dst="0" />
+<file name="class-wp-rest-terms-controller.php" server="191.101.235.83" local="133925970950234616" remote="133905231600000000" Dst="0" />
+<file name="class-wp-rest-users-controller.php" server="191.101.235.83" local="133925970950394615" remote="133905231600000000" Dst="0" />
+<file name="class-wp-rest-widgets-controller.php" server="191.101.235.83" local="133925970950394615" remote="133905231600000000" Dst="0" />
+</dwsync>

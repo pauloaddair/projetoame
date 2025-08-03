@@ -1,0 +1,5 @@
+[05-Jan-2024 09:49:46 America/Fortaleza] PHP Fatal error:  Uncaught Error: Call to undefined function ereg() in /home2/projetoame/public_html/excel/Worksheet.php:1267
+Stack trace:
+#0 /home2/projetoame/public_html/excel/test.php(29): Worksheet->write_formula(3, 3, '=A4 * (2 + 2)')
+#1 {main}
+  thrown in /home2/projetoame/public_html/excel/Worksheet.php on line 1267

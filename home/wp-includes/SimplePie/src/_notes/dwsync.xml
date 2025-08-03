@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="Author.php" server="191.101.235.83" local="133925970006410907" remote="133905231600000000" Dst="0" />
+<file name="Cache.php" server="191.101.235.83" local="133925970017228879" remote="133905231600000000" Dst="0" />
+<file name="Caption.php" server="191.101.235.83" local="133925970017268926" remote="133905231600000000" Dst="0" />
+<file name="Category.php" server="191.101.235.83" local="133925970017379670" remote="133905231600000000" Dst="0" />
+<file name="Copyright.php" server="191.101.235.83" local="133925970017525067" remote="133905231600000000" Dst="0" />
+<file name="Core.php" server="191.101.235.83" local="133925970017650296" remote="133905231600000000" Dst="0" />
+<file name="Credit.php" server="191.101.235.83" local="133925970017660283" remote="133905231600000000" Dst="0" />
+<file name="Exception.php" server="191.101.235.83" local="133925970017855823" remote="133905231600000000" Dst="0" />
+<file name="File.php" server="191.101.235.83" local="133925970017970991" remote="133905231600000000" Dst="0" />
+<file name="Gzdecode.php" server="191.101.235.83" local="133925970017970991" remote="133905231600000000" Dst="0" />
+<file name="Enclosure.php" server="191.101.235.83" local="133925970018026224" remote="133905231600000000" Dst="0" />
+<file name="IRI.php" server="191.101.235.83" local="133925970018056226" remote="133905231600000000" Dst="0" />
+<file name="Item.php" server="191.101.235.83" local="133925970028090966" remote="133905231600000000" Dst="0" />
+<file name="Locator.php" server="191.101.235.83" local="133925970028140464" remote="133905231600000000" Dst="0" />
+<file name="Misc.php" server="191.101.235.83" local="133925970028245634" remote="133905231600000000" Dst="0" />
+<file name="Rating.php" server="191.101.235.83" local="133925970028320941" remote="133905231600000000" Dst="0" />
+<file name="Parser.php" server="191.101.235.83" local="133925970028528142" remote="133905231600000000" Dst="0" />
+<file name="Registry.php" server="191.101.235.83" local="133925970028813736" remote="133905231600000000" Dst="0" />
+<file name="RegistryAware.php" server="191.101.235.83" local="133925970028813736" remote="133905231600000000" Dst="0" />
+<file name="Restriction.php" server="191.101.235.83" local="133925970028813736" remote="133905231600000000" Dst="0" />
+<file name="Sanitize.php" server="191.101.235.83" local="133925970028929116" remote="133905231600000000" Dst="0" />
+<file name="Source.php" server="191.101.235.83" local="133925970028929116" remote="133905231600000000" Dst="0" />
+<file name="SimplePie.php" server="191.101.235.83" local="133925970029225237" remote="133905231600000000" Dst="0" />
+</dwsync>

@@ -1,0 +1,27 @@
+# Arquivos e diretórios do Virtualmin/cPanel
+phpmyadmin/
+dbadmin/
+webmail/
+awstats/
+awstats-icon/
+awstatsicons/
+cgi-bin/
+logs/
+tmp/
+virtualmin-backup/
+
+# Arquivos de sistema e de IDEs
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Arquivos de log e de dependências
+*.log
+node_modules/
+vendor/
+
+# Arquivos de configuração sensíveis
+.env
