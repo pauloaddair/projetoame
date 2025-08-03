@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="AbstractArgument.php" server="191.101.235.83" local="133925973105913390" remote="133898299200000000" Dst="0" />
+<file name="ArgumentInterface.php" server="191.101.235.83" local="133925973108377679" remote="133898299200000000" Dst="0" />
+<file name="BoundArgument.php" server="191.101.235.83" local="133925973108712347" remote="133898299200000000" Dst="0" />
+<file name="IteratorArgument.php" server="191.101.235.83" local="133925973108890531" remote="133898299200000000" Dst="0" />
+<file name="ReferenceSetArgumentTrait.php" server="191.101.235.83" local="133925973109051197" remote="133898299200000000" Dst="0" />
+<file name="RewindableGenerator.php" server="191.101.235.83" local="133925973109176258" remote="133898299200000000" Dst="0" />
+<file name="ServiceClosureArgument.php" server="191.101.235.83" local="133925973109231529" remote="133898299200000000" Dst="0" />
+<file name="ServiceLocator.php" server="191.101.235.83" local="133925973109281521" remote="133898299200000000" Dst="0" />
+<file name="ServiceLocatorArgument.php" server="191.101.235.83" local="133925973109346847" remote="133898299200000000" Dst="0" />
+<file name="TaggedIteratorArgument.php" server="191.101.235.83" local="133925973109401969" remote="133898299200000000" Dst="0" />
+</dwsync>

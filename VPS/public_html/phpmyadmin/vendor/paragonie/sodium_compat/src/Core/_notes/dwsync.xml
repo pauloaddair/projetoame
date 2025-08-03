@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="AES.php" server="191.101.235.83" local="133925972772861879" remote="133898299200000000" Dst="0" />
+<file name="AEGIS256.php" server="191.101.235.83" local="133925972773047937" remote="133898299200000000" Dst="0" />
+<file name="ChaCha20.php" server="191.101.235.83" local="133925972773057957" remote="133898299200000000" Dst="0" />
+<file name="BLAKE2b.php" server="191.101.235.83" local="133925972773248513" remote="133898299200000000" Dst="0" />
+<file name="Ed25519.php" server="191.101.235.83" local="133925972773685021" remote="133898299200000000" Dst="0" />
+<file name="HChaCha20.php" server="191.101.235.83" local="133925972773685021" remote="133898299200000000" Dst="0" />
+<file name="HSalsa20.php" server="191.101.235.83" local="133925972783794800" remote="133898299200000000" Dst="0" />
+<file name="Poly1305.php" server="191.101.235.83" local="133925972783995798" remote="133898299200000000" Dst="0" />
+<file name="SipHash.php" server="191.101.235.83" local="133925972784040862" remote="133898299200000000" Dst="0" />
+<file name="Ristretto255.php" server="191.101.235.83" local="133925972784136745" remote="133898299200000000" Dst="0" />
+<file name="Util.php" server="191.101.235.83" local="133925972784261772" remote="133898299200000000" Dst="0" />
+<file name="XChaCha20.php" server="191.101.235.83" local="133925972784301827" remote="133898299200000000" Dst="0" />
+<file name="XSalsa20.php" server="191.101.235.83" local="133925972784357124" remote="133898299200000000" Dst="0" />
+<file name="Salsa20.php" server="191.101.235.83" local="133925972787603927" remote="133898299200000000" Dst="0" />
+<file name="AEGIS128L.php" server="191.101.235.83" local="133925972796587869" remote="133898299200000000" Dst="0" />
+<file name="X25519.php" server="191.101.235.83" local="133925972854455729" remote="133898299200000000" Dst="0" />
+<file name="Curve25519.php" server="191.101.235.83" local="133925972855275708" remote="133898299200000000" Dst="0" />
+</dwsync>

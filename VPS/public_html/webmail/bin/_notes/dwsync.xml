@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="cleandb.sh" server="191.101.235.83" local="133925973597065566" remote="133898299200000000" Dst="0" />
+<file name="cssshrink.sh" server="191.101.235.83" local="133925973597186029" remote="133898299200000000" Dst="0" />
+<file name="decrypt.sh" server="191.101.235.83" local="133925973597186029" remote="133898299200000000" Dst="0" />
+<file name="deluser.sh" server="191.101.235.83" local="133925973597186029" remote="133898299200000000" Dst="0" />
+<file name="gc.sh" server="191.101.235.83" local="133925973597251619" remote="133898299200000000" Dst="0" />
+<file name="indexcontacts.sh" server="191.101.235.83" local="133925973607135056" remote="133898299200000000" Dst="0" />
+<file name="initdb.sh" server="191.101.235.83" local="133925973607284338" remote="133898299200000000" Dst="0" />
+<file name="updatecss.sh" server="191.101.235.83" local="133925973607395844" remote="133898299200000000" Dst="0" />
+<file name="installto.sh" server="191.101.235.83" local="133925973607465971" remote="133898299200000000" Dst="0" />
+<file name="updatedb.sh" server="191.101.235.83" local="133925973607561517" remote="133898299200000000" Dst="0" />
+<file name="jsshrink.sh" server="191.101.235.83" local="133925973607667148" remote="133898299200000000" Dst="0" />
+<file name="makedoc.sh" server="191.101.235.83" local="133925973607667148" remote="133898299200000000" Dst="0" />
+<file name="moduserprefs.sh" server="191.101.235.83" local="133925973607682253" remote="133898299200000000" Dst="0" />
+<file name="msgexport.sh" server="191.101.235.83" local="133925973608028607" remote="133898299200000000" Dst="0" />
+<file name="msgimport.sh" server="191.101.235.83" local="133925973608028607" remote="133898299200000000" Dst="0" />
+<file name="update.sh" server="191.101.235.83" local="133925973608028607" remote="133898299200000000" Dst="0" />
+</dwsync>

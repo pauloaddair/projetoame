@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="BIFFwriter.php" server="ftp.novaeratec.com.br" local="133747849416296630" remote="133720670400000000" Dst="0" />
+<file name="CellDataValidation.php" server="ftp.novaeratec.com.br" local="133747849417756937" remote="133720670400000000" Dst="0" />
+<file name="ConditionalHelper.php" server="ftp.novaeratec.com.br" local="133747849418844834" remote="133720670400000000" Dst="0" />
+<file name="ErrorCode.php" server="ftp.novaeratec.com.br" local="133747849420382731" remote="133720670400000000" Dst="0" />
+<file name="Font.php" server="ftp.novaeratec.com.br" local="133747849423048119" remote="133720670400000000" Dst="0" />
+<file name="Escher.php" server="ftp.novaeratec.com.br" local="133747849423428132" remote="133720670400000000" Dst="0" />
+<file name="Parser.php" server="ftp.novaeratec.com.br" local="133747849427316874" remote="133720670400000000" Dst="0" />
+<file name="Workbook.php" server="ftp.novaeratec.com.br" local="133747849432855020" remote="133720670400000000" Dst="0" />
+<file name="Xf.php" server="ftp.novaeratec.com.br" local="133747849435131753" remote="133720670400000000" Dst="0" />
+<file name="Worksheet.php" server="ftp.novaeratec.com.br" local="133747849436352399" remote="133720670400000000" Dst="0" />
+<file name="BIFFwriter.php" server="ftp.projetoame.org/public_html/" local="133747849410000000" remote="133811968200000000" Dst="0" />
+<file name="CellDataValidation.php" server="ftp.projetoame.org/public_html/" local="133747849410000000" remote="133811968200000000" Dst="0" />
+<file name="ConditionalHelper.php" server="ftp.projetoame.org/public_html/" local="133747849410000000" remote="133811968200000000" Dst="0" />
+<file name="ErrorCode.php" server="ftp.projetoame.org/public_html/" local="133747849420000000" remote="133811968200000000" Dst="0" />
+<file name="Escher.php" server="ftp.projetoame.org/public_html/" local="133747849420000000" remote="133811968200000000" Dst="0" />
+<file name="Font.php" server="ftp.projetoame.org/public_html/" local="133747849420000000" remote="133811968200000000" Dst="0" />
+<file name="Parser.php" server="ftp.projetoame.org/public_html/" local="133747849420000000" remote="133811968200000000" Dst="0" />
+<file name="Workbook.php" server="ftp.projetoame.org/public_html/" local="133747849430000000" remote="133811968200000000" Dst="0" />
+<file name="Worksheet.php" server="ftp.projetoame.org/public_html/" local="133747849430000000" remote="133811968200000000" Dst="0" />
+<file name="Xf.php" server="ftp.projetoame.org/public_html/" local="133747849430000000" remote="133811968200000000" Dst="0" />
+<file name="BIFFwriter.php" server="191.101.235.83/public_html/" local="133747849410000000" remote="133930927800000000" Dst="0" />
+<file name="CellDataValidation.php" server="191.101.235.83/public_html/" local="133747849410000000" remote="133930927800000000" Dst="0" />
+<file name="ConditionalHelper.php" server="191.101.235.83/public_html/" local="133747849410000000" remote="133930927800000000" Dst="0" />
+<file name="ErrorCode.php" server="191.101.235.83/public_html/" local="133747849420000000" remote="133930927800000000" Dst="0" />
+<file name="Escher.php" server="191.101.235.83/public_html/" local="133747849420000000" remote="133930927800000000" Dst="0" />
+<file name="Font.php" server="191.101.235.83/public_html/" local="133747849420000000" remote="133930927800000000" Dst="0" />
+<file name="Parser.php" server="191.101.235.83/public_html/" local="133747849420000000" remote="133930927800000000" Dst="0" />
+<file name="Workbook.php" server="191.101.235.83/public_html/" local="133747849430000000" remote="133930927800000000" Dst="0" />
+<file name="Worksheet.php" server="191.101.235.83/public_html/" local="133747849430000000" remote="133930927800000000" Dst="0" />
+<file name="Xf.php" server="191.101.235.83/public_html/" local="133747849430000000" remote="133930927800000000" Dst="0" />
+<file name="BIFFwriter.php" server="62.72.63.89/public_html/" local="133747849410000000" remote="133928621400000000" Dst="0" />
+<file name="CellDataValidation.php" server="62.72.63.89/public_html/" local="133747849410000000" remote="133928621400000000" Dst="0" />
+<file name="ConditionalHelper.php" server="62.72.63.89/public_html/" local="133747849410000000" remote="133928621400000000" Dst="0" />
+<file name="ErrorCode.php" server="62.72.63.89/public_html/" local="133747849420000000" remote="133928621400000000" Dst="0" />
+<file name="Escher.php" server="62.72.63.89/public_html/" local="133747849420000000" remote="133928621400000000" Dst="0" />
+<file name="Font.php" server="62.72.63.89/public_html/" local="133747849420000000" remote="133928621400000000" Dst="0" />
+<file name="Parser.php" server="62.72.63.89/public_html/" local="133747849420000000" remote="133928621400000000" Dst="0" />
+<file name="Workbook.php" server="62.72.63.89/public_html/" local="133747849430000000" remote="133928621400000000" Dst="0" />
+<file name="Worksheet.php" server="62.72.63.89/public_html/" local="133747849430000000" remote="133928621400000000" Dst="0" />
+<file name="Xf.php" server="62.72.63.89/public_html/" local="133747849430000000" remote="133928621400000000" Dst="0" />
+</dwsync>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="AbstractArray.php" server="191.101.235.83" local="133925972917662805" remote="133898299200000000" Dst="0" />
+<file name="AbstractCollection.php" server="191.101.235.83" local="133925972972589477" remote="133898299200000000" Dst="0" />
+<file name="AbstractSet.php" server="191.101.235.83" local="133925972972776768" remote="133898299200000000" Dst="0" />
+<file name="ArrayInterface.php" server="191.101.235.83" local="133925972972882429" remote="133898299200000000" Dst="0" />
+<file name="Collection.php" server="191.101.235.83" local="133925972973078976" remote="133898299200000000" Dst="0" />
+<file name="CollectionInterface.php" server="191.101.235.83" local="133925972973324467" remote="133898299200000000" Dst="0" />
+<file name="DoubleEndedQueue.php" server="191.101.235.83" local="133925972973324467" remote="133898299200000000" Dst="0" />
+<file name="DoubleEndedQueueInterface.php" server="191.101.235.83" local="133925972973595071" remote="133898299200000000" Dst="0" />
+<file name="GenericArray.php" server="191.101.235.83" local="133925972973710369" remote="133898299200000000" Dst="0" />
+<file name="Queue.php" server="191.101.235.83" local="133925972974199203" remote="133898299200000000" Dst="0" />
+<file name="QueueInterface.php" server="191.101.235.83" local="133925972974209190" remote="133898299200000000" Dst="0" />
+<file name="Set.php" server="191.101.235.83" local="133925972974319622" remote="133898299200000000" Dst="0" />
+</dwsync>

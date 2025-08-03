@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="AbstractTokenParser.php" server="191.101.235.83" local="133925973395148266" remote="133898299200000000" Dst="0" />
+<file name="ApplyTokenParser.php" server="191.101.235.83" local="133925973395323921" remote="133898299200000000" Dst="0" />
+<file name="AutoEscapeTokenParser.php" server="191.101.235.83" local="133925973395373981" remote="133898299200000000" Dst="0" />
+<file name="BlockTokenParser.php" server="191.101.235.83" local="133925973395419259" remote="133898299200000000" Dst="0" />
+<file name="DeprecatedTokenParser.php" server="191.101.235.83" local="133925973395449234" remote="133898299200000000" Dst="0" />
+<file name="ExtendsTokenParser.php" server="191.101.235.83" local="133925973395550563" remote="133898299200000000" Dst="0" />
+<file name="DoTokenParser.php" server="191.101.235.83" local="133925973395635885" remote="133898299200000000" Dst="0" />
+<file name="EmbedTokenParser.php" server="191.101.235.83" local="133925973395635885" remote="133898299200000000" Dst="0" />
+<file name="FlushTokenParser.php" server="191.101.235.83" local="133925973395721147" remote="133898299200000000" Dst="0" />
+<file name="ForTokenParser.php" server="191.101.235.83" local="133925973395721147" remote="133898299200000000" Dst="0" />
+<file name="FromTokenParser.php" server="191.101.235.83" local="133925973405714018" remote="133898299200000000" Dst="0" />
+<file name="IfTokenParser.php" server="191.101.235.83" local="133925973405774138" remote="133898299200000000" Dst="0" />
+<file name="ImportTokenParser.php" server="191.101.235.83" local="133925973405829729" remote="133898299200000000" Dst="0" />
+<file name="MacroTokenParser.php" server="191.101.235.83" local="133925973405925294" remote="133898299200000000" Dst="0" />
+<file name="IncludeTokenParser.php" server="191.101.235.83" local="133925973405975314" remote="133898299200000000" Dst="0" />
+<file name="SandboxTokenParser.php" server="191.101.235.83" local="133925973406291669" remote="133898299200000000" Dst="0" />
+<file name="SetTokenParser.php" server="191.101.235.83" local="133925973406291669" remote="133898299200000000" Dst="0" />
+<file name="TokenParserInterface.php" server="191.101.235.83" local="133925973406291669" remote="133898299200000000" Dst="0" />
+<file name="UseTokenParser.php" server="191.101.235.83" local="133925973406301839" remote="133898299200000000" Dst="0" />
+<file name="WithTokenParser.php" server="191.101.235.83" local="133925973406492201" remote="133898299200000000" Dst="0" />
+</dwsync>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="Alias.php" server="191.101.235.83" local="133925973109051197" remote="133898299200000000" Dst="0" />
+<file name="ChildDefinition.php" server="191.101.235.83" local="133925973120003665" remote="133898299200000000" Dst="0" />
+<file name="CHANGELOG.md" server="191.101.235.83" local="133925973120260897" remote="133898299200000000" Dst="0" />
+<file name="Container.php" server="191.101.235.83" local="133925973132290708" remote="133898299200000000" Dst="0" />
+<file name="ContainerInterface.php" server="191.101.235.83" local="133925973142387244" remote="133898299200000000" Dst="0" />
+<file name="ContainerAwareInterface.php" server="191.101.235.83" local="133925973142452631" remote="133898299200000000" Dst="0" />
+<file name="ContainerAwareTrait.php" server="191.101.235.83" local="133925973142452631" remote="133898299200000000" Dst="0" />
+<file name="ContainerBuilder.php" server="191.101.235.83" local="133925973142523049" remote="133898299200000000" Dst="0" />
+<file name="Definition.php" server="191.101.235.83" local="133925973142890179" remote="133898299200000000" Dst="0" />
+<file name="EnvVarLoaderInterface.php" server="191.101.235.83" local="133925973142985416" remote="133898299200000000" Dst="0" />
+<file name="EnvVarProcessor.php" server="191.101.235.83" local="133925973143145831" remote="133898299200000000" Dst="0" />
+<file name="EnvVarProcessorInterface.php" server="191.101.235.83" local="133925973143241178" remote="133898299200000000" Dst="0" />
+<file name="ExpressionLanguage.php" server="191.101.235.83" local="133925973154172427" remote="133898299200000000" Dst="0" />
+<file name="LICENSE" server="191.101.235.83" local="133925973154342900" remote="133898299200000000" Dst="0" />
+<file name="ExpressionLanguageProvider.php" server="191.101.235.83" local="133925973154528462" remote="133898299200000000" Dst="0" />
+<file name="Parameter.php" server="191.101.235.83" local="133925973177051329" remote="133898299200000000" Dst="0" />
+<file name="Reference.php" server="191.101.235.83" local="133925973177433126" remote="133898299200000000" Dst="0" />
+<file name="ReverseContainer.php" server="191.101.235.83" local="133925973177433126" remote="133898299200000000" Dst="0" />
+<file name="README.md" server="191.101.235.83" local="133925973177578560" remote="133898299200000000" Dst="0" />
+<file name="ServiceLocator.php" server="191.101.235.83" local="133925973177613746" remote="133898299200000000" Dst="0" />
+<file name="TaggedContainerInterface.php" server="191.101.235.83" local="133925973177739119" remote="133898299200000000" Dst="0" />
+<file name="Variable.php" server="191.101.235.83" local="133925973177779091" remote="133898299200000000" Dst="0" />
+<file name="TypedReference.php" server="191.101.235.83" local="133925973177829727" remote="133898299200000000" Dst="0" />
+<file name="composer.json" server="191.101.235.83" local="133925973177879701" remote="133898299200000000" Dst="0" />
+</dwsync>

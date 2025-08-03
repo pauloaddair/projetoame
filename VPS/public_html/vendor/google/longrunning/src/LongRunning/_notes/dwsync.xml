@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="DeleteOperationRequest.php" server="ftp.novaeratec.com.br" local="133747847072256955" remote="133616852400000000" Dst="0" />
+<file name="CancelOperationRequest.php" server="ftp.novaeratec.com.br" local="133747847072286992" remote="133616852400000000" Dst="0" />
+<file name="GetOperationRequest.php" server="ftp.novaeratec.com.br" local="133747847076544002" remote="133616852400000000" Dst="0" />
+<file name="ListOperationsRequest.php" server="ftp.novaeratec.com.br" local="133747847077439279" remote="133616852400000000" Dst="0" />
+<file name="ListOperationsResponse.php" server="ftp.novaeratec.com.br" local="133747847080713693" remote="133616852400000000" Dst="0" />
+<file name="Operation.php" server="ftp.novaeratec.com.br" local="133747847081369008" remote="133616852400000000" Dst="0" />
+<file name="OperationInfo.php" server="ftp.novaeratec.com.br" local="133747847082028160" remote="133616852400000000" Dst="0" />
+<file name="OperationsClient.php" server="ftp.novaeratec.com.br" local="133747847085197140" remote="133616852400000000" Dst="0" />
+<file name="OperationsGrpcClient.php" server="ftp.novaeratec.com.br" local="133747847085422327" remote="133616852400000000" Dst="0" />
+<file name="WaitOperationRequest.php" server="ftp.novaeratec.com.br" local="133747847086527612" remote="133616852400000000" Dst="0" />
+<file name="CancelOperationRequest.php" server="ftp.projetoame.org/public_html/" local="133747847070000000" remote="133811961000000000" Dst="0" />
+<file name="DeleteOperationRequest.php" server="ftp.projetoame.org/public_html/" local="133747847070000000" remote="133811961000000000" Dst="0" />
+<file name="GetOperationRequest.php" server="ftp.projetoame.org/public_html/" local="133747847070000000" remote="133811961000000000" Dst="0" />
+<file name="ListOperationsRequest.php" server="ftp.projetoame.org/public_html/" local="133747847070000000" remote="133811961000000000" Dst="0" />
+<file name="ListOperationsResponse.php" server="ftp.projetoame.org/public_html/" local="133747847080000000" remote="133811961000000000" Dst="0" />
+<file name="Operation.php" server="ftp.projetoame.org/public_html/" local="133747847080000000" remote="133811961000000000" Dst="0" />
+<file name="OperationInfo.php" server="ftp.projetoame.org/public_html/" local="133747847080000000" remote="133811961000000000" Dst="0" />
+<file name="OperationsClient.php" server="ftp.projetoame.org/public_html/" local="133747847080000000" remote="133811961000000000" Dst="0" />
+<file name="OperationsGrpcClient.php" server="ftp.projetoame.org/public_html/" local="133747847080000000" remote="133811961000000000" Dst="0" />
+<file name="WaitOperationRequest.php" server="ftp.projetoame.org/public_html/" local="133747847080000000" remote="133811961000000000" Dst="0" />
+<file name="CancelOperationRequest.php" server="191.101.235.83/public_html/" local="133747847070000000" remote="133930926600000000" Dst="0" />
+<file name="DeleteOperationRequest.php" server="191.101.235.83/public_html/" local="133747847070000000" remote="133930926600000000" Dst="0" />
+<file name="GetOperationRequest.php" server="191.101.235.83/public_html/" local="133747847070000000" remote="133930926600000000" Dst="0" />
+<file name="ListOperationsRequest.php" server="191.101.235.83/public_html/" local="133747847070000000" remote="133930926600000000" Dst="0" />
+<file name="ListOperationsResponse.php" server="191.101.235.83/public_html/" local="133747847080000000" remote="133930926600000000" Dst="0" />
+<file name="Operation.php" server="191.101.235.83/public_html/" local="133747847080000000" remote="133930926600000000" Dst="0" />
+<file name="OperationInfo.php" server="191.101.235.83/public_html/" local="133747847080000000" remote="133930926600000000" Dst="0" />
+<file name="OperationsClient.php" server="191.101.235.83/public_html/" local="133747847080000000" remote="133930926600000000" Dst="0" />
+<file name="OperationsGrpcClient.php" server="191.101.235.83/public_html/" local="133747847080000000" remote="133930926600000000" Dst="0" />
+<file name="WaitOperationRequest.php" server="191.101.235.83/public_html/" local="133747847080000000" remote="133930926600000000" Dst="0" />
+<file name="CancelOperationRequest.php" server="62.72.63.89/public_html/" local="133747847070000000" remote="133928620800000000" Dst="0" />
+<file name="DeleteOperationRequest.php" server="62.72.63.89/public_html/" local="133747847070000000" remote="133928620800000000" Dst="0" />
+<file name="GetOperationRequest.php" server="62.72.63.89/public_html/" local="133747847070000000" remote="133928620800000000" Dst="0" />
+<file name="ListOperationsRequest.php" server="62.72.63.89/public_html/" local="133747847070000000" remote="133928620800000000" Dst="0" />
+<file name="ListOperationsResponse.php" server="62.72.63.89/public_html/" local="133747847080000000" remote="133928620800000000" Dst="0" />
+<file name="Operation.php" server="62.72.63.89/public_html/" local="133747847080000000" remote="133928620800000000" Dst="0" />
+<file name="OperationInfo.php" server="62.72.63.89/public_html/" local="133747847080000000" remote="133928620800000000" Dst="0" />
+<file name="OperationsClient.php" server="62.72.63.89/public_html/" local="133747847080000000" remote="133928620800000000" Dst="0" />
+<file name="OperationsGrpcClient.php" server="62.72.63.89/public_html/" local="133747847080000000" remote="133928620800000000" Dst="0" />
+<file name="WaitOperationRequest.php" server="62.72.63.89/public_html/" local="133747847080000000" remote="133928620800000000" Dst="0" />
+</dwsync>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="AttestedCredentialData.php" server="191.101.235.83" local="133925973440767257" remote="133898299200000000" Dst="0" />
+<file name="AuthenticatorAssertionResponse.php" server="191.101.235.83" local="133925973441364195" remote="133898299200000000" Dst="0" />
+<file name="AuthenticatorAssertionResponseValidator.php" server="191.101.235.83" local="133925973441449499" remote="133898299200000000" Dst="0" />
+<file name="AuthenticatorAttestationResponse.php" server="191.101.235.83" local="133925973441449499" remote="133898299200000000" Dst="0" />
+<file name="AuthenticatorData.php" server="191.101.235.83" local="133925973441494708" remote="133898299200000000" Dst="0" />
+<file name="AuthenticatorAttestationResponseValidator.php" server="191.101.235.83" local="133925973451531798" remote="133898299200000000" Dst="0" />
+<file name="AuthenticatorResponse.php" server="191.101.235.83" local="133925973451702475" remote="133898299200000000" Dst="0" />
+<file name="AuthenticatorSelectionCriteria.php" server="191.101.235.83" local="133925973451772541" remote="133898299200000000" Dst="0" />
+<file name="PublicKeyCredentialDescriptorCollection.php" server="191.101.235.83" local="133925973451772541" remote="133898299200000000" Dst="0" />
+<file name="CertificateToolbox.php" server="191.101.235.83" local="133925973451923064" remote="133898299200000000" Dst="0" />
+<file name="CollectedClientData.php" server="191.101.235.83" local="133925973451923064" remote="133898299200000000" Dst="0" />
+<file name="PublicKeyCredentialEntity.php" server="191.101.235.83" local="133925973452028424" remote="133898299200000000" Dst="0" />
+<file name="PublicKeyCredentialCreationOptions.php" server="191.101.235.83" local="133925973452138774" remote="133898299200000000" Dst="0" />
+<file name="PublicKeyCredentialDescriptor.php" server="191.101.235.83" local="133925973452138774" remote="133898299200000000" Dst="0" />
+<file name="PublicKeyCredentialOptions.php" server="191.101.235.83" local="133925973452148767" remote="133898299200000000" Dst="0" />
+<file name="Credential.php" server="191.101.235.83" local="133925973452359244" remote="133898299200000000" Dst="0" />
+<file name="PublicKeyCredential.php" server="191.101.235.83" local="133925973452359244" remote="133898299200000000" Dst="0" />
+<file name="PublicKeyCredentialLoader.php" server="191.101.235.83" local="133925973452369318" remote="133898299200000000" Dst="0" />
+<file name="PublicKeyCredentialParameters.php" server="191.101.235.83" local="133925973452369318" remote="133898299200000000" Dst="0" />
+<file name="PublicKeyCredentialRequestOptions.php" server="191.101.235.83" local="133925973452369318" remote="133898299200000000" Dst="0" />
+<file name="PublicKeyCredentialRpEntity.php" server="191.101.235.83" local="133925973452518815" remote="133898299200000000" Dst="0" />
+<file name="PublicKeyCredentialSource.php" server="191.101.235.83" local="133925973452518815" remote="133898299200000000" Dst="0" />
+<file name="PublicKeyCredentialSourceRepository.php" server="191.101.235.83" local="133925973452518815" remote="133898299200000000" Dst="0" />
+<file name="PublicKeyCredentialUserEntity.php" server="191.101.235.83" local="133925973452614020" remote="133898299200000000" Dst="0" />
+<file name="Server.php" server="191.101.235.83" local="133925973452674017" remote="133898299200000000" Dst="0" />
+<file name="StringStream.php" server="191.101.235.83" local="133925973452729183" remote="133898299200000000" Dst="0" />
+<file name="U2FPublicKey.php" server="191.101.235.83" local="133925973463299495" remote="133898299200000000" Dst="0" />
+</dwsync>

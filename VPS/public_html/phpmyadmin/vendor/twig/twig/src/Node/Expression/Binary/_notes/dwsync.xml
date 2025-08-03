@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="AddBinary.php" server="191.101.235.83" local="133925973348815527" remote="133898299200000000" Dst="0" />
+<file name="AndBinary.php" server="191.101.235.83" local="133925973348865524" remote="133898299200000000" Dst="0" />
+<file name="BitwiseAndBinary.php" server="191.101.235.83" local="133925973349210731" remote="133898299200000000" Dst="0" />
+<file name="AbstractBinary.php" server="191.101.235.83" local="133925973349295844" remote="133898299200000000" Dst="0" />
+<file name="BitwiseOrBinary.php" server="191.101.235.83" local="133925973349295844" remote="133898299200000000" Dst="0" />
+<file name="BitwiseXorBinary.php" server="191.101.235.83" local="133925973349421188" remote="133898299200000000" Dst="0" />
+<file name="ConcatBinary.php" server="191.101.235.83" local="133925973349461182" remote="133898299200000000" Dst="0" />
+<file name="DivBinary.php" server="191.101.235.83" local="133925973349516407" remote="133898299200000000" Dst="0" />
+<file name="EndsWithBinary.php" server="191.101.235.83" local="133925973349566434" remote="133898299200000000" Dst="0" />
+<file name="EqualBinary.php" server="191.101.235.83" local="133925973349621733" remote="133898299200000000" Dst="0" />
+<file name="GreaterBinary.php" server="191.101.235.83" local="133925973349696819" remote="133898299200000000" Dst="0" />
+<file name="FloorDivBinary.php" server="191.101.235.83" local="133925973349777081" remote="133898299200000000" Dst="0" />
+<file name="GreaterEqualBinary.php" server="191.101.235.83" local="133925973349792192" remote="133898299200000000" Dst="0" />
+<file name="HasEveryBinary.php" server="191.101.235.83" local="133925973349832432" remote="133898299200000000" Dst="0" />
+<file name="InBinary.php" server="191.101.235.83" local="133925973349892482" remote="133898299200000000" Dst="0" />
+<file name="HasSomeBinary.php" server="191.101.235.83" local="133925973359835269" remote="133898299200000000" Dst="0" />
+<file name="LessEqualBinary.php" server="191.101.235.83" local="133925973359970443" remote="133898299200000000" Dst="0" />
+<file name="LessBinary.php" server="191.101.235.83" local="133925973360025748" remote="133898299200000000" Dst="0" />
+<file name="SubBinary.php" server="191.101.235.83" local="133925973360150932" remote="133898299200000000" Dst="0" />
+<file name="MatchesBinary.php" server="191.101.235.83" local="133925973360341311" remote="133898299200000000" Dst="0" />
+<file name="ModBinary.php" server="191.101.235.83" local="133925973360341311" remote="133898299200000000" Dst="0" />
+<file name="MulBinary.php" server="191.101.235.83" local="133925973360341311" remote="133898299200000000" Dst="0" />
+<file name="NotEqualBinary.php" server="191.101.235.83" local="133925973360351280" remote="133898299200000000" Dst="0" />
+<file name="NotInBinary.php" server="191.101.235.83" local="133925973360551775" remote="133898299200000000" Dst="0" />
+<file name="OrBinary.php" server="191.101.235.83" local="133925973360551775" remote="133898299200000000" Dst="0" />
+<file name="PowerBinary.php" server="191.101.235.83" local="133925973360551775" remote="133898299200000000" Dst="0" />
+<file name="RangeBinary.php" server="191.101.235.83" local="133925973360747970" remote="133898299200000000" Dst="0" />
+<file name="SpaceshipBinary.php" server="191.101.235.83" local="133925973360747970" remote="133898299200000000" Dst="0" />
+<file name="StartsWithBinary.php" server="191.101.235.83" local="133925973360757973" remote="133898299200000000" Dst="0" />
+</dwsync>

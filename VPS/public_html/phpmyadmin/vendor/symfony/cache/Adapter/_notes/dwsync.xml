@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="AbstractAdapter.php" server="191.101.235.83" local="133925973040271281" remote="133898299200000000" Dst="0" />
+<file name="AbstractTagAwareAdapter.php" server="191.101.235.83" local="133925973040316503" remote="133898299200000000" Dst="0" />
+<file name="AdapterInterface.php" server="191.101.235.83" local="133925973040386454" remote="133898299200000000" Dst="0" />
+<file name="ApcuAdapter.php" server="191.101.235.83" local="133925973040547026" remote="133898299200000000" Dst="0" />
+<file name="ArrayAdapter.php" server="191.101.235.83" local="133925973040547026" remote="133898299200000000" Dst="0" />
+<file name="ChainAdapter.php" server="191.101.235.83" local="133925973040612115" remote="133898299200000000" Dst="0" />
+<file name="CouchbaseBucketAdapter.php" server="191.101.235.83" local="133925973040817751" remote="133898299200000000" Dst="0" />
+<file name="DoctrineAdapter.php" server="191.101.235.83" local="133925973040817751" remote="133898299200000000" Dst="0" />
+<file name="CouchbaseCollectionAdapter.php" server="191.101.235.83" local="133925973040867774" remote="133898299200000000" Dst="0" />
+<file name="DoctrineDbalAdapter.php" server="191.101.235.83" local="133925973040922945" remote="133898299200000000" Dst="0" />
+<file name="FilesystemAdapter.php" server="191.101.235.83" local="133925973040972919" remote="133898299200000000" Dst="0" />
+<file name="Psr16Adapter.php" server="191.101.235.83" local="133925973049655502" remote="133898299200000000" Dst="0" />
+<file name="FilesystemTagAwareAdapter.php" server="191.101.235.83" local="133925973050968260" remote="133898299200000000" Dst="0" />
+<file name="RedisAdapter.php" server="191.101.235.83" local="133925973051083718" remote="133898299200000000" Dst="0" />
+<file name="NullAdapter.php" server="191.101.235.83" local="133925973051128890" remote="133898299200000000" Dst="0" />
+<file name="MemcachedAdapter.php" server="191.101.235.83" local="133925973051205072" remote="133898299200000000" Dst="0" />
+<file name="ParameterNormalizer.php" server="191.101.235.83" local="133925973051316144" remote="133898299200000000" Dst="0" />
+<file name="RedisTagAwareAdapter.php" server="191.101.235.83" local="133925973051325886" remote="133898299200000000" Dst="0" />
+<file name="PhpArrayAdapter.php" server="191.101.235.83" local="133925973051431252" remote="133898299200000000" Dst="0" />
+<file name="PhpFilesAdapter.php" server="191.101.235.83" local="133925973051441259" remote="133898299200000000" Dst="0" />
+<file name="ProxyAdapter.php" server="191.101.235.83" local="133925973051441259" remote="133898299200000000" Dst="0" />
+<file name="PdoAdapter.php" server="191.101.235.83" local="133925973051556648" remote="133898299200000000" Dst="0" />
+<file name="TagAwareAdapter.php" server="191.101.235.83" local="133925973051566647" remote="133898299200000000" Dst="0" />
+<file name="TagAwareAdapterInterface.php" server="191.101.235.83" local="133925973051566647" remote="133898299200000000" Dst="0" />
+<file name="TraceableAdapter.php" server="191.101.235.83" local="133925973051606632" remote="133898299200000000" Dst="0" />
+<file name="TraceableTagAwareAdapter.php" server="191.101.235.83" local="133925973051759399" remote="133898299200000000" Dst="0" />
+</dwsync>

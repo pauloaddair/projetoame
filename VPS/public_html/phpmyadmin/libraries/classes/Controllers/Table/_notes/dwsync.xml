@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="AbstractController.php" server="191.101.235.83" local="133925971740325924" remote="133898299200000000" Dst="0" />
+<file name="AddFieldController.php" server="191.101.235.83" local="133925971740371185" remote="133898299200000000" Dst="0" />
+<file name="ChangeController.php" server="191.101.235.83" local="133925971740416438" remote="133898299200000000" Dst="0" />
+<file name="ChangeRowsController.php" server="191.101.235.83" local="133925971740567066" remote="133898299200000000" Dst="0" />
+<file name="ChartController.php" server="191.101.235.83" local="133925971740567066" remote="133898299200000000" Dst="0" />
+<file name="CreateController.php" server="191.101.235.83" local="133925971740577189" remote="133898299200000000" Dst="0" />
+<file name="DeleteConfirmController.php" server="191.101.235.83" local="133925971740577189" remote="133898299200000000" Dst="0" />
+<file name="DeleteRowsController.php" server="191.101.235.83" local="133925971740617310" remote="133898299200000000" Dst="0" />
+<file name="DropColumnConfirmationController.php" server="191.101.235.83" local="133925971750607091" remote="133898299200000000" Dst="0" />
+<file name="DropColumnController.php" server="191.101.235.83" local="133925971750742562" remote="133898299200000000" Dst="0" />
+<file name="ExportController.php" server="191.101.235.83" local="133925971750788058" remote="133898299200000000" Dst="0" />
+<file name="FindReplaceController.php" server="191.101.235.83" local="133925971751064306" remote="133898299200000000" Dst="0" />
+<file name="GetFieldController.php" server="191.101.235.83" local="133925971751064306" remote="133898299200000000" Dst="0" />
+<file name="IndexRenameController.php" server="191.101.235.83" local="133925971751144482" remote="133898299200000000" Dst="0" />
+<file name="IndexesController.php" server="191.101.235.83" local="133925971751144482" remote="133898299200000000" Dst="0" />
+<file name="ExportRowsController.php" server="191.101.235.83" local="133925971751275209" remote="133898299200000000" Dst="0" />
+<file name="GisVisualizationController.php" server="191.101.235.83" local="133925971751360336" remote="133898299200000000" Dst="0" />
+<file name="ImportController.php" server="191.101.235.83" local="133925971751360336" remote="133898299200000000" Dst="0" />
+<file name="PrivilegesController.php" server="191.101.235.83" local="133925971761428587" remote="133898299200000000" Dst="0" />
+<file name="RecentFavoriteController.php" server="191.101.235.83" local="133925971761571968" remote="133898299200000000" Dst="0" />
+<file name="OperationsController.php" server="191.101.235.83" local="133925971761803082" remote="133898299200000000" Dst="0" />
+<file name="RelationController.php" server="191.101.235.83" local="133925971761803082" remote="133898299200000000" Dst="0" />
+<file name="ReplaceController.php" server="191.101.235.83" local="133925971761989284" remote="133898299200000000" Dst="0" />
+<file name="SearchController.php" server="191.101.235.83" local="133925971762176122" remote="133898299200000000" Dst="0" />
+<file name="SqlController.php" server="191.101.235.83" local="133925971762261276" remote="133898299200000000" Dst="0" />
+<file name="StructureController.php" server="191.101.235.83" local="133925971792867882" remote="133898299200000000" Dst="0" />
+<file name="TriggersController.php" server="191.101.235.83" local="133925971793138647" remote="133898299200000000" Dst="0" />
+<file name="TrackingController.php" server="191.101.235.83" local="133925971793223392" remote="133898299200000000" Dst="0" />
+<file name="ZoomSearchController.php" server="191.101.235.83" local="133925971793308843" remote="133898299200000000" Dst="0" />
+</dwsync>

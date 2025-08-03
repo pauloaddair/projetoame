@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="changelog.twig" server="191.101.235.83" local="133925971953751908" remote="133898299200000000" Dst="0" />
+<file name="create_tracking_version.twig" server="191.101.235.83" local="133925971954815903" remote="133898299200000000" Dst="0" />
+<file name="header.twig" server="191.101.235.83" local="133925972006537604" remote="133898299200000000" Dst="0" />
+<file name="header_location.twig" server="191.101.235.83" local="133925972006829580" remote="133898299200000000" Dst="0" />
+<file name="import.twig" server="191.101.235.83" local="133925972006914811" remote="133898299200000000" Dst="0" />
+<file name="import_status.twig" server="191.101.235.83" local="133925972017061188" remote="133898299200000000" Dst="0" />
+<file name="indexes.twig" server="191.101.235.83" local="133925972017292596" remote="133898299200000000" Dst="0" />
+<file name="list_navigator.twig" server="191.101.235.83" local="133925972017387898" remote="133898299200000000" Dst="0" />
+<file name="export_modal.twig" server="191.101.235.83" local="133925972027174039" remote="133898299200000000" Dst="0" />
+<file name="footer.twig" server="191.101.235.83" local="133925972027174039" remote="133898299200000000" Dst="0" />
+<file name="filter.twig" server="191.101.235.83" local="133925972027300788" remote="133898299200000000" Dst="0" />
+<file name="file_select_options.twig" server="191.101.235.83" local="133925972027400742" remote="133898299200000000" Dst="0" />
+<file name="gis_data_editor_form.twig" server="191.101.235.83" local="133925972027440816" remote="133898299200000000" Dst="0" />
+<file name="export.twig" server="191.101.235.83" local="133925972027485960" remote="133898299200000000" Dst="0" />
+<file name="preview_sql.twig" server="191.101.235.83" local="133925972038637681" remote="133898299200000000" Dst="0" />
+<file name="recent_favorite_table_favorite.twig" server="191.101.235.83" local="133925972038718086" remote="133898299200000000" Dst="0" />
+<file name="recent_favorite_table_no_tables.twig" server="191.101.235.83" local="133925972038718086" remote="133898299200000000" Dst="0" />
+<file name="recent_favorite_table_recent.twig" server="191.101.235.83" local="133925972038748124" remote="133898299200000000" Dst="0" />
+<file name="scripts.twig" server="191.101.235.83" local="133925972038927344" remote="133898299200000000" Dst="0" />
+<file name="select_all.twig" server="191.101.235.83" local="133925972038937344" remote="133898299200000000" Dst="0" />
+<file name="message.twig" server="191.101.235.83" local="133925972048496350" remote="133898299200000000" Dst="0" />
+<file name="top_menu.twig" server="191.101.235.83" local="133925972104445339" remote="133898299200000000" Dst="0" />
+<file name="transformation_overview.twig" server="191.101.235.83" local="133925972104600638" remote="133898299200000000" Dst="0" />
+<file name="user_password.twig" server="191.101.235.83" local="133925972104600638" remote="133898299200000000" Dst="0" />
+<file name="view_create.twig" server="191.101.235.83" local="133925972104864879" remote="133898299200000000" Dst="0" />
+</dwsync>

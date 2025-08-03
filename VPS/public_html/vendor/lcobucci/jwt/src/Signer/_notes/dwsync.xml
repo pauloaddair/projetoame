@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="Blake2b.php" server="ftp.novaeratec.com.br" local="133747847939789040" remote="133728987600000000" Dst="0" />
+<file name="CannotSignPayload.php" server="ftp.novaeratec.com.br" local="133747847941065983" remote="133728987600000000" Dst="0" />
+<file name="Ecdsa.php" server="ftp.novaeratec.com.br" local="133747847951518792" remote="133728987600000000" Dst="0" />
+<file name="Eddsa.php" server="ftp.novaeratec.com.br" local="133747847953550705" remote="133728987600000000" Dst="0" />
+<file name="Hmac.php" server="ftp.novaeratec.com.br" local="133747847959329578" remote="133728987600000000" Dst="0" />
+<file name="InvalidKeyProvided.php" server="ftp.novaeratec.com.br" local="133747847960594752" remote="133728987600000000" Dst="0" />
+<file name="Key.php" server="ftp.novaeratec.com.br" local="133747847965287977" remote="133728987600000000" Dst="0" />
+<file name="OpenSSL.php" server="ftp.novaeratec.com.br" local="133747847967268295" remote="133728987600000000" Dst="0" />
+<file name="Rsa.php" server="ftp.novaeratec.com.br" local="133747847973083450" remote="133728987600000000" Dst="0" />
+<file name="Blake2b.php" server="ftp.projetoame.org/public_html/" local="133747847930000000" remote="133811964000000000" Dst="0" />
+<file name="CannotSignPayload.php" server="ftp.projetoame.org/public_html/" local="133747847940000000" remote="133811964000000000" Dst="0" />
+<file name="Ecdsa.php" server="ftp.projetoame.org/public_html/" local="133747847950000000" remote="133811964000000000" Dst="0" />
+<file name="Eddsa.php" server="ftp.projetoame.org/public_html/" local="133747847950000000" remote="133811964000000000" Dst="0" />
+<file name="Hmac.php" server="ftp.projetoame.org/public_html/" local="133747847950000000" remote="133811964000000000" Dst="0" />
+<file name="InvalidKeyProvided.php" server="ftp.projetoame.org/public_html/" local="133747847960000000" remote="133811964000000000" Dst="0" />
+<file name="Key.php" server="ftp.projetoame.org/public_html/" local="133747847960000000" remote="133811964000000000" Dst="0" />
+<file name="OpenSSL.php" server="ftp.projetoame.org/public_html/" local="133747847960000000" remote="133811964000000000" Dst="0" />
+<file name="Rsa.php" server="ftp.projetoame.org/public_html/" local="133747847970000000" remote="133811964000000000" Dst="0" />
+<file name="Blake2b.php" server="191.101.235.83/public_html/" local="133747847930000000" remote="133930927200000000" Dst="0" />
+<file name="CannotSignPayload.php" server="191.101.235.83/public_html/" local="133747847940000000" remote="133930927200000000" Dst="0" />
+<file name="Ecdsa.php" server="191.101.235.83/public_html/" local="133747847950000000" remote="133930927200000000" Dst="0" />
+<file name="Eddsa.php" server="191.101.235.83/public_html/" local="133747847950000000" remote="133930927200000000" Dst="0" />
+<file name="Hmac.php" server="191.101.235.83/public_html/" local="133747847950000000" remote="133930927200000000" Dst="0" />
+<file name="InvalidKeyProvided.php" server="191.101.235.83/public_html/" local="133747847960000000" remote="133930927200000000" Dst="0" />
+<file name="Key.php" server="191.101.235.83/public_html/" local="133747847960000000" remote="133930927200000000" Dst="0" />
+<file name="OpenSSL.php" server="191.101.235.83/public_html/" local="133747847960000000" remote="133930927200000000" Dst="0" />
+<file name="Rsa.php" server="191.101.235.83/public_html/" local="133747847970000000" remote="133930927200000000" Dst="0" />
+<file name="Blake2b.php" server="62.72.63.89/public_html/" local="133747847930000000" remote="133928620800000000" Dst="0" />
+<file name="CannotSignPayload.php" server="62.72.63.89/public_html/" local="133747847940000000" remote="133928620800000000" Dst="0" />
+<file name="Ecdsa.php" server="62.72.63.89/public_html/" local="133747847950000000" remote="133928620800000000" Dst="0" />
+<file name="Eddsa.php" server="62.72.63.89/public_html/" local="133747847950000000" remote="133928620800000000" Dst="0" />
+<file name="InvalidKeyProvided.php" server="62.72.63.89/public_html/" local="133747847960000000" remote="133928620800000000" Dst="0" />
+<file name="Hmac.php" server="62.72.63.89/public_html/" local="133747847950000000" remote="133928620800000000" Dst="0" />
+<file name="Key.php" server="62.72.63.89/public_html/" local="133747847960000000" remote="133928620800000000" Dst="0" />
+<file name="OpenSSL.php" server="62.72.63.89/public_html/" local="133747847960000000" remote="133928620800000000" Dst="0" />
+<file name="Rsa.php" server="62.72.63.89/public_html/" local="133747847970000000" remote="133928620800000000" Dst="0" />
+</dwsync>

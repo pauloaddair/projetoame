@@ -1,0 +1,10 @@
+
+RewriteEngine On
+RewriteCond %{HTTPS} !=on
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# RewriteEngine On
+RewriteCond {REQUEST_URI} !\.(png|gif|jpg)$
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ /index.php?url=$1&hostName=%{HTTP_HOST} [QSA,L]

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="ClosureLoader.php" server="191.101.235.83" local="133925973154673672" remote="133898299200000000" Dst="0" />
+<file name="DirectoryLoader.php" server="191.101.235.83" local="133925973176590361" remote="133898299200000000" Dst="0" />
+<file name="FileLoader.php" server="191.101.235.83" local="133925973176859961" remote="133898299200000000" Dst="0" />
+<file name="GlobFileLoader.php" server="191.101.235.83" local="133925973176859961" remote="133898299200000000" Dst="0" />
+<file name="IniFileLoader.php" server="191.101.235.83" local="133925973176899967" remote="133898299200000000" Dst="0" />
+<file name="PhpFileLoader.php" server="191.101.235.83" local="133925973177051329" remote="133898299200000000" Dst="0" />
+<file name="YamlFileLoader.php" server="191.101.235.83" local="133925973177282228" remote="133898299200000000" Dst="0" />
+<file name="XmlFileLoader.php" server="191.101.235.83" local="133925973177433126" remote="133898299200000000" Dst="0" />
+</dwsync>

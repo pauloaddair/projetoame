@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="AbstractConfigurator.php" server="191.101.235.83" local="133925973154869418" remote="133898299200000000" Dst="0" />
+<file name="AbstractServiceConfigurator.php" server="191.101.235.83" local="133925973154869418" remote="133898299200000000" Dst="0" />
+<file name="AliasConfigurator.php" server="191.101.235.83" local="133925973154924753" remote="133898299200000000" Dst="0" />
+<file name="ClosureReferenceConfigurator.php" server="191.101.235.83" local="133925973154970007" remote="133898299200000000" Dst="0" />
+<file name="ContainerConfigurator.php" server="191.101.235.83" local="133925973155015249" remote="133898299200000000" Dst="0" />
+<file name="InlineServiceConfigurator.php" server="191.101.235.83" local="133925973165161213" remote="133898299200000000" Dst="0" />
+<file name="EnvConfigurator.php" server="191.101.235.83" local="133925973165214155" remote="133898299200000000" Dst="0" />
+<file name="DefaultsConfigurator.php" server="191.101.235.83" local="133925973165300038" remote="133898299200000000" Dst="0" />
+<file name="InstanceofConfigurator.php" server="191.101.235.83" local="133925973165420756" remote="133898299200000000" Dst="0" />
+<file name="ReferenceConfigurator.php" server="191.101.235.83" local="133925973165420756" remote="133898299200000000" Dst="0" />
+<file name="ParametersConfigurator.php" server="191.101.235.83" local="133925973165541641" remote="133898299200000000" Dst="0" />
+<file name="PrototypeConfigurator.php" server="191.101.235.83" local="133925973165541641" remote="133898299200000000" Dst="0" />
+<file name="ServiceConfigurator.php" server="191.101.235.83" local="133925973165712220" remote="133898299200000000" Dst="0" />
+<file name="ServicesConfigurator.php" server="191.101.235.83" local="133925973165722344" remote="133898299200000000" Dst="0" />
+</dwsync>
