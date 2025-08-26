@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="check.twig" server="191.101.235.83" local="133925972083007563" remote="133898299200000000" Dst="0" />
+<file name="analyze.twig" server="191.101.235.83" local="133925972093275478" remote="133898299200000000" Dst="0" />
+<file name="drop.twig" server="191.101.235.83" local="133925972093285417" remote="133898299200000000" Dst="0" />
+<file name="optimize.twig" server="191.101.235.83" local="133925972093285417" remote="133898299200000000" Dst="0" />
+<file name="rebuild.twig" server="191.101.235.83" local="133925972093285417" remote="133898299200000000" Dst="0" />
+<file name="truncate.twig" server="191.101.235.83" local="133925972093536866" remote="133898299200000000" Dst="0" />
+<file name="repair.twig" server="191.101.235.83" local="133925972093697152" remote="133898299200000000" Dst="0" />
+</dwsync>

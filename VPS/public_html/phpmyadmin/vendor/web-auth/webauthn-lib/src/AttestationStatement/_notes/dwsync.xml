@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="PackedAttestationStatementSupport.php" server="191.101.235.83" local="133925973440277559" remote="133898299200000000" Dst="0" />
+<file name="AndroidKeyAttestationStatementSupport.php" server="191.101.235.83" local="133925973440428759" remote="133898299200000000" Dst="0" />
+<file name="AndroidSafetyNetAttestationStatementSupport.php" server="191.101.235.83" local="133925973440428759" remote="133898299200000000" Dst="0" />
+<file name="AppleAttestationStatementSupport.php" server="191.101.235.83" local="133925973440438746" remote="133898299200000000" Dst="0" />
+<file name="TPMAttestationStatementSupport.php" server="191.101.235.83" local="133925973440494085" remote="133898299200000000" Dst="0" />
+<file name="AttestationObject.php" server="191.101.235.83" local="133925973440687086" remote="133898299200000000" Dst="0" />
+<file name="AttestationObjectLoader.php" server="191.101.235.83" local="133925973440687086" remote="133898299200000000" Dst="0" />
+<file name="AttestationStatementSupport.php" server="191.101.235.83" local="133925973441013096" remote="133898299200000000" Dst="0" />
+<file name="AttestationStatementSupportManager.php" server="191.101.235.83" local="133925973441013096" remote="133898299200000000" Dst="0" />
+<file name="NoneAttestationStatementSupport.php" server="191.101.235.83" local="133925973441013096" remote="133898299200000000" Dst="0" />
+<file name="AttestationStatement.php" server="191.101.235.83" local="133925973441113696" remote="133898299200000000" Dst="0" />
+<file name="FidoU2FAttestationStatementSupport.php" server="191.101.235.83" local="133925973441113696" remote="133898299200000000" Dst="0" />
+</dwsync>

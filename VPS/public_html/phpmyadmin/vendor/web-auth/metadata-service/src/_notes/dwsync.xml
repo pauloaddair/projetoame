@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="AbstractDescriptor.php" server="191.101.235.83" local="133925973428765157" remote="133898299200000000" Dst="0" />
+<file name="AuthenticatorStatus.php" server="191.101.235.83" local="133925973429111095" remote="133898299200000000" Dst="0" />
+<file name="BiometricAccuracyDescriptor.php" server="191.101.235.83" local="133925973429111095" remote="133898299200000000" Dst="0" />
+<file name="BiometricStatusReport.php" server="191.101.235.83" local="133925973429121059" remote="133898299200000000" Dst="0" />
+<file name="CodeAccuracyDescriptor.php" server="191.101.235.83" local="133925973429121059" remote="133898299200000000" Dst="0" />
+<file name="MetadataService.php" server="191.101.235.83" local="133925973429171089" remote="133898299200000000" Dst="0" />
+<file name="MetadataStatementFetcher.php" server="191.101.235.83" local="133925973429246290" remote="133898299200000000" Dst="0" />
+<file name="DisplayPNGCharacteristicsDescriptor.php" server="191.101.235.83" local="133925973429387187" remote="133898299200000000" Dst="0" />
+<file name="DistantSingleMetadata.php" server="191.101.235.83" local="133925973429387187" remote="133898299200000000" Dst="0" />
+<file name="EcdaaTrustAnchor.php" server="191.101.235.83" local="133925973429396403" remote="133898299200000000" Dst="0" />
+<file name="ExtensionDescriptor.php" server="191.101.235.83" local="133925973429396403" remote="133898299200000000" Dst="0" />
+<file name="MetadataStatementRepository.php" server="191.101.235.83" local="133925973429491649" remote="133898299200000000" Dst="0" />
+<file name="MetadataTOCPayload.php" server="191.101.235.83" local="133925973429491649" remote="133898299200000000" Dst="0" />
+<file name="MetadataStatement.php" server="191.101.235.83" local="133925973429561891" remote="133898299200000000" Dst="0" />
+<file name="MetadataTOCPayloadEntry.php" server="191.101.235.83" local="133925973429571893" remote="133898299200000000" Dst="0" />
+<file name="PatternAccuracyDescriptor.php" server="191.101.235.83" local="133925973429637176" remote="133898299200000000" Dst="0" />
+<file name="RgbPaletteEntry.php" server="191.101.235.83" local="133925973429687195" remote="133898299200000000" Dst="0" />
+<file name="RogueListEntry.php" server="191.101.235.83" local="133925973429762530" remote="133898299200000000" Dst="0" />
+<file name="SingleMetadata.php" server="191.101.235.83" local="133925973429807804" remote="133898299200000000" Dst="0" />
+<file name="StatusReport.php" server="191.101.235.83" local="133925973429867824" remote="133898299200000000" Dst="0" />
+<file name="Utils.php" server="191.101.235.83" local="133925973429988224" remote="133898299200000000" Dst="0" />
+<file name="VerificationMethodANDCombinations.php" server="191.101.235.83" local="133925973429988224" remote="133898299200000000" Dst="0" />
+<file name="VerificationMethodDescriptor.php" server="191.101.235.83" local="133925973429988224" remote="133898299200000000" Dst="0" />
+<file name="Version.php" server="191.101.235.83" local="133925973440015359" remote="133898299200000000" Dst="0" />
+</dwsync>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="GisLineString.php" server="191.101.235.83" local="133925971814173141" remote="133898299200000000" Dst="0" />
+<file name="GisMultiLineString.php" server="191.101.235.83" local="133925971814278529" remote="133898299200000000" Dst="0" />
+<file name="GisMultiPoint.php" server="191.101.235.83" local="133925971814338500" remote="133898299200000000" Dst="0" />
+<file name="GisMultiPolygon.php" server="191.101.235.83" local="133925971814399793" remote="133898299200000000" Dst="0" />
+<file name="GisPoint.php" server="191.101.235.83" local="133925971814475088" remote="133898299200000000" Dst="0" />
+<file name="GisVisualization.php" server="191.101.235.83" local="133925971814530329" remote="133898299200000000" Dst="0" />
+<file name="GisPolygon.php" server="191.101.235.83" local="133925971814612962" remote="133898299200000000" Dst="0" />
+<file name="GisFactory.php" server="191.101.235.83" local="133925971835809489" remote="133898299200000000" Dst="0" />
+<file name="GisGeometry.php" server="191.101.235.83" local="133925971836065760" remote="133898299200000000" Dst="0" />
+<file name="GisGeometryCollection.php" server="191.101.235.83" local="133925971836125896" remote="133898299200000000" Dst="0" />
+</dwsync>

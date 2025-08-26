@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="BindTrait.php" server="191.101.235.83" local="133925973165551654" remote="133898299200000000" Dst="0" />
+<file name="AbstractTrait.php" server="191.101.235.83" local="133925973165722344" remote="133898299200000000" Dst="0" />
+<file name="ArgumentTrait.php" server="191.101.235.83" local="133925973165722344" remote="133898299200000000" Dst="0" />
+<file name="CallTrait.php" server="191.101.235.83" local="133925973165882919" remote="133898299200000000" Dst="0" />
+<file name="ClassTrait.php" server="191.101.235.83" local="133925973165882919" remote="133898299200000000" Dst="0" />
+<file name="AutowireTrait.php" server="191.101.235.83" local="133925973165958220" remote="133898299200000000" Dst="0" />
+<file name="ConfiguratorTrait.php" server="191.101.235.83" local="133925973166013537" remote="133898299200000000" Dst="0" />
+<file name="AutoconfigureTrait.php" server="191.101.235.83" local="133925973166108646" remote="133898299200000000" Dst="0" />
+<file name="DecorateTrait.php" server="191.101.235.83" local="133925973166108646" remote="133898299200000000" Dst="0" />
+<file name="DeprecateTrait.php" server="191.101.235.83" local="133925973166224015" remote="133898299200000000" Dst="0" />
+<file name="FactoryTrait.php" server="191.101.235.83" local="133925973166224015" remote="133898299200000000" Dst="0" />
+<file name="FileTrait.php" server="191.101.235.83" local="133925973166274013" remote="133898299200000000" Dst="0" />
+<file name="LazyTrait.php" server="191.101.235.83" local="133925973166319361" remote="133898299200000000" Dst="0" />
+<file name="ParentTrait.php" server="191.101.235.83" local="133925973166359374" remote="133898299200000000" Dst="0" />
+<file name="PropertyTrait.php" server="191.101.235.83" local="133925973166444556" remote="133898299200000000" Dst="0" />
+<file name="PublicTrait.php" server="191.101.235.83" local="133925973166474561" remote="133898299200000000" Dst="0" />
+<file name="ShareTrait.php" server="191.101.235.83" local="133925973166579789" remote="133898299200000000" Dst="0" />
+<file name="SyntheticTrait.php" server="191.101.235.83" local="133925973166579789" remote="133898299200000000" Dst="0" />
+<file name="TagTrait.php" server="191.101.235.83" local="133925973176671055" remote="133898299200000000" Dst="0" />
+</dwsync>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="ASNObject.php" server="191.101.235.83" local="133925972672204706" remote="133898299200000000" Dst="0" />
+<file name="AbstractString.php" server="191.101.235.83" local="133925972672464124" remote="133898299200000000" Dst="0" />
+<file name="AbstractTime.php" server="191.101.235.83" local="133925972672464124" remote="133898299200000000" Dst="0" />
+<file name="Base128.php" server="191.101.235.83" local="133925972672799929" remote="133898299200000000" Dst="0" />
+<file name="Construct.php" server="191.101.235.83" local="133925972673308455" remote="133898299200000000" Dst="0" />
+<file name="ExplicitlyTaggedObject.php" server="191.101.235.83" local="133925972673454088" remote="133898299200000000" Dst="0" />
+<file name="Identifier.php" server="191.101.235.83" local="133925972673454088" remote="133898299200000000" Dst="0" />
+<file name="TemplateParser.php" server="191.101.235.83" local="133925972673504075" remote="133898299200000000" Dst="0" />
+<file name="Parsable.php" server="191.101.235.83" local="133925972683473933" remote="133898299200000000" Dst="0" />
+<file name="OID.php" server="191.101.235.83" local="133925972683599207" remote="133898299200000000" Dst="0" />
+<file name="UnknownConstructedObject.php" server="191.101.235.83" local="133925972695093003" remote="133898299200000000" Dst="0" />
+<file name="UnknownObject.php" server="191.101.235.83" local="133925972695093003" remote="133898299200000000" Dst="0" />
+</dwsync>

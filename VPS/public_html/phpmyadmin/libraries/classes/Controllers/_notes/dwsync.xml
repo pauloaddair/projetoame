@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="AbstractController.php" server="191.101.235.83" local="133925971677275267" remote="133898299200000000" Dst="0" />
+<file name="BrowseForeignersController.php" server="191.101.235.83" local="133925971677365528" remote="133898299200000000" Dst="0" />
+<file name="ChangeLogController.php" server="191.101.235.83" local="133925971677415754" remote="133898299200000000" Dst="0" />
+<file name="CheckRelationsController.php" server="191.101.235.83" local="133925971677455734" remote="133898299200000000" Dst="0" />
+<file name="CollationConnectionController.php" server="191.101.235.83" local="133925971677501089" remote="133898299200000000" Dst="0" />
+<file name="DatabaseController.php" server="191.101.235.83" local="133925971698709020" remote="133898299200000000" Dst="0" />
+<file name="ErrorReportController.php" server="191.101.235.83" local="133925971698794215" remote="133898299200000000" Dst="0" />
+<file name="ColumnController.php" server="191.101.235.83" local="133925971707714417" remote="133898299200000000" Dst="0" />
+<file name="HomeController.php" server="191.101.235.83" local="133925971708041003" remote="133898299200000000" Dst="0" />
+<file name="LicenseController.php" server="191.101.235.83" local="133925971708261847" remote="133898299200000000" Dst="0" />
+<file name="LintController.php" server="191.101.235.83" local="133925971708347109" remote="133898299200000000" Dst="0" />
+<file name="JavaScriptMessagesController.php" server="191.101.235.83" local="133925971708422377" remote="133898299200000000" Dst="0" />
+<file name="LogoutController.php" server="191.101.235.83" local="133925971708422377" remote="133898299200000000" Dst="0" />
+<file name="NavigationController.php" server="191.101.235.83" local="133925971708477512" remote="133898299200000000" Dst="0" />
+<file name="NormalizationController.php" server="191.101.235.83" local="133925971708547588" remote="133898299200000000" Dst="0" />
+<file name="PhpInfoController.php" server="191.101.235.83" local="133925971708622839" remote="133898299200000000" Dst="0" />
+<file name="RecentTablesListController.php" server="191.101.235.83" local="133925971719229935" remote="133898299200000000" Dst="0" />
+<file name="SchemaExportController.php" server="191.101.235.83" local="133925971719370368" remote="133898299200000000" Dst="0" />
+<file name="GisDataEditorController.php" server="191.101.235.83" local="133925971729480787" remote="133898299200000000" Dst="0" />
+<file name="GitInfoController.php" server="191.101.235.83" local="133925971769459497" remote="133898299200000000" Dst="0" />
+<file name="TableController.php" server="191.101.235.83" local="133925971772761518" remote="133898299200000000" Dst="0" />
+<file name="ThemeSetController.php" server="191.101.235.83" local="133925971782908818" remote="133898299200000000" Dst="0" />
+<file name="ThemesController.php" server="191.101.235.83" local="133925971783044316" remote="133898299200000000" Dst="0" />
+<file name="VersionCheckController.php" server="191.101.235.83" local="133925971783356501" remote="133898299200000000" Dst="0" />
+<file name="UserPasswordController.php" server="191.101.235.83" local="133925971783491824" remote="133898299200000000" Dst="0" />
+</dwsync>

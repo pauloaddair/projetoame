@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="copy.php" server="191.101.235.83" local="133925974244059191" remote="133898299200000000" Dst="0" />
+<file name="delete.php" server="191.101.235.83" local="133925974244059191" remote="133898299200000000" Dst="0" />
+<file name="edit.php" server="191.101.235.83" local="133925974244059191" remote="133898299200000000" Dst="0" />
+<file name="export.php" server="191.101.235.83" local="133925974244139391" remote="133898299200000000" Dst="0" />
+<file name="group_addmembers.php" server="191.101.235.83" local="133925974244139391" remote="133898299200000000" Dst="0" />
+<file name="group_create.php" server="191.101.235.83" local="133925974254175449" remote="133898299200000000" Dst="0" />
+<file name="group_delete.php" server="191.101.235.83" local="133925974254225553" remote="133898299200000000" Dst="0" />
+<file name="group_delmembers.php" server="191.101.235.83" local="133925974254279790" remote="133898299200000000" Dst="0" />
+<file name="group_rename.php" server="191.101.235.83" local="133925974254480859" remote="133898299200000000" Dst="0" />
+<file name="import.php" server="191.101.235.83" local="133925974254540563" remote="133898299200000000" Dst="0" />
+<file name="list.php" server="191.101.235.83" local="133925974254681512" remote="133898299200000000" Dst="0" />
+<file name="mailto.php" server="191.101.235.83" local="133925974254691521" remote="133898299200000000" Dst="0" />
+<file name="photo.php" server="191.101.235.83" local="133925974254691521" remote="133898299200000000" Dst="0" />
+<file name="print.php" server="191.101.235.83" local="133925974254756735" remote="133898299200000000" Dst="0" />
+<file name="qrcode.php" server="191.101.235.83" local="133925974254756735" remote="133898299200000000" Dst="0" />
+<file name="move.php" server="191.101.235.83" local="133925974254837081" remote="133898299200000000" Dst="0" />
+<file name="save.php" server="191.101.235.83" local="133925974254837081" remote="133898299200000000" Dst="0" />
+<file name="index.php" server="191.101.235.83" local="133925974254902333" remote="133898299200000000" Dst="0" />
+<file name="search.php" server="191.101.235.83" local="133925974254937865" remote="133898299200000000" Dst="0" />
+<file name="search_create.php" server="191.101.235.83" local="133925974255043048" remote="133898299200000000" Dst="0" />
+<file name="search_delete.php" server="191.101.235.83" local="133925974255123491" remote="133898299200000000" Dst="0" />
+<file name="show.php" server="191.101.235.83" local="133925974255123491" remote="133898299200000000" Dst="0" />
+<file name="undo.php" server="191.101.235.83" local="133925974255217397" remote="133898299200000000" Dst="0" />
+<file name="upload_photo.php" server="191.101.235.83" local="133925974255217397" remote="133898299200000000" Dst="0" />
+</dwsync>

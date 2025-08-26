@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="ldap_ppolicy.php" server="191.101.235.83" local="133925974925356005" remote="133898299200000000" Dst="0" />
+<file name="ldap_samba_ad.php" server="191.101.235.83" local="133925974925705950" remote="133898299200000000" Dst="0" />
+<file name="cpanel.php" server="191.101.235.83" local="133925974933382422" remote="133898299200000000" Dst="0" />
+<file name="chpasswd.php" server="191.101.235.83" local="133925974933432326" remote="133898299200000000" Dst="0" />
+<file name="ldap_simple.php" server="191.101.235.83" local="133925974933522305" remote="133898299200000000" Dst="0" />
+<file name="dbmail.php" server="191.101.235.83" local="133925974933772427" remote="133898299200000000" Dst="0" />
+<file name="directadmin.php" server="191.101.235.83" local="133925974933772427" remote="133898299200000000" Dst="0" />
+<file name="domainfactory.php" server="191.101.235.83" local="133925974933782289" remote="133898299200000000" Dst="0" />
+<file name="dovecot_passwdfile.php" server="191.101.235.83" local="133925974933782289" remote="133898299200000000" Dst="0" />
+<file name="mailcow.php" server="191.101.235.83" local="133925974933792272" remote="133898299200000000" Dst="0" />
+<file name="expect.php" server="191.101.235.83" local="133925974933942229" remote="133898299200000000" Dst="0" />
+<file name="gearman.php" server="191.101.235.83" local="133925974933942229" remote="133898299200000000" Dst="0" />
+<file name="ldap_exop.php" server="191.101.235.83" local="133925974933952229" remote="133898299200000000" Dst="0" />
+<file name="miab.php" server="191.101.235.83" local="133925974933952229" remote="133898299200000000" Dst="0" />
+<file name="kpasswd.php" server="191.101.235.83" local="133925974934032234" remote="133898299200000000" Dst="0" />
+<file name="ldap.php" server="191.101.235.83" local="133925974934032234" remote="133898299200000000" Dst="0" />
+<file name="hmail.php" server="191.101.235.83" local="133925974934122227" remote="133898299200000000" Dst="0" />
+<file name="httpapi.php" server="191.101.235.83" local="133925974934122227" remote="133898299200000000" Dst="0" />
+<file name="modoboa.php" server="191.101.235.83" local="133925974934212220" remote="133898299200000000" Dst="0" />
+<file name="pam.php" server="191.101.235.83" local="133925974934212220" remote="133898299200000000" Dst="0" />
+<file name="plesk.php" server="191.101.235.83" local="133925974934262207" remote="133898299200000000" Dst="0" />
+<file name="poppassd.php" server="191.101.235.83" local="133925974934302231" remote="133898299200000000" Dst="0" />
+<file name="pw_usermod.php" server="191.101.235.83" local="133925974934342201" remote="133898299200000000" Dst="0" />
+<file name="pwned.php" server="191.101.235.83" local="133925974934402200" remote="133898299200000000" Dst="0" />
+<file name="sasl.php" server="191.101.235.83" local="133925974934452229" remote="133898299200000000" Dst="0" />
+<file name="smb.php" server="191.101.235.83" local="133925974934502203" remote="133898299200000000" Dst="0" />
+<file name="tinycp.php" server="191.101.235.83" local="133925974944673532" remote="133898299200000000" Dst="0" />
+<file name="vpopmaild.php" server="191.101.235.83" local="133925974944723120" remote="133898299200000000" Dst="0" />
+<file name="sql.php" server="191.101.235.83" local="133925974944809101" remote="133898299200000000" Dst="0" />
+<file name="ximss.php" server="191.101.235.83" local="133925974944819074" remote="133898299200000000" Dst="0" />
+<file name="virtualmin.php" server="191.101.235.83" local="133925974944869084" remote="133898299200000000" Dst="0" />
+<file name="zxcvbn.php" server="191.101.235.83" local="133925974944949056" remote="133898299200000000" Dst="0" />
+<file name="xmail.php" server="191.101.235.83" local="133925974945251842" remote="133898299200000000" Dst="0" />
+</dwsync>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="BitArray.php" server="191.101.235.83" local="133925975241921751" remote="133898299200000000" Dst="0" />
+<file name="BitMatrix.php" server="191.101.235.83" local="133925975242257706" remote="133898299200000000" Dst="0" />
+<file name="BitUtils.php" server="191.101.235.83" local="133925975242457006" remote="133898299200000000" Dst="0" />
+<file name="CharacterSetEci.php" server="191.101.235.83" local="133925975242527528" remote="133898299200000000" Dst="0" />
+<file name="EcBlock.php" server="191.101.235.83" local="133925975242537571" remote="133898299200000000" Dst="0" />
+<file name="EcBlocks.php" server="191.101.235.83" local="133925975242698136" remote="133898299200000000" Dst="0" />
+<file name="ErrorCorrectionLevel.php" server="191.101.235.83" local="133925975242789549" remote="133898299200000000" Dst="0" />
+<file name="FormatInformation.php" server="191.101.235.83" local="133925975242839551" remote="133898299200000000" Dst="0" />
+<file name="Mode.php" server="191.101.235.83" local="133925975242882073" remote="133898299200000000" Dst="0" />
+<file name="ReedSolomonCodec.php" server="191.101.235.83" local="133925975242987266" remote="133898299200000000" Dst="0" />
+<file name="Version.php" server="191.101.235.83" local="133925975243077801" remote="133898299200000000" Dst="0" />
+</dwsync>

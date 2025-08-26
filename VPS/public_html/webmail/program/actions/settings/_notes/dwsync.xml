@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="about.php" server="191.101.235.83" local="133925974265526829" remote="133898299200000000" Dst="0" />
+<file name="folder_create.php" server="191.101.235.83" local="133925974265536787" remote="133898299200000000" Dst="0" />
+<file name="folder_delete.php" server="191.101.235.83" local="133925974265571962" remote="133898299200000000" Dst="0" />
+<file name="folder_edit.php" server="191.101.235.83" local="133925974265621978" remote="133898299200000000" Dst="0" />
+<file name="folder_purge.php" server="191.101.235.83" local="133925974275697003" remote="133898299200000000" Dst="0" />
+<file name="folder_rename.php" server="191.101.235.83" local="133925974276000552" remote="133898299200000000" Dst="0" />
+<file name="folder_save.php" server="191.101.235.83" local="133925974276010920" remote="133898299200000000" Dst="0" />
+<file name="folder_size.php" server="191.101.235.83" local="133925974276020924" remote="133898299200000000" Dst="0" />
+<file name="folder_subscribe.php" server="191.101.235.83" local="133925974276020924" remote="133898299200000000" Dst="0" />
+<file name="folder_unsubscribe.php" server="191.101.235.83" local="133925974276162127" remote="133898299200000000" Dst="0" />
+<file name="folders.php" server="191.101.235.83" local="133925974276172314" remote="133898299200000000" Dst="0" />
+<file name="identities.php" server="191.101.235.83" local="133925974276363094" remote="133898299200000000" Dst="0" />
+<file name="identity_create.php" server="191.101.235.83" local="133925974276423231" remote="133898299200000000" Dst="0" />
+<file name="identity_delete.php" server="191.101.235.83" local="133925974276468586" remote="133898299200000000" Dst="0" />
+<file name="identity_edit.php" server="191.101.235.83" local="133925974276538574" remote="133898299200000000" Dst="0" />
+<file name="identity_save.php" server="191.101.235.83" local="133925974276603843" remote="133898299200000000" Dst="0" />
+<file name="prefs_edit.php" server="191.101.235.83" local="133925974276653867" remote="133898299200000000" Dst="0" />
+<file name="prefs_save.php" server="191.101.235.83" local="133925974276729141" remote="133898299200000000" Dst="0" />
+<file name="response_create.php" server="191.101.235.83" local="133925974276729141" remote="133898299200000000" Dst="0" />
+<file name="index.php" server="191.101.235.83" local="133925974276774374" remote="133898299200000000" Dst="0" />
+<file name="response_delete.php" server="191.101.235.83" local="133925974276814379" remote="133898299200000000" Dst="0" />
+<file name="response_edit.php" server="191.101.235.83" local="133925974276889647" remote="133898299200000000" Dst="0" />
+<file name="response_get.php" server="191.101.235.83" local="133925974276889647" remote="133898299200000000" Dst="0" />
+<file name="response_save.php" server="191.101.235.83" local="133925974276971831" remote="133898299200000000" Dst="0" />
+<file name="responses.php" server="191.101.235.83" local="133925974277086966" remote="133898299200000000" Dst="0" />
+<file name="upload.php" server="191.101.235.83" local="133925974277086966" remote="133898299200000000" Dst="0" />
+<file name="upload_display.php" server="191.101.235.83" local="133925974277086966" remote="133898299200000000" Dst="0" />
+</dwsync>
