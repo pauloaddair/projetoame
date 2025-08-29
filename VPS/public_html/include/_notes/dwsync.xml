@@ -367,11 +367,11 @@
 <file name="verifica_login.bak.php" server="E:/01_Projetos/Ativos/PROJETO_AME/VPS/public_html/" local="133925971440000000" remote="133925971440000000" Dst="0" />
 <file name="verifica_login.bak2.php" server="E:/01_Projetos/Ativos/PROJETO_AME/VPS/public_html/" local="133925971440000000" remote="133925971440000000" Dst="0" />
 <file name="verifica_login.php" server="E:/01_Projetos/Ativos/PROJETO_AME/VPS/public_html/" local="133925971440000000" remote="133925971440000000" Dst="0" />
-<file name="conexao.php" server="E:/xampp/htdocs/ame/" local="134001738860000000" remote="134001738860000000" Dst="0" />
+<file name="conexao.php" server="E:/xampp/htdocs/ame/" local="134009547010374707" remote="134009547010000000" Dst="0" />
 <file name="funcoes.php" server="E:/xampp/htdocs/ame/" local="133971758830000000" remote="133971758830000000" Dst="0" />
-<file name="head.php" server="E:/xampp/htdocs/ame/" local="134007026460044477" remote="134007026460000000" Dst="0" />
+<file name="head.php" server="E:/xampp/htdocs/ame/" local="134009573400423318" remote="134009573400000000" Dst="0" />
 <file name="nav.php" server="E:/xampp/htdocs/ame/" local="134002109790000000" remote="134002109790000000" Dst="0" />
-<file name="scripts.php" server="E:/xampp/htdocs/ame/" local="134002109940000000" remote="134002109940000000" Dst="0" />
+<file name="scripts.php" server="E:/xampp/htdocs/ame/" local="134009574947476812" remote="134009574940000000" Dst="0" />
 <file name="action.php" server="E:/xampp/htdocs/ame/" local="133925971390000000" remote="133925971390000000" Dst="0" />
 <file name="app-footer.php" server="E:/xampp/htdocs/ame/" local="133925971400000000" remote="133925971400000000" Dst="0" />
 <file name="atualiza_contatos.php" server="E:/xampp/htdocs/ame/" local="133925971400000000" remote="133925971400000000" Dst="0" />
@@ -403,10 +403,10 @@
 <file name="fonts.css" server="E:/xampp/htdocs/ame/" local="133925971410000000" remote="133925971410000000" Dst="0" />
 <file name="footer-botton.php" server="E:/xampp/htdocs/ame/" local="133925971410000000" remote="133925971410000000" Dst="0" />
 <file name="footer-database-noorder.php" server="E:/xampp/htdocs/ame/" local="133925971410000000" remote="133925971410000000" Dst="0" />
-<file name="footer-database.php" server="E:/xampp/htdocs/ame/" local="133925971410000000" remote="133925971410000000" Dst="0" />
+<file name="footer-database.php" server="E:/xampp/htdocs/ame/" local="134008779085128739" remote="134008779080000000" Dst="0" />
 <file name="footer-debug.php" server="E:/xampp/htdocs/ame/" local="133930950060000000" remote="133930950060000000" Dst="0" />
 <file name="footer-table.php" server="E:/xampp/htdocs/ame/" local="133925971410000000" remote="133925971410000000" Dst="0" />
-<file name="footer.php" server="E:/xampp/htdocs/ame/" local="133925971410000000" remote="133925971410000000" Dst="0" />
+<file name="footer.php" server="E:/xampp/htdocs/ame/" local="134009574705905451" remote="134009574700000000" Dst="0" />
 <file name="footer3.php" server="E:/xampp/htdocs/ame/" local="133925971410000000" remote="133925971410000000" Dst="0" />
 <file name="footerbt.php" server="E:/xampp/htdocs/ame/" local="133925971410000000" remote="133925971410000000" Dst="0" />
 <file name="footerjqwidget.php" server="E:/xampp/htdocs/ame/" local="133925971410000000" remote="133925971410000000" Dst="0" />
@@ -415,7 +415,7 @@
 <file name="get_aniversarios.php" server="E:/xampp/htdocs/ame/" local="133925971420000000" remote="133925971420000000" Dst="0" />
 <file name="get_saldo_mensal.php" server="E:/xampp/htdocs/ame/" local="133925971420000000" remote="133925971420000000" Dst="0" />
 <file name="head-datatable.php" server="E:/xampp/htdocs/ame/" local="133939932540000000" remote="133939932540000000" Dst="0" />
-<file name="head-table.php" server="E:/xampp/htdocs/ame/" local="133939932800000000" remote="133939932800000000" Dst="0" />
+<file name="head-table.php" server="E:/xampp/htdocs/ame/" local="134009574156791811" remote="134009574150000000" Dst="0" />
 <file name="head.bak.php" server="E:/xampp/htdocs/ame/" local="133972652124354818" remote="133972652120000000" Dst="0" />
 <file name="head1.php" server="E:/xampp/htdocs/ame/" local="133925971410000000" remote="133925971410000000" Dst="0" />
 <file name="head2.php" server="E:/xampp/htdocs/ame/" local="133925971410000000" remote="133925971410000000" Dst="0" />
@@ -441,7 +441,7 @@
 <file name="processar_rodizio.php" server="E:/xampp/htdocs/ame/" local="134005197659957304" remote="134005197650000000" Dst="0" />
 <file name="reenviar.php" server="E:/xampp/htdocs/ame/" local="133925971420000000" remote="133925971420000000" Dst="0" />
 <file name="registra_contato.php" server="E:/xampp/htdocs/ame/" local="133925971420000000" remote="133925971420000000" Dst="0" />
-<file name="restrito.php" server="E:/xampp/htdocs/ame/" local="134007002317356532" remote="134007002310000000" Dst="0" />
+<file name="restrito.php" server="E:/xampp/htdocs/ame/" local="134007024536936821" remote="134007024530000000" Dst="0" />
 <file name="resumo_expositores.php" server="E:/xampp/htdocs/ame/" local="133925971420000000" remote="133925971420000000" Dst="0" />
 <file name="resumo_leads.php" server="E:/xampp/htdocs/ame/" local="133925971420000000" remote="133925971420000000" Dst="0" />
 <file name="salvar_mensagens.php" server="E:/xampp/htdocs/ame/" local="133925971420000000" remote="133925971420000000" Dst="0" />
@@ -458,9 +458,15 @@
 <file name="ultramsg.class.php" server="E:/xampp/htdocs/ame/" local="133925971430000000" remote="133925971430000000" Dst="0" />
 <file name="update_event_status.php" server="E:/xampp/htdocs/ame/" local="134005198027344517" remote="134005198020000000" Dst="0" />
 <file name="upload.php" server="E:/xampp/htdocs/ame/" local="133925971430000000" remote="133925971430000000" Dst="0" />
-<file name="valida.php" server="E:/xampp/htdocs/ame/" local="134007035994596427" remote="134007035990000000" Dst="0" />
+<file name="valida.php" server="E:/xampp/htdocs/ame/" local="134008926542214195" remote="134008926540000000" Dst="0" />
 <file name="verifica_login.bak.php" server="E:/xampp/htdocs/ame/" local="133925971440000000" remote="133925971440000000" Dst="0" />
 <file name="verifica_login.bak2.php" server="E:/xampp/htdocs/ame/" local="133925971440000000" remote="133925971440000000" Dst="0" />
-<file name="verifica_login.php" server="E:/xampp/htdocs/ame/" local="133925971440000000" remote="133925971440000000" Dst="0" />
+<file name="verifica_login.php" server="E:/xampp/htdocs/ame/" local="134008858750302265" remote="134008858750000000" Dst="0" />
 <file name="migrations.sql" server="E:/xampp/htdocs/ame/" local="134005236763153569" remote="134005236760000000" Dst="0" />
+<file name="check_session.php" server="E:/xampp/htdocs/ame/" local="134008666360697221" remote="134008666360000000" Dst="0" />
+<file name="lista_todos_eventos.php" server="E:/xampp/htdocs/ame/" local="134009481173935830" remote="134009481170000000" Dst="0" />
+<file name="api_escala.php" server="E:/xampp/htdocs/ame/" local="134009673551159578" remote="134009673550000000" Dst="0" />
+<file name="html_footer_scripts.php" server="E:/xampp/htdocs/ame/" local="134009574468980261" remote="134009574460000000" Dst="0" />
+<file name="html_head.php" server="E:/xampp/htdocs/ame/" local="134009573152766484" remote="134009573150000000" Dst="0" />
+<file name="html_head_table.php" server="E:/xampp/htdocs/ame/" local="134009573889781003" remote="134009573880000000" Dst="0" />
 </dwsync>

@@ -51,14 +51,14 @@
 <!--<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>-->
 
   <!-- Bootstrap tooltips -->
-  <script type="text/javascript" src="/js/popper.min.js"></script>
+  <script type="text/javascript" src="<?php echo $GLOBALS['app_web_root']?>js/popper.min.js"></script>
 
 <!-- Bootstrap core JavaScript -->
-  <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="<?php echo $GLOBALS['app_web_root']?>js/bootstrap.min.js"></script>
 
 
   <!-- MDB core JavaScript -->
-  <script type="text/javascript" src="/js/mdb.min.js"></script>
+  <script type="text/javascript" src="<?php echo $GLOBALS['app_web_root']?>js/mdb.min.js"></script>
 
   <!-- DataTable JavaScript -->
 	<script type="text/javascript" src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>

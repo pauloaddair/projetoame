@@ -185,8 +185,5 @@ include_once($base_path . 'include/head-table.php');
 */
 	?>
 	</body>
-<?php
-include_once($base_path . 'include/scripts.php');
-?>
 <?php include_once($base_path . 'include/end.php');
 ?>

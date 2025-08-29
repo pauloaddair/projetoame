@@ -8,7 +8,7 @@
 		  <hr class="my-4">
 		  <p class="text-center text-uppercase tipo1"><small>Identifique-se ou cadastre-se para receber autorização para acessá-la.</small></p>
 		  <p class="lead text-center text-uppercase tipo3">
-			<a class="btn bg-primary btn-sm rounded-pill text-white" href="/login" role="button">Identifique-se</a>
+			<a class="btn bg-primary btn-sm rounded-pill text-white" href="<?php echo $GLOBALS['app_web_root']; ?>login" role="button">Identifique-se</a>
 		  </p>
 		</div>
 	</div>

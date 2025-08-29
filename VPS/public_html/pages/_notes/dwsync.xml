@@ -435,13 +435,13 @@
 <file name="usuarios.php" server="E:/01_Projetos/Ativos/PROJETO_AME/VPS/public_html/" local="133925971500000000" remote="133925971500000000" Dst="0" />
 <file name="vendas.php" server="E:/01_Projetos/Ativos/PROJETO_AME/VPS/public_html/" local="133925971500000000" remote="133925971500000000" Dst="0" />
 <file name="webhook_pagseguro.php" server="E:/01_Projetos/Ativos/PROJETO_AME/VPS/public_html/" local="133925971500000000" remote="133925971500000000" Dst="0" />
-<file name="atendentes.php" server="E:/xampp/htdocs/ame/" local="133939773010000000" remote="133939773010000000" Dst="0" />
+<file name="atendentes.php" server="E:/xampp/htdocs/ame/" local="134008858412797860" remote="134008858410000000" Dst="0" />
 <file name="avaliacao.php" server="E:/xampp/htdocs/ame/" local="134005237585093230" remote="134005237580000000" Dst="0" />
-<file name="inscrever.php" server="E:/xampp/htdocs/ame/" local="133974120700000000" remote="133974120700000000" Dst="0" />
-<file name="escala.php" server="E:/xampp/htdocs/ame/" local="134003613897047186" remote="134003613890000000" Dst="0" />
+<file name="inscrever.php" server="E:/xampp/htdocs/ame/" local="134008858479583622" remote="134008858470000000" Dst="0" />
+<file name="escala.php" server="E:/xampp/htdocs/ame/" local="134008858167030160" remote="134008858160000000" Dst="0" />
 <file name="action.php" server="E:/xampp/htdocs/ame/" local="133925971460000000" remote="133925971460000000" Dst="0" />
-<file name="admin.php" server="E:/xampp/htdocs/ame/" local="133933485210000000" remote="133933485210000000" Dst="0" />
-<file name="adminatividades.php" server="E:/xampp/htdocs/ame/" local="134007002771626048" remote="134007002770000000" Dst="0" />
+<file name="admin.php" server="E:/xampp/htdocs/ame/" local="134009575862096914" remote="134009575860000000" Dst="0" />
+<file name="adminatividades.php" server="E:/xampp/htdocs/ame/" local="134007028284279553" remote="134007028280000000" Dst="0" />
 <file name="admincontato-NET-SOHO-2025.php" server="E:/xampp/htdocs/ame/" local="133930950380000000" remote="133930950380000000" Dst="0" />
 <file name="admincontato.php" server="E:/xampp/htdocs/ame/" local="133925971460000000" remote="133925971460000000" Dst="0" />
 <file name="admindadoscadastrais.php" server="E:/xampp/htdocs/ame/" local="133925971460000000" remote="133925971460000000" Dst="0" />
@@ -450,7 +450,7 @@
 <file name="adminenviaextrato.php" server="E:/xampp/htdocs/ame/" local="133925971460000000" remote="133925971460000000" Dst="0" />
 <file name="adminevento.php" server="E:/xampp/htdocs/ame/" local="133925971460000000" remote="133925971460000000" Dst="0" />
 <file name="admineventos.bak.php" server="E:/xampp/htdocs/ame/" local="133925971460000000" remote="133925971460000000" Dst="0" />
-<file name="admineventos.php" server="E:/xampp/htdocs/ame/" local="133925971460000000" remote="133925971460000000" Dst="0" />
+<file name="admineventos.php" server="E:/xampp/htdocs/ame/" local="134009497642914526" remote="134009497640000000" Dst="0" />
 <file name="admineventos2.php" server="E:/xampp/htdocs/ame/" local="133925971460000000" remote="133925971460000000" Dst="0" />
 <file name="adminexcluidisponibilidade.php" server="E:/xampp/htdocs/ame/" local="133925971460000000" remote="133925971460000000" Dst="0" />
 <file name="adminexpositores.php" server="E:/xampp/htdocs/ame/" local="133925971460000000" remote="133925971460000000" Dst="0" />
@@ -520,9 +520,9 @@
 <file name="inscrever-NET-SOHO-2025.php" server="E:/xampp/htdocs/ame/" local="133920982680000000" remote="133920982680000000" Dst="0" />
 <file name="legal.php" server="E:/xampp/htdocs/ame/" local="133925971550000000" remote="133925971550000000" Dst="0" />
 <file name="legal2.php" server="E:/xampp/htdocs/ame/" local="133925971490000000" remote="133925971490000000" Dst="0" />
-<file name="login.php" server="E:/xampp/htdocs/ame/" local="134007023461018410" remote="134007023460000000" Dst="0" />
+<file name="login.php" server="E:/xampp/htdocs/ame/" local="134008858583056735" remote="134008858580000000" Dst="0" />
 <file name="login1.php" server="E:/xampp/htdocs/ame/" local="133925971490000000" remote="133925971490000000" Dst="0" />
-<file name="logout.php" server="E:/xampp/htdocs/ame/" local="133925971490000000" remote="133925971490000000" Dst="0" />
+<file name="logout.php" server="E:/xampp/htdocs/ame/" local="134008836548853813" remote="134008836540000000" Dst="0" />
 <file name="loteria.php" server="E:/xampp/htdocs/ame/" local="133925971490000000" remote="133925971490000000" Dst="0" />
 <file name="metadados.bak.php" server="E:/xampp/htdocs/ame/" local="133925971490000000" remote="133925971490000000" Dst="0" />
 <file name="metadados.php" server="E:/xampp/htdocs/ame/" local="133925971490000000" remote="133925971490000000" Dst="0" />
@@ -534,8 +534,8 @@
 <file name="prospects.php" server="E:/xampp/htdocs/ame/" local="133925971500000000" remote="133925971500000000" Dst="0" />
 <file name="prospects2.php" server="E:/xampp/htdocs/ame/" local="133925971490000000" remote="133925971490000000" Dst="0" />
 <file name="relatorios.php" server="E:/xampp/htdocs/ame/" local="133925971500000000" remote="133925971500000000" Dst="0" />
-<file name="restrito.php" server="E:/xampp/htdocs/ame/" local="133925971500000000" remote="133925971500000000" Dst="0" />
-<file name="rodizio.php" server="E:/xampp/htdocs/ame/" local="133972732879567673" remote="133972732870000000" Dst="0" />
+<file name="restrito.php" server="E:/xampp/htdocs/ame/" local="134008661557089465" remote="134008661550000000" Dst="0" />
+<file name="rodizio.php" server="E:/xampp/htdocs/ame/" local="134008858647894348" remote="134008858640000000" Dst="0" />
 <file name="roleta.php" server="E:/xampp/htdocs/ame/" local="133925971490000000" remote="133925971490000000" Dst="0" />
 <file name="saldo.php" server="E:/xampp/htdocs/ame/" local="133925971500000000" remote="133925971500000000" Dst="0" />
 <file name="server.php" server="E:/xampp/htdocs/ame/" local="133925971500000000" remote="133925971500000000" Dst="0" />
@@ -551,5 +551,5 @@
 <file name="webhook_pagseguro.php" server="E:/xampp/htdocs/ame/" local="133925971500000000" remote="133925971500000000" Dst="0" />
 <file name="backfill_uuid.php" server="E:/xampp/htdocs/ame/" local="134005233564542838" remote="134005233560000000" Dst="0" />
 <file name="avaliar_atendente.php" server="E:/xampp/htdocs/ame/" local="134005237069041292" remote="134005237060000000" Dst="0" />
-<file name="adminescala.php" server="E:/xampp/htdocs/ame/" local="134006920019479360" remote="134006920010000000" Dst="0" />
+<file name="adminescala.php" server="E:/xampp/htdocs/ame/" local="134009681188073771" remote="134009681180000000" Dst="0" />
 </dwsync>

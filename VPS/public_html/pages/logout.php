@@ -1,5 +1,5 @@
 <?php
-session_start();
+//session_start();
 $ref = "./";
 if(isset($_SESSION['ref'])){
 	$ref = $_SESSION['ref'];

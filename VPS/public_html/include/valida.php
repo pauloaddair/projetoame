@@ -1,5 +1,5 @@
 <?php
-session_start();
+// session_start();
 include('conexao.php');
 include('funcoes.php');
 $ref = "../";
@@ -22,7 +22,7 @@ echo "</pre>";
 */
 
 if(empty($_POST['nome']) || empty($_POST['senha'])) {
-	$_SESSION['nao_autenticado']==true;
+	$_SESSION['nao_autenticado'] = true;
 	header('Location: '.$ref);
 	exit();
 }
@@ -34,12 +34,8 @@ if(empty($_POST['nome']) || empty($_POST['senha'])) {
 	LEFT JOIN imagens
 	ON usuarios.imagem_id = imagens.imagem_id
 	WHERE ((login LIKE '{$usuario}' OR email LIKE '{$usuario}' OR telefone LIKE '{$usuario}') and (senha = md5('{$senha}')))";
-/*
-echo $query;
-exit;
-
-
-*/
+//echo $query;
+//exit;
 $result = mysqli_query($conexao, $query);
 
 $row = mysqli_num_rows($result);
@@ -55,11 +51,11 @@ exit;
 
 if($row == 1) {
     $row1 = mysqli_fetch_assoc($result);
-/*
 	echo "<pre>";
 	print_r($row1);
 	echo "</pre>";
 	echo $ref . "<br>";
+/*
 	exit;
 	$usuario = $row1["login"];
 */
@@ -76,17 +72,14 @@ if($row == 1) {
 	$_SESSION['perfil'] = $row1["url"];
 	$host  = $_SERVER['HTTP_HOST'];
 	$uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
-/*
 		echo "<pre>";
 		print_r($_SESSION);
-		echo "</pre>";			  
-*/
+		echo "</pre>";	
+	echo $ref;
 //	exit();
 	//echo $ref;
 //	header('Location: $ref');
-    echo "DEBUG: Redirecionando para: " . htmlspecialchars($ref);
-    exit; // Parando o script para depuração
-	header("Location: $ref");
+    header("Location: $ref");
 	exit();
 } else {
 	$_SESSION['nao_autenticado'] = true;

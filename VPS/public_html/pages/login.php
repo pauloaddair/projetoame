@@ -1,5 +1,5 @@
 <?php
-session_start();
+// session_start();
 $ref="";
 if (isset($_SERVER['HTTP_REFERER'])){
 	$ref = $_SERVER['HTTP_REFERER'];	
