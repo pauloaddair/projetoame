@@ -1,8 +1,8 @@
 <?php
-include_once('./include/conexao.php');
+// include_once('./include/conexao.php');
 include_once('./include/funcoes.php');
 $titulo = "Troca fot de perfil";
-include_once('./include/head.php');
+// include_once('./include/head.php');
 $usuario_id = 0;
 $candidato_id = 0;
 	if (array_key_exists(1,$parametros)){
@@ -71,10 +71,10 @@ if ($_SERVER['REQUEST_METHOD']=="POST"){
 			<div class="col col-md-8">
 				<div class="card">
 				<form method="post" enctype="multipart/form-data">
-					<input class="btn rounded-pill" type="hidden" id="usuario_id" name="usuario_id" value="<? echo $candidato_id?>">
+					<input class="btn rounded-pill" type="hidden" id="usuario_id" name="usuario_id" value="<?php echo $candidato_id?>">
 					<div class="card-header">
-						<h1><? echo $nome?></h1>
-					<img src="/<? echo $icone?>" class="img-card-top img-thumbnail">
+						<h1><?php echo $nome?></h1>
+					<img src="/<?php echo $icone?>" class="img-card-top img-thumbnail">
 					</div>
 					<div class="md-form">
 						<!--  <label for="formFile" class="form-label">Default file input example</label>-->
@@ -97,6 +97,6 @@ include_once('./include/footer.php');
 <?php
 include_once('./include/scripts.php');
 ?>
-<?
+<?php 
 include_once('./include/end.php');
 ?>

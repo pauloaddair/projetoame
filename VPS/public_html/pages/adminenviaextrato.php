@@ -51,13 +51,13 @@ if ($_SERVER['REQUEST_METHOD']=="POST"){
 	
 }
 $titulo = "Importar extrato";
-include_once('./include/head.php');
+// include_once('./include/head.php');
 ?>
 <body>
     <div class="container mt-5">
 		<header>
 			<h2 class="mb-4">Importar Lançamentos - CSV</h2>
-			<?
+			<?php
 			if ($msg){
 				echo "<h2>".$msg."</h2>";
 			}
@@ -73,8 +73,9 @@ include_once('./include/head.php');
             <button type="submit" class="btn btn-primary">Enviar</button>
         </form>
     </div>
-<?
+<?php
 	include_once('./include/footer.php');
 	include_once('./include/scripts.php');
 	include_once('./include/end.php');
 ?>
+

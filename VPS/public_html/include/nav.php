@@ -84,6 +84,9 @@
 	<div id="div-logado" style="display: <?php echo $logado?>">		
 		<a class="dropdown-item" href="<?php echo $app_web_root; ?>perfil"><i class="fas fa-user-alt light-blue-text mx-2"></i>&nbsp;Perfil</a>
 		<a class="dropdown-item" href="<?php echo $app_web_root; ?>admin"><i class="fas fa-columns light-blue-text mx-2"></i>Painel</a>
+    <?php if (isset($_SESSION['nivel']) && $_SESSION['nivel'] >= 3): ?>
+		<a class="dropdown-item" href="<?php echo $app_web_root; ?>atestados"><i class="fas fa-certificate light-blue-text mx-2"></i>&nbsp;Atestados</a>
+    <?php endif; ?>
 		<hr class="dropdown-divider" />
 		<a class="dropdown-item" href="<?php echo $app_web_root; ?>logout"><i class="fas fa-sign-out-alt light-blue-text"></i>&nbsp;Sair</a>
 	</div>

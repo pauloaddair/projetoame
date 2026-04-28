@@ -8,8 +8,8 @@ require before('/public_html',__DIR__) . '/vendor/autoload.php';
 //session_start();
 setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'portuguese');
 date_default_timezone_set('America/Sao_Paulo');
-include_once('./include/conexao.php');
-include_once('./include/head.php');
+// include_once('./include/conexao.php');
+// include_once('./include/head.php');
 $body="";
 $queryeventos = "SELECT eventos_marcados.*,imagens.url
 FROM eventos_marcados,imagens
@@ -77,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD']=="POST"){
 			$dados['email'] = $email;
 		}
 		$from = "pauloadd@projetoame.org";
-		$to = "pauloadd@gmail.com";
+		$to = "pauloadd@novaeratec.com.br";
 	//    $to = "pauloadd@gmail.com";
 		$message = "";
 		// To send HTML mail, the Content-type header must be set
@@ -92,9 +92,9 @@ if ($_SERVER['REQUEST_METHOD']=="POST"){
 
 	//    $headers = "From:" . $from;
 
-		$subject  = 'Dados do atendente '. $nome; // Assunto da mensagem
+		$subject  = 'Disponibilidade do atendente '. $nome; // Assunto da mensagem
 		$body = ' <strong>Nome: '.$dados['nome'].'</strong><br>'; // Nomes do atendente
-		$body .= ' <strong>Responsavel: '.$row['responsavel'].'</strong><br>'; // Nomes dos noivos
+		$body .= ' <strong>Responsável: '.$row['responsavel'].'</strong><br>'; 
 			$body .="<br>Disponibilidade:<hr>";
 		$i=0;
 	    foreach ($_POST as $campo => $valor) {
@@ -126,22 +126,24 @@ if ($_SERVER['REQUEST_METHOD']=="POST"){
 	$body .= ' Navegador: '.$_SERVER['HTTP_USER_AGENT'].'<br>'; // IP do visitante
 	$body .= ' Enviado em: '. date('d/m/Y H:i').'<br>'; // Texto da mensagem
 		$message = $body;
-	$dados['server'] = $_SERVER['SERVER_ADDR'];
-	$dados['agent'] = $_SERVER['HTTP_USER_AGENT'];
-	$dados['data_atual'] = date('d/m/Y H:i');
-/*
-		echo "<p>to: ".$to."</p>";
-		echo "<p>subject: ".$subject."</p>";
-		echo "<p>message: ".$message."</p>";
-		echo "<p>$to: ".implode("\r\n", $headers)."</p>";
-*/
-//		exit;
-	if (mail($to,$subject,$message, implode("\r\n", $headers))) {
-//    if (mail($to,$subject,$message, $headers)) {
-       $msg = "<p class='text-center'>Os dados de <strong><em>".$nome."</em></strong> foram enviados com sucesso!</p>"; // or use booleans here
-    } else {
-        $msg = "<p class='text-center'>Não conseguimos enviar sua mensagem!  Tente novamente mais tarde.</p>";;
-    }
+
+	try {
+		// Configurações do PHPMailer (já definidas acima, apenas aplicando o conteúdo)
+		$mail->setFrom('noreply@projetoame.org', 'Projeto AME - Disponibilidade');
+		$mail->addAddress($to);
+		$mail->addAddress($_POST['email']); // Cópia para o atendente
+		$mail->addCC('regina.rjr@hotmail.com');
+		
+		$mail->isHTML(true);
+		$mail->Subject = $subject;
+		$mail->Body    = $message;
+		$mail->CharSet = 'UTF-8';
+
+		$mail->send();
+		$msg = "<p class='text-center'>Os dados de <strong><em>".$nome."</em></strong> foram enviados com sucesso!</p>";
+	} catch (Exception $e) {
+		$msg = "<p class='text-center'>Não conseguimos enviar sua mensagem! Erro: {$mail->ErrorInfo}</p>";
+	}
 	}
 }
 ?>
@@ -175,6 +177,7 @@ $resp = mysqli_query($conexao,$queryeventos);
 				<div class="card-header">
 					<img class="card-img-top" src="/<?php echo $row0['url']?>">
 					<h1 class="text-center"><?php echo $row0['nome']?></h1>
+					<p class="text-center">De <?php echo Date("d/M",strtotime($row0['inicio']))?> a <?php echo Date("d/M",strtotime($row0['final']))?></p>
 					<p><a href="<?php echo $row0['maps']?>" target="_blank"><i class="far fa-map grey-text mr-1"></i><strong><?php echo $row0['local']?></strong></a>&nbsp;<?php echo $row0['endereco']?></p>
 					<?php
 					if ($row0['obs']<>""){
@@ -248,6 +251,12 @@ $resp = mysqli_query($conexao,$queryeventos);
 				<div class="md-form">
 					<button class="btn btn-sm btn-block rounded-pill btn-primary" type="submit">Enviar</button>
 				</div>
+                <div class="text-center mt-3">
+                    <p class="small text-muted">Mudou de e-mail? <a href="/atualizar_email">Clique aqui para atualizar seu cadastro</a>.</p>
+<!--
+                    <p class="small text-muted">Quer aproveitar e atualizar seu perfil completo (tamanhos, contatos, etc)? <a href="/meuperfil">Clique aqui</a>.</p>
+-->
+                </div>
 			</div>
 			</div>
 			</form>

@@ -1,6 +1,6 @@
 <?php
 session_start();
-include_once('include/conexao.php');
+// include_once('include/conexao.php');
 include_once('include/head3.php');
 ?>
 <body>
@@ -14,7 +14,7 @@ include_once('include/head3.php');
     </h2>
     <div id="collapseTwo" class="accordion-collapse collapse show" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
       <div class="accordion-body">
-		<? 
+		<?php 
 		echo "<pre>";
 		print_r($_SESSION);
 		echo "</pre>";			  
@@ -30,7 +30,7 @@ include_once('include/head3.php');
     </h2>
     <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
       <div class="accordion-body">
-		<? 
+		<?php 
 		echo "<pre>";
 		print_r($_COOKIE);
 		echo "</pre>";
@@ -46,7 +46,7 @@ include_once('include/head3.php');
     </h2>
     <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
       <div class="accordion-body">
-		<? 
+		<?php 
 		echo "<pre>";
 		print_r($_SERVER);
 		echo "</pre>";
@@ -54,7 +54,7 @@ include_once('include/head3.php');
       </div>
     </div>
   </div>
-<?
+<?php 
 if (($_SERVER["REQUEST_METHOD"]=="POST")){
 ?>
   <div class="accordion-item">
@@ -65,7 +65,7 @@ if (($_SERVER["REQUEST_METHOD"]=="POST")){
     </h2>
     <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionExample">
       <div class="accordion-body">
-		<? 
+		<?php 
 		echo "<pre>";
 		print_r($_POST);
 		echo "</pre>";
@@ -73,7 +73,7 @@ if (($_SERVER["REQUEST_METHOD"]=="POST")){
       </div>
     </div>
   </div>
-<?
+<?php 
   }
   ?>
   <div class="accordion-item">
@@ -84,7 +84,7 @@ if (($_SERVER["REQUEST_METHOD"]=="POST")){
     </h2>
     <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionExample">
       <div class="accordion-body">
-		<? 
+		<?php 
 		echo "<pre>";
 		print_r($_GET);
 		echo "</pre>";
@@ -95,7 +95,7 @@ if (($_SERVER["REQUEST_METHOD"]=="POST")){
 </div>
 		<a href="/logout" class="btn btn-info rounded-pill d-block">Logout</a>
 </div>
-<?
+<?php 
 $ativ = "server";
 include_once('include/footer3.php');
 include_once('include/scripts3.php');

@@ -1,8 +1,8 @@
 <?php
 // Inclui arquivos essenciais
 include_once('./include/funcoes.php');
-include_once('./include/conexao.php');
-include_once('./include/head.php');
+// include_once('./include/conexao.php');
+// include_once('./include/head.php');
 
 $evento_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 $msg = "";

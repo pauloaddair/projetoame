@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="api_busca_candidatos.php" server="191.101.235.83/public_html/" local="134204026158680992" remote="134210794800000000" Dst="0" />
+<file name="api_salvar_escala.php" server="191.101.235.83/public_html/" local="134204030891403924" remote="134210794800000000" Dst="0" />
+<file name="api_toggle_escala.php" server="191.101.235.83/public_html/" local="134204032409101050" remote="134210794800000000" Dst="0" />
+<file name="conexao.php" server="191.101.235.83/public_html/" local="134204198690207916" remote="134210794800000000" Dst="0" />
+<file name="conexao.VPS.php" server="191.101.235.83/public_html/" local="134203842050429235" remote="134210794800000000" Dst="0" />
+<file name="extrair_rss.php" server="191.101.235.83/public_html/" local="134204009418292425" remote="134210794800000000" Dst="0" />
+<file name="extrair_rss_completo.php" server="191.101.235.83/public_html/" local="134204015536532071" remote="134210794800000000" Dst="0" />
+<file name="importar_rodizio.php" server="191.101.235.83/public_html/" local="134204017171328500" remote="134210794800000000" Dst="0" />
+<file name="migrar_candidatos_usuarios.php" server="191.101.235.83/public_html/" local="134203914869402746" remote="134210794800000000" Dst="0" />
+<file name="migrar_unique_contatos.php" server="191.101.235.83/public_html/" local="134203921779352176" remote="134210794800000000" Dst="0" />
+<file name="saneamento_nomes_responsaveis.php" server="191.101.235.83/public_html/" local="134203925198765321" remote="134210794800000000" Dst="0" />
+<file name="2026-04-11-projetoame.sql" server="191.101.235.83/public_html/" local="134203905275218844" remote="134210794800000000" Dst="0" />
+<file name="sanear_e_migrar.php" server="191.101.235.83/public_html/" local="134203915892968744" remote="134210794800000000" Dst="0" />
+<file name="sincronizar_nomes.php" server="191.101.235.83/public_html/" local="134203927650438827" remote="134210794800000000" Dst="0" />
+<file name="verificar_duplicidade.php" server="191.101.235.83/public_html/" local="134203920186787062" remote="134210794800000000" Dst="0" />
+<file name="conexao.local.php" server="191.101.235.83/public_html/" local="134204197850641818" remote="134210794800000000" Dst="0" />
+</dwsync>

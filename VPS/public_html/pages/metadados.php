@@ -92,7 +92,7 @@
             var map = new google.maps.Map(document.getElementById('map'), mapOptions);
             // Criar um ícone personalizado com a miniatura da imagem
             var image = {
-                url: <? echo $filePath ?>, // Caminho da imagem
+                url: <?php echo $filePath ?>, // Caminho da imagem
                 scaledSize: new google.maps.Size(50, 50), // Tamanho da miniatura
                 origin: new google.maps.Point(0, 0), // Origem
                 anchor: new google.maps.Point(25, 25) // Ponto de ancoragem no centro

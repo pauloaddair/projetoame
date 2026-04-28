@@ -1,6 +1,6 @@
 <?php
 $titulo = "Admin Mensagens";
-include 'include/head.php';
+// include 'include/head.php';
 ?>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
@@ -54,8 +54,8 @@ include 'include/head.php';
 include 'include/footer.php';
 ?>
 </body>
-<?
+<?php 
 include 'include/scripts.php';
 include 'include/end.php';
-include 'include/head.php';
+// include 'include/head.php';
 ?>

@@ -1,7 +1,7 @@
 <?php
 date_default_timezone_set('America/Sao_Paulo');
-include_once('./include/head.php');
-include_once('./include/conexao.php');
+// include_once('./include/head.php');
+// include_once('./include/conexao.php');
 include_once('./include/funcoes.php');
 
 // Chave secreta para a assinatura. Mantenha isso em segredo e não o exponha.

@@ -1,10 +1,10 @@
 <?php
 setlocale(LC_ALL, 'pt_BR');
-include_once('./include/conexao.php');
+// include_once('./include/conexao.php');
 include_once('./include/funcoes.php');
 include_once('./include/funcoes-fpdf.php');
 $titulo = "Edição de candidato";
-include_once('./include/head.php');
+// include_once('./include/head.php');
 $id = 0;
 $perfil = "img/profile.png";
 $candidato = "";
@@ -141,57 +141,57 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 			<div class="col col-md-8">
 				<div class="card">
 				<div class="card-header">
-					<img class="card-img-top img-thumbnail" src="<? echo $perfil?>">
-					<h1 class="text-center"><? echo $candidato?></h1>
-					<?
+					<img class="card-img-top img-thumbnail" src="<?php echo $perfil?>">
+					<h1 class="text-center"><?php echo $candidato?></h1>
+					<?php 
 					if ($_SERVER['REQUEST_METHOD']=="POST"){
 					?>
-					<p class="text-center"><a href="<? echo $arquivo?>" target="_blank">Autorização</a></p>
-					<?						
+					<p class="text-center"><a href="<?php echo $arquivo?>" target="_blank">Autorização</a></p>
+					<?php 					
 					}
 					?>
 				</div>
 				<div class="card-body">
 					<form method="post">
-						<input type="hidden" id="candidato_id" name="candidato_id" value="<? echo $id?>">
+						<input type="hidden" id="candidato_id" name="candidato_id" value="<?php echo $id?>">
 					<div class="md-form">
 						<i class="far fa-user prefix grey-text"></i>
-						<input type="text" id="atendente" name="atendente" class="form-control" placeholder="informe o nome do atendente" value="<? echo $atendente?>" required>
+						<input type="text" id="atendente" name="atendente" class="form-control" placeholder="informe o nome do atendente" value="<?php echo $atendente?>" required>
 						<label for="atendente">Nome do atendente</label>
 					</div>
 					<div class="md-form">
 						<i class="far fa-address-card prefix grey-text"></i>
-						<input type="text" id="cpf" name="cpf" class="form-control" placeholder="informe o CPF do atendente" value="<? echo $cpf?>" required>
+						<input type="text" id="cpf" name="cpf" class="form-control" placeholder="informe o CPF do atendente" value="<?php echo $cpf?>" required>
 						<label for="cpf">CPF do atendente</label>
 					</div>
 					<div class="md-form">
 						<i class="far fa-user prefix grey-text"></i>
-						<input type="text" id="resp" name="resp" class="form-control" placeholder="informe o nome do responsável" value="<? echo $resp?>" required>
+						<input type="text" id="resp" name="resp" class="form-control" placeholder="informe o nome do responsável" value="<?php echo $resp?>" required>
 						<label for="resp">Nome do Responsável</label>
 					</div>
 					<div class="md-form">
 						<i class="far fa-address-card prefix grey-text"></i>
-						<input type="text" id="RG" name="RG" class="form-control" placeholder="informe o RG do responsável" value="<? echo $rg?>" required>
+						<input type="text" id="RG" name="RG" class="form-control" placeholder="informe o RG do responsável" value="<?php echo $rg?>" required>
 						<label for="RG">RG do responsável</label>
 					</div>
 					<div class="md-form">
 						<i class="far fa-address-card prefix grey-text"></i>
-						<input type="text" id="cpfresp" name="cpfresp" class="form-control" placeholder="informe o CPF do responsável" value="<? echo $cpfresp?>" required>
+						<input type="text" id="cpfresp" name="cpfresp" class="form-control" placeholder="informe o CPF do responsável" value="<?php echo $cpfresp?>" required>
 						<label for="cpf">CPF do responsável</label>
 					</div>
 					<div class="md-form">
 						<i class="far fa-address-card prefix grey-text"></i>
-						<input type="email" id="email" name="email" class="form-control" placeholder="informe o e-mail cadastrado" value="<? echo $email?>" required>
+						<input type="email" id="email" name="email" class="form-control" placeholder="informe o e-mail cadastrado" value="<?php echo $email?>" required>
 						<label for="cpf">e-mail cadastrado</label>
 					</div>
 					<div class="md-form">
 						<i class="far fa-address-card prefix grey-text"></i>
-						<input type="text" id="cidade" name="cidade" class="form-control" placeholder="informe a cidade" value="<? echo $cidade?>" required>
+						<input type="text" id="cidade" name="cidade" class="form-control" placeholder="informe a cidade" value="<?php echo $cidade?>" required>
 						<label for="cidade">Cidade</label>
 					</div>
 					<div class="md-form">
 						<i class="far fa-address-card prefix grey-text"></i>
-						<input type="text" id="UF" name="uf" class="form-control" placeholder="sigla do estado" value="<? echo $estado?>" required>
+						<input type="text" id="UF" name="uf" class="form-control" placeholder="sigla do estado" value="<?php echo $estado?>" required>
 						<label for="uf">Estado</label>
 					</div>
 					<div class="md-form">
@@ -203,7 +203,7 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 			</div>
 		</div>
 	</div>
-<?
+<?php 
 	include_once('./include/footer.php');
 	include_once('./include/scripts.php');
 	include_once('./include/end.php');

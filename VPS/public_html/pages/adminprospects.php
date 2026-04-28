@@ -44,7 +44,7 @@ if (mysqli_num_rows($resp)){
 ?>
 <body>
 <main class="flex-shrink-0">
-<?
+<?php 
 	include_once('./include/nav.php');
 ?>
 	<div class="container mt-5">
@@ -52,7 +52,7 @@ if (mysqli_num_rows($resp)){
 			<nav aria-label="breadcrumb">
 			<ol class="breadcrumb">
 				<li class="breadcrumb-item"><a href="/atendentes">Atividades</a></li>
-				<li class="breadcrumb-item"><a href="/admin/<? echo $t?>"><? echo $titulo?></a></li>
+				<li class="breadcrumb-item"><a href="/admin/<?php echo $t?>"><?php echo $titulo?></a></li>
 				<li class="breadcrumb-item active" aria-current="page">Contato</li>
 			</ol>
 			</nav>
@@ -66,7 +66,7 @@ if (mysqli_num_rows($resp)){
 						<div class="col mr-2">
 							<div class="text-xs font-weight-bold text-primary text-uppercase mb-1"><a href="/admin/pendencias">Pendências</a></div>
 							<div class="h5 mb-0 font-weight-bold text-gray-800">
-								<? echo '0'?>
+								<?php echo '0'?>
 							</div>
 						</div>
 						<div class="col-auto">
@@ -85,7 +85,7 @@ if (mysqli_num_rows($resp)){
 						<div class="col mr-2">
 							<div class="text-xs font-weight-bold text-primary text-uppercase mb-1"><a href="/admin/atendentes">Atendentes</a></div>
 							<div class="h5 mb-0 font-weight-bold text-gray-800">
-								<? echo number_format($qtd_atendentes,0,",",".")?>
+								<?php echo number_format($qtd_atendentes,0,",",".")?>
 							</div>
 						</div>
 						<div class="col-auto">
@@ -103,7 +103,7 @@ if (mysqli_num_rows($resp)){
 						<div class="col mr-2">
 							<div class="text-xs font-weight-bold text-primary text-uppercase mb-1"><a href="/admin/eventos">Eventos</a></div>
 							<div class="h5 mb-0 font-weight-bold text-gray-800">
-								<? echo number_format($qtd_atividades,0,",",".")?>
+								<?php echo number_format($qtd_atividades,0,",",".")?>
 							</div>
 						</div>
 						<div class="col-auto">
@@ -122,7 +122,7 @@ if (mysqli_num_rows($resp)){
 							<div class="col mr-2">
 								<div class="text-xs font-weight-bold text-primary text-uppercase mb-1"><a href="/admin/expositores">Expositores</a></div>
 								<div class="h5 mb-0 font-weight-bold text-gray-800">
-									<? echo number_format($qtd_expositores,0,",",".")?>
+									<?php echo number_format($qtd_expositores,0,",",".")?>
 								</div>
 							</div>
 							<div class="col-auto">
@@ -141,7 +141,7 @@ if (mysqli_num_rows($resp)){
 							<div class="col mr-2">
 								<div class="text-xs font-weight-bold text-primary text-uppercase mb-1"><a href="/admin/prospects">Prospects</a></div>
 								<div class="h5 mb-0 font-weight-bold text-gray-800">
-									<? echo number_format($qtd_prospects,0,",",".")?>
+									<?php echo number_format($qtd_prospects,0,",",".")?>
 								</div>
 							</div>
 							<div class="col-auto">
@@ -168,7 +168,7 @@ if (mysqli_num_rows($resp)){
 			<th>
 			E-mail</th>
 		</thead>
-			<?
+			<?php 
 		if (mysqli_num_rows($atividades)>0){
 				$i = 1;
 				while($atividade = mysqli_fetch_array($atividades)){
@@ -183,8 +183,8 @@ if (mysqli_num_rows($resp)){
 */
 			?>
 			<tr>
-				<td><a href="<? echo '/admin/contato/'.digitos($atividade['expositor_ID'])?>/prospects">
-				<? 
+				<td><a href="<?php echo '/admin/contato/'.digitos($atividade['expositor_ID'])?>/prospects">
+				<?php 
 					If($atividade['NomeFantasia']<>""){
 						echo $atividade['NomeFantasia'];
 					} else {
@@ -192,23 +192,23 @@ if (mysqli_num_rows($resp)){
 					}
 				?>
 				</td>
-				</a><td><a href="<? echo '/admin/contato/'.digitos($atividade['expositor_ID'])?>/prospects">
-				<? echo $atividade['Resp1']?>
+				</a><td><a href="<?php echo '/admin/contato/'.digitos($atividade['expositor_ID'])?>/prospects">
+				<?php echo $atividade['Resp1']?>
 				</a></td>
-				<td><a href="<? echo '/admin/contato/'.digitos($atividade['expositor_ID'])?>/prospects">
-					   <? echo $atividade['Fone1']?>
+				<td><a href="<?php echo '/admin/contato/'.digitos($atividade['expositor_ID'])?>/prospects">
+					   <?php echo $atividade['Fone1']?>
 				</a></td>
-				<td><a href="<? echo '/admin/contato/'.digitos($atividade['expositor_ID'])?>/prospects">
-						<? echo $atividade['Email1']?>
+				<td><a href="<?php echo '/admin/contato/'.digitos($atividade['expositor_ID'])?>/prospects">
+						<?php echo $atividade['Email1']?>
 				</a></td>
 			</tr>
-			<?		
+			<?php 	
 				}
 		} else {
 			?>
 					
-			<tr><td colspan=3><? echo $mensagem?></td></tr>
-			<?
+			<tr><td colspan=3><?php echo $mensagem?></td></tr>
+			<?php 
 		}	
 			?>
 		</table>
@@ -217,7 +217,7 @@ if (mysqli_num_rows($resp)){
 	</div>
 </main>
 </body>
-<?
+<?php 
 include_once("include/footer-database.php");
 include_once("include/scripts.php");
 ?>

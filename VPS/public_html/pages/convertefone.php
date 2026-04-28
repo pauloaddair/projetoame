@@ -1,6 +1,6 @@
 <?php
 $titulo = "Converte telefones";
-include_once('./include/conexao.php');
+// include_once('./include/conexao.php');
 include_once('./include/funcoes.php');
 include_once('./include/head-table.php');
 $query = "SELECT candidatos.*,imagens.url AS perfil FROM candidatos,imagens WHERE candidatos.imagem_id = imagens.imagem_id ORDER BY nome,data_inscricao;";
@@ -20,7 +20,7 @@ $resp = mysqli_query($conexao,$query);
 		</header>
 	<table class="table table-striped table-hover" id="table">
 		<thead><th>#</th><th>ID</th><th>Perfil</th><th>Atendente</th><th>E-mail</th><th>tel</th><th>tel novo</th><th>Ações</th></thead>
-			<?
+			<?php 
 		$i=1;
 			while ($row = mysqli_fetch_array($resp)){
 /*
@@ -49,16 +49,16 @@ $resp = mysqli_query($conexao,$query);
 				$perfil = "/".$row['perfil'];
 			?>
 		<tr>
-		<td><? echo $i?></td>
-		<td><? echo $row['candidato_id']?>/<? echo $row['usuario_id']?></td>
-			<td><a href="trocafoto/<? echo digitos($row['candidato_id'])?>"><img src="<? echo $perfil?>" height="32" class="img-thumbnail"></a></td>
-		<td><? echo $row['nome']?></td>
-		<td><? echo $row['Email']?></td>
-		<td><? echo $row['Telefone']?></td>
-		<td><? echo formataWA($row['Telefone'])?></td>
-			<td><small><a href="/excluircandidato/<? echo digitos($row['candidato_id'])?>">Excluir</a> | <a href="/editacandidato/<? echo digitos($row['candidato_id'])?>">Editar</a></small></td>
+		<td><?php echo $i?></td>
+		<td><?php echo $row['candidato_id']?>/<?php echo $row['usuario_id']?></td>
+			<td><a href="trocafoto/<?php echo digitos($row['candidato_id'])?>"><img src="<?php echo $perfil?>" height="32" class="img-thumbnail"></a></td>
+		<td><?php echo $row['nome']?></td>
+		<td><?php echo $row['Email']?></td>
+		<td><?php echo $row['Telefone']?></td>
+		<td><?php echo formataWA($row['Telefone'])?></td>
+			<td><small><a href="/excluircandidato/<?php echo digitos($row['candidato_id'])?>">Excluir</a> | <a href="/editacandidato/<?php echo digitos($row['candidato_id'])?>">Editar</a></small></td>
 	</tr>
-		<?
+		<?php 
 				$i++;
 			}
 		?>
@@ -71,6 +71,6 @@ include_once('./include/footer-database.php');
 <?php
 include_once('./include/scripts.php');
 ?>
-<?
+<?php 
 include_once('./include/end.php');
 ?>

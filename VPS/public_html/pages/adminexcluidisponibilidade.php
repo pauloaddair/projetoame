@@ -1,6 +1,6 @@
 <?php
 $titulo = "Modelo";
-include_once('./include/conexao.php');
+// include_once('./include/conexao.php');
 include_once('./include/funcoes.php');
 include_once('./include/head-table.php');
 $id = 0;
@@ -29,7 +29,7 @@ $disponivel = mysqli_query($conexao,$query);
 				<td>Ação</td>
 			</thead>
 			<tbody>
-			<?
+			<?php
 			while ($row = mysqli_fetch_array($disponivel)){
 				$badge = "<span class='badge badge-danger ml-1 p-1 rounded-pill'>escalado</span>";
 				if ($row['escalado']==0){
@@ -37,18 +37,18 @@ $disponivel = mysqli_query($conexao,$query);
 				}
 				?>
 				<tr>
-					<td><? echo $row['evento']?></td>
-					<td><? echo $row['local']?></td>
-					<td><? echo $row['nome'].$badge?></td>
-					<td><? echo $row['inicio']?></td>
-					<td><? echo $row['escalado']?></td>
+					<td><?php echo $row['evento']?></td>
+					<td><?php echo $row['local']?></td>
+					<td><?php echo $row['nome'].$badge?></td>
+					<td><?php echo $row['inicio']?></td>
+					<td><?php echo $row['escalado']?></td>
 					<td><form method="post" action="/admin/disponibilidade">
-						<input type="hidden"  name="excluir" value="<? echo $row['id']?>">
-							<button type="submit" href="/admin/excluidisponibilidade/<? echo $row['id']?>" class="btn btn-danger btn-sm rounded-pill m-1">Confirmar?</button>
+						<input type="hidden"  name="excluir" value="<?php echo $row['id']?>">
+							<button type="submit" href="/admin/excluidisponibilidade/<?php echo $row['id']?>" class="btn btn-danger btn-sm rounded-pill m-1">Confirmar?</button>
 						</form>
 					</td>
 				</tr>
-				<?
+				<?php
 			}
 			?>
 			</tbody>
@@ -61,6 +61,7 @@ include_once('./include/footer-table.php');
 <?php
 include_once('./include/scripts.php');
 ?>
-<?
+<?php
 include_once('./include/end.php');
 ?>
+

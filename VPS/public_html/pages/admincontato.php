@@ -104,21 +104,21 @@
 			<nav aria-label="breadcrumb">
 			<ol class="breadcrumb">
 				<li class="breadcrumb-item"><a href="/atendentes">Atividades</a></li>
-				<li class="breadcrumb-item"><a href="/admin/<? echo $t?>"><? echo $titulo?></a></li>
+				<li class="breadcrumb-item"><a href="/admin/<?php echo $t?>"><?php echo $titulo?></a></li>
 				<li class="breadcrumb-item active" aria-current="page">Contato</li>
 			</ol>
 			</nav>
-			<h1 class="text-center"><? echo $titulo?></h1>
+			<h1 class="text-center"><?php echo $titulo?></h1>
 		</header>
 		<div class="row justify-content-center">
 			<div class="col col-sm-6 mb-2">
 				<div class="card rounded shadow">
 					<div class="card-body">
 						<form method="post">
-							<input type="hidden" name="id" value="<? echo $id?>">
-							<input type="hidden" name="tabela" value="<? echo $tabela?>">
-							<input type="hidden" name="uid" value="<? echo $usuario_id?>">
-						<?
+							<input type="hidden" name="id" value="<?php echo $id?>">
+							<input type="hidden" name="tabela" value="<?php echo $tabela?>">
+							<input type="hidden" name="uid" value="<?php echo $usuario_id?>">
+						<?php
 						if (mysqli_num_rows($resp)>0){
 							print_r($resp)."<br>";
 							while($row = mysqli_fetch_array($resp)){
@@ -126,25 +126,25 @@
 						?>
 							<div class="md-form p-1">
 								<i class="far fa-map prefix grey-text"></i>
-								<input type="text" id="<? echo $item?>" name="<? echo $item?>" class="form-control" placeholder="<? echo $item?>"
-									   <? 
+								<input type="text" id="<?php echo $item?>" name="<?php echo $item?>" class="form-control" placeholder="<?php echo $item?>"
+									   <?php 
 									   if(isset($_POST[$item]) && !is_null($row)){
 										   echo " value='".$_POST[$item]."'";
 									   } else {
 										   echo " value='".$row[$item]."'";
 									   }
 									   ?>>
-								<label for="<? echo $item?>"><? echo $labels[$item]?></label>
+								<label for="<?php echo $item?>"><?php echo $labels[$item]?></label>
 							</div>
-							<?
+							<?php
 								}
 							}		
 						} else {
 							?>
 							<div class="md-form p-1">
-								<label>Nenhum <? echo $titulo?> encontrado</label>
+								<label>Nenhum <?php echo $titulo?> encontrado</label>
 							</div>
-							<?
+							<?php
 						}			
 							?>
 							<div class="md-form">
@@ -160,11 +160,11 @@
 					<div class="card rounded shadow">
 						<div class="card-header"><h1>Ações</h1></div>
 						<div class="card-body">
-								<input type="hidden" name="id" value="<? echo $id?>">
-								<input type="hidden" name="tabela" value="<? echo $tabela?>">
-								<input type="hidden" name="uid" value="<? echo $usuario_id?>">
-								<a hef="/whastapp/<? digitos($id)?>" class="btn btn-sm btn-block rounded-pill btn-success mt-1" name="anotar"><i class="fa fa-whatsapp text-white p-1"></i>Mensagem</a>
-								<a hef="/email/<? digitos($id)?>" class="btn btn-sm btn-block rounded-pill btn-primary mt-1" name="anotar"><i class="far fa-envelope text-white p-1"></i>E-mail</a>
+								<input type="hidden" name="id" value="<?php echo $id?>">
+								<input type="hidden" name="tabela" value="<?php echo $tabela?>">
+								<input type="hidden" name="uid" value="<?php echo $usuario_id?>">
+								<a hef="/whastapp/<?php digitos($id)?>" class="btn btn-sm btn-block rounded-pill btn-success mt-1" name="anotar"><i class="fa fa-whatsapp text-white p-1"></i>Mensagem</a>
+								<a hef="/email/<?php digitos($id)?>" class="btn btn-sm btn-block rounded-pill btn-primary mt-1" name="anotar"><i class="far fa-envelope text-white p-1"></i>E-mail</a>
 							<hr>
 							<form method="post">
 								<div class="custom-control custom-switch">
@@ -174,11 +174,11 @@
 								</div>
 								<hr>
 								<div class="md-form">
-									<?
+									<?php
 									$dataFutura = date('Y-m-d', strtotime('+3 days'));
 									?>
 									<i class="fa fa-calendar prefix text-white p-1"></i>
-									<input type="date" class="form-control" id="data" name="data" value="<? echo $dataFutura ?>">
+									<input type="date" class="form-control" id="data" name="data" value="<?php echo $dataFutura ?>">
 								  <label class="form-label" for="data">Próximo contato</label>
 								</div>
 								<div class="custom-control custom-switch">
@@ -196,11 +196,11 @@
 						<div class="card-header"><h1>Anotações</h1></div>
 						<div class="card-body">
 							<form method="post">
-								<input type="hidden" name="id" value="<? echo $id?>">
-								<input type="hidden" name="tabela" value="<? echo $tabela?>">
-								<input type="hidden" name="uid" value="<? echo $usuario_id?>">
+								<input type="hidden" name="id" value="<?php echo $id?>">
+								<input type="hidden" name="tabela" value="<?php echo $tabela?>">
+								<input type="hidden" name="uid" value="<?php echo $usuario_id?>">
 							<table class="table">
-							<?
+							<?php
 							while ($row1 = mysqli_fetch_assoc($comments)){
 								echo "<tr><td>".$row1['data']."</td><td>".$row1['comentario']."</td></tr>";
 							}
@@ -221,13 +221,13 @@
 			</div>
 		</div>
 	</div>
-<?
+<?php
 	include_once('./include/footer.php');
 ?>
 </body>
 <?php
 include_once('./include/scripts.php');
 ?>
-<?
+<?php
 include_once('./include/end.php');
 ?>

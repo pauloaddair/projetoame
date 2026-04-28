@@ -2,9 +2,9 @@
 //	session_start();
 	setlocale (LC_ALL, 'pt_BR.utf-8');
     date_default_timezone_set('America/Sao_Paulo');
-	include_once("./include/conexao.php");
-	include_once("./include/funcoes.php");
-	include_once("./include/head.php");
+//	include_once("./include/conexao.php");
+//	include_once("./include/funcoes.php");
+//     include_once('./include/head.php');
 	$nome = "";
 	$mensagem = "";
 	$logado = "none";
@@ -175,7 +175,7 @@ $treinamento = mysqli_query($conexao,$query);
 				<?php
 				if ($nome<>""){
 				?>
-				<td><a href="./?r=<? echo digitos($row1['candidato_id'])?>" class="btn btn-sm rounded-pill btn-primary">Rodar</a><a href="./?t=<? echo digitos($row1['candidato_id'])?>" class="btn btn-sm rounded-pill btn-warning ml-1">Treinar</a></td>
+				<td><a href="./?r=<?php echo digitos($row1['candidato_id'])?>" class="btn btn-sm rounded-pill btn-primary">Rodar</a><a href="./?t=<?php echo digitos($row1['candidato_id'])?>" class="btn btn-sm rounded-pill btn-warning ml-1">Treinar</a></td>
 				<?php
 				}
 				?>
@@ -209,7 +209,7 @@ $treinamento = mysqli_query($conexao,$query);
 				<?php
 				if ($nome<>""){
 				?>
-				<td><a href="./?r=<? echo digitos($row['candidato_id'])?>" class="btn btn-sm rounded-pill btn-primary mr-1">Rodar</a><a href="./?a=<? echo digitos($row['candidato_id'])?>" class="btn btn-sm rounded-pill btn-success ml-1">Aprovar</a></td>
+				<td><a href="./?r=<?php echo digitos($row['candidato_id'])?>" class="btn btn-sm rounded-pill btn-primary mr-1">Rodar</a><a href="./?a=<?php echo digitos($row['candidato_id'])?>" class="btn btn-sm rounded-pill btn-success ml-1">Aprovar</a></td>
 				<?php
 				}
 				?>

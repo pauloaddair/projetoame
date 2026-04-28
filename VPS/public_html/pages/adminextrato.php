@@ -64,22 +64,22 @@ FROM (
 $result = mysqli_query($conexao,$query);
 ?>
 <body>
-		<?
+		<?php 
 		include_once('./include/nav.php');
 		?>
 	<div class="container mt-5">
-		<?
+		<?php 
 		if ($_SESSION['id']<>""){
 		?>
 		<header class="p-5">
-			<h1>Extrato de <?echo $mes?>/<?echo $ano?></h1>
+			<h1>Extrato de <?php echo $mes?>/<?php echo $ano?></h1>
 			<span class="badge badge-light m-1 rounded-pill"><a href='/admin'>Balanço</a></span>
-			<span class="badge badge-info m-1 rounded-pill"><a href='/admin/extrato/<? echo $anoantes?>/<?echo $mesantes?>'><?echo $mesantes?>/<?echo $anoantes?></a></span>
-			<span class="badge badge-success m-1 rounded-pill"><?echo $mes?>/<?echo $ano?></span>
-			<span class="badge badge-info m-1 rounded-pill"><a href='/admin/extrato/<? echo $anoantes?>/<?echo $mesdepois?>'><?echo $mesdepois?>/<?echo $anodepois?></a></span>
+			<span class="badge badge-info m-1 rounded-pill"><a href='/admin/extrato/<?php echo $anoantes?>/<?php echo $mesantes?>'><?php echo $mesantes?>/<?php echo $anoantes?></a></span>
+			<span class="badge badge-success m-1 rounded-pill"><?php echo $mes?>/<?php echo $ano?></span>
+			<span class="badge badge-info m-1 rounded-pill"><a href='/admin/extrato/<?php echo $anoantes?>/<?php echo $mesdepois?>'><?php echo $mesdepois?>/<?php echo $anodepois?></a></span>
 		</header>
 	
-		<?
+		<?php 
 /*
 		echo "<pre>";
 		print_r($parametros);
@@ -97,7 +97,7 @@ $result = mysqli_query($conexao,$query);
 			<th><strong>Saldo</strong></th>
 		</thead>
 			<tbody>
-			<?
+			<?php 
 				$i=1;
 			while ($row=mysqli_fetch_array($result)){
 				$link = "#";

@@ -1,6 +1,6 @@
 <?php
 // Inclui a conexão com o banco de dados
-include('./include/conexao.php');
+// include('./include/conexao.php');
 $ativ = "Backup";
 $titulo = "Backup de dados";
 if (isset($_SESSION['nivel']) && $_SESSION['nivel'] >= 3) {
@@ -112,7 +112,7 @@ include('./include/head-table.php');
 
 <body>
 	<div  class="container">
-		<?
+		<?php 
 		include_once('./include/nav.php');
 		if ($msg<>""){
 			echo $msg;
@@ -139,14 +139,14 @@ include('./include/head-table.php');
     ?>
 	</div>
 </body>
-<?
+<?php 
 include('./include/footer-table.php');
 include('./include/scripts.php');
 } else {
 // Usuário não tem permissão, redirecione ou exiba uma mensagem de erro
 //	include_once('include/conexao.php');
 //    echo "Você não tem permissão para acessar esta página.<a href='/login'>Login</a>";
-	include_once('include/head.php');
+// 	include_once('include/head.php');
 	include_once('pages/restrito.php');
 	include_once('include/scripts.php');
 }

@@ -1,8 +1,8 @@
 <?php
-include_once('./include/conexao.php');
+// include_once('./include/conexao.php');
 include_once('./include/funcoes.php');
 $titulo = "Edição de candidato";
-include_once('./include/head.php');
+// include_once('./include/head.php');
 $id = 0;
 $campos = array (
 	'id' => 0,
@@ -138,13 +138,13 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 				<label for="exampleDataList" class="form-label">Datalist example</label>
 				<input class="form-control" list="datalistOptions" id="empresa" name="empresa" placeholder="empresa...">
 				<datalist id="datalistOptions">
-					<?
+					<?php 
 					$querynomes = "SELECT expositor_id,empresa FROM expositores2024 ORDER BY empresa;";
 					$respnome = mysqli_query($conexao,$querynomes);
 					while ($row = mysqli_fetch_assoc($respnome)){
 						?>
-						<option value="<? echo $row['empresa']?>">
-						<?
+						<option value="<?php echo $row['empresa']?>">
+						<?php 
 					}
 					?>
 						<option value="Nova Empresa">
@@ -190,24 +190,24 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 			?>
 				<div class="card">
 				<div class="card-header">
-				<?
+				<?php 
 				$troca = "";
 				if ($perfil<>""){
 					$troca = "/trocafoto/".digitos($id);
 					?>
-					<a href="<? $troca?>"><img class="card-img-top img-thumbnail" src="<? echo $perfil?>"></a>
-					<?
+					<a href="<?php $troca?>"><img class="card-img-top img-thumbnail" src="<?php echo $perfil?>"></a>
+					<?php 
 				} else {
 					?>
-					<img class="card-img-top img-thumbnail" src="<? echo $perfil?>">
-					<?
+					<img class="card-img-top img-thumbnail" src="<?php echo $perfil?>">
+					<?php 
 				}
 				?>
-					<h1 class="text-center"><? echo $campos['nome']?></h1>
+					<h1 class="text-center"><?php echo $campos['nome']?></h1>
 				</div>
 					<div class="card-body">
 						<form method="post" enctype="multipart/form-data">
-							<input type="hidden" id="expositor_id" name="expositor_id" value="<? echo $id?>">
+							<input type="hidden" id="expositor_id" name="expositor_id" value="<?php echo $id?>">
 						<p><small>Imagem:</small></p>
 					<div class="md-form">
 							<i class="far fa-image prefix grey-text"></i>
@@ -215,7 +215,7 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 <input class="form-control" type="file" name="file" id="file" accept=".jpg,.jpeg,.png,.pdf" >
 <!--						<small>escolha o arquivo de imagem para este expositor</small>-->
 					</div>
-					<?
+					<?php 
 					// Loop através de todas as colunas e seus valores
 					$i = 0;
 					echo "<div id='section1' class='p-2 border'>";
@@ -223,11 +223,11 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 						if ($campo <>"imagem_id"  && $campo <> "id"){
 						?>
 						<div class="md-form">
-							<i class="<? echo $campos_label[$campo][4]?> prefix grey-text"></i>
-							<input type="<?echo $campos_label[$campo][2]?>" id="<? echo $campo?>" name="<? echo $campo?>" class="form-control" placeholder="<? echo $campos_label[$campo][1]?>" value="<? echo $valor?>" <? echo $campos_label[$campo][3]?>>
-							<label class="grey-text" for="<? echo $campo?>"><small><? echo $campos_label[$campo][0]?></small></label>
+							<i class="<?php echo $campos_label[$campo][4]?> prefix grey-text"></i>
+							<input type="<?php echo $campos_label[$campo][2]?>" id="<?php echo $campo?>" name="<?php echo $campo?>" class="form-control" placeholder="<?php echo $campos_label[$campo][1]?>" value="<?php echo $valor?>" <?php echo $campos_label[$campo][3]?>>
+							<label class="grey-text" for="<?php echo $campo?>"><small><?php echo $campos_label[$campo][0]?></small></label>
 						</div>
-						<?
+						<?php 
 						}
 						$i++;
 						if ($i==6){
@@ -266,7 +266,7 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
             }
         });
     </script>
-<?	
+<?php 
 include_once('./include/footer.php');
 ?>
 	
@@ -374,6 +374,6 @@ include_once('./include/scripts.php');
 		});
 		
     </script>
-<?
+<?php 
 include_once('./include/end.php');
 ?>

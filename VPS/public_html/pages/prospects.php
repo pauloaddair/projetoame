@@ -1,7 +1,7 @@
 <?php
-include 'include/conexao.php';
+// include 'include/conexao.php';
 include 'include/funcoes.php';
-include 'include/head.php';
+// include 'include/head.php';
 ?>
 <body>
     <div class="container mt-4">
@@ -49,7 +49,7 @@ include 'include/head.php';
         <h3 class="mt-4">Histórico de Anotações</h3>
         <div id="historicoAnotacoes" class="border p-3 rounded bg-light"></div>
     </div>
-	<?
+	<?php 
 	$sql = "SELECT * FROM mensagens;";
 	$msgs = mysqli_query($conexao,$sql);
 	?>
@@ -75,11 +75,11 @@ include 'include/head.php';
 					<select id="mensagem_padrao" class="form-control">
 						<option value="">Selecione...</option>
 						<!-- Mensagens serão carregadas aqui via AJAX -->
-						<?
+						<?php 
 						while ($row=mysqli_fetch_array($msgs)){
 						?>
-						<option value="<? echo $row['mensagem']?>"><? echo $row['titulo']?></option>
-						<?							
+						<option value="<?php echo $row['mensagem']?>"><?php echo $row['titulo']?></option>
+						<?php 						
 						}
 						?>
 					</select>
@@ -247,6 +247,6 @@ include 'include/scripts.php';
 
 	});
     </script>
-<?
+<?php 
 include 'include/end.php';
 ?>

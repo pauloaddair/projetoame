@@ -1,6 +1,6 @@
 <?php
 $titulo = "Documentos";
-include_once('./include/conexao.php');
+// include_once('./include/conexao.php');
 include_once('./include/funcoes.php');
 $titulo = "Documentos";
 
@@ -13,7 +13,7 @@ $query = "SELECT candidatos.candidato_id,candidatos.nome,documentos.descritivo,d
 $resp = mysqli_query($conexao,$query);
 ?>
 <body>
-	<?
+	<?php 
 	include_once('./include/nav.php');
 	?>
 	<style>
@@ -32,7 +32,7 @@ $resp = mysqli_query($conexao,$query);
 	<table id="table" class="table table-hover table-stripe">
 		<thead><th>#</th><th>Documento</th></thead>
 		<tbody>
-		<?
+		<?php 
 			$i=1;
 		while ($row = mysqli_fetch_array($resp)){
 			echo "<tr><td>".$i."</td><td><a href='/editacandidato/".digitos($row['candidato_id'])."'>".$row['nome'] . "</a>" . " - <a href='/".$row['url']. "' target='_blank'>".$row['descritivo']."</a></td></tr>\n";
@@ -46,7 +46,7 @@ $resp = mysqli_query($conexao,$query);
 include_once('./include/footer-database.php');
 ?>
 </body>
-<?
+<?php 
 } else {
 include_once('./pages/restrito.php');
 include_once('./include/scripts.php');

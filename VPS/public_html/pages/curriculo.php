@@ -1,6 +1,6 @@
 <?php
 $titulo = "Currículo";
-include_once('include/conexao.php');
+// include_once('include/conexao.php');
 
 // Processar salvamento de detalhes
 if (isset($_POST['salvar_detalhes']) && isset($_POST['candidato_id']) && isset($_POST['detalhes'])) {
@@ -165,7 +165,7 @@ if (isset($_GET['gerar_pdf']) && isset($_GET['candidato_id'])) {
         exit;
     }
 }
-include_once('include/head.php');
+// include_once('include/head.php');
 
 // Buscar candidatos ativos
 $query_candidatos = "SELECT candidato_id, nome, Email, Telefone, cidade FROM candidatos WHERE ativo = 1 ORDER BY nome";

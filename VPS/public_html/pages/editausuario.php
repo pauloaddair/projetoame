@@ -1,5 +1,5 @@
 <?php
-include_once('./include/conexao.php');
+// include_once('./include/conexao.php');
 include_once('./include/funcoes.php');
 $titulo = "Edição de usuário";
 if (isset($_SESSION['nivel']) && $_SESSION['nivel'] >= 3) {
@@ -133,13 +133,13 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 }
 ?>
 <body>
-<?
+<?php 
 	include_once('./include/nav.php');
 ?>
 	<div class="container">
 		<header class="mt-5 p-2 justify-content-md-center">
 			<h1 class="text-center">Edição de candidato</h1>
-			<p  class="text-center"><small><? echo $msg?></small></p>
+			<p  class="text-center"><small><?php echo $msg?></small></p>
 			<div class="row justify-content-between bg-light p-1 rounded">
 			<div class="col">
 				<nav aria-label="breadcrumb bg-transparent">
@@ -155,13 +155,13 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 				<label for="exampleDataList" class="form-label">Datalist example</label>
 				<input class="form-control" list="datalistOptions" id="exampleDataList" name="buscar" placeholder="Digite para buscar...">
 				<datalist id="datalistOptions">
-					<?
+					<?php 
 					$querynomes = "SELECT usuario_id,nome FROM usuarios ORDER BY nome;";
 					$respnome = mysqli_query($conexao,$querynomes);
 					while ($row = mysqli_fetch_assoc($respnome)){
 						?>
-						<option value="<? echo $row['nome']?>">
-						<?
+						<option value="<?php echo $row['nome']?>">
+						<?php 
 					}
 					?>
 				</datalist>
@@ -197,29 +197,29 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 ?>
 				<div class="card">
 				<div class="card-header">
-					<h1 class="text-center"><? echo $row['nome']?></h1>
-					<a href="/trocafoto/<? echo digitos($id)?>"><img class="card-img-top img-thumbnail" src="<? echo $perfil?>"></a>
+					<h1 class="text-center"><?php echo $row['nome']?></h1>
+					<a href="/trocafoto/<?php echo digitos($id)?>"><img class="card-img-top img-thumbnail" src="<?php echo $perfil?>"></a>
 				</div>
 					<div class="card-body">
 						<form method="post" enctype="multipart/form-data">
-							<input type="hidden" id="candidato_id" name="candidato_id" value="<? echo $id?>">
-							<input type="hidden" id="usuario_id" name="usuario_id" value="<? echo $usuario_id?>">
+							<input type="hidden" id="candidato_id" name="candidato_id" value="<?php echo $id?>">
+							<input type="hidden" id="usuario_id" name="usuario_id" value="<?php echo $usuario_id?>">
 						<div class="md-form">
 							<i class="far fa-map prefix grey-text"></i>
-							<input type="text" id="usuario_id0" name="usuario_id0" class="form-control" placeholder="código usuário" value="<? echo $usuario_id?>" disabled>
+							<input type="text" id="usuario_id0" name="usuario_id0" class="form-control" placeholder="código usuário" value="<?php echo $usuario_id?>" disabled>
 							<label for="usuario_id">Usuário ID</label>
 						</div>
-					<?
+					<?php 
 					// Loop através de todas as colunas e seus valores
 					foreach ($row as $campo => $valor) {
 						if ($campo <>"perfil"  && $campo <> "candidato_id" && $campo <> "usuario_id"&& $campo <> "IP"){
 						?>
 						<div class="md-form">
 							<i class="far fa-map prefix grey-text"></i>
-							<input type="text" id="<? echo $campo?>" name="<? echo $campo?>" class="form-control" placeholder="<? echo $campo?>" value="<? echo $valor?>">
-							<label for="cep"><? echo $campo?></label>
+							<input type="text" id="<?php echo $campo?>" name="<?php echo $campo?>" class="form-control" placeholder="<?php echo $campo?>" value="<?php echo $valor?>">
+							<label for="cep"><?php echo $campo?></label>
 						</div>
-						<?
+						<?php 
 						}
 					}
 					
@@ -234,7 +234,7 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 						<button class="btn btn-block btn-pill btn-primary" type="submit" id="submit" name="submit">Enviar</button>
 						</div>
 						</form>
-					<?		   
+					<?php 	   
 } else {
 //    echo "Nenhum registro encontrado.";
 // Nome da tabela
@@ -249,13 +249,13 @@ if (mysqli_num_rows($resultado) > 0) {
 ?>
 	<div class="card">
 		<div class="card-header">
-			<img class="card-img-top img-thumbnail" src="<? echo $perfil?>">
+			<img class="card-img-top img-thumbnail" src="<?php echo $perfil?>">
 			<h1 class="text-center">Novo usuario</h1>
 		</div>
 		<div class="card-body">
 			<form method="post">
 			<input type="hidden" id="candidato_id" name="candidato_id" value="0">
-<?
+<?php 
     while ($row = $resultado->fetch_assoc()) {
         $campo = $row['Field'];
 		$valor = "";
@@ -269,10 +269,10 @@ if (mysqli_num_rows($resultado) > 0) {
 ?>
 			<div class="md-form">
 				<i class="far fa-map prefix grey-text"></i>
-				<input type="text" id="<? echo $campo?>" name="<? echo $campo?>" class="form-control" placeholder="<? echo $campo?>" value="<? echo $valor?>">
-				<label for="<? echo $campo?>"><? echo $campo?></label>
+				<input type="text" id="<?php echo $campo?>" name="<?php echo $campo?>" class="form-control" placeholder="<?php echo $campo?>" value="<?php echo $valor?>">
+				<label for="<?php echo $campo?>"><?php echo $campo?></label>
 			</div>
-<?
+<?php 
    }
 	}
 			?>
@@ -287,7 +287,7 @@ if (mysqli_num_rows($resultado) > 0) {
 				<button class="btn btn-block btn-pill btn-primary" type="submit" id="submit" name="submit">ENVIAR</button>
 				</div>
 				</form>
-			<?		   
+			<?php 	   
 } else {
     echo "Nenhum campo encontrado na tabela.";
 }
@@ -308,7 +308,7 @@ if(mysqli_num_rows($resp)){
 			?>
 			<h2 class="text-center">Documentos</h2>
 		<table class="table table-striped table-hover m-2 border">
-			<?
+			<?php 
 			$i=0;
 			while($row = mysqli_fetch_assoc($resp)){
 				if (!is_null($row['doc_url']) || !is_null($row['url'])){
@@ -334,7 +334,7 @@ if(mysqli_num_rows($resp)){
 	}
 			?>
 		</table>
-			<?
+			<?php 
 				
 }
 			?>
@@ -343,13 +343,13 @@ if(mysqli_num_rows($resp)){
 			</div>
 		</div>
 	</div>
-			<?	
+			<?php 
 include_once('./include/footer.php');
 } else {
 // Usuário não tem permissão, redirecione ou exiba uma mensagem de erro
-	include_once('include/conexao.php');
+// 	include_once('include/conexao.php');
 //    echo "Você não tem permissão para acessar esta página.<a href='/login'>Login</a>";
-	include_once('include/head.php');
+// 	include_once('include/head.php');
 	include_once('pages/restrito.php');
 }
 ?>	
@@ -455,6 +455,6 @@ include_once('./include/scripts.php');
 		});
 		
     </script>
-<?
+<?php 
 include_once('./include/end.php');
 ?>

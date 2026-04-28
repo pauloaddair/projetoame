@@ -1,6 +1,6 @@
 <?php
 	$titulo = "Converte telefones";
-	include_once('./include/conexao.php');
+// 	include_once('./include/conexao.php');
 	include_once('./include/funcoes.php');
 	include_once('./include/head-table.php');
 	if (isset($_SESSION['nivel']) && $_SESSION['nivel'] >= 3) {
@@ -76,7 +76,7 @@
 // Usuário não tem permissão, redirecione ou exiba uma mensagem de erro
 //	include_once('include/conexao.php');
 //    echo "Você não tem permissão para acessar esta página.<a href='/login'>Login</a>";
-	include_once('include/head.php');
+// 	include_once('include/head.php');
 	include_once('pages/restrito.php');
 }
 	?>

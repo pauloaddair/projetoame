@@ -1,5 +1,5 @@
 <?php
-  require_once 'conexao.php';
+//  require_once 'conexao.php';
 
   if (isset($_POST['query'])) {
     $inpText = $_POST['query'];

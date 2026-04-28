@@ -1,7 +1,7 @@
 <?php
-include_once('include/conexao.php');
+// include_once('include/conexao.php');
 include_once('include/nav.php');
-include_once('include/head.php');
+// include_once('include/head.php');
 // Caminho do diretório que você quer ler
 $diretorio = 'docs/';
 

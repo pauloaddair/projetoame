@@ -1,7 +1,7 @@
 <?php
 // backfill_uuid.php - RODE ESTE SCRIPT APENAS UMA VEZ
 
-include_once('./include/conexao.php');
+// include_once('./include/conexao.php');
 
 // Função para gerar um UUID v4 (padrão para IDs aleatórias)
 function gen_uuid() {

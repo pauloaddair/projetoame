@@ -1,5 +1,5 @@
 <?php
-include_once('./include/conexao.php');
+// include_once('./include/conexao.php');
 include_once('./include/funcoes.php');
 include_once('./include/head-table.php');
 $query = "SELECT * FROM expositores2024 ORDER BY empresa"
@@ -15,7 +15,7 @@ $query = "SELECT * FROM expositores2024 ORDER BY empresa"
 		</thead>
 		<tbody>
 			
-				<?
+				<?php 
 				$i=1;
 				$resp = mysqli_query($conexao,$query);
 				while ($row = mysqli_fetch_assoc($resp)){
@@ -34,6 +34,6 @@ include_once('./include/footer-database.php');
 <?php
 include_once('./include/scripts.php');
 ?>
-<?
+<?php 
 include_once('./include/end.php');
 ?>

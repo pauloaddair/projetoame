@@ -1,7 +1,7 @@
 <?php
-include_once('./include/conexao.php');
-include_once('./include/funcoes.php');
-include_once('./include/head.php');
+// include_once('./include/conexao.php');
+// include_once('./include/funcoes.php');
+// include_once('./include/head.php');
 require 'vendor/autoload.php'; // Carrega o autoload do Composer para usar o PhpSpreadsheet
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -151,7 +151,7 @@ if (!$resultMain) {
 <body>
 	<div class='container'>
 		<header>
-			<h1 class='text-center'>Disponibilidade</h1><p class="text-center"><? echo $msg?></p>
+			<h1 class='text-center'>Disponibilidade</h1><p class="text-center"><?php echo $msg?></p>
 		</header>
   <nav class="navbar navbar-expand-lg navbar-light bg-light rounded">
 <!--    <a class="navbar-brand" href="#">Navbar</a>-->
@@ -181,16 +181,16 @@ if (!$resultMain) {
         </li>
 -->
       </ul>
-		<?
+		<?php 
 		if (isset($_SESSION['nivel']) && $_SESSION['nivel']>4){
 		?>
-		<a href="/logout"><div class="btn p-2 rounded" data-toggle="tooltip" data-placement="right" title="Clique para sair"><? echo $nome?><img clas='img ms-4' src="/<? echo $perfil?>" width="32" alt="<? echo $nome?>"></div></a>
+		<a href="/logout"><div class="btn p-2 rounded" data-toggle="tooltip" data-placement="right" title="Clique para sair"><?php echo $nome?><img clas='img ms-4' src="/<?php echo $perfil?>" width="32" alt="<?php echo $nome?>"></div></a>
 		
-		<?
+		<?php 
 		} else {
 		?>
 <a class="form-inline" href='/login'>Login</a>
-		<?
+		<?php 
 		}
 		?>
 <!--
@@ -200,7 +200,7 @@ if (!$resultMain) {
 -->
     </div>
   </nav>
-<?
+<?php 
 // Montagem da tabela em HTML
 echo "<table border='1' cellspacing='0' cellpadding='5'>";
 echo "<thead class='bg-light'>";
@@ -312,9 +312,9 @@ echo "</tbody></table>";
 	
 ?>
 			<div class="row">
-				<a href="/docs/<? echo $fileName?>" class="btn btn-sm btn-primary rounded-pill">Baixar relatório</a></div>
+				<a href="/docs/<?php echo $fileName?>" class="btn btn-sm btn-primary rounded-pill">Baixar relatório</a></div>
 			</div>
-<?
+<?php 
 	// Nome do arquivo Excel a ser salvo
 	$fileName = slugify($titulo).Date("YmdHi").'.xlsx';
 	$writer = new Xlsx($spreadsheet);

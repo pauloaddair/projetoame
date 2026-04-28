@@ -97,6 +97,56 @@ if (isset($data['action']) && $data['action'] === 'get_escala_details') {
     exit;
 }
 
+if (isset($data['action']) && $data['action'] === 'suggest_escala') {
+    $evento_id = intval($data['evento_id']);
+
+    // 1. Fetch all horarios for the event
+    $query_horarios = "SELECT horario_id, vagas FROM horarios WHERE evento_id = {$evento_id} ORDER BY data_inicio ASC";
+    $result_horarios = mysqli_query($conexao, $query_horarios);
+    if (!$result_horarios) {
+        echo json_encode(['success' => false, 'message' => 'Erro na consulta de horários: ' . mysqli_error($conexao)]);
+        exit;
+    }
+
+    $sugestao = []; // [horario_id => [candidato_id1, candidato_id2, ...]]
+    $candidatos_ja_sugeridos = []; // Para evitar que a mesma pessoa seja sugerida para dois turnos no mesmo evento
+
+    while ($horario = mysqli_fetch_assoc($result_horarios)) {
+        $horario_id = $horario['horario_id'];
+        $vagas = intval($horario['vagas']);
+
+        // 2. Fetch candidates available for this horario, ordered by rodizio
+        // We exclude candidates already suggested for other shifts in the same event
+        $exclude_sql = "";
+        if (!empty($candidatos_ja_sugeridos)) {
+            $exclude_sql = " AND d.candidato_id NOT IN (" . implode(',', $candidatos_ja_sugeridos) . ")";
+        }
+
+        $query_disponiveis = "SELECT d.candidato_id 
+                              FROM disponibilidade d 
+                              JOIN candidatos c ON d.candidato_id = c.candidato_id
+                              WHERE d.atividade_id = {$horario_id} 
+                              AND c.ativo = 1 
+                              {$exclude_sql}
+                              ORDER BY c.rodizio ASC 
+                              LIMIT {$vagas}";
+        
+        $result_disponiveis = mysqli_query($conexao, $query_disponiveis);
+        $sugeridos_neste_horario = [];
+        while ($row = mysqli_fetch_assoc($result_disponiveis)) {
+            $sugeridos_neste_horario[] = $row['candidato_id'];
+            $candidatos_ja_sugeridos[] = $row['candidato_id'];
+        }
+        $sugestao[$horario_id] = $sugeridos_neste_horario;
+    }
+
+    echo json_encode([
+        'success' => true,
+        'sugestao' => $sugestao
+    ]);
+    exit;
+}
+
 if (isset($data['action']) && $data['action'] === 'save_escala') {
     $evento_id = intval($data['evento_id']);
     $escalados_por_horario = $data['escalados'] ?? [];

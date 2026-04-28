@@ -1,7 +1,7 @@
 <?php
-include_once('./include/conexao.php');
+// include_once('./include/conexao.php');
 include_once('./include/funcoes.php');
-include_once('./include/head.php');
+// include_once('./include/head.php');
 $id = 0;
 $msg = "Nenhum candidato a excluir";
 if (array_key_exists(1,$parametros)){
@@ -42,11 +42,11 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 		<div class="row">
 			<div class="col col-md-8">
 				<form method="post">
-					<input type="hidden" id="cnadidato_id" name="candidato_id" value="<? echo $id?>">
+					<input type="hidden" id="cnadidato_id" name="candidato_id" value="<?php echo $id?>">
 				<div class="card">
 					<div class="card-header">
 						<h2 class="text-center">
-						<? echo $msg?>
+						<?php echo $msg?>
 						</h2>
 					</div>
 					<div class="card-body">
@@ -66,6 +66,6 @@ include_once('./include/footes.php');
 <?php
 include_once('./include/scripts.php');
 ?>
-<?
+<?php 
 include_once('./include/end.php');
 ?>

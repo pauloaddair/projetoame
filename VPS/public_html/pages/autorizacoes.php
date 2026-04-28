@@ -1,5 +1,5 @@
 <?php
-include_once('./include/conexao.php');
+// include_once('./include/conexao.php');
 include_once('./include/funcoes.php');
 include_once('./include/head-table.php');
 $query = "SELECT candidatos.*, documentos.*
@@ -16,7 +16,7 @@ $resp = mysqli_query($conexao,$query);
 		<th>Autorização</th>
 		</thead>
 			<tbody>
-			<?
+			<?php 
 			$arquivo = "";
 			while ($row = mysqli_fetch_assoc($resp)){
 				$url = "";
@@ -46,6 +46,6 @@ include_once('./include/footer-database.php');
 <?php
 include_once('./include/scripts.php');
 ?>
-<?
+<?php 
 include_once('./include/end.php');
 ?>

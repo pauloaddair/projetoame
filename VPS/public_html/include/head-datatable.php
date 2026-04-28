@@ -1,6 +1,6 @@
 <?php
 setlocale(LC_ALL, 'pt_BR.utf8');
-	include_once('./include/conexao.php');
+//	include_once('./include/conexao.php');
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">

@@ -4,6 +4,6 @@ setlocale(LC_ALL, 'pt_BR.utf8');
 
 // Only output HTML if it's not an AJAX request
 if (empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) !== 'xmlhttprequest') {
-    include_once('./html_head_table.php'); // Include the new file
+    include_once('./include/html_head_table.php'); // Include the new file
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-include_once('include/conexao.php');
+// include_once('include/conexao.php');
 // Mês atual
 $mes_atual = date('m');
 

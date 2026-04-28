@@ -1,3 +1,10 @@
+---
+project: public_html
+skills:
+  - brainstorming
+  - clean-code
+---
+
 # Contexto da Sessão: Criação de Funcionalidade de Eventos
 
 ## Objetivo

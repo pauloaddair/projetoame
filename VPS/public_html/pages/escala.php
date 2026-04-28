@@ -178,7 +178,7 @@ include_once($base_path . 'include/head-table.php');
 /*
 } else {
 // Usuário não tem permissão, redirecione ou exiba uma mensagem de erro
-	include_once($base_path . 'include/conexao.php');
+//	include_once($base_path . 'include/conexao.php');
 	include_once($base_path . 'include/head.php');
 	include_once($base_path . 'pages/restrito.php');
 }

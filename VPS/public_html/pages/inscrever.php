@@ -2,9 +2,8 @@
 // session_start();
 setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'portuguese');
 date_default_timezone_set('America/Sao_Paulo');
-include_once('./include/conexao.php');
-include_once('./include/funcoes.php');
-include_once('./include/head.php');
+// Inclusões removidas pois já constam no index.php
+// include_once('./include/head.php');
 $nomearquivo = "";
 $campos = array(
 	array(
@@ -94,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD']=="POST"){
 	$nome = $_POST['nome'];
 	$email = $_POST['Email'];
 	$telefone = $_POST['Telefone'];
-	$nome = iconv("UTF-8", "ISO-8859-1//TRANSLIT",$_POST['nome']);
+	// $nome = iconv("UTF-8", "ISO-8859-1//TRANSLIT",$_POST['nome']); // Removido iconv
 //	echo $query . "<br>";
 	$r = mysqli_query($conexao,$query);
 	$cadastrar = 1;
@@ -149,15 +148,15 @@ if ($_SERVER['REQUEST_METHOD']=="POST"){
 			if (array_key_exists(1,$temp)){
 				$sobrenome = trim(after($temp[0],$_POST['responsavel']));	
 			}
-			$query = "SELECT * FROM usuarios WHERE `email` LIKE `".$email."`";
+			$query = "SELECT * FROM usuarios WHERE `email` LIKE '".$email."'";
 			$resp = mysqli_query($conexao,$query);
 			if (mysqli_num_rows($resp)>0){
-				$query = "UPDATE `usuarios` SET `login`='".$login."',`telefone`='".$telefone."',`nome`='".$nome."',`sobrenome`='".$sobrenome."'";
+				$query = "UPDATE `usuarios` SET `login`='".$login."',`telefone`='".$telefone."',`nome`='".$temp[0]."',`sobrenome`='".$sobrenome."'";
 			} else {
 				$senha = "projetoame";
-				$query = "INSERT INTO usuarios (`nome`, `login`, `senha`, `email`, `telefone`, `sobrenome`, `nivel`) VALUES ('".$temp[0]."','".$login."',MD5('".$senha."'),'".$email."','".$telefone."','".$sobrenome."',1)";			
-			}
-/*
+				$senha_hash = password_hash($senha, PASSWORD_DEFAULT);
+				$query = "INSERT INTO usuarios (`nome`, `login`, `senha`, `email`, `telefone`, `sobrenome`, `nivel`) VALUES ('".$temp[0]."','".$login."','".$senha_hash."','".$email."','".$telefone."','".$sobrenome."',1)";
+			}/*
 			echo $query."<br>";
 			exit;
 */
@@ -192,55 +191,56 @@ if ($_SERVER['REQUEST_METHOD']=="POST"){
 
 		ini_set( 'display_errors', 1 );
 		error_reporting( E_ALL );
-		require './include/autoload.php';
-		$email = "pauloadd@hotmail.com";
-		if (isset($_POST['email'])){
-			$email = strtolower($_POST['email']);
-			$dados['email'] = $email;
+		
+		require before('/public_html',__DIR__) . '/vendor/autoload.php';
+		use PHPMailer\PHPMailer\PHPMailer;
+		use PHPMailer\PHPMailer\Exception;
+
+		if (isset($_POST['Email'])){
+			$email_post = strtolower($_POST['Email']);
 		}
-		$from = "contato@projetoame.org";
-		$to = "pauloadd@gmail.com";
-	//    $to = "pauloadd@gmail.com";
-		$message = "";
-		// To send HTML mail, the Content-type header must be set
-		$headers[] = 'MIME-Version: 1.0';
-		$headers[] = 'Content-type: text/html; charset=iso-8859-1';
-		$headers[] = 'From:Dados de Atendente via Site<' . $from . ">";
-		$headers[] = 'Content-Type: text/html; charset=iso-8859-1';
-	//    $headers[] = 'Content-Transfer-Encoding: 7bit';
-	    $headers[] = 'Cc: <'. $_POST['Email'].'>,<regina.rjr@hotmail.com>';
-	//    $headers[] = 'Cc: <regina.rjr@hotmail.com>';
-	//    $headers[] = "From:" . $from;
-
-	//    $headers = "From:" . $from;
-
-		$subject  = 'Dados do atendente:'.$nome; // Assunto da mensagem
-		$body = ' Nome: <strong>'.$nome.'</strong><br>'; // Nomes do atendente
-		$body .= ' Responsavel: <strong>'.$_POST['responsavel'].'</strong><br>'; // Nomes dos noivos
+		
+		$to = "pauloadd@novaeratec.com.br";
+		$subject  = 'Dados do atendente: '.$nome; // Assunto da mensagem
+		$body = ' Nome: <strong>'.$nome.'</strong><br>'; 
+		$body .= ' Responsável: <strong>'.$_POST['responsavel'].'</strong><br>'; 
 			    foreach ($_POST as $campo => $valor) {
-        // Exibir o nome do campo e seu valor
-			$ev = "";
-			if ($campo<>"nome" && $campo<>"Email"&& $campo<>"responsavel"){
-				$body .= ' '. $campo .': '.$valor."<br>";
-			}
+					if ($campo<>"nome" && $campo<>"Email"&& $campo<>"responsavel" && $campo<>"criar_evento"){
+						$body .= ' '. $campo .': '.$valor."<br>";
+					}
 				}
 		$body .= " <a href='https://www.projetoame.org/".$nomearquivo."' target='_blank'>Curriculo</a><br>";
-		$body .= '<br><hr> DADOS DE AUDITORIA:<br>IP: '.$_SERVER['SERVER_ADDR'].'<br>'; // IP do visitante
-		$body .= ' Navegador: '.$_SERVER['HTTP_USER_AGENT'].'<br>'; // IP do visitante
-		$body .= ' Enviado em: '. date('d/m/Y H:i').'<br>'; // Texto da mensagem
-			$message = $body;
-		$dados['server'] = $_SERVER['SERVER_ADDR'];
-		$dados['agent'] = $_SERVER['HTTP_USER_AGENT'];
-		$dados['data_atual'] = date('d/m/Y H:i');
-		if (mail($to,$subject,$message, implode("\r\n", $headers))) {
-	//    if (mail($to,$subject,$message, $headers)) {
-		   $msg = "<p class='text-center'>Os dados de <strong><em>".$nome."</em></strong> foram enviados com sucesso!</p>"; // or use booleans here
-		} else {
-			$msg = "<p class='text-center'>Não conseguimos enviar sua mensagem!  Tente novamente mais tarde.</p>";;
+		$body .= '<br><hr> DADOS DE AUDITORIA:<br>IP: '.$_SERVER['SERVER_ADDR'].'<br>'; 
+		$body .= ' Navegador: '.$_SERVER['HTTP_USER_AGENT'].'<br>'; 
+		$body .= ' Enviado em: '. date('d/m/Y H:i').'<br>'; 
+
+		$mail = new PHPMailer(true);
+		try {
+			$mail->isSMTP();
+			$mail->Host       = 'mail.projetoame.org';
+			$mail->SMTPAuth   = true;
+			$mail->Username   = 'noreply@projetoame.org';
+			$mail->Password   = 'PittJusto@3802';
+			$mail->SMTPSecure = 'tls';
+			$mail->Port       = 587;
+
+			$mail->setFrom('noreply@projetoame.org', 'Projeto AME - Inscrição');
+			$mail->addAddress($to);
+			if(isset($email_post)) $mail->addAddress($email_post);
+			$mail->addCC('regina.rjr@hotmail.com');
+
+			$mail->isHTML(true);
+			$mail->Subject = $subject;
+			$mail->Body    = $body;
+			$mail->CharSet = 'UTF-8';
+
+			$mail->send();
+			$msg = "<p class='text-center'>Os dados de <strong><em>".$nome."</em></strong> foram enviados com sucesso!</p>";
+		} catch (Exception $e) {
+			$msg = "<p class='text-center'>Não conseguimos enviar sua mensagem! Erro: {$mail->ErrorInfo}</p>";
 		}
 	}
 ?>
-<body>
 	<div class="container">
 		<header>
 		<h1 class="text-center"><?php echo $msg?></h1>
@@ -316,11 +316,5 @@ if ($_SERVER['REQUEST_METHOD']=="POST"){
 			</form>
 	</div>
 <?php
-include_once('./include/footer.php');
-?>
-</body>
-<?php
-include_once('./include/scripts.php');
-?>
-<?php include_once('./include/end.php');
+// Inclusões removidas pois já constam no index.php
 ?>

@@ -1,7 +1,7 @@
 <?php
-include_once('./include/conexao.php');
-include_once('./include/funcoes.php');
-include_once('./include/head.php');
+//include_once('./include/conexao.php');
+//include_once('./include/funcoes.php');
+// include_once('./include/head.php');
 if (isset($_SESSION['id'])){
 	$usuario_id = $_SESSION['id'];
 $query = "SELECT * FROM produtos ORDER BY produto;";
@@ -59,7 +59,7 @@ if (mysqli_num_rows($totais)>0){
 					<div class="text-xs font-weight-bold text-primary text-uppercase mb-1 mr-1"><a href="/admin/pendencias">Vendas</a>
 					</div>
 					<div class="h5 mb-0 font-weight-bold text-gray-800">
-					<? echo number_format($db_qtd,0,",",".")?>
+					<?php echo number_format($db_qtd,0,",",".")?>
 					</div>
 				</div>
 				<div class="col-auto">
@@ -73,7 +73,7 @@ if (mysqli_num_rows($totais)>0){
 					<div class="text-xs font-weight-bold text-primary text-uppercase mb-1 mr-1">Total
 					</div>
 					<div class="h5 mb-0 font-weight-bold text-gray-800">
-					<? echo number_format($db_total,2,",",".")?>
+					<?php echo number_format($db_total,2,",",".")?>
 					</div>
 				</div>
 				<div class="col-auto">
@@ -87,7 +87,7 @@ if (mysqli_num_rows($totais)>0){
 					<div class="text-xs font-weight-bold text-danger text-uppercase mb-1 mr-1">Custo
 					</div>
 					<div class="h5 mb-0 font-weight-bold text-gray-800">
-					<? echo number_format($db_custo,2,",",".")?>
+					<?php echo number_format($db_custo,2,",",".")?>
 					</div>
 				</div>
 				<div class="col-auto">
@@ -102,40 +102,40 @@ if (mysqli_num_rows($totais)>0){
 			<form method="post";
 			<div class="col">
 			<div class="card border shadow-1 p-2">
-				<?
+				<?php 
 					if ($produto_id==0){
 						$botao = "Selecionar";
 					?>
 						<select name="produto_id" required>
 						<option value=0>Escolha o produto</option>
-					<?
+					<?php 
 						while ($produto = mysqli_fetch_assoc($produtos)){
 							echo "<option value='".$produto['produto_id']."'>".$produto['produto']."</option>";
 						}
 						?>
 						</select>
-						<?
+						<?php 
 					} else {
 						$botao = "Registar";
 						$produtos = mysqli_query($conexao,$query);
 						$produto = mysqli_fetch_assoc($produtos);
 						?>
-						<input type="hidden" name="produto_id" id="produto_id" value="<? echo $produto_id?>">
+						<input type="hidden" name="produto_id" id="produto_id" value="<?php echo $produto_id?>">
 						<input type="hidden" name="registrar" id="registrar" value="1">
-						<input type="hidden" name="custo" id="custo" value="<? echo $produto['custo']?>">
+						<input type="hidden" name="custo" id="custo" value="<?php echo $produto['custo']?>">
 						<div class="md-form">
 						<i class="far fa-map prefix grey-text"></i>
-						<input type="text" id="produto" name="produto" class="form-control" placeholder="produto" value="<? echo $produto['produto']?>">
+						<input type="text" id="produto" name="produto" class="form-control" placeholder="produto" value="<?php echo $produto['produto']?>">
 						<label for="produto">produto vendido</label>
 						</div>
 						<div class="md-form">
 						<i class="far fa-map prefix grey-text"></i>
-						<input type="text" id="descricao" name="descricao" class="form-control" placeholder="produto" value="<? echo $produto['descricao']?>">
+						<input type="text" id="descricao" name="descricao" class="form-control" placeholder="produto" value="<?php echo $produto['descricao']?>">
 						<label for="descricao">anotações sobre a venda</label>
 						</div>
 						<div class="md-form">
 						<i class="far fa-map prefix grey-text"></i>
-						<input type="text" id="valor" name="valor" class="form-control" placeholder="valor" value="<? echo number_format($produto['valor'],2,",",".")?>">
+						<input type="text" id="valor" name="valor" class="form-control" placeholder="valor" value="<?php echo number_format($produto['valor'],2,",",".")?>">
 						<label for="produto">valor</label>
 						</div>
 						<div class="md-form">
@@ -143,12 +143,12 @@ if (mysqli_num_rows($totais)>0){
 						<input type="number" id="qtd" name="qtd" class="form-control" placeholder="quantidade" value="1" min="1">
 						<label for="qtd">quantidade</label>
 						</div>
-						<?
+						<?php 
 
 					}
 				?>
 
-				<button class="btn btn-primary btn-sm"><? echo $botao?></button>	
+				<button class="btn btn-primary btn-sm"><?php echo $botao?></button>	
 			</div>
 			</form>
 		</div>
@@ -166,6 +166,6 @@ include_once('./include/footer.php');
 <?php
 include_once('./include/scripts.php');
 ?>
-<?
+<?php 
 include_once('./include/end.php');
 ?>

@@ -14,7 +14,7 @@ include_once("pages/conexao.php");
 	<meta charset="utf-8"/>
 
 	<!-- HTML Meta Tags -->
-	<title>Projeto A.M.E. - <?echo $titulo?></title>
+	<title>Projeto A.M.E. - <?php echo $titulo?></title>
 	<meta name="description" content="Associação Brasileira de Inclusão Através do Trabalho - A.M.E. - Atendentes Muito Especiais.">
 
 	<!-- Facebook Meta Tags -->

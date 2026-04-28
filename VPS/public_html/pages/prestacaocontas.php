@@ -1,5 +1,5 @@
 <?php
-include_once('./include/conexao.php');
+// include_once('./include/conexao.php');
 include_once('./include/funcoes.php');
 include_once('./include/head-table.php');
 //$query = "SELECT * FROM contabil_movimento ORDER BY movimento_id DESC;";
@@ -39,7 +39,7 @@ $contas = mysqli_query($conexao,$query);
 				<th align="right">Saldo</th>
 			</thead>	
 			<tbody>
-			<?
+			<?php 
 				$i=1;
 				$saldo = 0;
 				while ($conta = mysqli_fetch_assoc($contas)){
@@ -78,6 +78,6 @@ include_once('./include/footer.php');
 <?php
 include_once('./include/scripts-database.php');
 ?>
-<?
+<?php 
 include_once('./include/end.php');
 ?>

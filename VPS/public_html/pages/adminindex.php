@@ -1,6 +1,6 @@
 <?php
-include_once('./include/conexao.php');
-include_once('./include/funcoes.php');
+// include_once('./include/conexao.php');
+// include_once('./include/funcoes.php');
 include_once('./include/head-table.php');
 /*
 $query = "SELECT 
@@ -90,11 +90,11 @@ $receber = mysqli_fetch_array($areceber);
 $atual = $total-$pagar['pagar']-$receber['receber'];
 ?>
 <body>
-		<?
+		<?php 
 		include_once('./include/nav.php');
 		?>
 	<div class="container mt-5">
-		<?
+		<?php 
 		if ($_SESSION['id']<>""){
 		?>
 		<header class="p-5">
@@ -117,7 +117,7 @@ $atual = $total-$pagar['pagar']-$receber['receber'];
 						<div class="col mr-2">
 							<div class="text-xs font-weight-bold text-primary text-uppercase mb-1"><a href="/admin/saldo/atual">Saldo Atual</a></div>
 							<div class="h5 mb-0 font-weight-bold text-gray-800">
-								<? echo number_format($atual,2,",",".")?>
+								<?php echo number_format($atual,2,",",".")?>
 							</div>
 						</div>
 						<div class="col-auto">
@@ -135,7 +135,7 @@ $atual = $total-$pagar['pagar']-$receber['receber'];
 						<div class="col mr-2">
 							<div class="text-xs font-weight-bold text-primary text-uppercase mb-1"><a href="/admin/pagar">A pagar</a></div>
 							<div class="h5 mb-0 font-weight-bold text-gray-800">
-								<? echo number_format(abs($pagar['pagar']),2,",",".")?><small> (<? echo $pagar['qtd']?> lançamentos)</small>
+								<?php echo number_format(abs($pagar['pagar']),2,",",".")?><small> (<?php echo $pagar['qtd']?> lançamentos)</small>
 							</div>
 						</div>
 						<div class="col-auto">
@@ -154,7 +154,7 @@ $atual = $total-$pagar['pagar']-$receber['receber'];
 						<div class="col mr-2">
 							<div class="text-xs font-weight-bold text-primary text-uppercase mb-1"><a href="/admin/receber">A receber</a></div>
 							<div class="h5 mb-0 font-weight-bold text-gray-800">
-								<? echo number_format($receber['receber'],2,",",".")?><small> (<? echo $receber['qtd']?> lançamentos)</small>
+								<?php echo number_format($receber['receber'],2,",",".")?><small> (<?php echo $receber['qtd']?> lançamentos)</small>
 							</div>
 						</div>
 						<div class="col-auto">
@@ -172,7 +172,7 @@ $atual = $total-$pagar['pagar']-$receber['receber'];
 						<div class="col mr-2">
 							<div class="text-xs font-weight-bold text-primary text-uppercase mb-1"><a href="/admin/saldo/final">Saldo final</a></div>
 							<div class="h5 mb-0 font-weight-bold text-gray-800">
-								<? echo number_format($total,2,",",".")?>
+								<?php echo number_format($total,2,",",".")?>
 							</div>
 						</div>
 						<div class="col-auto">
@@ -187,7 +187,7 @@ $atual = $total-$pagar['pagar']-$receber['receber'];
 		</div>
 		<div class="row wow fadeIn animated">
        <canvas id="saldoChart"></canvas>
-		<?
+		<?php 
 /*
 		echo "<pre>";
 		print_r($_SESSION);
@@ -203,7 +203,7 @@ $atual = $total-$pagar['pagar']-$receber['receber'];
 					<th align='right'>Saldo</th>
 				</thead>
 				<tbody>
-				<?
+				<?php 
 					$i=1;
 				while ($row=mysqli_fetch_array($result)){
 					echo "<tr><td>".$i."</td><td><a href='/admin/extrato/".before('-',$row['mes_ano'])."/".after('-',$row['mes_ano'])."'>".$row['mes_ano']." (".strtoupper(mes(intval(after('-',$row['mes_ano']))-1)).") "."<i class='fa fa-arrow-right ml-1 text-info'></i></a></td><td align='right'>".number_format($row['total_valor'],2,",",".")." (".$row['qtd_itens'].")</td><td align='right'>".number_format($row['saldo_final'],2,",",".")."</td></tr>";
@@ -275,6 +275,6 @@ include_once('./include/footer-database-noorder.php');
 		});		
 	});
 </script>
-<?
+<?php 
 include_once('./include/scripts.php');
 ?>

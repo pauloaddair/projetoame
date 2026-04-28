@@ -2,9 +2,9 @@
 session_start();
 setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'portuguese');
 date_default_timezone_set('America/Sao_Paulo');
-include_once('./include/conexao.php');
-include_once('./include/funcoes.php');
-include_once('./include/head.php');
+//include_once('./include/conexao.php');
+//include_once('./include/funcoes.php');
+// include_once('./include/head.php');
 $body="";
 $queryeventos = "SELECT eventos_marcados.*,imagens.url
 FROM eventos_marcados,imagens
@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD']=="POST"){
 	$r = mysqli_query($conexao,$query);
 	$msg = "<h2 class='text-center'>Atendente não encontrado</h2><p class='text-center'><span class='mt-1 p-2 bg-danger rounded-pill text-white'>Por favor, verifique se digitou seu e-mail cadastrado corretamente e tente novamente</span></p>";
 ?>
-	<?
+	<?php 
 	If (mysqli_num_rows($r)>0){
 		$row=mysqli_fetch_assoc($r);
 		$msg = "<h2 class='text-center'>Atendente: ".$row['nome']."</h2><p class='mt-1 p-2 text-center bg-success rounded-pill'>Disponibilidade registrada</p>";
@@ -110,24 +110,24 @@ if ($_SERVER['REQUEST_METHOD']=="POST"){
 		<form method="post">
 			<div class="row mt-1">
 				<div class='col-12'>
-					<?
+					<?php 
 						echo $msg . "<br>" . $body;
 					?>
 				</div>
 			</div>
 			<div class="row mt-1">
-			<?
+			<?php 
 $resp = mysqli_query($conexao,$queryeventos);
 			while ($row0 = mysqli_fetch_assoc($resp)){
 			?>
 		<div class="col col-md-6 align-items-stretch d-flex mb-2">
 			<div class="card">
 				<div class="card-header">
-					<img class="card-img-top" src="<? echo $row0['url']?>">
-					<h1 class="text-center"><? echo $row0['nome']?></h1>
+					<img class="card-img-top" src="<?php echo $row0['url']?>">
+					<h1 class="text-center"><?php echo $row0['nome']?></h1>
 				</div>
 				<div class="card-body">
-			<?
+			<?php 
 				$id = $row0['id'];
 				$query1 = "SELECT * FROM horarios WHERE evento_id = ".$id;
 				$horarios = mysqli_query($conexao,$query1);
@@ -138,9 +138,9 @@ $resp = mysqli_query($conexao,$queryeventos);
 					}
 					?>
 					<div class="custom-control custom-switch">
-					<input type="checkbox" class="custom-control-input" name="<? echo digitos($row0['horario_id'])?>" id="<? echo digitos($row0['horario_id'])?>" <? echo $checked?>>
-					<label class="custom-control-label" for="<? echo digitos($row0['horario_id'])?>"><? echo date("d-M-Y",strtotime($row0['data_inicio']))?><br>
-						<? 
+					<input type="checkbox" class="custom-control-input" name="<?php echo digitos($row0['horario_id'])?>" id="<?php echo digitos($row0['horario_id'])?>" <?php echo $checked?>>
+					<label class="custom-control-label" for="<?php echo digitos($row0['horario_id'])?>"><?php echo date("d-M-Y",strtotime($row0['data_inicio']))?><br>
+						<?php 
 						echo "das ".date("H:i",strtotime($row0['data_inicio'])). " às ".date("H:i",strtotime($row0['data_final']));
 						$vagas = "";
 						If (intval($row0['vagas'])>0){
@@ -150,14 +150,14 @@ $resp = mysqli_query($conexao,$queryeventos);
 						?>
 						</label>
 					</div>
-					<?
+					<?php 
 					
 				}
 			?>
 			</div>
 			</div>
 		</div>
-			<?
+			<?php 
 			}
 			?>
 	</div><hr>
@@ -167,7 +167,7 @@ $resp = mysqli_query($conexao,$queryeventos);
 				<div class="md-form">
 					<i class="far fa-map prefix grey-text"></i>
 					<input type="text" id="nome" name="nome" class="form-control" placeholder="nome do atendente"
-						   <? 
+						   <?php 
 						   if(isset($_POST['nome'])){
 							   echo " value='".$_POST['nome']."'";
 						   }
@@ -177,7 +177,7 @@ $resp = mysqli_query($conexao,$queryeventos);
 				<div class="md-form">
 					<i class="far fa-map prefix grey-text"></i>
 					<input type="email" id="email" name="email" class="form-control" placeholder="seu e-mail cadastrado"
-						   <? 
+						   <?php 
 						   if(isset($_POST['email'])){
 							   echo " value='".$_POST['email']."'";
 						   }
@@ -205,6 +205,6 @@ include_once('./include/footer.php');
 <?php
 include_once('./include/scripts.php');
 ?>
-<?
+<?php 
 include_once('./include/end.php');
 ?>

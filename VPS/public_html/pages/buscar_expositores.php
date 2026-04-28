@@ -1,6 +1,6 @@
 <?php
 header('Content-Type: application/json');
-include_once('./include/conexao.php');
+// include_once('./include/conexao.php');
 
 $term = isset($_GET['term']) ? mysqli_real_escape_string($conexao, $_GET['term']) : '';
 $expositores = [];

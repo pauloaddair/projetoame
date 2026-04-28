@@ -1,7 +1,7 @@
 <?PHP
 $titulo = "Cadastro";
-include_once("include/head.php");
-include_once("include/conexao.php");
+// include_once("include/head.php");
+// include_once("include/conexao.php");
 	$id = 0;
 	$nome = "visitante";
 	$boletim = 0;
@@ -90,26 +90,26 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 	  <ol class="breadcrumb">
 		<li class="breadcrumb-item"><a href="/">Inicio</a></li>
 		<li class="breadcrumb-item"><a href="../atendentes/atendentes.php">Atendentes</a></li>
-		<li class="breadcrumb-item active" aria-current="page"><? echo $inscrito?></li>
+		<li class="breadcrumb-item active" aria-current="page"><?php echo $inscrito?></li>
 	  </ol>
 	</nav>
 </div>
 <div class="container mt-2 p-3">
-<?
+<?php 
 include_once("include/header.php");
 ?>
 	<div class="card mt-5">
-				<?
+				<?php 
 				if ($id>0){
 				?>
-		<img src="<? echo $imagem?>" class="card-img-top" alt="<? echo $nome?>">
-				<?
+		<img src="<?php echo $imagem?>" class="card-img-top" alt="<?php echo $nome?>">
+				<?php 
 					}
 				?>
 		<div class="card-body">
 			<div class="row">
 				<div class="col-12">
-				<?
+				<?php 
 				if ($id>0){
 				?>
 				<form class="card m-1">
@@ -132,13 +132,13 @@ include_once("include/header.php");
 						<button type="submit" class="btn btn-primary mb-3">Enviar documento</button>
 					</div>
 				</form>
-				<?
+				<?php 
 				} else {
 				?>
 				<div class="alert alert-warning" role="alert">
   <strong>ATENÇÃO: </strong>Após preencher e enviar o formulário abaixo, esta página se atualizará com as informações fornecidas e você poderá enviar uma foto do inscrito <small>(de preferência quadrada, com pelo menos 310x310 pixels, formato PNG ou JPG)</small> e um arquivo com o curriculo <small>(formato PDF ou DOC/DOCX)</small>.  Esses dados são opcionais. Confira as informações e, caso não seja necessária nenhuma correção, pode sair desta página. <strong>Obrigado!</strong> 
 </div>
-				<?
+				<?php 
 					}
 /*
 echo "<pre>";
@@ -152,36 +152,36 @@ echo "</pre>";
 
 	<div class="md-form">
 	<i class="fas fa-user prefix grey-text"></i>
-	<input type="text" id="nome" name="nome" class="form-control" value="<?echo $nome?>">
+	<input type="text" id="nome" name="nome" class="form-control" value="<?php echo $nome?>">
 	<label for="nome">Nome</label>
 	</div>
 	<div class="md-form">
 	<i class="fas fa-user prefix grey-text"></i>
-	<input type="text" id="responsavel" name="responsavel" class="form-control" value="<?echo $responsavel?>">
+	<input type="text" id="responsavel" name="responsavel" class="form-control" value="<?php echo $responsavel?>">
 	<label for="empresa">Responsável</label>
 	</div>
 	<div class="md-form">
 	<i class="fas  fa-calendar prefix grey-text"></i>
 <!--		<i class="fas fa-building prefix grey-text"></i>-->
-	<input type="date" id="depto" name="depto" class="form-control" value="<?echo $nascimento?>">
+	<input type="date" id="depto" name="depto" class="form-control" value="<?php echo $nascimento?>">
 	<label for="depto">Nascimento (dd/mm/aaaa)</label>
 	</div>
 <!--
 	<div class="md-form">
 	<i class="fas  fa-calendar prefix grey-text"></i>
-	<input type="text" id="desde" name="desde" class="form-control" value="<?echo $inscricao?>">
+	<input type="text" id="desde" name="desde" class="form-control" value="<?php echo $inscricao?>">
 	<label for="cargo">Inscrito desde</label>
 	</div>
 -->
 	<div class="md-form">
 	<i class="fas fa-envelope prefix grey-text"></i>
-	<input type="email" id="email" name="email" class="form-control" value="<?echo $email?>">
+	<input type="email" id="email" name="email" class="form-control" value="<?php echo $email?>">
 	<label for="email">E-mail de contato</label>
 	</div>
 
 	<div class="md-form">
 	<i class="fas fa-phone prefix grey-text"></i>
-	<input type="tel" id="telefone" name="telefone" class="form-control" value="<? echo $telefone?>">
+	<input type="tel" id="telefone" name="telefone" class="form-control" value="<?php echo $telefone?>">
 	<label for="telefone">Seu telefone</label>
 	</div>
 	<!-- Default switch -->
@@ -226,11 +226,11 @@ echo "</pre>";
 	  <label for="newsletter" class="form-check-label dark-grey-text">Quero saber das novidades</label>
 		</div>
 	  <div class="form-check">
-	  <input type="checkbox" class="form-check-input" name="grupo_capacitacao" id="grupo_capacitacao"<? echo $boletim?>></input>
+	  <input type="checkbox" class="form-check-input" name="grupo_capacitacao" id="grupo_capacitacao"<?php echo $boletim?>></input>
 	  <label for="grupo_capacitacao" class="form-check-label dark-grey-text">Quero ser incluído(a) no grupo de capacitação para acompanhar as atividades</label>
 		</div>
 	  <div class="form-check">
-	  <input type="checkbox" class="form-check-input" name="grupo_voluntarios" id="grupo_voluntarios"<? echo $boletim?>></input>
+	  <input type="checkbox" class="form-check-input" name="grupo_voluntarios" id="grupo_voluntarios"<?php echo $boletim?>></input>
 	  <label for="grupo_voluntarios" class="form-check-label dark-grey-text mb-3">Quero ser incluído(a) no grupo de voluntários para colaborar</label>
 		</div>
 	</fieldset>

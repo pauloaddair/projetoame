@@ -1,8 +1,8 @@
 <?php
 $titulo = "Modelo";
-include_once('./include/conexao.php');
+// include_once('./include/conexao.php');
 include_once('./include/funcoes.php');
-include_once('./include/head.php');
+// include_once('./include/head.php');
 $doc_id = -1;
 $msg = "";
 if (array_key_exists(1,$parametros)){
@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD']=="POST"){
 		  <ol class="breadcrumb bg-transparent">
 			<li class="breadcrumb-item"><a href="/atendentes">Atividades</a></li>
 			<li class="breadcrumb-item"><a href="/casting">Atendentes</a></li>
-			<li class="breadcrumb-item"><a href="/editacandidato/<? echo digitos($row['candidato_id'])?>">Candidato</a></li>
+			<li class="breadcrumb-item"><a href="/editacandidato/<?php echo digitos($row['candidato_id'])?>">Candidato</a></li>
 			<li class="breadcrumb-item active" aria-current="page">Editando candidato</li>
 		  </ol>
 		</nav>
@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD']=="POST"){
 			<div class="col">
 		<h1 class="text-center">Descritivo do documento</h1>
 				<div class="card p-2">
-			<?
+			<?php 
 			if ($msg<>""){
 				echo "<p class='text-center'>".$msg."</p>";
 			}
@@ -63,24 +63,24 @@ if ($_SERVER['REQUEST_METHOD']=="POST"){
 							
 			?>
 <!--			<i class="far fa-file prefix grey-text"></i>-->
-				<label for="descritivo"><? echo $filename?></label>
+				<label for="descritivo"><?php echo $filename?></label>
 		<form class="form-inline" method="post">
 		<div class="form-group">
-			<? echo "<img src='/".$icone."' width=32 class='prefix mr-2'>"?>
+			<?php echo "<img src='/".$icone."' width=32 class='prefix mr-2'>"?>
 			<input type="text" maxlength="64" class="form-control" id="descritivo" name="descritivo" placeholder="descrição" value="Tem certeza?">
 			<button type="submit" class="btn btn-sm btn-primary mb-2 btn-success" id='confirmar' name='confirmar' >Confirmar</button>
-			<a href="/editacandidato/<? echo digitos($row['candidato_id'])?>" class="btn btn-sm btn-primary mb-2 btn-danger">Voltar</a>
+			<a href="/editacandidato/<?php echo digitos($row['candidato_id'])?>" class="btn btn-sm btn-primary mb-2 btn-danger">Voltar</a>
 		</div>
 		</form>
 			</div>
 			</div>
 		</div>
-		<?
+		<?php 
 	} else {
 		?>
 		<h1 class="text-center">Documento não encontrado!</h1>
 		<div class="text-center"><button class="btn btn-sm btn-primary mb-2" onclick="history.back()">Salvar</button></div>
-		<?
+		<?php 
 	}
 include_once('./include/footerbt.php');
 ?>
@@ -89,6 +89,6 @@ include_once('./include/footerbt.php');
 <?php
 include_once('./include/scripts.php');
 ?>
-<?
+<?php 
 include_once('./include/end.php');
 ?>

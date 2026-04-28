@@ -1,7 +1,7 @@
 <?php
 $titulo = "Usuários cadastrados";
-include_once('./include/conexao.php');
-include_once('./include/funcoes.php');
+//include_once('./include/conexao.php');
+//include_once('./include/funcoes.php');
 include_once('./include/head-table.php');
 if (isset($_SESSION['nivel']) && $_SESSION['nivel'] >= 3) {
 	$query = "SELECT usuarios.*,imagens.url AS perfil 
@@ -11,7 +11,7 @@ if (isset($_SESSION['nivel']) && $_SESSION['nivel'] >= 3) {
 	$resp = mysqli_query($conexao,$query);
 	?>
 	<body>
-<?
+<?php 
 	include_once('./include/nav.php');
 ?>
 		<div class="container">
@@ -27,7 +27,7 @@ if (isset($_SESSION['nivel']) && $_SESSION['nivel'] >= 3) {
 			</header>
 		<table class="table table-striped table-hover" id="table">
 			<thead><th>#</th><th>ID</th><th>Perfil</th><th>Atendente</th><th>E-mail</th><th>Ações</th></thead>
-				<?
+				<?php 
 			$i=1;
 				while ($row = mysqli_fetch_array($resp)){
 	/*
@@ -59,18 +59,18 @@ if (isset($_SESSION['nivel']) && $_SESSION['nivel'] >= 3) {
 					}
 				?>
 			<tr>
-			<td><? echo $i?></td>
-			<td><? echo $row['usuario_id']?></td>
-				<td><a href="trocafotou/<? echo digitos($row['usuario_id'])?>"><img src="<? echo $perfil?>" height="32" class="img-thumbnail"></a></td>
-			<td><? echo $row['nome']?></td>
-			<td><? echo $row['email']?></td>
+			<td><?php echo $i?></td>
+			<td><?php echo $row['usuario_id']?></td>
+				<td><a href="trocafotou/<?php echo digitos($row['usuario_id'])?>"><img src="<?php echo $perfil?>" height="32" class="img-thumbnail"></a></td>
+			<td><?php echo $row['nome']?></td>
+			<td><?php echo $row['email']?></td>
 <!--
-			<td><? echo $row['Telefone']?></td>
-			<td><? echo formataWA($row['Telefone'])?></td>
+			<td><?php echo $row['Telefone']?></td>
+			<td><?php echo formataWA($row['Telefone'])?></td>
 -->
-				<td><small><a href="/excluirusuario/<? echo digitos($row['usuario_id'])?>">Excluir</a> | <a href="/editausuario/<? echo digitos($row['usuario_id'])?>">Editar</a></small></td>
+				<td><small><a href="/excluirusuario/<?php echo digitos($row['usuario_id'])?>">Excluir</a> | <a href="/editausuario/<?php echo digitos($row['usuario_id'])?>">Editar</a></small></td>
 		</tr>
-			<?
+			<?php 
 					$i++;
 				}
 			?>
@@ -80,9 +80,9 @@ if (isset($_SESSION['nivel']) && $_SESSION['nivel'] >= 3) {
 	include_once('./include/footer-database.php');
 } else {
 // Usuário não tem permissão, redirecione ou exiba uma mensagem de erro
-	include_once('include/conexao.php');
+// 	include_once('include/conexao.php');
 //    echo "Você não tem permissão para acessar esta página.<a href='/login'>Login</a>";
-	include_once('include/head.php');
+// 	include_once('include/head.php');
 	include_once('pages/restrito.php');
 }
 	?>
@@ -90,6 +90,6 @@ if (isset($_SESSION['nivel']) && $_SESSION['nivel'] >= 3) {
 <?php
 include_once('./include/scripts.php');
 ?>
-<?
+<?php 
 include_once('./include/end.php');
 ?>

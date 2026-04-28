@@ -1,139 +1,173 @@
 <?php
-include_once('./include/conexao.php');
-include_once('./include/head.php');
-$id = 1;
-if (array_key_exists(2,$parametros)){
-	$id = intval($parametros[2]);
+// adminevento.php - Gerenciamento de detalhes do evento (Horários/Turnos)
+// Acessível via /admin/evento/{id_ou_slug}
+include_once('./include/funcoes.php');
+// include_once('./include/conexao.php');
+// include_once('./include/head.php');
+
+$identificador = isset($parametros[2]) ? $parametros[2] : 0;
+$msg = "";
+$evento = null;
+$horarios = [];
+
+// Busca detalhes do evento (suporta ID numérico ou futuramente SLUG)
+if ($identificador) {
+    if (is_numeric($identificador)) {
+        $queryEvento = "SELECT * FROM eventos_marcados WHERE id = $identificador";
+    } else {
+        $identificador = mysqli_real_escape_string($conexao, $identificador);
+        $queryEvento = "SELECT * FROM eventos_marcados WHERE slug = '$identificador'";
+    }
+    
+    $respEvento = mysqli_query($conexao, $queryEvento);
+    if ($respEvento && mysqli_num_rows($respEvento) > 0) {
+        $evento = mysqli_fetch_assoc($respEvento);
+        $evento_id = $evento['id'];
+    } else {
+        die("<div class='container mt-5'><div class='alert alert-danger'>Evento não encontrado.</div></div>");
+    }
+} else {
+    die("<div class='container mt-5'><div class='alert alert-warning'>Identificador do evento não fornecido.</div></div>");
 }
-$sql = "SELECT lev.*,lex.* 
-FROM leads_expositores lex
-LEFT JOIN leads_eventos lev ON lev.id = lex.evento_id
-WHERE lex.id = ".$id;
-$resp = mysqli_query($conexao,$sql);
-$row = mysqli_fetch_array($resp);
+
+// Processa o formulário de adição de horário
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_horario'])) {
+    $data_inicio = mysqli_real_escape_string($conexao, $_POST['data_inicio']);
+    $data_final = mysqli_real_escape_string($conexao, $_POST['data_final']);
+    $vagas = (int)$_POST['vagas'];
+    $tipo = mysqli_real_escape_string($conexao, $_POST['tipo']);
+    $empresa_id = (int)$_POST['empresa_id'];
+
+    if ($empresa_id > 0) {
+        $queryInsertHorario = "INSERT INTO horarios (evento_id, empresa_id, data_inicio, data_final, vagas, tipo) 
+                               VALUES ($evento_id, $empresa_id, '$data_inicio', '$data_final', $vagas, '$tipo')";
+        if (mysqli_query($conexao, $queryInsertHorario)) {
+            $msg = "<div class='alert alert-success'>Horário adicionado com sucesso!</div>";
+        } else {
+            $msg = "<div class='alert alert-danger'>Erro ao adicionar horário: " . mysqli_error($conexao) . "</div>";
+        }
+    } else {
+        $msg = "<div class='alert alert-danger'>Selecione uma empresa válida.</div>";
+    }
+}
+
+// Busca horários existentes para este evento
+$queryHorarios = "SELECT h.*, e.empresa as nome_empresa FROM horarios h JOIN expositores2024 e ON h.empresa_id = e.expositor_id WHERE h.evento_id = $evento_id ORDER BY h.data_inicio ASC";
+$respHorarios = mysqli_query($conexao, $queryHorarios);
+if ($respHorarios) {
+    while ($row = mysqli_fetch_assoc($respHorarios)) {
+        $horarios[] = $row;
+    }
+}
+
 ?>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+
 <body>
-	<div class="container">
-		<header>
-			<h1 class="text-center"><strong><? echo strtoupper($row[9])?></strong> - Novo contato</h1>
-			<hr>
-			<nav aria-label="breadcrumb">
-			  <ol class="breadcrumb">
-				<li class="breadcrumb-item"><a href="/admin/relatorios">Relatórios</a></li>
-				<li class="breadcrumb-item"><a href="/admin/resumo">Resumo</a></li>
-				<li class="breadcrumb-item active" aria-current="page"><a href="/admin/eventos">Novo Expositor</a></li>
-			  </ol>
-			</nav>
-		</header>
-	<div class="row justify-content-center">
-			<div class="col col-md-8 col-lg-4  d-flex align-items-stretch">
-				<div class="card d-flex">
-					<div class="card-header">
-						<h2>Evento</h2>
-					</div>
-				<div class="card-body">
-						<div class="md-form">
-							<label for="nome">Nome do Evento:</label>
-							<input type="text" id="nome" name="nome" value="<? echo $row[1]?>">
-						</div>
-						<div class="md-form">
-							<label for="data">Data:</label>
-							<input type="date" id="data" name="data" value="<? echo $row[2]?>">
-						</div>
-						<div class="md-form">
-							<label for="local">Local:</label>
-							<input type="text" id="local" name="local" value="<? echo $row[3]?>">
-						</div>
-						<div class="md-form">
-							<label for="site">Site:</label>
-							<input type="text" id="site" name="site" value="<? echo $row[4]?>">
-						</div>
-				</div>
-				</div>
-		</div>
-		<div class="col col-md-8 col-lg-4 d-flex align-items-stretch">
-			<div class="card d-flex">
-				<div class="card-header">
-					<h2>Empresa</h2>
-				</div>
-				<div class="card-body">
-					<div class="md-form">
-						<label for="nome">Nome:</label>
-						<input type="text" id="nome" name="nome" value="<? echo $row[9]?>">
-					</div>
-					<div class="md-form">
-						<label for="telefone">Telefone:</label>
-						<input type="text" id="telefone" name="telefone" value="<? echo $row[10]?>">
-					</div>
-					<div class="md-form">
-						<label for="email">Email:</label>
-						<input type="email" id="email" name="email" value="<? echo $row[12]?>">
-					</div>
-						<div class="md-form">
-							<label for="siteexp">Site:</label>
-							<input type="text" id="siteexp" name="siteexp" value="<? echo $row[11]?>">
-						</div>
-					<div class="md-form">
-						<label for="whatsapp">WhatsApp:</label>
-						<input type="text" id="whatsapp" name="whatsapp" value="<? echo $row[13]?>">
-					</div>
-					<div class="md-form">
-						<label for="instagram">Instagram:</label>
-						<input type="text" id="instagram" name="instagram" value="<? echo $row[14]?>">
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="col col-md-8 col-lg-4 d-flex align-items-stretch">
-			<form id="formContato">
-			<div class="card d-flex">
-				<div class="card-header">
-			<h2>Registrar Contato</h2>
-				</div>
-				<div class="card-body">
-						<input type="hidden" name="expositor_id" value="<? echo $row[7] ?>"
-						<label>Tipo de Contato:</label>
-						<select name="tipo_contato" required>
-							<option value="telefone">Telefone</option>
-							<option value="email">Email</option>
-							<option value="whatsapp">WhatsApp</option>
-							<option value="instagram">Instagram</option>
-							<option value="outro">Outro</option>
-						</select>
-						<label>Data do Contato:</label>
-						<input type="date" name="data_contato" required>
-						<label>Observação:</label>
-						<textarea name="observacao"></textarea>
-						<label>Data de Follow-up:</label>
-						<input type="date" name="data_followup">
-				</div>
-				<div class="card-footer">
-					<button class="btn btn-primary rounded-pill" type="submit">Registrar</button>
-				</div>
-			</div>
-			</form>
-		</div>
-	</div>
-	</div>
-<?
-	include_once('./include/footer.php');
-	include_once('./include/scripts.php');
-?>
-	<script>
-        // Registrar contato
-        $('#formContato').submit(function(e) {
-            e.preventDefault();
-            $.ajax({
-                url: '/include/registra_contato.php',
-                type: 'POST',
-                data: $(this).serialize(),
-                dataType: 'json',
-                success: function(response) {
-                    alert(response.message);
-                    if (response.success) $('#formContato')[0].reset();
-                }
-            });
+    <div class="container mt-4">
+        <header>
+            <h1 class="text-center">Gerenciar: <?php echo htmlspecialchars($evento['nome']); ?></h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/admin/eventos">Eventos</a></li>
+                    <li class="breadcrumb-item active">Gerenciar</li>
+                </ol>
+            </nav>
+        </header>
+
+        <?php echo $msg; ?>
+
+        <div class="row">
+            <!-- Formulário de Adição de Horário -->
+            <div class="col-md-5">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-success text-white">Adicionar Turno</div>
+                    <div class="card-body">
+                        <form method="post">
+                            <input type="hidden" name="add_horario" value="1">
+                            <div class="md-form mb-3">
+                                <label>Início do Turno</label>
+                                <input type="datetime-local" name="data_inicio" class="form-control" required>
+                            </div>
+                            <div class="md-form mb-3">
+                                <label>Fim do Turno</label>
+                                <input type="datetime-local" name="data_final" class="form-control" required>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <label>Vagas</label>
+                                    <input type="number" name="vagas" class="form-control" min="1" value="1" required>
+                                </div>
+                                <div class="col-6">
+                                    <label>Tipo</label>
+                                    <input type="text" name="tipo" class="form-control" placeholder="Atendimento..." required>
+                                </div>
+                            </div>
+                            <div class="md-form mt-3">
+                                <label for="busca_expositor">Expositor</label>
+                                <input type="text" id="busca_expositor" class="form-control" placeholder="Buscar empresa...">
+                                <input type="hidden" id="empresa_id" name="empresa_id" required>
+                            </div>
+                            <button type="submit" class="btn btn-success btn-block rounded-pill mt-4">Salvar Turno</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Listagem de Turnos -->
+            <div class="col-md-7">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-light">Turnos Cadastrados</div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th>Tipo</th>
+                                        <th>Empresa</th>
+                                        <th class="text-center">Vagas</th>
+                                        <th>Início</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php if (empty($horarios)): ?>
+                                        <tr><td colspan="4" class="text-center text-muted">Nenhum turno cadastrado.</td></tr>
+                                    <?php else: ?>
+                                        <?php foreach ($horarios as $h): ?>
+                                            <tr>
+                                                <td><strong><?php echo htmlspecialchars($h['tipo']); ?></strong></td>
+                                                <td><?php echo htmlspecialchars($h['nome_empresa']); ?></td>
+                                                <td class="text-center"><?php echo $h['vagas']; ?></td>
+                                                <td><small><?php echo date('d/m/Y H:i', strtotime($h['data_inicio'])); ?></small></td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    <?php endif; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-3 text-right">
+                    <a href="/admin/escala?evento_id=<?php echo $evento_id; ?>" class="btn btn-primary rounded-pill">Ver Escala e Rodízio</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <?php include_once('./include/footer.php'); ?>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <script>
+    $(function() {
+        $("#busca_expositor").autocomplete({
+            source: "/pages/buscar_expositores.php",
+            minLength: 3,
+            select: function(event, ui) {
+                $("#empresa_id").val(ui.item.id);
+            }
         });
+    });
     </script>
+    <?php include_once('./include/scripts.php'); ?>
 </body>
 </html>

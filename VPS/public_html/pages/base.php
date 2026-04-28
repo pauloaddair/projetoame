@@ -1,6 +1,6 @@
 <?php
 include_once('include/conexao_vb.php');
-include_once('include/head.php');
+// include_once('include/head.php');
 include_once('include/nav.php');
 $query = "SELECT table_name
 FROM information_schema.tables
@@ -12,8 +12,8 @@ $r = mysqli_query($conexao,$query);
 <h1 class="text-center">Banco de dados</h1>
 </div>
 <div class="container">
-	<h6><? echo $url?></h6>
-<?
+	<h6><?php echo $url?></h6>
+<?php 
 	echo "<p>".mysqli_num_rows($r)."</p>";
 	while($row = mysqli_fetch_array($r)){
 		$query_qtd = "SELECT count(*) AS qtd FROM ".$row[0];
@@ -34,6 +34,6 @@ $r = mysqli_query($conexao,$query);
 	};
 ?>
 </div>
-<?
+<?php 
 include_once('include/footer.php');
 ?>

@@ -1,6 +1,6 @@
 <?php
 date_default_timezone_set('America/Sao_Paulo');
-include_once('./include/conexao.php');
+// include_once('./include/conexao.php');
 // --- LÓGICA DE BACKEND (Responde a requisições AJAX) ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header('Content-Type: application/json');
@@ -246,7 +246,15 @@ document.addEventListener('DOMContentLoaded', function() {
                  saveButton.id = 'salvar-escala-btn';
                  saveButton.innerText = 'Salvar Escala';
                  escalaContainer.appendChild(saveButton);
+
+                 const suggestButton = document.createElement('button');
+                 suggestButton.className = 'btn btn-secondary mt-3 ml-2';
+                 suggestButton.id = 'sugerir-escala-btn';
+                 suggestButton.innerText = 'Sugerir Escala (Rodízio)';
+                 escalaContainer.appendChild(suggestButton);
+
                  attachSaveListener();
+                 attachSuggestListener();
              } else {
                  msgDiv.className = 'alert alert-danger';
                 msgDiv.innerHTML = 'Erro ao carregar detalhes: ' + (data.message || 'Resposta inválida do servidor.');
@@ -299,6 +307,42 @@ document.addEventListener('DOMContentLoaded', function() {
                     msgDiv.innerHTML = data.message || 'Ocorreu uma falha.';
                     setTimeout(() => { msgDiv.innerHTML = ''; msgDiv.className = ''; }, 3000);
 */
+                });
+            });
+        }
+    }
+
+    function attachSuggestListener() {
+        const suggestButton = document.getElementById('sugerir-escala-btn');
+        if(suggestButton) {
+            suggestButton.addEventListener('click', function(event) {
+                event.preventDefault();
+                fetch(AppWebRoot + 'include/api_escala.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        action: 'suggest_escala', 
+                        evento_id: eventoId
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // 1. Desmarcar todos os switches primeiro
+                        const allSwitches = document.querySelectorAll('#escala-container input[type="checkbox"]');
+                        allSwitches.forEach(cb => cb.checked = false);
+
+                        // 2. Marcar apenas os sugeridos
+                        for (const horarioId in data.sugestao) {
+                            data.sugestao[horarioId].forEach(candidatoId => {
+                                const switchId = `switch-${candidatoId}-${horarioId}`;
+                                const cb = document.getElementById(switchId);
+                                if (cb) cb.checked = true;
+                            });
+                        }
+                    } else {
+                        alert('Erro ao obter sugestão: ' + data.message);
+                    }
                 });
             });
         }

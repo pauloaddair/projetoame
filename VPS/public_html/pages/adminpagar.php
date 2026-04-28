@@ -1,7 +1,7 @@
 <?php
 $titulo = "Modelo";
-include_once('./include/conexao.php');
-include_once('./include/funcoes.php');
+// include_once('./include/conexao.php');
+// include_once('./include/funcoes.php');
 include_once('./include/head-table.php');
 if ($_SESSION['id']<>""){
 	// A PAGAR
@@ -25,7 +25,7 @@ if ($_SESSION['id']<>""){
 			  </ol>
 			</nav>
 		</header>
-		<?
+		<?php 
 			include_once('./include/nav.php');
 		?>
 		<div class="row wow fadeIn animated mb-5">
@@ -40,12 +40,12 @@ if ($_SESSION['id']<>""){
 					<th>Ação</th>
 				</thead>
 				<tbody>
-					<?
+					<?php 
 						$i=1;
 						while($pagar = mysqli_fetch_array($apagar)){
 					?>
-					<tr><td><? echo $i?></td><td><? echo $pagar['descricao']?></td><td><? echo $pagar['data_prevista']?></td><td><? echo $pagar['valor_previsto']?></td><td>comprovante</td><td>ação</td></tr>
-					<?
+					<tr><td><?php echo $i?></td><td><?php echo $pagar['descricao']?></td><td><?php echo $pagar['data_prevista']?></td><td><?php echo $pagar['valor_previsto']?></td><td>comprovante</td><td>ação</td></tr>
+					<?php 
 							
 						}
 						$i++;
@@ -56,7 +56,7 @@ if ($_SESSION['id']<>""){
 			</div>
 	</div>
 	</div>
-		<?
+		<?php 
 		include_once('./include/footer-table.php');
 		?>
 </body>
@@ -66,6 +66,6 @@ if ($_SESSION['id']<>""){
 			include_once('./include/restrito.php');
 		}
 ?>
-<?
+<?php 
 include_once('./include/end.php');
 ?>

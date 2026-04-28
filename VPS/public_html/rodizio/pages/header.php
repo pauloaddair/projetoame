@@ -52,7 +52,7 @@
           <li class="nav-item">
             <a href="sobre.html" class="nav-link border border-light rounded"
               target="_blank">
-				<?
+				<?php
 				$profile = "../atendentes/img/profile.jpg";
 /*
 				If ($_SESSION['profile']<>""){
@@ -64,7 +64,7 @@
 				}
 */
 				?>
-              <img src="<?echo $profile?>" height="24" class="rounded-circle mr-1"><?echo $nome?>
+              <img src="<?php echo $profile?>" height="24" class="rounded-circle mr-1"><?php echo $nome?>
             </a>
           </li>
         </ul>

@@ -2,7 +2,7 @@
 //session_start();
 //$titulo = "A.B.I.A.T. - Ass. Bras. Inclusão Através do Trabalho";
 $titulo = "Painel";
-include_once("include/conexao.php");
+// include_once("include/conexao.php");
 include_once("include/funcoes.php");
 if (array_key_exists(1, $parametros)) {
     $parametros[1] = strtok($parametros[1], '?');

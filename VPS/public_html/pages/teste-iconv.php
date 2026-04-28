@@ -1,9 +1,9 @@
 <?php
 $titulo = "Iconv Teste";
 $string = "";
-include_once('./include/conexao.php');
+// include_once('./include/conexao.php');
 include_once('./include/funcoes.php');
-include_once('./include/head.php');
+// include_once('./include/head.php');
 static $alias = array(
         'utf8' => 'utf-8',
         'ascii' => 'us-ascii',
@@ -89,15 +89,15 @@ static $alias = array(
 ?>
 	<form method="post" class="form my-2">
 		<label class="form-label" for="string">Digite o texto a converter</label>
-		<input type="text" class="form-input" name="string" id="string" value="<? echo $string?>"></input>
+		<input type="text" class="form-input" name="string" id="string" value="<?php echo $string?>"></input>
 		<select name ="opcao">
-			<option value="//translit" <? echo ($opcao=="//translit")?" selected ":""; ?>>Transliteral</option>
-			<option value="//ignore" <? echo ($opcao=="//ignore") ? " selected ":""; ?>>Ignorar</option>
-			<option value="" <? echo ($opcao=="")?" selected ":""; ?>>Converter</option>
+			<option value="//translit" <?php echo ($opcao=="//translit")?" selected ":""; ?>>Transliteral</option>
+			<option value="//ignore" <?php echo ($opcao=="//ignore") ? " selected ":""; ?>>Ignorar</option>
+			<option value="" <?php echo ($opcao=="")?" selected ":""; ?>>Converter</option>
 		</select>
 		<button type="submit">Enviar</button>
 	</form>
-	<?
+	<?php 
 		echo "UTF-8/ascii: ". iconv('UTF-8','US-ASCII'.$opcao,$string)."<br>";
 		echo "UTF-8/iso-8859-11: ". iconv('UTF-8','ISO-8859-11'.$opcao,$string)."<br>";
 		echo "UTF-8/windows-1251: ". iconv('UTF-8','windows-1251'.$opcao,$string)."<br>";
@@ -147,6 +147,6 @@ include_once('./include/footerbt.php');
 <?php
 include_once('./include/scripts.php');
 ?>
-<?
+<?php 
 include_once('./include/end.php');
 ?>

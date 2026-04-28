@@ -1,7 +1,7 @@
 <?php
 date_default_timezone_set('America/Sao_Paulo');
-include_once('./include/head.php');
-include_once('./include/conexao.php');
+// include_once('./include/head.php');
+// include_once('./include/conexao.php');
 
 // Lógica para buscar todos os eventos
 $query_eventos = "SELECT id, nome, inicio, tipo_evento, status_evento, escala_fechada, rodizio_processado FROM eventos_marcados ORDER BY inicio DESC";

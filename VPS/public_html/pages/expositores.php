@@ -1,6 +1,6 @@
 <?php
 $titulo = "A.B.I.A.T. - Ass. Bras. Inclusão Através do Trabalho";
-include_once("include/conexao.php");
+// include_once("include/conexao.php");
 include_once("include/funcoes.php");
 include_once("include/head-table.php");
 // Atividades
@@ -65,7 +65,7 @@ if (mysqli_num_rows($resp)){
 						<div class="col mr-2">
 							<div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Pendências</div>
 							<div class="h5 mb-0 font-weight-bold text-gray-800">
-								<? echo '0'?>
+								<?php echo '0'?>
 							</div>
 						</div>
 						<div class="col-auto">
@@ -81,7 +81,7 @@ if (mysqli_num_rows($resp)){
 						<div class="col mr-2">
 							<div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Atendentes</div>
 							<div class="h5 mb-0 font-weight-bold text-gray-800">
-								<? echo number_format($qtd_atendentes,0,",",".")?>
+								<?php echo number_format($qtd_atendentes,0,",",".")?>
 							</div>
 						</div>
 						<div class="col-auto">
@@ -97,7 +97,7 @@ if (mysqli_num_rows($resp)){
 						<div class="col mr-2">
 							<div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Eventos</div>
 							<div class="h5 mb-0 font-weight-bold text-gray-800">
-								<? echo number_format($qtd_atividades,0,",",".")?>
+								<?php echo number_format($qtd_atividades,0,",",".")?>
 							</div>
 						</div>
 						<div class="col-auto">
@@ -113,7 +113,7 @@ if (mysqli_num_rows($resp)){
 						<div class="col mr-2">
 							<div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Expositores</div>
 							<div class="h5 mb-0 font-weight-bold text-gray-800">
-								<? echo number_format($qtd_expositores,0,",",".")?>
+								<?php echo number_format($qtd_expositores,0,",",".")?>
 							</div>
 						</div>
 						<div class="col-auto">
@@ -129,7 +129,7 @@ if (mysqli_num_rows($resp)){
 						<div class="col mr-2">
 							<div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Prospects</div>
 							<div class="h5 mb-0 font-weight-bold text-gray-800">
-								<? echo number_format($qtd_prospects,0,",",".")?>
+								<?php echo number_format($qtd_prospects,0,",",".")?>
 							</div>
 						</div>
 						<div class="col-auto">
@@ -153,7 +153,7 @@ if (mysqli_num_rows($resp)){
 			<th>
 			Dias</th>
 		</thead>
-			<?
+			<?php 
 		if (mysqli_num_rows($atividades)>0){
 				$i = 1;
 				while($atividade = mysqli_fetch_array($atividades)){
@@ -167,24 +167,24 @@ if (mysqli_num_rows($resp)){
 			?>
 			<tr>
 				<td class="">
-				<? echo $atividade['Evento']?>
+				<?php echo $atividade['Evento']?>
 				</td>
 				<td>
-				<? echo $atividade['Local']?>
+				<?php echo $atividade['Local']?>
 				</td>
 				<td>
-				<? echo $atividade['Inicio']?>
+				<?php echo $atividade['Inicio']?>
 				</td>
 				<td>
-				<? echo $dateInterval->days?>
+				<?php echo $dateInterval->days?>
 				</td>
 			</tr>
-			<?		
+			<?php 	
 				}
 		} else {
 			?>
-			<tr><td colspan=3><? echo $mensagem?></td></tr>
-			<?
+			<tr><td colspan=3><?php echo $mensagem?></td></tr>
+			<?php 
 		}	
 			?>
 <!--			<tr><td colspan="3"><a href="atividade.php" class=" btn btn-sm btn-primary rounded-pill">Nova atividade</a></td></tr>-->
@@ -202,28 +202,28 @@ if (mysqli_num_rows($resp)){
 			<th>
 			Telefone</th>
 		</thead>
-			<?
+			<?php 
 		if (mysqli_num_rows($atendentes)>0){
 				$i = 1;
 				while($atividade = mysqli_fetch_array($atendentes)){
 			?>
 			<tr>
 				<td>
-				<? echo $atividade['nome']?>
+				<?php echo $atividade['nome']?>
 				</td>
 				<td>
-				<? echo $atividade['responsavel']?>
+				<?php echo $atividade['responsavel']?>
 				</td>
 				<td>
-				<? echo $atividade['Telefone']?>
+				<?php echo $atividade['Telefone']?>
 				</td>
 			</tr>
-			<?		
+			<?php 	
 				}
 		} else {
 			?>
-			<tr><td colspan=3><? echo $mensagem?></td></tr>
-			<?
+			<tr><td colspan=3><?php echo $mensagem?></td></tr>
+			<?php 
 		}	
 			?>
 			<tr><td colspan="3"><a href="atividade.php" class=" btn btn-sm btn-primary rounded-pill">Nova atividade</a></td></tr>
@@ -234,7 +234,7 @@ if (mysqli_num_rows($resp)){
 	</div>
 </main>
 </body>
-<?
+<?php 
 include_once("include/footer-database.php");
 include_once("include/scripts.php");
 include_once("include/end.php");

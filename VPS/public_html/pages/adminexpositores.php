@@ -44,7 +44,7 @@ if (mysqli_num_rows($resp)){
 ?>
 <body>
 <main class="flex-shrink-0">
-<?
+<?php
 	include_once('./include/nav.php');
 ?>
 	<div class="container mt-5">
@@ -65,7 +65,7 @@ if (mysqli_num_rows($resp)){
 						<div class="col mr-2">
 							<div class="text-xs font-weight-bold text-primary text-uppercase mb-1"><a href="/admin/pendencias">Pendências</a></div>
 							<div class="h5 mb-0 font-weight-bold text-gray-800">
-								<? echo '0'?>
+								<?php echo '0'?>
 							</div>
 						</div>
 						<div class="col-auto">
@@ -84,7 +84,7 @@ if (mysqli_num_rows($resp)){
 						<div class="col mr-2">
 							<div class="text-xs font-weight-bold text-primary text-uppercase mb-1"><a href="/admin/atendentes">Atendentes</a></div>
 							<div class="h5 mb-0 font-weight-bold text-gray-800">
-								<? echo number_format($qtd_atendentes,0,",",".")?>
+								<?php echo number_format($qtd_atendentes,0,",",".")?>
 							</div>
 						</div>
 						<div class="col-auto">
@@ -102,7 +102,7 @@ if (mysqli_num_rows($resp)){
 						<div class="col mr-2">
 							<div class="text-xs font-weight-bold text-primary text-uppercase mb-1"><a href="/admin/eventos">Eventos</a></div>
 							<div class="h5 mb-0 font-weight-bold text-gray-800">
-								<? echo number_format($qtd_atividades,0,",",".")?>
+								<?php echo number_format($qtd_atividades,0,",",".")?>
 							</div>
 						</div>
 						<div class="col-auto">
@@ -121,7 +121,7 @@ if (mysqli_num_rows($resp)){
 							<div class="col mr-2">
 								<div class="text-xs font-weight-bold text-primary text-uppercase mb-1"><a href="/admin/expositores">Expositores</a></div>
 								<div class="h5 mb-0 font-weight-bold text-gray-800">
-									<? echo number_format($qtd_expositores,0,",",".")?>
+									<?php echo number_format($qtd_expositores,0,",",".")?>
 								</div>
 							</div>
 							<div class="col-auto">
@@ -140,7 +140,7 @@ if (mysqli_num_rows($resp)){
 							<div class="col mr-2">
 								<div class="text-xs font-weight-bold text-primary text-uppercase mb-1"><a href="/admin/prospects">Prospects</a></div>
 								<div class="h5 mb-0 font-weight-bold text-gray-800">
-									<? echo number_format($qtd_prospects,0,",",".")?>
+									<?php echo number_format($qtd_prospects,0,",",".")?>
 								</div>
 							</div>
 							<div class="col-auto">
@@ -167,7 +167,7 @@ if (mysqli_num_rows($resp)){
 			<th>
 			E-mail</th>
 		</thead>
-			<?
+			<?php
 		if (mysqli_num_rows($atividades)>0){
 				$i = 1;
 				while($atividade = mysqli_fetch_array($atividades)){
@@ -182,29 +182,29 @@ if (mysqli_num_rows($resp)){
 */
 			?>
 			<tr>
-				<td><a href="<? echo '/admin/contato/'.digitos($atividade['expositor_id'])?>/expositores">
-				<? 
+				<td><a href="<?php echo '/admin/contato/'.digitos($atividade['expositor_id'])?>/expositores">
+				<?php 
 				echo $atividade['empresa'];
 				?>
 					</a>
 				</td>
-				</a><td><a href="<? echo '/admin/contato/'.digitos($atividade['expositor_id'])?>/expositores">
-				<? echo $atividade['nome']?>
+				</a><td><a href="<?php echo '/admin/contato/'.digitos($atividade['expositor_id'])?>/expositores">
+				<?php echo $atividade['nome']?>
 				</a></td>
-				<td><a href="<? echo '/admin/contato/'.digitos($atividade['expositor_id'])?>/expositores">
-					   <? echo $atividade['numero']?>
+				<td><a href="<?php echo '/admin/contato/'.digitos($atividade['expositor_id'])?>/expositores">
+					   <?php echo $atividade['numero']?>
 				</a></td>
-				<td><a href="<? echo '/admin/contato/'.digitos($atividade['expositor_id'])?>/expositores">
-						<? echo $atividade['email']?>
+				<td><a href="<?php echo '/admin/contato/'.digitos($atividade['expositor_id'])?>/expositores">
+						<?php echo $atividade['email']?>
 				</a></td>
 			</tr>
-			<?		
+			<?php		
 				}
 		} else {
 			?>
 					
-			<tr><td colspan=3><? echo $mensagem?></td></tr>
-			<?
+			<tr><td colspan=3><?php echo $mensagem?></td></tr>
+			<?php
 		}	
 			?>
 		</table>
@@ -213,7 +213,7 @@ if (mysqli_num_rows($resp)){
 	</div>
 </main>
 </body>
-<?
+<?php
 include_once("include/footer-database.php");
 include_once("include/scripts.php");
 ?>

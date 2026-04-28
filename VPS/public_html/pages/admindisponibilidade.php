@@ -1,6 +1,6 @@
 <?php
 $titulo = "Modelo";
-include_once('./include/conexao.php');
+// include_once('./include/conexao.php');
 include_once('./include/funcoes.php');
 include_once('./include/head-table.php');
 if ($_SERVER['REQUEST_METHOD']=="POST"){
