@@ -15,8 +15,8 @@ $sql = "SELECT
             DATE_FORMAT(data_prevista, '%Y') AS ano,
             DATE_FORMAT(data_prevista, '%m') AS mes,
             SUM(valor_realizado) AS total_mes,
-            (SELECT SUM(valor_realizado) FROM contabil_movimento2 m2 WHERE m2.data_prevista <= MAX(m1.data_prevista)) AS saldo_acumulado
-        FROM contabil_movimento2 m1
+            (SELECT SUM(valor_realizado) FROM contabil_movimento m2 WHERE m2.data_prevista <= MAX(m1.data_prevista)) AS saldo_acumulado
+        FROM contabil_movimento m1
         GROUP BY ano,mes
         ORDER BY ano,mes";
 

@@ -14,7 +14,7 @@ FROM (
         NULL AS data_realizada,
         IFNULL(SUM(valor_realizado), 0) AS valor_realizado
     FROM 
-        contabil_movimento2
+        contabil_movimento
     WHERE 
         data_realizada < '2024-10-01'
     
@@ -25,7 +25,7 @@ FROM (
         data_realizada,
         valor_realizado
     FROM 
-        contabil_movimento2
+        contabil_movimento
     WHERE 
         YEAR(data_realizada) = 2024 
         AND MONTH(data_realizada) = 10
@@ -45,7 +45,7 @@ FROM (
         SUM(valor_previsto) AS total_valor,
         COUNT(valor_previsto) AS qtd_itens
     FROM 
-        contabil_movimento2
+        contabil_movimento
     GROUP BY 
         YEAR(data_prevista), 
         MONTH(data_prevista)
@@ -55,26 +55,26 @@ FROM (
 (SELECT @saldo_acumulado := 0) AS inicializador;";
 $result = mysqli_query($conexao,$query);
 $query = 'SELECT sum(valor_previsto) AS saldo 
-FROM `contabil_movimento2`;';
+FROM `contabil_movimento`;';
 $saldo_total = mysqli_query($conexao,$query);
 $saldo = mysqli_fetch_array($saldo_total);
 $total = $saldo['saldo'];
 /*
 $query = 'SELECT sum(valor_realizado) AS saldo 
-FROM contabil_movimento2;';
+FROM contabil_movimento;';
 $saldo_atual = mysqli_query($conexao,$query);
 $saldo = mysqli_fetch_array($saldo_atual);
 $atual = $saldo['saldo'];
 */
 $query = 'SELECT count(id) AS pendencias 
-FROM `contabil_movimento2` WHERE valor_realizado IS Null;';
+FROM `contabil_movimento` WHERE valor_realizado IS Null;';
 $resultado = mysqli_query($conexao,$query);
 $pendencias = mysqli_fetch_array($resultado);
 $pendente = $pendencias['pendencias'];
 
 // A PAGAR
 $query = "SELECT SUM(valor_previsto) AS pagar, COUNT(valor_previsto) AS qtd
-FROM contabil_movimento2 
+FROM contabil_movimento 
 WHERE valor_previsto <= 0 
 AND data_prevista > NOW();";
 $apagar = mysqli_query($conexao,$query);
@@ -82,7 +82,7 @@ $pagar = mysqli_fetch_array($apagar);
 
 // A RECEBER
 $query = "SELECT SUM(valor_previsto) AS receber, COUNT(valor_previsto) AS qtd
-FROM contabil_movimento2 
+FROM contabil_movimento 
 WHERE valor_previsto > 0 
 AND data_prevista > NOW();";
 $areceber = mysqli_query($conexao,$query);

@@ -6,7 +6,7 @@ include_once('./include/head-table.php');
 if ($_SESSION['id']<>""){
 	// A PAGAR
 	$query = "SELECT *
-	FROM contabil_movimento2 
+	FROM contabil_movimento 
 	WHERE valor_previsto > 0 
 	AND data_prevista > NOW();";
 	$apagar = mysqli_query($conexao,$query);
@@ -46,9 +46,8 @@ if ($_SESSION['id']<>""){
 					?>
 					<tr><td><?php echo $i?></td><td><?php echo $pagar['descricao']?></td><td><?php echo $pagar['data_prevista']?></td><td><?php echo $pagar['valor_previsto']?></td><td>comprovante</td><td>ação</td></tr>
 					<?php 
-							
+							$i++;
 						}
-						$i++;
 					?>
 				</tbody>
 				</table>

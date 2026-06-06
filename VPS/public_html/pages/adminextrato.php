@@ -37,9 +37,9 @@ FROM (
         IFNULL(SUM(valor_realizado), 0) AS valor_realizado,
         IFNULL(SUM(valor_previsto), 0) AS valor_previsto
     FROM 
-        contabil_movimento2,contabil_plano_itens
+        contabil_movimento,contabil_plano_itens
     WHERE 
-    	contabil_movimento2.plano_ID = contabil_plano_itens.plano_ID
+    	contabil_movimento.plano_ID = contabil_plano_itens.plano_ID
         AND data_prevista <  '".$ano."-".$mes."-1'    
     UNION ALL
     
@@ -52,9 +52,9 @@ FROM (
         valor_previsto,
         valor_realizado
     FROM 
-        contabil_movimento2,contabil_plano_itens
+        contabil_movimento,contabil_plano_itens
     WHERE 
-   		contabil_movimento2.plano_ID = contabil_plano_itens.plano_ID
+   		contabil_movimento.plano_ID = contabil_plano_itens.plano_ID
         AND YEAR(data_prevista) = ".$ano." 
         AND MONTH(data_prevista) = ".$mes."
     ORDER BY 
