@@ -187,7 +187,7 @@ if (!$result_list_neg) {
     ?>
     <div class="container mt-5">
         <?php 
-        if ($_SESSION['id']<>""){
+        if (isset($_SESSION['id']) && $_SESSION['id'] !== "") {
         ?>
         <header class="mb-4">
             <h1 class="display-4 font-weight-bold">Balanço Geral</h1>
@@ -472,9 +472,6 @@ if (!$result_list_neg) {
 
             </div>
         </div>
-        <?php 
-        }
-        ?>
     </div>
     </div>
     <script>
@@ -614,4 +611,7 @@ include_once('./include/footer-database-noorder.php');
 </script>
 <?php 
 include_once('./include/scripts.php');
+} else {
+    include_once('./include/restrito.php');
+}
 ?>
