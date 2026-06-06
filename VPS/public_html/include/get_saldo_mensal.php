@@ -1,7 +1,7 @@
 <?php
 header('Content-Type: application/json');
-include_once('conexao.php');
-include_once('funcoes.php');
+include_once(dirname(__DIR__) . '/database/conexao.php');
+include_once(__DIR__ . '/funcoes.php');
 
 /*
 $conn = new mysqli($host, $user, $pass, $dbname);

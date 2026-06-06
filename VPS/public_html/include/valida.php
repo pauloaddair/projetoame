@@ -1,7 +1,7 @@
 <?php
 // session_start();
-include('conexao.php');
-include('funcoes.php');
+include_once(dirname(__DIR__) . '/database/conexao.php');
+include_once(__DIR__ . '/funcoes.php');
 $ref = "../";
 if (isset($_SERVER['HTTP_REFERER'])){
 	$ref = $_SERVER['HTTP_REFERER'];	
