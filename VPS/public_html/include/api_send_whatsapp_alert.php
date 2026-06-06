@@ -9,7 +9,7 @@ error_reporting(E_ALL);
 header('Content-Type: application/json');
 
 // Configuration
-$api_key = "3ACDA4BD8811-4B32-A4E2-8A43367E1DAB";
+$api_key = "1b4b590c-cd88-493a-99bf-2c5710e542b3";
 $evolution_url = "https://evogo.netmailing.com.br/message/sendText/GONET1200";
 
 // Start session to access session variables
