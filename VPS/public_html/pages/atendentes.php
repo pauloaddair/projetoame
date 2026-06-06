@@ -40,18 +40,7 @@ $dados = array(
 );
 if ($_SERVER['REQUEST_METHOD']=="POST"){
 
-	$mail = new PHPMailer(true);
-
-	$mail->isSMTP();
-	$mail->Host       = 'mail.projetoame.org';
-	$mail->SMTPAuth   = true;
-	$mail->Username   = 'noreply@projetoame.org';
-	$mail->Password   = 'PittJusto@3802';
-	$mail->SMTPSecure = 'tls'; // ou 'ssl'
-	$mail->Port       = 587;   // ou 465 para SSL
-
 	$query = "SELECT candidatos.* FROM candidatos WHERE candidatos.Email LIKE '".$_POST['email']."'";
-//	echo $query . "<br>";
 	$r = mysqli_query($conexao,$query);
 	$msg = "<h2 class='text-center'>Atendente não encontrado</h2><p class='text-center'><span class='mt-1 p-2 bg-danger rounded-pill text-white'>Por favor, verifique se digitou seu e-mail cadastrado corretamente e tente novamente</span><p class='text-center'>Se ainda não é inscrito, clique <a href='https://projetoame.org/inscrever' class='btn btn-sm btn-primary'>AQUI</a></p>";
 	$cadastrar = 1;
@@ -66,84 +55,88 @@ if ($_SERVER['REQUEST_METHOD']=="POST"){
 		AND eventos_marcados.escala_fechada = 0 
         AND disponibilidade.candidato_id =".$row['candidato_id'].";";
 		$del = mysqli_query($conexao,$deletar);
+		
 		$nome = iconv("UTF-8", "ISO-8859-1//TRANSLIT",$_POST['nome']);
 		$dados['nome']=$nome;
+		
 		ini_set( 'display_errors', 1 );
 		error_reporting( E_ALL );
-		require './include/autoload.php';
+		
 		$email = "pauloadd@hotmail.com";
 		if (isset($_POST['email'])){
 			$email = strtolower($_POST['email']);
 			$dados['email'] = $email;
 		}
-		$from = "pauloadd@projetoame.org";
+		
 		$to = "pauloadd@novaeratec.com.br";
-	//    $to = "pauloadd@gmail.com";
-		$message = "";
-		// To send HTML mail, the Content-type header must be set
-		$headers[] = 'MIME-Version: 1.0';
-		$headers[] = 'Content-type: text/html; charset=iso-8859-1';
-		$headers[] = 'From:Dados de Atendente via Site<' . $from . ">";
-		$headers[] = 'Content-Type: text/html; charset=iso-8859-1';
-	//    $headers[] = 'Content-Transfer-Encoding: 7bit';
-	    $headers[] = 'Cc: <'. $_POST['email'].'>,<regina.rjr@hotmail.com>';
-	//    $headers[] = 'Cc: <regina.rjr@hotmail.com>';
-	//    $headers[] = "From:" . $from;
-
-	//    $headers = "From:" . $from;
-
-		$subject  = 'Disponibilidade do atendente '. $nome; // Assunto da mensagem
-		$body = ' <strong>Nome: '.$dados['nome'].'</strong><br>'; // Nomes do atendente
+		$subject  = 'Disponibilidade do atendente '. $nome;
+		$body = ' <strong>Nome: '.$dados['nome'].'</strong><br>'; 
 		$body .= ' <strong>Responsável: '.$row['responsavel'].'</strong><br>'; 
-			$body .="<br>Disponibilidade:<hr>";
+		$body .="<br>Disponibilidade:<hr>";
+		
 		$i=0;
 	    foreach ($_POST as $campo => $valor) {
-        // Exibir o nome do campo e seu valor
 			$ev = "";
 			if ($campo<>"nome" && $campo<>"email"){
 				$inserir = "INSERT INTO `disponibilidade`(`candidato_id`, `atividade_id`) VALUES (".$row['candidato_id']."," . intval($campo) . ")";
 				$insere = mysqli_query($conexao,$inserir);
-//				echo "<p>\$inserir: ".$inserir."</p>";
+				
 				$query = "SELECT eventos_marcados.*,horarios.data_inicio,horarios.data_final FROM eventos_marcados,horarios WHERE eventos_marcados.id = horarios.evento_id AND horario_id = ".intval($campo)." ORDER BY eventos_marcados.nome,horarios.data_inicio;";
-//				echo "<p>\$quey: ".$query . "</p>";
 				$resp = mysqli_query($conexao,$query);
 				if(mysqli_num_rows($resp)>0){
 					$ativ = mysqli_fetch_assoc($resp);
-//					$dados['resp'] = iconv("UTF-8", "ISO-8859-1//TRANSLIT",$_POST['resp']);
 					if ($ev<>$ativ['nome']){
 						$body .= '<strong>Evento: '.$ativ['nome'].'</strong><br>';
 					}
 					$body .= 'Dia: '. iconv( "ISO-8859-1","UTF-8",Date("d/M, D",strtotime($ativ['data_inicio']))) . " das " .Date("H:i, D",strtotime($ativ['data_inicio'])) ." às ". Date("H:i",strtotime($ativ['data_final'])) . '<br>';
 				}
-					$ev = $ativ['nome'];
+				$ev = $ativ['nome'];
 			}
 			$i++;
-    }
+		}
+		
 		if ($i==0){
 			$body .= "Nenhuma disponibilidade informada!<br>";
 		}
-	$body .= '<br><hr> DADOS DE AUDITORIA:<br>IP: '.$_SERVER['SERVER_ADDR'].'<br>'; // IP do visitante
-	$body .= ' Navegador: '.$_SERVER['HTTP_USER_AGENT'].'<br>'; // IP do visitante
-	$body .= ' Enviado em: '. date('d/m/Y H:i').'<br>'; // Texto da mensagem
+		
+		$body .= '<br><hr> DADOS DE AUDITORIA:<br>IP: '.$_SERVER['SERVER_ADDR'].'<br>';
+		$body .= ' Navegador: '.$_SERVER['HTTP_USER_AGENT'].'<br>';
+		$body .= ' Enviado em: '. date('d/m/Y H:i').'<br>';
 		$message = $body;
 
-	try {
-		// Configurações do PHPMailer (já definidas acima, apenas aplicando o conteúdo)
-		$mail->setFrom('noreply@projetoame.org', 'Projeto AME - Disponibilidade');
-		$mail->addAddress($to);
-		$mail->addAddress($_POST['email']); // Cópia para o atendente
-		$mail->addCC('regina.rjr@hotmail.com');
-		
-		$mail->isHTML(true);
-		$mail->Subject = $subject;
-		$mail->Body    = $message;
-		$mail->CharSet = 'UTF-8';
+		$mail = new PHPMailer(true);
+		try {
+			$mail->isSMTP();
+			$mail->Host       = 'mail.projetoame.org';
+			$mail->SMTPAuth   = true;
+			$mail->Username   = 'noreply@projetoame.org';
+			$mail->Password   = 'PittJusto@3802';
+			$mail->SMTPSecure = 'tls';
+			$mail->Port       = 587;
 
-		$mail->send();
-		$msg = "<p class='text-center'>Os dados de <strong><em>".$nome."</em></strong> foram enviados com sucesso!</p>";
-	} catch (Exception $e) {
-		$msg = "<p class='text-center'>Não conseguimos enviar sua mensagem! Erro: {$mail->ErrorInfo}</p>";
-	}
+			$mail->SMTPOptions = array(
+				'ssl' => array(
+					'verify_peer' => false,
+					'verify_peer_name' => false,
+					'allow_self_signed' => true
+				)
+			);
+
+			$mail->setFrom('noreply@projetoame.org', 'Projeto AME - Disponibilidade');
+			$mail->addAddress($to);
+			$mail->addAddress($_POST['email']);
+			$mail->addCC('regina.rjr@hotmail.com');
+			
+			$mail->isHTML(true);
+			$mail->Subject = $subject;
+			$mail->Body    = $message;
+			$mail->CharSet = 'UTF-8';
+
+			$mail->send();
+			$msg = "<p class='text-center'>Os dados de <strong><em>".$nome."</em></strong> foram enviados com sucesso!</p>";
+		} catch (Exception $e) {
+			$msg = "<p class='text-center'>Não conseguimos enviar sua mensagem! Erro: {$mail->ErrorInfo}</p>";
+		}
 	}
 }
 ?>

@@ -90,28 +90,57 @@ $receber = mysqli_fetch_array($areceber);
 $atual = $total-$pagar['pagar']-$receber['receber'];
 
 // --- ATIVIDADES (PRÓXIMAS ATIVIDADES) ---
-$query_atividades = "SELECT em.*, le.whatsapp, le.telefone, le.contato AS expositor_contato, le.nome AS expositor_nome 
-                     FROM eventos_marcados em 
-                     LEFT JOIN leads_expositores le ON em.expositor_id = le.id 
-                     WHERE em.inicio >= NOW() 
-                     ORDER BY em.inicio ASC LIMIT 5";
-$result_atividades = mysqli_query($conexao, $query_atividades);
+$result_atividades = false;
+try {
+    $query_atividades = "SELECT em.*, le.whatsapp, le.telefone, le.contato AS expositor_contato, le.nome AS expositor_nome 
+                         FROM eventos_marcados em 
+                         LEFT JOIN leads_expositores le ON em.expositor_id = le.id 
+                         WHERE em.inicio >= NOW() 
+                         ORDER BY em.inicio ASC LIMIT 5";
+    $result_atividades = mysqli_query($conexao, $query_atividades);
+} catch (Exception $e) {
+    $result_atividades = false;
+} catch (Throwable $t) {
+    $result_atividades = false;
+}
+
 if (!$result_atividades) {
     // If the join fails due to database discrepancy, query just eventos_marcados
-    $query_atividades = "SELECT * FROM eventos_marcados WHERE inicio >= NOW() ORDER BY inicio ASC LIMIT 5";
-    $result_atividades = mysqli_query($conexao, $query_atividades);
+    try {
+        $query_atividades = "SELECT * FROM eventos_marcados WHERE inicio >= NOW() ORDER BY inicio ASC LIMIT 5";
+        $result_atividades = mysqli_query($conexao, $query_atividades);
+    } catch (Exception $e) {
+        $result_atividades = false;
+    } catch (Throwable $t) {
+        $result_atividades = false;
+    }
 }
 
 if (!$result_atividades || mysqli_num_rows($result_atividades) == 0) {
     // Fallback local: show latest activities in DB
-    $query_atividades = "SELECT em.*, le.whatsapp, le.telefone, le.contato AS expositor_contato, le.nome AS expositor_nome 
-                         FROM eventos_marcados em 
-                         LEFT JOIN leads_expositores le ON em.expositor_id = le.id 
-                         ORDER BY em.inicio DESC LIMIT 5";
-    $result_atividades = mysqli_query($conexao, $query_atividades);
-    if (!$result_atividades) {
-        $query_atividades = "SELECT * FROM eventos_marcados ORDER BY inicio DESC LIMIT 5";
+    $fallback_success = false;
+    try {
+        $query_atividades = "SELECT em.*, le.whatsapp, le.telefone, le.contato AS expositor_contato, le.nome AS expositor_nome 
+                             FROM eventos_marcados em 
+                             LEFT JOIN leads_expositores le ON em.expositor_id = le.id 
+                             ORDER BY em.inicio DESC LIMIT 5";
         $result_atividades = mysqli_query($conexao, $query_atividades);
+        $fallback_success = true;
+    } catch (Exception $e) {
+        $fallback_success = false;
+    } catch (Throwable $t) {
+        $fallback_success = false;
+    }
+    
+    if (!$fallback_success) {
+        try {
+            $query_atividades = "SELECT * FROM eventos_marcados ORDER BY inicio DESC LIMIT 5";
+            $result_atividades = mysqli_query($conexao, $query_atividades);
+        } catch (Exception $e) {
+            $result_atividades = false;
+        } catch (Throwable $t) {
+            $result_atividades = false;
+        }
     }
 }
 

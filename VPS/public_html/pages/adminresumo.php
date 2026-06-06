@@ -25,7 +25,7 @@
 			  <ol class="breadcrumb">
 				<li class="breadcrumb-item"><a href="/admin/relatorios">Relatórios</a></li>
 				<li class="breadcrumb-item" aria-current="page">Resumo</li>
-				<li class="breadcrumb-item active"><a href="/admin/eventos">Contatos</a></li>
+				<li class="breadcrumb-item active"><a href="/admin/atividades">Contatos</a></li>
 			  </ol>
 			</nav>
 		</header>

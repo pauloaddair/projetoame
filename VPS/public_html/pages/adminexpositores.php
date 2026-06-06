@@ -100,13 +100,13 @@ if (mysqli_num_rows($resp)){
 					<div class="card-body">
 						<div class="row no-gutters align-items-center">
 						<div class="col mr-2">
-							<div class="text-xs font-weight-bold text-primary text-uppercase mb-1"><a href="/admin/eventos">Eventos</a></div>
+							<div class="text-xs font-weight-bold text-primary text-uppercase mb-1"><a href="/admin/atividades">Atividades</a></div>
 							<div class="h5 mb-0 font-weight-bold text-gray-800">
 								<?php echo number_format($qtd_atividades,0,",",".")?>
 							</div>
 						</div>
 						<div class="col-auto">
-							<a href="/admin/eventos">
+							<a href="/admin/atividades">
 								<i class="fas fa-building fa-2x text-gray-300"></i>
 							</a>
 							</div>

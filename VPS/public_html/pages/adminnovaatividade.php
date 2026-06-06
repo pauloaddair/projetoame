@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['criar_evento'])) {
                         VALUES ('$nome', '$tipo', '$inicio', '$final', '$local', '$endereco', '$maps', $imagem_id, '$obs', 1, 1, $expositor_id)";
         if (mysqli_query($conexao, $queryInsert)) {
             $evento_id = mysqli_insert_id($conexao);
-            header("Location: /admin/evento/" . $evento_id . "?msg=success");
+            header("Location: /admin/atividade/" . $evento_id . "?msg=success");
             exit;
         } else {
             $msg = "<div class='alert alert-danger'>Erro ao cadastrar evento: " . mysqli_error($conexao) . "</div>";
@@ -99,11 +99,11 @@ if ($evento_id > 0) {
 <body>
     <div class="container mt-4">
         <header>
-            <h1 class="text-center"><?php echo ($evento_id > 0) ? "Gerenciar Evento: " . $evento_atual['nome'] : "Novo Evento AME"; ?></h1>
+            <h1 class="text-center"><?php echo ($evento_id > 0) ? "Gerenciar Atividade: " . $evento_atual['nome'] : "Nova Atividade AME"; ?></h1>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="/admin/eventos">Eventos</a></li>
-                    <li class="breadcrumb-item active">Novo Evento</li>
+                    <li class="breadcrumb-item"><a href="/admin/atividades">Atividades</a></li>
+                    <li class="breadcrumb-item active">Nova Atividade</li>
                 </ol>
             </nav>
         </header>
@@ -115,13 +115,13 @@ if ($evento_id > 0) {
             <div class="col-lg-<?php echo ($evento_id > 0) ? '5' : '12'; ?>">
                 <div class="card shadow-sm mb-4">
                     <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0">1. Informações do Evento</h5>
+                        <h5 class="mb-0">1. Informações da Atividade</h5>
                     </div>
                     <div class="card-body">
                         <form method="post" enctype="multipart/form-data">
                             <input type="hidden" name="criar_evento" value="1">
                             <div class="md-form mb-3">
-                                <label for="nome">Nome do Evento</label>
+                                <label for="nome">Nome da Atividade</label>
                                 <input type="text" id="nome" name="nome" class="form-control" value="<?php echo $evento_atual['nome'] ?? ''; ?>" required>
                             </div>
                             <div class="md-form mb-3">
@@ -159,8 +159,8 @@ if ($evento_id > 0) {
                                 <input type="url" id="maps" name="maps" class="form-control" value="<?php echo $evento_atual['maps'] ?? ''; ?>">
                             </div>
                             <div class="md-form mb-3">
-                                <label for="busca_expositor_evento">Expositor / Empresa (Opcional)</label>
-                                <input type="text" id="busca_expositor_evento" class="form-control" placeholder="Buscar empresa para associar ao evento..." value="<?php 
+                                <label for="busca_expositor_evento">Expositor / Empresa Associada (Opcional)</label>
+                                <input type="text" id="busca_expositor_evento" class="form-control" placeholder="Buscar empresa para associar..." value="<?php 
                                     if(isset($evento_atual['expositor_id'])){
                                         $ex_res = mysqli_query($conexao, "SELECT empresa FROM expositores2024 WHERE expositor_id = ".$evento_atual['expositor_id']);
                                         $ex_row = mysqli_fetch_assoc($ex_res);
@@ -171,7 +171,7 @@ if ($evento_id > 0) {
                             </div>
                             
                             <hr>
-                            <label class="form-label">Imagem do Evento</label>
+                            <label class="form-label">Imagem da Atividade</label>
                             <div class="md-form mb-3">
                                 <select name="imagem_id" class="form-control">
                                     <option value="">Selecione imagem existente...</option>
@@ -185,13 +185,13 @@ if ($evento_id > 0) {
                                 <input type="file" name="nova_imagem" class="form-control-file">
                             </div>
 
-                            <button type="submit" class="btn btn-primary btn-block rounded-pill">Salvar Evento</button>
+                            <button type="submit" class="btn btn-primary btn-block rounded-pill">Salvar Atividade</button>
                         </form>
                     </div>
                 </div>
             </div>
 
-            <!-- Coluna 2: Adição de Turnos (Só aparece após o evento ser criado) -->
+            <!-- Coluna 2: Adição de Turnos (Só aparece após a atividade ser criada) -->
             <?php if ($evento_id > 0): ?>
             <div class="col-lg-7">
                 <div class="card shadow-sm mb-4">

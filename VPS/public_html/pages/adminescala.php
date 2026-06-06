@@ -94,7 +94,7 @@ if (isset($_GET['evento_id'])) {
 		<img id="event-header-image" src="" alt="Imagem do Evento" class="img-thumbnail ml-3" style="max-height: 80px; display: none;">
 	</h1>
 <!--    <h1 class="mb-4">Gestão de Escala: <?php echo htmlspecialchars($nome_evento_selecionado); ?></h1>-->
-    <p><a href="/admin/eventos">&laquo; Voltar para a lista de eventos</a></p>
+    <p><a href="/admin/atividades">&laquo; Voltar para a lista de eventos</a></p>
     <hr>
 	<div id="mensagem-escala"></div>
     <div id="escala-container">

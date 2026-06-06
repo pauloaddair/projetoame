@@ -1,6 +1,6 @@
 <?php
 // adminevento.php - Gerenciamento de detalhes do evento (Horários/Turnos)
-// Acessível via /admin/evento/{id_ou_slug}
+// Acessível via /admin/atividade/{id_ou_slug}
 include_once('./include/funcoes.php');
 // include_once('./include/conexao.php');
 // include_once('./include/head.php');
@@ -24,10 +24,10 @@ if ($identificador) {
         $evento = mysqli_fetch_assoc($respEvento);
         $evento_id = $evento['id'];
     } else {
-        die("<div class='container mt-5'><div class='alert alert-danger'>Evento não encontrado.</div></div>");
+        die("<div class='container mt-5'><div class='alert alert-danger'>Atividade não encontrada.</div></div>");
     }
 } else {
-    die("<div class='container mt-5'><div class='alert alert-warning'>Identificador do evento não fornecido.</div></div>");
+    die("<div class='container mt-5'><div class='alert alert-warning'>Identificador da atividade não fornecido.</div></div>");
 }
 
 // Processa o formulário de adição de horário
@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_horario'])) {
     }
 }
 
-// Busca horários existentes para este evento
+// Busca horários existentes para esta atividade
 $queryHorarios = "SELECT h.*, e.empresa as nome_empresa FROM horarios h JOIN expositores2024 e ON h.empresa_id = e.expositor_id WHERE h.evento_id = $evento_id ORDER BY h.data_inicio ASC";
 $respHorarios = mysqli_query($conexao, $queryHorarios);
 if ($respHorarios) {
@@ -69,7 +69,7 @@ if ($respHorarios) {
             <h1 class="text-center">Gerenciar: <?php echo htmlspecialchars($evento['nome']); ?></h1>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="/admin/eventos">Eventos</a></li>
+                    <li class="breadcrumb-item"><a href="/admin/atividades">Atividades</a></li>
                     <li class="breadcrumb-item active">Gerenciar</li>
                 </ol>
             </nav>

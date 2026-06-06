@@ -34,7 +34,7 @@ body { font-family: Arial, sans-serif; }
 			  <ol class="breadcrumb">
 				<li class="breadcrumb-item" aria-current="page">Relatórios</li>
 				<li class="breadcrumb-item"><a href="/admin/resumo">Resumo</a></li>
-				<li class="breadcrumb-item active"><a href="/admin/eventos">Contatos</a></li>
+				<li class="breadcrumb-item active"><a href="/admin/atividades">Contatos</a></li>
 			  </ol>
 			</nav>		
 	</head>
@@ -93,7 +93,7 @@ include_once('include/footer-table.php');
                             }
                         }
 
-                        let expositorLink = `<a href="/admin/evento/${contato.expositor_id}">${contato.expositor}</a>`;
+                        let expositorLink = `<a href="/admin/atividade/${contato.expositor_id}">${contato.expositor}</a>`;
                         // Adicionar linha ao DataTable
                         table.row.add([
 							i,

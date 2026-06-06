@@ -1,4 +1,6 @@
 <?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 // session_start();
 setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'portuguese');
 date_default_timezone_set('America/Sao_Paulo');
@@ -193,8 +195,6 @@ if ($_SERVER['REQUEST_METHOD']=="POST"){
 		error_reporting( E_ALL );
 		
 		require before('/public_html',__DIR__) . '/vendor/autoload.php';
-		use PHPMailer\PHPMailer\PHPMailer;
-		use PHPMailer\PHPMailer\Exception;
 
 		if (isset($_POST['Email'])){
 			$email_post = strtolower($_POST['Email']);
@@ -223,6 +223,14 @@ if ($_SERVER['REQUEST_METHOD']=="POST"){
 			$mail->Password   = 'PittJusto@3802';
 			$mail->SMTPSecure = 'tls';
 			$mail->Port       = 587;
+
+			$mail->SMTPOptions = array(
+				'ssl' => array(
+					'verify_peer' => false,
+					'verify_peer_name' => false,
+					'allow_self_signed' => true
+				)
+			);
 
 			$mail->setFrom('noreply@projetoame.org', 'Projeto AME - Inscrição');
 			$mail->addAddress($to);
