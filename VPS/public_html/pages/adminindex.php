@@ -372,7 +372,7 @@ if (!$result_list_neg) {
                 <div class="card shadow mb-4">
                     <div class="card-header py-3 bg-light d-flex align-items-center justify-content-between">
                         <h6 class="m-0 font-weight-bold text-primary">
-                            <i class="fas fa-calendar-alt mr-2"></i>Próximas Atividades
+                            <i class="fas fa-calendar-alt mr-2"></i>Atividades (<?php echo date('Y'); ?>)
                         </h6>
                         <span class="badge badge-secondary"><?php echo $result_atividades ? mysqli_num_rows($result_atividades) : 0; ?></span>
                     </div>
