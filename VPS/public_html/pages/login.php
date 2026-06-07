@@ -27,15 +27,17 @@ $titulo = "Login";
 		ON usuarios.imagem_id = imagens.imagem_id
 		WHERE usuario_id =".$usuario_id;
 		$result = mysqli_query($conexao, $query);
-		$row1 = mysqli_num_rows($result);
-		setcookie("usuario_id", $row1["usuario_ID"], time()+14*24*60*60);
-		$_SESSION['id'] = $row1["usuario_ID"];
-		$_SESSION['usuario'] =  $row1["login"];
-		$_SESSION['nome'] = $row1["nome"];
-		$_SESSION['nivel'] = $row1["nivel"];
-		$_SESSION['perfil'] = $row1["url"];
-		header("Location: $ref");
-		exit();
+		if ($result && mysqli_num_rows($result) > 0) {
+			$row1 = mysqli_fetch_assoc($result);
+			setcookie("usuario_id", $row1["usuario_ID"], time()+14*24*60*60, "/");
+			$_SESSION['id'] = $row1["usuario_ID"];
+			$_SESSION['usuario'] =  $row1["login"];
+			$_SESSION['nome'] = $row1["nome"];
+			$_SESSION['nivel'] = $row1["nivel"];
+			$_SESSION['perfil'] = $row1["url"];
+			header("Location: $ref");
+			exit();
+		}
 	}
 
 ?>
