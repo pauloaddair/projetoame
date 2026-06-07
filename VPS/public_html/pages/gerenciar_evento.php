@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_horario'])) {
 }
 
 // Busca horários existentes para este evento
-$queryHorarios = "SELECT h.*, e.empresa as nome_empresa FROM horarios h JOIN expositores2024 e ON h.empresa_id = e.expositor_id WHERE h.evento_id = $evento_id ORDER BY h.data_inicio ASC";
+$queryHorarios = "SELECT h.*, e.empresa as nome_empresa FROM horarios h JOIN empresas e ON h.empresa_id = e.empresa_id WHERE h.evento_id = $evento_id ORDER BY h.data_inicio ASC";
 $respHorarios = mysqli_query($conexao, $queryHorarios);
 if ($respHorarios) {
     while ($row = mysqli_fetch_assoc($respHorarios)) {
@@ -140,7 +140,7 @@ if ($respHorarios) {
     <script>
     $(function() {
         $("#busca_empresa").autocomplete({
-            source: "buscar_expositores.php",
+            source: "buscar_empresas.php",
             minLength: 3,
             select: function(event, ui) {
                 // ui.item.id e ui.item.value são retornados pelo JSON

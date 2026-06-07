@@ -46,10 +46,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['criar_evento'])) {
         $endereco = mysqli_real_escape_string($conexao, $_POST['endereco']);
         $maps = mysqli_real_escape_string($conexao, $_POST['maps']);
         $obs = mysqli_real_escape_string($conexao, $_POST['obs']);
-        $expositor_id = !empty($_POST['expositor_id']) ? (int)$_POST['expositor_id'] : 'NULL';
+        $empresa_id = !empty($_POST['empresa_id']) ? (int)$_POST['empresa_id'] : 'NULL';
 
-        $queryInsert = "INSERT INTO eventos_marcados (nome, tipo, inicio, final, local, endereco, maps, imagem_id, obs, aval_grupo, escala_fechada, expositor_id)
-                        VALUES ('$nome', '$tipo', '$inicio', '$final', '$local', '$endereco', '$maps', $imagem_id, '$obs', 1, 1, $expositor_id)";
+        $queryInsert = "INSERT INTO eventos_marcados (nome, tipo, inicio, final, local, endereco, maps, imagem_id, obs, aval_grupo, escala_fechada, empresa_id)
+                        VALUES ('$nome', '$tipo', '$inicio', '$final', '$local', '$endereco', '$maps', $imagem_id, '$obs', 1, 1, $empresa_id)";
         if (mysqli_query($conexao, $queryInsert)) {
             $evento_id = mysqli_insert_id($conexao);
             header("Location: /admin/atividade/" . $evento_id . "?msg=success");
@@ -159,15 +159,15 @@ if ($evento_id > 0) {
                                 <input type="url" id="maps" name="maps" class="form-control" value="<?php echo $evento_atual['maps'] ?? ''; ?>">
                             </div>
                             <div class="md-form mb-3">
-                                <label for="busca_expositor_evento">Expositor / Empresa Associada (Opcional)</label>
+                                <label for="busca_expositor_evento">Empresa Associada (Opcional)</label>
                                 <input type="text" id="busca_expositor_evento" class="form-control" placeholder="Buscar empresa para associar..." value="<?php 
-                                    if(isset($evento_atual['expositor_id'])){
-                                        $ex_res = mysqli_query($conexao, "SELECT empresa FROM expositores2024 WHERE expositor_id = ".$evento_atual['expositor_id']);
+                                    if(!empty($evento_atual['empresa_id'])){
+                                        $ex_res = mysqli_query($conexao, "SELECT empresa FROM empresas WHERE empresa_id = ".$evento_atual['empresa_id']);
                                         $ex_row = mysqli_fetch_assoc($ex_res);
                                         echo $ex_row['empresa'];
                                     }
                                 ?>">
-                                <input type="hidden" id="expositor_id" name="expositor_id" value="<?php echo $evento_atual['expositor_id'] ?? ''; ?>">
+                                <input type="hidden" id="empresa_id_evento" name="empresa_id" value="<?php echo $evento_atual['empresa_id'] ?? ''; ?>">
                             </div>
                             
                             <hr>
@@ -248,7 +248,7 @@ if ($evento_id > 0) {
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $qH = "SELECT h.*, e.empresa FROM horarios h JOIN expositores2024 e ON h.empresa_id = e.expositor_id WHERE h.evento_id = $evento_id ORDER BY h.data_inicio ASC";
+                                    $qH = "SELECT h.*, e.empresa FROM horarios h JOIN empresas e ON h.empresa_id = e.empresa_id WHERE h.evento_id = $evento_id ORDER BY h.data_inicio ASC";
                                     $rH = mysqli_query($conexao, $qH);
                                     while ($h = mysqli_fetch_assoc($rH)):
                                     ?>
@@ -276,10 +276,10 @@ if ($evento_id > 0) {
     $(function() {
         // Autocomplete para o Expositor do Evento
         $("#busca_expositor_evento").autocomplete({
-            source: "/pages/buscar_expositores.php",
+            source: "/pages/buscar_empresas.php",
             minLength: 3,
             select: function(event, ui) {
-                $("#expositor_id").val(ui.item.id);
+                $("#empresa_id_evento").val(ui.item.id);
                 // Se o campo de turno estiver vazio, sugere o mesmo expositor
                 if ($("#empresa_id").val() == "") {
                     $("#empresa_id").val(ui.item.id);
@@ -290,7 +290,7 @@ if ($evento_id > 0) {
 
         // Autocomplete para o Expositor do Turno
         $("#busca_expositor").autocomplete({
-            source: "/pages/buscar_expositores.php",
+            source: "/pages/buscar_empresas.php",
             minLength: 3,
             select: function(event, ui) {
                 $("#empresa_id").val(ui.item.id);
@@ -298,9 +298,9 @@ if ($evento_id > 0) {
         });
 
         // Preenchimento automático inicial do turno se o evento já tiver expositor
-        <?php if (isset($evento_atual['expositor_id'])): ?>
+        <?php if (!empty($evento_atual['empresa_id'])): ?>
             if ($("#empresa_id").val() == "") {
-                $("#empresa_id").val("<?php echo $evento_atual['expositor_id']; ?>");
+                $("#empresa_id").val("<?php echo $evento_atual['empresa_id']; ?>");
                 $("#busca_expositor").val("<?php echo htmlspecialchars($ex_row['empresa'] ?? ''); ?>");
             }
         <?php endif; ?>

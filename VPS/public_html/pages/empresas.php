@@ -28,7 +28,7 @@ if (mysqli_num_rows($resp)){
 	$row = mysqli_fetch_array($resp);
 	$qtd_atendentes = $row['qtd'];
 }
-$query = "SELECT count(*) AS qtd FROM expositores;";
+$query = "SELECT count(*) AS qtd FROM empresas;";
 $resp = mysqli_query($conexao,$query);
 if (mysqli_num_rows($resp)){
 	$row = mysqli_fetch_array($resp);
@@ -46,7 +46,7 @@ if (mysqli_num_rows($resp)){
 	$row = mysqli_fetch_array($resp);
 	$qtd_eventos = $row['qtd'];
 }
-$query = "SELECT count(*) AS qtd FROM expositores2024;";
+$query = "SELECT count(*) AS qtd FROM empresas;";
 $resp = mysqli_query($conexao,$query);
 if (mysqli_num_rows($resp)){
 	$row = mysqli_fetch_array($resp);
@@ -111,7 +111,7 @@ if (mysqli_num_rows($resp)){
 					<div class="card-body">
 						<div class="row no-gutters align-items-center">
 						<div class="col mr-2">
-							<div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Expositores</div>
+							<div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Empresas</div>
 							<div class="h5 mb-0 font-weight-bold text-gray-800">
 								<?php echo number_format($qtd_expositores,0,",",".")?>
 							</div>

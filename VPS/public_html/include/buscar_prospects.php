@@ -1,10 +1,10 @@
 <?php
 include 'conexao.php';
 
-$sql = "SELECT p.id, e.Evento AS evento, ex.nome AS expositor, p.status, p.data_registro 
+$sql = "SELECT p.id, e.Evento AS evento, ex.empresa AS expositor, p.status, p.data_registro 
         FROM prospects p
         JOIN eventos e ON p.evento_id = e.evento_id
-        JOIN expositores2024 ex ON p.expositor_id = ex.id
+        JOIN empresas ex ON p.empresa_id = ex.empresa_id
         ORDER BY p.data_registro DESC";
 
 $result = $conexao->query($sql);

@@ -78,15 +78,16 @@
 	<div id="div-login" style="display: <?php echo $login?>">
 		<hr class="dropdown-divider" />
 		<a class="dropdown-item mx-2" href="<?php echo $app_web_root; ?>login"><i class="fas fa-sign-in-alt light-blue-text mx-2"></i>Login</a>
-		<a class="dropdown-item mx-2" href="<?php echo $app_web_root; ?>cadastro" role="button"><i class="fas fa-table light-blue-text mx-2"></i>Cadastre-se</a>
+		<a class="dropdown-item mx-2" href="<?php echo $app_web_root; ?>inscrever" role="button"><i class="fas fa-table light-blue-text mx-2"></i>Cadastre-se</a>
 		<a class="dropdown-item mx-2" href="<?php echo $app_web_root; ?>privacidade" role="button"><i class="fas fa-user-secret light-blue-text mx-2"></i>Política de privacidade</a>
 	</div>
 	<div id="div-logado" style="display: <?php echo $logado?>">		
-		<a class="dropdown-item" href="<?php echo $app_web_root; ?>perfil"><i class="fas fa-user-alt light-blue-text mx-2"></i>&nbsp;Perfil</a>
+		<a class="dropdown-item" href="<?php echo $app_web_root; ?>meuperfil"><i class="fas fa-user-alt light-blue-text mx-2"></i>&nbsp;Perfil</a>
+    <?php if (isset($_SESSION['nivel']) && $_SESSION['nivel'] >= 4): ?>
 		<a class="dropdown-item" href="<?php echo $app_web_root; ?>admin"><i class="fas fa-columns light-blue-text mx-2"></i>Painel</a>
-    <?php if (isset($_SESSION['nivel']) && $_SESSION['nivel'] >= 3): ?>
-		<a class="dropdown-item" href="<?php echo $app_web_root; ?>atestados"><i class="fas fa-certificate light-blue-text mx-2"></i>&nbsp;Atestados</a>
     <?php endif; ?>
+		<a class="dropdown-item" href="<?php echo $app_web_root; ?>documentos"><i class="fas fa-file-alt light-blue-text mx-2"></i>&nbsp;Documentos</a>
+		<a class="dropdown-item" href="<?php echo $app_web_root; ?>dre"><i class="fas fa-chart-line light-blue-text mx-2"></i>&nbsp;Transparência DRE</a>
 		<hr class="dropdown-divider" />
 		<a class="dropdown-item" href="<?php echo $app_web_root; ?>logout"><i class="fas fa-sign-out-alt light-blue-text"></i>&nbsp;Sair</a>
 	</div>

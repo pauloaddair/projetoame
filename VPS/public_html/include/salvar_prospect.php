@@ -28,41 +28,41 @@ if ($rowEvento = $resultEvento->fetch_assoc()) {
 }
 //echo "2. ". $sqlEvento ."<br>";
 
-// Verificar se o expositor já existe
-$sqlExpositor = "SELECT expositor_id FROM expositores2024 WHERE nome = ?";
+// Verificar se o expositor (empresa) já existe
+$sqlExpositor = "SELECT empresa_id FROM empresas WHERE empresa = ?";
 $stmtExpositor = $conexao->prepare($sqlExpositor);
 $stmtExpositor->bind_param("s", $expositor);
 $stmtExpositor->execute();
 $resultExpositor = $stmtExpositor->get_result();
 if ($rowExpositor = $resultExpositor->fetch_assoc()) {
-    $expositor_id = $rowExpositor['expositor_id'];
+    $empresa_id = $rowExpositor['empresa_id'];
 } else {
-    $sqlInsertExpositor = "INSERT INTO expositores2024 (nome) VALUES (?)";
+    $sqlInsertExpositor = "INSERT INTO empresas (empresa) VALUES (?)";
     $stmtInsertExpositor = $conexao->prepare($sqlInsertExpositor);
     $stmtInsertExpositor->bind_param("s", $expositor);
     $stmtInsertExpositor->execute();
-    $expositor_id = $stmtInsertExpositor->insert_id;
+    $empresa_id = $stmtInsertExpositor->insert_id;
 }
 //echo "3. ". $sqlExpositor ."<br>";
 
-// Relacionar expositor ao evento
-$sqlRelacionamento = "INSERT IGNORE INTO expositor_evento (evento_id, expositor_id) VALUES (?, ?)";
+// Relacionar empresa ao evento
+$sqlRelacionamento = "INSERT IGNORE INTO empresa_evento (evento_id, empresa_id) VALUES (?, ?)";
 $stmtRelacionamento = $conexao->prepare($sqlRelacionamento);
-$stmtRelacionamento->bind_param("ii", $evento_id, $expositor_id);
+$stmtRelacionamento->bind_param("ii", $evento_id, $empresa_id);
 $stmtRelacionamento->execute();
 
 // Verificar se o contato já existe
-$sqlContato = "SELECT id FROM contatos WHERE expositor_id = ? AND nome = ?";
+$sqlContato = "SELECT id FROM contatos WHERE empresa_id = ? AND nome = ?";
 $stmtContato = $conexao->prepare($sqlContato);
-$stmtContato->bind_param("is", $expositor_id, $contato);
+$stmtContato->bind_param("is", $empresa_id, $contato);
 $stmtContato->execute();
 $resultContato = $stmtContato->get_result();
 if ($rowContato = $resultContato->fetch_assoc()) {
     $contato_id = $rowContato['id'];
 } else {
-    $sqlInsertContato = "INSERT INTO contatos (expositor_id, nome, telefone, email, redes_sociais) VALUES (?, ?, ?, ?, ?)";
+    $sqlInsertContato = "INSERT INTO contatos (empresa_id, nome, telefone, email, redes_sociais) VALUES (?, ?, ?, ?, ?)";
     $stmtInsertContato = $conexao->prepare($sqlInsertContato);
-    $stmtInsertContato->bind_param("issss", $expositor_id, $contato, $telefone, $email, $redes);
+    $stmtInsertContato->bind_param("issss", $empresa_id, $contato, $telefone, $email, $redes);
     $stmtInsertContato->execute();
     $contato_id = $stmtInsertContato->insert_id;
 }

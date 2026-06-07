@@ -103,9 +103,9 @@ $total = $atual + $receber['receber'] + $pagar['pagar'];
 // --- ATIVIDADES (PRÓXIMAS ATIVIDADES) ---
 $result_atividades = false;
 try {
-    $query_atividades = "SELECT em.*, le.whatsapp, le.telefone, le.contato AS expositor_contato, le.nome AS expositor_nome 
+    $query_atividades = "SELECT em.*, e.whatsapp, e.telefone, e.nome AS expositor_contato, e.empresa AS expositor_nome 
                          FROM eventos_marcados em 
-                         LEFT JOIN leads_expositores le ON em.expositor_id = le.id 
+                         LEFT JOIN empresas e ON em.empresa_id = e.empresa_id 
                          WHERE em.inicio >= NOW() 
                          ORDER BY em.inicio ASC LIMIT 5";
     $result_atividades = mysqli_query($conexao, $query_atividades);
@@ -131,9 +131,9 @@ if (!$result_atividades || mysqli_num_rows($result_atividades) == 0) {
     // Fallback local: show latest activities in DB
     $fallback_success = false;
     try {
-        $query_atividades = "SELECT em.*, le.whatsapp, le.telefone, le.contato AS expositor_contato, le.nome AS expositor_nome 
+        $query_atividades = "SELECT em.*, e.whatsapp, e.telefone, e.nome AS expositor_contato, e.empresa AS expositor_nome 
                              FROM eventos_marcados em 
-                             LEFT JOIN leads_expositores le ON em.expositor_id = le.id 
+                             LEFT JOIN empresas e ON em.empresa_id = e.empresa_id 
                              ORDER BY em.inicio DESC LIMIT 5";
         $result_atividades = mysqli_query($conexao, $query_atividades);
         $fallback_success = true;
@@ -250,8 +250,8 @@ if (!$result_list_neg) {
                                             <a href="<?php echo $app_web_root; ?>admin/pagar">A Pagar</a>
                                         </div>
                                         <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                            R$ <?php echo number_format(abs($pagar['pagar']),2,",",".")?>
-                                            <small class="text-muted d-block">(<?php echo $pagar['qtd']?> lançamentos)</small>
+                                            R$ <?php echo number_format(abs(floatval($pagar['pagar'] ?? 0)),2,",",".")?>
+                                            <small class="text-muted d-block">(<?php echo intval($pagar['qtd'] ?? 0)?> lançamentos)</small>
                                         </div>
                                     </div>
                                     <div class="col-auto">
@@ -273,8 +273,8 @@ if (!$result_list_neg) {
                                             <a href="<?php echo $app_web_root; ?>admin/receber">A Receber</a>
                                         </div>
                                         <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                            R$ <?php echo number_format($receber['receber'],2,",",".")?>
-                                            <small class="text-muted d-block">(<?php echo $receber['qtd']?> lançamentos)</small>
+                                            R$ <?php echo number_format(floatval($receber['receber'] ?? 0),2,",",".")?>
+                                            <small class="text-muted d-block">(<?php echo intval($receber['qtd'] ?? 0)?> lançamentos)</small>
                                         </div>
                                     </div>
                                     <div class="col-auto">
@@ -478,6 +478,11 @@ if (!$result_list_neg) {
                                 <?php endwhile; ?>
                             <?php endif; ?>
                         </div>
+                    </div>
+                    <div class="card-footer text-center bg-white border-0 pt-0 pb-3 px-3">
+                        <a href="<?php echo $app_web_root; ?>admin/prospeccao" class="btn btn-sm btn-primary btn-block rounded-pill shadow-sm">
+                            <i class="fas fa-search-dollar mr-1"></i> Acessar Painel de Prospecção
+                        </a>
                     </div>
                 </div>
 

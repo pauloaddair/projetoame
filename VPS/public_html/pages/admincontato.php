@@ -43,10 +43,10 @@
 					"Final" => "Final",
 					"SITE" => "Site");
 				break;				
-			case "expositores":
-				$tabela ="expositores2024";
-				$titulo = "Expositor";
-				$query ="SELECT nome,email,empresa,expositores_telefone.numero,expositores_telefone.celular FROM expositores2024,expositores_telefone WHERE expositores2024.expositor_id = expositores_telefone.expositor_id AND expositores2024.expositor_id = " . $id;
+			case "empresas":
+				$tabela ="empresas";
+				$titulo = "Empresa";
+				$query ="SELECT nome,email,empresa,empresas_telefones.numero,empresas_telefones.celular FROM empresas,empresas_telefones WHERE empresas.empresa_id = empresas_telefones.empresa_id AND empresas.empresa_id = " . $id;
 				$campos = array("nome","empresa","email","numero");
 				$labels = array(
 					"nome"=>"Contato",

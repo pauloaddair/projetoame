@@ -4,11 +4,11 @@ $qtd_prospects = 0;
 $qtd_atividades = 0;
 $qtd_eventos = 0;
 $qtd_expositores = 0;
-$query = "SELECT expositores2024.*,expositores_telefone.numero,expositores_telefone.celular FROM expositores2024,expositores_telefone WHERE expositores2024.expositor_id = expositores_telefone.expositor_id ORDER BY empresa;";
-$mensagem = "Nenhum evento encontrado!";
+$query = "SELECT empresas.*,empresas_telefones.numero,empresas_telefones.celular FROM empresas,empresas_telefones WHERE empresas.empresa_id = empresas_telefones.empresa_id ORDER BY empresa;";
+$mensagem = "Nenhuma empresa encontrada!";
 $atividades = mysqli_query($conexao,$query);
 // Atendentes
-$query = "SELECT * FROM expositores2024;";
+$query = "SELECT * FROM empresas;";
 $mensagem_candidatos = "Nenhum atendente encontrado!";
 $atendentes = mysqli_query($conexao,$query);
 $query = "SELECT count(*) AS qtd FROM candidatos;";
@@ -17,7 +17,7 @@ if (mysqli_num_rows($resp)){
 	$row = mysqli_fetch_array($resp);
 	$qtd_atendentes = $row['qtd'];
 }
-$query = "SELECT count(*) AS qtd FROM expositores;";
+$query = "SELECT count(*) AS qtd FROM empresas;";
 $resp = mysqli_query($conexao,$query);
 if (mysqli_num_rows($resp)){
 	$row = mysqli_fetch_array($resp);
@@ -35,7 +35,7 @@ if (mysqli_num_rows($resp)){
 	$row = mysqli_fetch_array($resp);
 	$qtd_eventos = $row['qtd'];
 }
-$query = "SELECT count(*) AS qtd FROM expositores2024;";
+$query = "SELECT count(*) AS qtd FROM empresas;";
 $resp = mysqli_query($conexao,$query);
 if (mysqli_num_rows($resp)){
 	$row = mysqli_fetch_array($resp);
@@ -52,10 +52,10 @@ if (mysqli_num_rows($resp)){
 			<nav aria-label="breadcrumb">
 			<ol class="breadcrumb">
 				<li class="breadcrumb-item"><a href="/atendentes">Atendentes</a></li>
-				<li class="breadcrumb-item active" aria-current="page">Expositores</li>
+				<li class="breadcrumb-item active" aria-current="page">Empresas</li>
 			</ol>
 			</nav>
-			<h1 class="text-center">Expositores</h1>
+			<h1 class="text-center">Empresas</h1>
 		</header>
 		<div class="row wow fadeIn animated">
 			<div class="col-sm">
@@ -119,13 +119,13 @@ if (mysqli_num_rows($resp)){
 					<div class="card-body">
 						<div class="row no-gutters align-items-center">
 							<div class="col mr-2">
-								<div class="text-xs font-weight-bold text-primary text-uppercase mb-1"><a href="/admin/expositores">Expositores</a></div>
+								<div class="text-xs font-weight-bold text-primary text-uppercase mb-1"><a href="/admin/empresas">Empresas</a></div>
 								<div class="h5 mb-0 font-weight-bold text-gray-800">
 									<?php echo number_format($qtd_expositores,0,",",".")?>
 								</div>
 							</div>
 							<div class="col-auto">
-								<a href="/admin/expositores">
+								<a href="/admin/empresas">
 									<i class="fas fa-users fa-2x text-gray-300"></i>
 								</a>
 							</div>
@@ -155,7 +155,7 @@ if (mysqli_num_rows($resp)){
 		</div>
 	<div class="row justify-content-center text-center">
 	<div class="col">
-		<h3 class="text-center">Expositores</h3>
+		<h3 class="text-center">Empresas</h3>
 		<table class="table" id="table">
 		<thead>
 			<th>
@@ -182,19 +182,19 @@ if (mysqli_num_rows($resp)){
 */
 			?>
 			<tr>
-				<td><a href="<?php echo '/admin/contato/'.digitos($atividade['expositor_id'])?>/expositores">
+				<td><a href="<?php echo '/admin/contato/'.digitos($atividade['empresa_id'])?>/empresas">
 				<?php 
 				echo $atividade['empresa'];
 				?>
 					</a>
 				</td>
-				</a><td><a href="<?php echo '/admin/contato/'.digitos($atividade['expositor_id'])?>/expositores">
+				</a><td><a href="<?php echo '/admin/contato/'.digitos($atividade['empresa_id'])?>/empresas">
 				<?php echo $atividade['nome']?>
 				</a></td>
-				<td><a href="<?php echo '/admin/contato/'.digitos($atividade['expositor_id'])?>/expositores">
+				<td><a href="<?php echo '/admin/contato/'.digitos($atividade['empresa_id'])?>/empresas">
 					   <?php echo $atividade['numero']?>
 				</a></td>
-				<td><a href="<?php echo '/admin/contato/'.digitos($atividade['expositor_id'])?>/expositores">
+				<td><a href="<?php echo '/admin/contato/'.digitos($atividade['empresa_id'])?>/empresas">
 						<?php echo $atividade['email']?>
 				</a></td>
 			</tr>

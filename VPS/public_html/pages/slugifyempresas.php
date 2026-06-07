@@ -2,7 +2,7 @@
 // include_once('./include/conexao.php');
 include_once('./include/funcoes.php');
 include_once('./include/head-table.php');
-$query = "SELECT * FROM expositores2024 ORDER BY empresa"
+$query = "SELECT * FROM empresas ORDER BY empresa"
 ?>
 <body>
 	<div class="container">
@@ -19,7 +19,7 @@ $query = "SELECT * FROM expositores2024 ORDER BY empresa"
 				$i=1;
 				$resp = mysqli_query($conexao,$query);
 				while ($row = mysqli_fetch_assoc($resp)){
-					echo "<tr><td>".$i."</td><td>".$row['expositor_id']."<td>".$row['empresa']."</td><td>".slugify($row['empresa'],'')."</td></tr>";
+					echo "<tr><td>".$i."</td><td>".$row['empresa_id']."<td>".$row['empresa']."</td><td>".slugify($row['empresa'],'')."</td></tr>";
 					$i++;
 				}
 				?>

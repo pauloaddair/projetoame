@@ -1,42 +1,42 @@
 <?php
-$qtd_atendentes =0;
+$qtd_atendentes = 0;
 $qtd_prospects = 0;
 $qtd_atividades = 0;
 $qtd_eventos = 0;
 $qtd_expositores = 0;
-$query = "SELECT * FROM expositores ORDER BY Empresa;";
-$mensagem = "Nenhum evento encontrado!";
-$atividades = mysqli_query($conexao,$query);
+$query = "SELECT * FROM empresas ORDER BY empresa;";
+$mensagem = "Nenhuma empresa encontrada!";
+$atividades = mysqli_query($conexao, $query);
 // Atendentes
 $query = "SELECT * FROM candidatos WHERE rodizio>0 ORDER BY data_inscricao ASC, nome ASC LIMIT 10;";
 $mensagem_candidatos = "Nenhum atendente encontrado!";
-$atendentes = mysqli_query($conexao,$query);
+$atendentes = mysqli_query($conexao, $query);
 $query = "SELECT count(*) AS qtd FROM candidatos;";
-$resp = mysqli_query($conexao,$query);
+$resp = mysqli_query($conexao, $query);
 if (mysqli_num_rows($resp)){
 	$row = mysqli_fetch_array($resp);
 	$qtd_atendentes = $row['qtd'];
 }
-$query = "SELECT count(*) AS qtd FROM expositores;";
-$resp = mysqli_query($conexao,$query);
+$query = "SELECT count(*) AS qtd FROM empresas;";
+$resp = mysqli_query($conexao, $query);
 if (mysqli_num_rows($resp)){
 	$row = mysqli_fetch_array($resp);
 	$qtd_prospects = $row['qtd'];
 }
 $query = "SELECT count(*) AS qtd FROM eventos;";
-$resp = mysqli_query($conexao,$query);
+$resp = mysqli_query($conexao, $query);
 if (mysqli_num_rows($resp)){
 	$row = mysqli_fetch_array($resp);
 	$qtd_atividades = $row['qtd'];
 }
 $query = "SELECT count(*) AS qtd FROM eventos;";
-$resp = mysqli_query($conexao,$query);
+$resp = mysqli_query($conexao, $query);
 if (mysqli_num_rows($resp)){
 	$row = mysqli_fetch_array($resp);
 	$qtd_eventos = $row['qtd'];
 }
-$query = "SELECT count(*) AS qtd FROM expositores2024;";
-$resp = mysqli_query($conexao,$query);
+$query = "SELECT count(*) AS qtd FROM empresas;";
+$resp = mysqli_query($conexao, $query);
 if (mysqli_num_rows($resp)){
 	$row = mysqli_fetch_array($resp);
 	$qtd_expositores = $row['qtd'];
@@ -120,13 +120,13 @@ if (mysqli_num_rows($resp)){
 					<div class="card-body">
 						<div class="row no-gutters align-items-center">
 							<div class="col mr-2">
-								<div class="text-xs font-weight-bold text-primary text-uppercase mb-1"><a href="/admin/expositores">Expositores</a></div>
+								<div class="text-xs font-weight-bold text-primary text-uppercase mb-1"><a href="/admin/empresas">Empresas</a></div>
 								<div class="h5 mb-0 font-weight-bold text-gray-800">
 									<?php echo number_format($qtd_expositores,0,",",".")?>
 								</div>
 							</div>
 							<div class="col-auto">
-								<a href="/admin/expositores">
+								<a href="/admin/empresas">
 									<i class="fas fa-users fa-2x text-gray-300"></i>
 								</a>
 							</div>
@@ -183,23 +183,19 @@ if (mysqli_num_rows($resp)){
 */
 			?>
 			<tr>
-				<td><a href="<?php echo '/admin/contato/'.digitos($atividade['expositor_ID'])?>/prospects">
+				<td><a href="<?php echo '/admin/contato/'.digitos($atividade['empresa_id'])?>/prospects">
 				<?php 
-					If($atividade['NomeFantasia']<>""){
-						echo $atividade['NomeFantasia'];
-					} else {
-						echo $atividade['Empresa'];
-					}
+					echo $atividade['empresa'];
 				?>
-				</td>
-				</a><td><a href="<?php echo '/admin/contato/'.digitos($atividade['expositor_ID'])?>/prospects">
-				<?php echo $atividade['Resp1']?>
 				</a></td>
-				<td><a href="<?php echo '/admin/contato/'.digitos($atividade['expositor_ID'])?>/prospects">
-					   <?php echo $atividade['Fone1']?>
+				<td><a href="<?php echo '/admin/contato/'.digitos($atividade['empresa_id'])?>/prospects">
+				<?php echo $atividade['nome']?>
 				</a></td>
-				<td><a href="<?php echo '/admin/contato/'.digitos($atividade['expositor_ID'])?>/prospects">
-						<?php echo $atividade['Email1']?>
+				<td><a href="<?php echo '/admin/contato/'.digitos($atividade['empresa_id'])?>/prospects">
+					   <?php echo $atividade['telefone']?>
+				</a></td>
+				<td><a href="<?php echo '/admin/contato/'.digitos($atividade['empresa_id'])?>/prospects">
+						<?php echo $atividade['email']?>
 				</a></td>
 			</tr>
 			<?php 	

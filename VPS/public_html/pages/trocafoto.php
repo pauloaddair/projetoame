@@ -48,8 +48,7 @@ if ($_SERVER['REQUEST_METHOD']=="POST"){
 		$query = "UPDATE `candidatos` SET `imagem_id`='".$imagem_id."' WHERE candidato_id = ".$candidato_id;
 		$resp = mysqli_query($conexao,$query);
 		if ($usuario_id>0){
-			$query = "UPDATE `usuarios` SET `imagem_id`='".$imagem_id."' WHERE usuario_id = ".$usuario_id;
-			$resp = mysqli_query($conexao,$query);
+			// Mantemos a alteração da foto do candidato isolada do perfil de usuário
 		}
 	}
 }

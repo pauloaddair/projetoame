@@ -40,9 +40,32 @@ $campos_label = array (
 	'pais'=>array('País','digite o país','text','','far fa-map'),
 	'email_empresa'=>array('E-mail','forneça o e-mail da empresa','email','','far fa-email')
 );
-if (array_key_exists(1,$parametros)){
-	$id = intval($parametros[1]);
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
 }
+if (empty($_SESSION['id'])) {
+    header("Location: /login");
+    exit;
+}
+
+if ($_SESSION['nivel'] != 5) {
+    // Busca o empresa_id associado ao usuario_id logado
+    $q_emp_link = "SELECT empresa_id FROM empresas WHERE usuario_id = " . intval($_SESSION['id']) . " LIMIT 1";
+    $r_emp_link = mysqli_query($conexao, $q_emp_link);
+    if ($r_emp_link && mysqli_num_rows($r_emp_link) > 0) {
+        $row_emp_link = mysqli_fetch_assoc($r_emp_link);
+        $id = (int)$row_emp_link['empresa_id'];
+    } else {
+        // Se o usuário não tiver empresa associada, exibe erro ou bloqueia
+        die("Acesso restrito: sua conta de usuário não possui uma empresa associada.");
+    }
+} else {
+    // Admin (nível 5) pode acessar via parâmetro
+    if (array_key_exists(1, $parametros)){
+        $id = intval($parametros[1]);
+    }
+}
+
 if($_SERVER['REQUEST_METHOD']=="POST"){
 	if (isset($_POST['nome'])){
 		$campos['nome'] = $_POST['nome'];
@@ -53,11 +76,11 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 	if (isset($_POST['email'])){
 		$campos['email'] = $_POST['email'];
 	}
-	if (isset($_POST['telefone'])){
-		$campos['whatsapp'] = $_POST['telefone'];
+	if (isset($_POST['whatsapp'])){
+		$campos['whatsapp'] = $_POST['whatsapp'];
 	}
 	if (isset($_POST['telefone'])){
-		$campos['nome'] = $_POST['whatsapp'];
+		$campos['telefone'] = $_POST['telefone'];
 	}
 	if (isset($_POST['empresa'])){
 		$campos['empresa'] = $_POST['empresa'];
@@ -89,8 +112,9 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 	if (isset($_POST['email_empresa'])){
 		$campos['email_empresa'] = $_POST['email_empresa'];
 	}
+	
 	if ($id>0){
-		$query = "UPDATE `expositores2024` 
+		$query = "UPDATE `empresas` 
 		SET `nome`='".$campos['nome']."',
 			`cargo`='".$campos['cargo']."',
 			`email`='".$campos['email']."',
@@ -104,14 +128,28 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 			`cidade`='".$campos['cidade']."',
 			`UF`='".$campos['UF']."',
 			`pais`='".$campos['pais']."',
-			`email_empresa`='".$campos['email_empresa']."' 
-			WHERE expositor_id = ".$id;				
+			`email_empresa`='".$campos['email_empresa']."'";
+			
+		if ($_SESSION['nivel'] == 5) {
+			$is_expositor = isset($_POST['is_expositor']) ? 1 : 0;
+			$is_promotor = isset($_POST['is_promotor']) ? 1 : 0;
+			$is_parceiro = isset($_POST['is_parceiro']) ? 1 : 0;
+			$is_contratante = isset($_POST['is_contratante']) ? 1 : 0;
+			$query .= ", `is_expositor` = $is_expositor,
+					   `is_promotor` = $is_promotor,
+					   `is_parceiro` = $is_parceiro,
+					   `is_contratante` = $is_contratante";
+		}
+		
+		$query .= " WHERE empresa_id = ".$id;
 	} else {
-		$query = "INSERT INTO `expositores2024`(`nome`, `cargo`,`email`, `telefone`, `whatsapp`, `empresa`, `CNPJ`, `CEP`, `endereco`, `complemento`, `cidade`, `UF`, `pais`, `email_empresa`) VALUES ('".$campos['nome']."','" . $campos['cargo'] . "','" . telephone($campos['telefone']). "','" . telephone($campos['whatsapp']) ."','" . $campos['empresa']."','" . $campos['CNPJ']."','" . $campos['CEP']."','" . $campos['endereco']."','" . $campos['complemento']."','" . $campos['cidade']."','" . $campos['UF']."','" . $campos['pais']."','" . $campos['email_empresa']."')";
-}
-//	echo $query . "<br>";
-//	exit;
-		$resp = mysqli_query($conexao,$query);	
+		$is_expositor = isset($_POST['is_expositor']) ? 1 : 0;
+		$is_promotor = isset($_POST['is_promotor']) ? 1 : 0;
+		$is_parceiro = isset($_POST['is_parceiro']) ? 1 : 0;
+		$is_contratante = isset($_POST['is_contratante']) ? 1 : 0;
+		$query = "INSERT INTO `empresas`(`nome`, `cargo`,`email`, `telefone`, `whatsapp`, `empresa`, `CNPJ`, `CEP`, `endereco`, `complemento`, `cidade`, `UF`, `pais`, `email_empresa`, `is_expositor`, `is_promotor`, `is_parceiro`, `is_contratante`) VALUES ('".$campos['nome']."','" . $campos['cargo'] . "','" . $campos['email'] . "','" . telephone($campos['telefone']). "','" . telephone($campos['whatsapp']) ."','" . $campos['empresa']."','" . $campos['CNPJ']."','" . $campos['CEP']."','" . $campos['endereco']."','" . $campos['complemento']."','" . $campos['cidade']."','" . $campos['UF']."','" . $campos['pais']."','" . $campos['email_empresa']."', $is_expositor, $is_promotor, $is_parceiro, $is_contratante)";
+	}
+	$resp = mysqli_query($conexao,$query);	
 }
 ?>
 <!--** INDEX **-->
@@ -123,13 +161,13 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 <body>
 	<div class="container">
 		<header class="mt-5 p-2 justify-content-md-center">
-			<h1 class="text-center">Expositor</h1>
+			<h1 class="text-center">Empresa</h1>
 			<div class="row justify-content-between bg-light p-1 rounded">
 			<div class="col">
 				<nav aria-label="breadcrumb bg-transparent">
 			  <ol class="breadcrumb bg-transparent">
-				<li class="breadcrumb-item"><a href="/expositores">Expositores</a></li>
-				<li class="breadcrumb-item active" aria-current="page">Expositor</li>
+				<li class="breadcrumb-item"><a href="/empresas">Empresas</a></li>
+				<li class="breadcrumb-item active" aria-current="page">Empresa</li>
 			  </ol>
 			</nav>
 			</div>
@@ -139,7 +177,7 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 				<input class="form-control" list="datalistOptions" id="empresa" name="empresa" placeholder="empresa...">
 				<datalist id="datalistOptions">
 					<?php 
-					$querynomes = "SELECT expositor_id,empresa FROM expositores2024 ORDER BY empresa;";
+					$querynomes = "SELECT empresa_id,empresa FROM empresas ORDER BY empresa;";
 					$respnome = mysqli_query($conexao,$querynomes);
 					while ($row = mysqli_fetch_assoc($respnome)){
 						?>
@@ -160,11 +198,11 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 <?php
 			$perfil = "/img/ms-icon-310x310.png";
 			if ($id>0){
-				$query = "SELECT expositores2024.*,imagens.url AS perfil 
-				FROM expositores2024
-				LEFT JOIN imagens ON expositores2024.imagem_id = imagens.imagem_id 
-				WHERE expositores2024.expositor_id = ".$id;
-				$msg = "Expositor não encontrado";
+				$query = "SELECT empresas.*,imagens.url AS perfil 
+				FROM empresas
+				LEFT JOIN imagens ON empresas.imagem_id = imagens.imagem_id 
+				WHERE empresas.empresa_id = ".$id;
+				$msg = "Empresa não encontrada";
 				$resp = mysqli_query($conexao,$query);
 				if ($resp) {
 					$row = mysqli_fetch_assoc($resp);
@@ -207,7 +245,7 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 				</div>
 					<div class="card-body">
 						<form method="post" enctype="multipart/form-data">
-							<input type="hidden" id="expositor_id" name="expositor_id" value="<?php echo $id?>">
+							<input type="hidden" id="empresa_id" name="empresa_id" value="<?php echo $id?>">
 						<p><small>Imagem:</small></p>
 					<div class="md-form">
 							<i class="far fa-image prefix grey-text"></i>
@@ -236,6 +274,31 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 					}
 					?>
 							</div>
+							
+                        <!-- Flags de Tipo de Empresa -->
+                        <div class="p-3 border mt-3 mb-3 bg-light rounded">
+                            <h6>Atribuições da Empresa:</h6>
+                            <?php
+                            $disabled_flag = ($_SESSION['nivel'] != 5) ? 'disabled' : '';
+                            ?>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="is_expositor" name="is_expositor" value="1" <?php echo (isset($row['is_expositor']) && $row['is_expositor']) ? 'checked' : ''; ?> <?php echo $disabled_flag; ?>>
+                                <label class="form-check-label" for="is_expositor">Expositor</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="is_promotor" name="is_promotor" value="1" <?php echo (isset($row['is_promotor']) && $row['is_promotor']) ? 'checked' : ''; ?> <?php echo $disabled_flag; ?>>
+                                <label class="form-check-label" for="is_promotor">Promotor</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="is_parceiro" name="is_parceiro" value="1" <?php echo (isset($row['is_parceiro']) && $row['is_parceiro']) ? 'checked' : ''; ?> <?php echo $disabled_flag; ?>>
+                                <label class="form-check-label" for="is_parceiro">Parceiro</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="is_contratante" name="is_contratante" value="1" <?php echo (isset($row['is_contratante']) && $row['is_contratante']) ? 'checked' : ''; ?> <?php echo $disabled_flag; ?>>
+                                <label class="form-check-label" for="is_contratante">Contratante</label>
+                            </div>
+                        </div>
+
 						<button class="btn btn-sm btn-pill btn-success rounded-pill" type="button" id="toggleButton">MAIS</button>
 						<div class="md-form">
 						<button class="btn btn-block btn-pill btn-primary" type="submit">Enviar</button>
