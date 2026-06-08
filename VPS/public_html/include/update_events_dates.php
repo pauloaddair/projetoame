@@ -48,8 +48,21 @@ $json_events = json_encode($events, JSON_UNESCAPED_UNICODE);
 $is_windows = (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN');
 $arg = $is_windows ? base64_encode($json_events) : $json_events;
 
+$python_cmd = 'python';
+if (!$is_windows) {
+    $venv_python = $base_path . 'include/venv/bin/python';
+    if (file_exists($venv_python)) {
+        $python_cmd = $venv_python;
+    } else {
+        $has_python3 = shell_exec('which python3');
+        if (!empty(trim($has_python3))) {
+            $python_cmd = 'python3';
+        }
+    }
+}
+
 $python_script = $base_path . 'include/update_events_dates.py';
-$command = "python " . escapeshellarg($python_script) . " " . escapeshellarg($arg);
+$command = $python_cmd . " " . escapeshellarg($python_script) . " " . escapeshellarg($arg);
 
 // Execute command
 $output = shell_exec($command);
