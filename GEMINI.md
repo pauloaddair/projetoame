@@ -1,5 +1,21 @@
 ---
 project: PROJETO_AME
+tags:
+  - "#projeto/ame"
+  - "#modulo/crm"
+  - "#modulo/biometria"
+  - "#modulo/portal-responsavel"
+  - "#modulo/web-to-print"
+  - "#infra/vps1"
+  - "#infra/vps2"
+  - "#infra/vps3"
+  - "#tipo/diretrizes"
+relacionados:
+  - "[[PRINTADVISOR]]"
+  - "[[AUTOMACAO]]"
+  - "[[contacteme]]"
+  - "[[cafezinhosocial]]"
+  - "[[REGRAS_DE_NEGOCIO]]"
 skills:
   - writing-skills
   - frontend-design
@@ -119,3 +135,11 @@ diretrizes_ok: true
 15. **Migração do Histórico Cronológico de Rodízio:** Criar script de população retroativa da tabela historico_rodizio processando as planilhas históricas de eventos e registros do banco desde o primeiro evento do Projeto AME.
 
 16. **Portfólio Impresso & Web-to-Print (Parceria AlphaGraphics):** Desenvolver módulo no `/painel` para montagem de portfólio físico/álbum de memórias com fotos da biometria e currículo integrado, conectando à esteira de impressão sob demanda via AlphaGraphics / PrintAdvisor.
+
+---
+
+## 🔗 Conexões & Ecossistema
+- **Servidores & Infraestrutura:** [[VPS1_Hostinger]] (Produção Web / MariaDB), [[VPS2_NASANET]] (Evolution GO NETGO1200 / LiteLLM Gateway), [[VPS3_Inferencia]] (Ollama / InsightFace).
+- **Projetos Integrados:** [[PRINTADVISOR]] (Web-to-Print / AlphaGraphics), [[AUTOMACAO]] (Orquestrador e relatórios Eda), [[contacteme]] (Crachás de Identificação), [[cafezinhosocial]] (Doações PIX).
+- **Documentação do Módulo:** [[REGRAS_DE_NEGOCIO.md]], [[HISTORY.md]], [[docs/UX_PAINEL_DO_RESPONSAVEL_IMPECCABLE.md]].
+

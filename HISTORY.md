@@ -1,3 +1,20 @@
+---
+tags:
+  - "#projeto/ame"
+  - "#modulo/crm"
+  - "#modulo/portal-responsavel"
+  - "#modulo/web-to-print"
+  - "#infra/vps1"
+  - "#infra/vps2"
+  - "#infra/vps3"
+  - "#tipo/historico"
+relacionados:
+  - "[[GEMINI]]"
+  - "[[REGRAS_DE_NEGOCIO]]"
+  - "[[PRINTADVISOR]]"
+  - "[[AUTOMACAO]]"
+---
+
 # Histórico de Trabalho - Projeto AME
 
 - **17/08/2026 - Expansão do Portal do Responsável (/painel), Wizard Enriquecido e Vitrine Pública (/atividades):**
@@ -193,4 +210,12 @@ odizio = MAX(rodizio) + 1 no ato da inscrio inicial do candidato.
     - Criada a funcionalidade 'Enviar Avaliação (Contratante)' no painel admin, gerando a mensagem formatada para o contratante com o link da página pública de avaliação (projetoame.org/avaliacao/{evento_uuid}).
     - Implementados botões de envio direto via WhatsApp, cópia rápida de mensagem e validação de telefone.
     - Deploy e testes de sintaxe concluídos com sucesso no VPS1.
+
+---
+
+## 🔗 Conexões & Ecossistema
+- **Servidores & Infraestrutura:** [[VPS1_Hostinger]], [[VPS2_NASANET]], [[VPS3_Inferencia]].
+- **Projetos Relacionados:** [[PRINTADVISOR]], [[AUTOMACAO]], [[contacteme]], [[cafezinhosocial]].
+- **Documentação Local:** [[GEMINI.md]], [[REGRAS_DE_NEGOCIO.md]], [[docs/UX_PAINEL_DO_RESPONSAVEL_IMPECCABLE.md]].
+
 

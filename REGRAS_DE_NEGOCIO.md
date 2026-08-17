@@ -1,3 +1,20 @@
+---
+tags:
+  - "#projeto/ame"
+  - "#modulo/crm"
+  - "#modulo/biometria"
+  - "#modulo/web-to-print"
+  - "#infra/vps1"
+  - "#infra/vps2"
+  - "#infra/vps3"
+  - "#tipo/regras-negocio"
+relacionados:
+  - "[[PRINTADVISOR]]"
+  - "[[AUTOMACAO]]"
+  - "[[agenet]]"
+  - "[[contacteme]]"
+---
+
 # Regras de Negócio - Projeto AME (Inclusão Social)
 
 Este documento centraliza as diretrizes de integração de escalas, reconhecimento facial, geração de currículo profissional e o painel de impacto social do **Projeto AME** (Associação Mulheres Empreendedoras).
@@ -79,3 +96,11 @@ graph TD
 ## 7. Diretrizes Futuras de Governança
 - **Efetivação de Rodízio Pós-Atendimento:** A atualização da posição do rodízio (`rodizio = MAX(rodizio) + 1`) ocorre após a confirmação presencial de atendimento no evento (check-in), prevenindo prejuízos em casos de faltas ou substituições.
 - **População Retroativa de Histórico:** A tabela `historico_rodizio` pode ser alimentada retroativamente via script Python/PHP processando o histórico das planilhas anteriores para preservar a linha do tempo desde a fundação do projeto.
+
+---
+
+## 🔗 Conexões & Ecossistema
+- **Infraestrutura:** [[VPS1_Hostinger]] (Apache / PHP / MariaDB Produção), [[VPS2_NASANET]] (Evolution API / LiteLLM Gateway), [[VPS3_Inferencia]] (Ollama / Python Biometria).
+- **Projetos Relacionados:** [[PRINTADVISOR]] (Parceria Web-to-Print / AlphaGraphics), [[AUTOMACAO]] (Orquestração & CI/CD Noturno), [[contacteme]] (Crachás Virtuais e Cartão Digital), [[cafezinhosocial]] (Doações Pix).
+- **Documentação Local:** [[GEMINI.md]], [[HISTORY.md]], [[docs/UX_PAINEL_DO_RESPONSAVEL_IMPECCABLE.md]].
+
