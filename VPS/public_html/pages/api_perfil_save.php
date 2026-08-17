@@ -41,7 +41,10 @@ $pix = mysqli_real_escape_string($conexao, $_POST['chave_pix'] ?? '');
 
 $restricoes_alimentares = mysqli_real_escape_string($conexao, $_POST['restricoes_alimentares'] ?? '');
 $medicacao_continuada = mysqli_real_escape_string($conexao, $_POST['medicacao_continuada'] ?? '');
+$medicacao_horarios = mysqli_real_escape_string($conexao, $_POST['medicacao_horarios'] ?? '');
 $orientacoes_responsaveis = mysqli_real_escape_string($conexao, $_POST['orientacoes_responsaveis'] ?? '');
+$cuidados_especiais = mysqli_real_escape_string($conexao, $_POST['cuidados_especiais'] ?? '');
+$cursos_externos = mysqli_real_escape_string($conexao, $_POST['cursos_externos'] ?? '');
 
 $camisa = mysqli_real_escape_string($conexao, $_POST['camisa'] ?? '');
 $calca = mysqli_real_escape_string($conexao, $_POST['calca'] ?? '');
@@ -73,7 +76,10 @@ $q_update = "UPDATE candidatos SET
                 PIX = '$pix',
                 restricoes_alimentares = '$restricoes_alimentares',
                 medicacao_continuada = '$medicacao_continuada',
+                medicacao_horarios = '$medicacao_horarios',
                 orientacoes_responsaveis = '$orientacoes_responsaveis',
+                cuidados_especiais = '$cuidados_especiais',
+                cursos_externos = '$cursos_externos',
                 camisa = '$camisa',
                 calca = '$calca',
                 sapato = '$sapato',
@@ -88,3 +94,4 @@ if (mysqli_query($conexao, $q_update)) {
     echo json_encode(['success' => false, 'message' => 'Erro ao atualizar dados no banco de dados: ' . mysqli_error($conexao)]);
 }
 exit;
+

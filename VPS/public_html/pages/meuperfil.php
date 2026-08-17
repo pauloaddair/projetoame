@@ -188,10 +188,11 @@ if ($logado) {
                         <div class="card shadow border-0">
                             <div class="card-header bg-white py-3">
                                 <ul class="nav nav-pills nav-justified" id="wizard-steps">
-                                    <li class="nav-item"><a class="nav-link active" data-step="1" href="#">Identificação</a></li>
-                                    <li class="nav-item"><a class="nav-link" data-step="2" href="#">Saúde</a></li>
-                                    <li class="nav-item"><a class="nav-link" data-step="3" href="#">Logística</a></li>
-                                    <li class="nav-item"><a class="nav-link" data-step="4" href="#">Endereço</a></li>
+                                    <li class="nav-item"><a class="nav-link active font-weight-bold" data-step="1" href="#"><i class="fas fa-id-card mr-1"></i> Identificação</a></li>
+                                    <li class="nav-item"><a class="nav-link font-weight-bold" data-step="2" href="#"><i class="fas fa-heartbeat mr-1"></i> Saúde & Cuidados</a></li>
+                                    <li class="nav-item"><a class="nav-link font-weight-bold" data-step="3" href="#"><i class="fas fa-tshirt mr-1"></i> Logística</a></li>
+                                    <li class="nav-item"><a class="nav-link font-weight-bold" data-step="4" href="#"><i class="fas fa-graduation-cap mr-1"></i> Cursos & Formação</a></li>
+                                    <li class="nav-item"><a class="nav-link font-weight-bold" data-step="5" href="#"><i class="fas fa-map-marker-alt mr-1"></i> Endereço</a></li>
                                 </ul>
                             </div>
                             <div class="card-body p-4">
@@ -200,11 +201,11 @@ if ($logado) {
                                     
                                     <!-- Passo 1: Identificação -->
                                     <div class="step-content" id="step-1">
-                                        <h5 class="mb-4 text-primary">Dados de Identificação</h5>
+                                        <h5 class="mb-4 text-primary font-weight-bold"><i class="fas fa-id-badge mr-2"></i>Dados de Identificação</h5>
                                         <div class="row">
                                             <!-- Foto de Perfil do Candidato -->
                                             <div class="col-md-3 text-center mb-4 border-right">
-                                                <label class="font-weight-bold text-muted d-block mb-3">Foto do Atendente</label>
+                                                <label class="font-weight-bold text-muted d-block mb-3">Foto Oficial do Atendente</label>
                                                 <?php 
                                                 $cand_photo_url = "img/profile.png";
                                                 if (!empty($cand['imagem_id'])) {
@@ -215,79 +216,172 @@ if ($logado) {
                                                     }
                                                 }
                                                 ?>
-                                                <img src="<?php echo $GLOBALS['app_web_root'] . $cand_photo_url; ?>" class="rounded-circle img-thumbnail shadow-sm mb-3" style="width: 110px; height: 110px; object-fit: cover;" alt="Foto do Candidato">
+                                                <img src="<?php echo $GLOBALS['app_web_root'] . $cand_photo_url; ?>" class="rounded-circle img-thumbnail shadow-sm mb-3" style="width: 120px; height: 120px; object-fit: cover;" alt="Foto do Candidato">
                                                 <div>
-                                                    <a href="<?php echo $GLOBALS['app_web_root']; ?>trocafoto/<?php echo $cand['candidato_id']; ?>" class="btn btn-outline-secondary btn-sm rounded-pill py-1"><i class="fas fa-camera mr-1"></i> Alterar Foto</a>
+                                                    <a href="<?php echo $GLOBALS['app_web_root']; ?>trocafoto/<?php echo $cand['candidato_id']; ?>" class="btn btn-outline-primary btn-sm rounded-pill py-1"><i class="fas fa-camera mr-1"></i> Alterar Foto</a>
                                                 </div>
                                             </div>
                                             
                                             <!-- Campos de Identificação -->
                                             <div class="col-md-9">
                                                 <div class="row">
-                                                    <div class="col-md-8 md-form"><label>Nome Completo</label><input type="text" name="nome" class="form-control" value="<?php echo $cand['nome']; ?>"></div>
-                                                    <div class="col-md-4 md-form"><label>Data Nascimento</label><input type="date" name="nascimento" class="form-control" value="<?php echo $cand['Nascimento']; ?>"></div>
+                                                    <div class="col-md-8 md-form"><label class="active font-weight-bold">Nome Completo</label><input type="text" name="nome" class="form-control" value="<?php echo htmlspecialchars($cand['nome'] ?? ''); ?>" required></div>
+                                                    <div class="col-md-4 md-form"><label class="active font-weight-bold">Data de Nascimento</label><input type="date" name="nascimento" class="form-control" value="<?php echo $cand['Nascimento']; ?>" required></div>
                                                 </div>
                                                 <div class="row mt-2">
-                                                    <div class="col-md-6 md-form"><label>CPF do Atendente</label><input type="text" name="cpf" class="form-control" value="<?php echo $cand['CPF']; ?>"></div>
-                                                    <div class="col-md-6 md-form"><label>Chave PIX</label><input type="text" name="chave_pix" class="form-control" placeholder="E-mail, CPF ou Celular" value="<?php echo htmlspecialchars($cand['PIX'] ?? ''); ?>"></div>
+                                                    <div class="col-md-6 md-form"><label class="active font-weight-bold">CPF do Atendente</label><input type="text" name="cpf" class="form-control" value="<?php echo htmlspecialchars($cand['CPF'] ?? ''); ?>"></div>
+                                                    <div class="col-md-6 md-form"><label class="active font-weight-bold">Chave PIX (Ajuda de Custo)</label><input type="text" name="chave_pix" class="form-control" placeholder="E-mail, CPF ou Celular" value="<?php echo htmlspecialchars($cand['PIX'] ?? ''); ?>"></div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <button type="button" class="btn btn-primary next-step float-right mt-3">Próximo</button>
+                                        <button type="button" class="btn btn-primary next-step float-right mt-3 rounded-pill px-4">Próximo <i class="fas fa-arrow-right ml-1"></i></button>
                                     </div>
 
-                                    <!-- Passo 2: Saúde -->
+                                    <!-- Passo 2: Saúde e Cuidados -->
                                     <div class="step-content" id="step-2" style="display:none;">
-                                        <h5 class="mb-4 text-primary">Saúde e Cuidados</h5>
-                                        <div class="md-form mb-3"><label>Restrições Alimentares</label><textarea name="restricoes_alimentares" class="form-control md-textarea"><?php echo $cand['restricoes_alimentares']; ?></textarea></div>
-                                        <div class="md-form mb-3"><label>Medicação Continuada</label><textarea name="medicacao_continuada" class="form-control md-textarea"><?php echo $cand['medicacao_continuada']; ?></textarea></div>
-                                        <div class="md-form mb-3"><label>Orientações ao Projeto</label><textarea name="orientacoes_responsaveis" class="form-control md-textarea"><?php echo $cand['orientacoes_responsaveis']; ?></textarea></div>
-                                        <button type="button" class="btn btn-link prev-step">Voltar</button>
-                                        <button type="button" class="btn btn-primary next-step float-right">Próximo</button>
+                                        <h5 class="mb-4 text-primary font-weight-bold"><i class="fas fa-heartbeat mr-2"></i>Saúde, Medicação e Cuidados Especiais</h5>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="md-form mb-4">
+                                                    <label class="active font-weight-bold">Restrições Alimentares / Alergias</label>
+                                                    <textarea name="restricoes_alimentares" class="form-control md-textarea" rows="3" placeholder="Ex: Intolerância à lactose, alergia a corantes..."><?php echo htmlspecialchars($cand['restricoes_alimentares'] ?? ''); ?></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="md-form mb-4">
+                                                    <label class="active font-weight-bold">Medicação Continuada (Nomes e Dosagens)</label>
+                                                    <textarea name="medicacao_continuada" class="form-control md-textarea" rows="3" placeholder="Ex: Risperidona 1mg, Levotiroxina 50mcg..."><?php echo htmlspecialchars($cand['medicacao_continuada'] ?? ''); ?></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="md-form mb-4">
+                                                    <label class="active font-weight-bold">Horários e Instruções de Medicação</label>
+                                                    <textarea name="medicacao_horarios" class="form-control md-textarea" rows="3" placeholder="Ex: 08:00 (em jejum), 14:00 (após almoço)..."><?php echo htmlspecialchars($cand['medicacao_horarios'] ?? ''); ?></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="md-form mb-4">
+                                                    <label class="active font-weight-bold">Cuidados Especiais / Sensoriais</label>
+                                                    <textarea name="cuidados_especiais" class="form-control md-textarea" rows="3" placeholder="Ex: Sensibilidade a ruídos muito altos, pausas regulares para água..."><?php echo htmlspecialchars($cand['cuidados_especiais'] ?? ''); ?></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="md-form mb-4">
+                                            <label class="active font-weight-bold">Orientações Gerais aos Monitores do Projeto AME</label>
+                                            <textarea name="orientacoes_responsaveis" class="form-control md-textarea" rows="3" placeholder="Observações de rotina que facilitam o acolhimento do atendente durante as feiras..."><?php echo htmlspecialchars($cand['orientacoes_responsaveis'] ?? ''); ?></textarea>
+                                        </div>
+                                        <button type="button" class="btn btn-outline-secondary prev-step rounded-pill px-4"><i class="fas fa-arrow-left mr-1"></i> Voltar</button>
+                                        <button type="button" class="btn btn-primary next-step float-right rounded-pill px-4">Próximo <i class="fas fa-arrow-right ml-1"></i></button>
                                     </div>
 
-                                    <!-- Passo 3: Logística -->
+                                    <!-- Passo 3: Logística e Uniforme -->
                                     <div class="step-content" id="step-3" style="display:none;">
-                                        <h5 class="mb-4 text-primary">Tamanhos e Uniforme</h5>
+                                        <h5 class="mb-4 text-primary font-weight-bold"><i class="fas fa-tshirt mr-2"></i>Tamanhos de Uniforme & Calçados</h5>
                                         <div class="row">
-                                            <div class="col-4">
-                                                <label>Camisa</label>
-                                                <select name="camisa" class="form-control">
-                                                    <option value="PP" <?php echo ($cand['camisa'] == 'PP') ? 'selected' : ''; ?>>PP</option>
-                                                    <option value="P" <?php echo ($cand['camisa'] == 'P') ? 'selected' : ''; ?>>P</option>
-                                                    <option value="M" <?php echo ($cand['camisa'] == 'M') ? 'selected' : ''; ?>>M</option>
-                                                    <option value="G" <?php echo ($cand['camisa'] == 'G') ? 'selected' : ''; ?>>G</option>
-                                                    <option value="GG" <?php echo ($cand['camisa'] == 'GG') ? 'selected' : ''; ?>>GG</option>
+                                            <div class="col-md-4">
+                                                <label class="font-weight-bold text-muted">Tamanho da Camisa</label>
+                                                <select name="camisa" class="form-control custom-select">
+                                                    <option value="PP" <?php echo (($cand['camisa'] ?? '') == 'PP') ? 'selected' : ''; ?>>PP</option>
+                                                    <option value="P" <?php echo (($cand['camisa'] ?? '') == 'P') ? 'selected' : ''; ?>>P</option>
+                                                    <option value="M" <?php echo (($cand['camisa'] ?? '') == 'M') ? 'selected' : ''; ?>>M</option>
+                                                    <option value="G" <?php echo (($cand['camisa'] ?? '') == 'G') ? 'selected' : ''; ?>>G</option>
+                                                    <option value="GG" <?php echo (($cand['camisa'] ?? '') == 'GG') ? 'selected' : ''; ?>>GG</option>
+                                                    <option value="XG" <?php echo (($cand['camisa'] ?? '') == 'XG') ? 'selected' : ''; ?>>XG</option>
                                                 </select>
                                             </div>
-                                            <div class="col-4">
-                                                <label>Calça</label>
+                                            <div class="col-md-4">
+                                                <label class="font-weight-bold text-muted">Número da Calça</label>
                                                 <input type="number" name="calca" class="form-control" placeholder="Ex: 40" value="<?php echo htmlspecialchars($cand['calca'] ?? ''); ?>">
                                             </div>
-                                            <div class="col-4">
-                                                <label>Calçado</label>
+                                            <div class="col-md-4">
+                                                <label class="font-weight-bold text-muted">Número do Calçado</label>
                                                 <input type="number" name="calcado" class="form-control" placeholder="Ex: 38" value="<?php echo htmlspecialchars($cand['sapato'] ?? ''); ?>">
                                             </div>
                                         </div>
-                                        <button type="button" class="btn btn-link prev-step mt-4">Voltar</button>
-                                        <button type="button" class="btn btn-primary next-step float-right mt-4">Próximo</button>
+                                        <button type="button" class="btn btn-outline-secondary prev-step mt-4 rounded-pill px-4"><i class="fas fa-arrow-left mr-1"></i> Voltar</button>
+                                        <button type="button" class="btn btn-primary next-step float-right mt-4 rounded-pill px-4">Próximo <i class="fas fa-arrow-right ml-1"></i></button>
                                     </div>
 
-                                    <!-- Passo 4: Endereço -->
+                                    <!-- Passo 4: Cursos e Qualificações Externas -->
                                     <div class="step-content" id="step-4" style="display:none;">
-                                        <h5 class="mb-4 text-primary">Endereço de Residência</h5>
+                                        <h5 class="mb-4 text-primary font-weight-bold"><i class="fas fa-graduation-cap mr-2"></i>Cursos Externos & Formação</h5>
+                                        <p class="text-muted small">Adicione cursos, oficinas e capacitações realizadas pelo atendente fora do Projeto AME. Esses dados serão incorporados automaticamente ao currículo oficial.</p>
+                                        <div class="md-form mb-4">
+                                            <label class="active font-weight-bold">Cursos, Certificados e Formações (Um por linha)</label>
+                                            <textarea name="cursos_externos" class="form-control md-textarea" rows="4" placeholder="Ex:
+- Curso de Informática Básica (SENAI, 2024)
+- Oficina de Atendimento ao Público (2023)
+- Capacitação em Barista / Gastronomia (2025)"><?php echo htmlspecialchars($cand['cursos_externos'] ?? ''); ?></textarea>
+                                        </div>
+                                        <button type="button" class="btn btn-outline-secondary prev-step rounded-pill px-4"><i class="fas fa-arrow-left mr-1"></i> Voltar</button>
+                                        <button type="button" class="btn btn-primary next-step float-right rounded-pill px-4">Próximo <i class="fas fa-arrow-right ml-1"></i></button>
+                                    </div>
+
+                                    <!-- Passo 5: Endereço -->
+                                    <div class="step-content" id="step-5" style="display:none;">
+                                        <h5 class="mb-4 text-primary font-weight-bold"><i class="fas fa-map-marked-alt mr-2"></i>Endereço de Residência</h5>
                                         <div class="row">
-                                            <div class="col-md-4 md-form"><label>CEP</label><input type="text" id="cep" name="cep" class="form-control" value="<?php echo htmlspecialchars($cand['CEP'] ?? ''); ?>"></div>
-                                            <div class="col-md-8 md-form"><label>Rua/Logradouro</label><input type="text" id="logradouro" name="logradouro" class="form-control" value="<?php echo htmlspecialchars(explode(',', $cand['endereco'] ?? '')[0]); ?>"></div>
+                                            <div class="col-md-4 md-form"><label class="active font-weight-bold">CEP</label><input type="text" id="cep" name="cep" class="form-control" value="<?php echo htmlspecialchars($cand['CEP'] ?? ''); ?>"></div>
+                                            <div class="col-md-8 md-form"><label class="active font-weight-bold">Rua / Logradouro</label><input type="text" id="logradouro" name="logradouro" class="form-control" value="<?php echo htmlspecialchars(explode(',', $cand['endereco'] ?? '')[0]); ?>"></div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-4 md-form"><label>Número</label><input type="text" name="numero" class="form-control" value="<?php echo htmlspecialchars(trim(explode(',', $cand['endereco'] ?? '')[1] ?? '')); ?>"></div>
-                                            <div class="col-md-8 md-form"><label>Complemento</label><input type="text" name="complemento" class="form-control" value="<?php echo htmlspecialchars($cand['complemento'] ?? ''); ?>"></div>
+                                            <div class="col-md-4 md-form"><label class="active font-weight-bold">Número</label><input type="text" name="numero" class="form-control" value="<?php echo htmlspecialchars(trim(explode(',', $cand['endereco'] ?? '')[1] ?? '')); ?>"></div>
+                                            <div class="col-md-8 md-form"><label class="active font-weight-bold">Complemento / Bairro</label><input type="text" name="complemento" class="form-control" value="<?php echo htmlspecialchars($cand['complemento'] ?? ''); ?>"></div>
                                         </div>
-                                        <button type="button" class="btn btn-link prev-step">Voltar</button>
-                                        <button type="submit" class="btn btn-success float-right shadow">Salvar Tudo</button>
+                                        <button type="button" class="btn btn-outline-secondary prev-step rounded-pill px-4"><i class="fas fa-arrow-left mr-1"></i> Voltar</button>
+                                        <button type="submit" class="btn btn-success float-right shadow rounded-pill px-5"><i class="fas fa-save mr-1"></i> Salvar Tudo</button>
                                     </div>
                                 </form>
+                            </div>
+                        </div>
+
+                        <!-- Card de Trajetória, Currículo & Álbum de Fotos -->
+                        <div class="card shadow border-0 mt-4">
+                            <div class="card-body p-4">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h5 class="font-weight-bold text-primary mb-0"><i class="fas fa-images mr-2"></i>Álbum de Atuações & Currículo Profissional</h5>
+                                    <div>
+                                        <a href="<?php echo $GLOBALS['app_web_root']; ?>curriculo/<?php echo $cand['candidato_id']; ?>" target="_blank" class="btn btn-outline-primary btn-sm rounded-pill font-weight-bold mr-2">
+                                            <i class="fas fa-file-pdf mr-1"></i> Ver Currículo PDF
+                                        </a>
+                                        <button class="btn btn-outline-success btn-sm rounded-pill font-weight-bold" onclick="alert('Funcionalidade de Portfólio Impresso em parceria com a AlphaGraphics será ativada em breve!');">
+                                            <i class="fas fa-book-open mr-1"></i> Montar Portfólio Impresso
+                                        </button>
+                                    </div>
+                                </div>
+                                <p class="text-muted small">Fotos reconhecidas automaticamente pela inteligência biométrica durante as participações do atendente em feiras e eventos oficiais:</p>
+
+                                <?php
+                                // Busca fotos reconhecidas para o candidato
+                                $q_fotos = "SELECT f.*, e.nome AS evento_nome FROM fotos_reconhecidas f 
+                                            LEFT JOIN eventos_marcados e ON f.evento_id = e.id 
+                                            WHERE f.candidato_id = $cand_id 
+                                            ORDER BY f.data_reconhecimento DESC LIMIT 12";
+                                $res_fotos = mysqli_query($conexao, $q_fotos);
+                                ?>
+
+                                <?php if ($res_fotos && mysqli_num_rows($res_fotos) > 0): ?>
+                                    <div class="row">
+                                        <?php while ($ft = mysqli_fetch_assoc($res_fotos)): ?>
+                                            <div class="col-md-3 col-sm-6 mb-3">
+                                                <div class="card h-100 border-0 shadow-sm overflow-hidden">
+                                                    <img src="<?php echo htmlspecialchars($ft['url_foto']); ?>" class="card-img-top" style="height: 160px; object-fit: cover;" alt="Atuação em Feira">
+                                                    <div class="card-body p-2 text-center bg-light">
+                                                        <small class="font-weight-bold text-dark d-block text-truncate"><?php echo htmlspecialchars($ft['evento_nome'] ?? 'Evento AME'); ?></small>
+                                                        <small class="text-muted"><?php echo date('d/m/Y', strtotime($ft['data_reconhecimento'])); ?></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <?php endwhile; ?>
+                                    </div>
+                                <?php else: ?>
+                                    <div class="text-center py-4 bg-light rounded border border-dashed text-muted">
+                                        <i class="fas fa-camera fa-2x mb-2 text-secondary"></i>
+                                        <p class="mb-0">Nenhuma foto de evento vinculada ainda. As fotos das próximas feiras serão catalogadas automaticamente aqui.</p>
+                                    </div>
+                                <?php endif; ?>
                             </div>
                         </div>
                     <?php endif; ?>

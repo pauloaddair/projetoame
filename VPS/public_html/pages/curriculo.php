@@ -1,5 +1,9 @@
 <?php
 $titulo = "Currículo";
+if (isset($parametros[1])) {
+    $_GET['candidato_id'] = (int)$parametros[1];
+    $_GET['visualizar'] = 1;
+}
 // include_once('include/conexao.php');
 
 // Processar salvamento de detalhes
@@ -50,7 +54,28 @@ if (isset($_GET['gerar_pdf']) && isset($_GET['candidato_id'])) {
         
         // Título
         $pdf->Cell(0, 10, 'CURRICULO VITAE', 0, 1, 'C');
-        $pdf->Ln(15); // Espaço extra para a imagem
+        
+        // Empurra a altura de início do texto para baixo da imagem (que termina em Y=50) para evitar sobreposição
+        if ($candidato['imagem_url']) {
+            $pdf->SetY(52);
+        } else {
+            $pdf->Ln(10);
+        }
+        
+        // Perfil / Apresentação (Se ativo)
+        if ($candidato['ativo'] == 1) {
+            $pdf->SetFont('Arial', 'B', 14);
+            $pdf->Cell(0, 8, iconv("UTF-8", "ISO-8859-1", 'PERFIL PROFISSIONAL'), 0, 1);
+            $pdf->SetFont('Arial', '', 12);
+            
+            $nomes = explode(' ', trim($candidato['nome']));
+            $nome_curto = $nomes[0] . (isset($nomes[1]) ? ' ' . $nomes[1] : '');
+            $nome_curto_iso = iconv("UTF-8", "ISO-8859-1//TRANSLIT", $nome_curto);
+            
+            $texto_perfil = $nome_curto_iso . iconv("UTF-8", "ISO-8859-1", " é uma atendente ativa cadastrada no Projeto A.M.E. Realizou com sucesso o Curso Básico Comportamental, o Curso Prático em Evento Real, o Curso de Finanças para Vida, entre outros. Além disso, participou ativamente como atendente em vários eventos de renome no estado de São Paulo, demonstrando alta capacidade em hospitalidade, autonomia e dedicação profissional.");
+            $pdf->MultiCell(0, 6, $texto_perfil);
+            $pdf->Ln(5);
+        }
         
         // Dados pessoais
         $pdf->SetFont('Arial', 'B', 14);
@@ -60,7 +85,27 @@ if (isset($_GET['gerar_pdf']) && isset($_GET['candidato_id'])) {
         $pdf->Cell(0, 6, 'Nome: ' . iconv("UTF-8", "ISO-8859-1", $candidato['nome']), 0, 1);
         if ($candidato['Email']) $pdf->Cell(0, 6, 'Email: ' . $candidato['Email'], 0, 1);
         if ($candidato['Telefone']) $pdf->Cell(0, 6, 'Telefone: ' . $candidato['Telefone'], 0, 1);
-        if ($candidato['Nascimento']) $pdf->Cell(0, 6, 'Data de Nascimento: ' . $candidato['Nascimento'], 0, 1);
+        
+        // Idade
+        if ($candidato['Nascimento']) {
+            $nascimento = trim($candidato['Nascimento']);
+            $idade_str = '';
+            try {
+                $data_nasc = null;
+                if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $nascimento)) {
+                    $data_nasc = new DateTime($nascimento);
+                } elseif (preg_match('/^\d{2}\/\d{2}\/\d{4}$/', $nascimento)) {
+                    $data_nasc = DateTime::createFromFormat('d/m/Y', $nascimento);
+                }
+                if ($data_nasc) {
+                    $hoje = new DateTime();
+                    $diff = $hoje->diff($data_nasc);
+                    $idade_str = ' (' . $diff->y . ' anos)';
+                }
+            } catch (Exception $e) {}
+            $pdf->Cell(0, 6, 'Nascimento: ' . $candidato['Nascimento'] . iconv("UTF-8", "ISO-8859-1", $idade_str), 0, 1);
+        }
+        
         if ($candidato['genero']) $pdf->Cell(0, 6, iconv("UTF-8", "ISO-8859-1", 'Gênero: ') . iconv("UTF-8", "ISO-8859-1", $candidato['genero']), 0, 1);
         if ($candidato['RG']) $pdf->Cell(0, 6, 'RG: ' . $candidato['RG'], 0, 1);
         if ($candidato['CPF']) $pdf->Cell(0, 6, 'CPF: ' . $candidato['CPF'], 0, 1);
@@ -84,28 +129,63 @@ if (isset($_GET['gerar_pdf']) && isset($_GET['candidato_id'])) {
             $pdf->Ln(5);
         }
         
-        // Dados profissionais
-        if ($candidato['CTPS'] || $candidato['PIX']) {
+        // Dados profissionais (Sem PIX)
+        if ($candidato['CTPS']) {
             $pdf->SetFont('Arial', 'B', 14);
             $pdf->Cell(0, 8, 'DADOS PROFISSIONAIS', 0, 1);
             $pdf->SetFont('Arial', '', 12);
             
-            if ($candidato['CTPS']) {
-                $ctps = $candidato['CTPS'];
-                if ($candidato['CTPS_serie']) $ctps .= ' - Série: ' . $candidato['CTPS_serie'];
-                $pdf->Cell(0, 6, 'CTPS: ' . $ctps, 0, 1);
-            }
-            if ($candidato['PIX']) $pdf->Cell(0, 6, 'PIX: ' . $candidato['PIX'], 0, 1);
+            $ctps = $candidato['CTPS'];
+            if ($candidato['CTPS_serie']) $ctps .= ' - Série: ' . $candidato['CTPS_serie'];
+            $pdf->Cell(0, 6, 'CTPS: ' . $ctps, 0, 1);
             
             $pdf->Ln(5);
         }
         
-        // Detalhes complementares (cursos, experiências, etc.)
-        if ($candidato['detalhes']) {
+        // Cursos Externos e Qualificações
+        if (!empty($candidato['cursos_externos']) || !empty($candidato['detalhes'])) {
             $pdf->SetFont('Arial', 'B', 14);
-            $pdf->Cell(0, 8, iconv("UTF-8", "ISO-8859-1", 'QUALIFICAÇÕES E CURSOS'), 0, 1);
+            $pdf->Cell(0, 8, iconv("UTF-8", "ISO-8859-1", 'CURSOS & QUALIFICAÇÕES'), 0, 1);
             $pdf->SetFont('Arial', '', 12);
-            $pdf->MultiCell(0, 6, iconv("UTF-8", "ISO-8859-1", $candidato['detalhes']));
+            if (!empty($candidato['cursos_externos'])) {
+                $pdf->MultiCell(0, 6, iconv("UTF-8", "ISO-8859-1", $candidato['cursos_externos']));
+            }
+            if (!empty($candidato['detalhes'])) {
+                $pdf->MultiCell(0, 6, iconv("UTF-8", "ISO-8859-1", $candidato['detalhes']));
+            }
+            $pdf->Ln(5);
+        }
+        
+        // Experiência no Projeto A.M.E.
+        $query_eventos = "SELECT em.nome as evento_nome, MIN(h.data_inicio) as data_inicio, MAX(h.data_final) as data_final
+                          FROM disponibilidade d
+                          JOIN horarios h ON d.atividade_id = h.horario_id
+                          JOIN eventos_marcados em ON h.evento_id = em.id
+                          WHERE d.candidato_id = ? AND d.escalado = 1
+                          GROUP BY em.id
+                          ORDER BY MIN(h.data_inicio) DESC";
+        $stmt_eventos = mysqli_prepare($conexao, $query_eventos);
+        mysqli_stmt_bind_param($stmt_eventos, "i", $candidato_id);
+        mysqli_stmt_execute($stmt_eventos);
+        $result_eventos = mysqli_stmt_get_result($stmt_eventos);
+        
+        if (mysqli_num_rows($result_eventos) > 0) {
+            $pdf->SetFont('Arial', 'B', 14);
+            $pdf->Cell(0, 8, iconv("UTF-8", "ISO-8859-1", 'ATUAÇÃO NO PROJETO A.M.E. (HISTÓRICO)'), 0, 1);
+            $pdf->SetFont('Arial', '', 12);
+            
+            while ($evt = mysqli_fetch_assoc($result_eventos)) {
+                $d_ini = new DateTime($evt['data_inicio']);
+                $d_fim = new DateTime($evt['data_final']);
+                if ($d_ini->format('Y-m-d') == $d_fim->format('Y-m-d')) {
+                    $data_str = $d_ini->format('d/m/Y');
+                } else {
+                    $data_str = $d_ini->format('d/m/Y') . ' a ' . $d_fim->format('d/m/Y');
+                }
+                
+                $pdf->Cell(130, 6, iconv("UTF-8", "ISO-8859-1", $evt['evento_nome']), 0, 0);
+                $pdf->Cell(0, 6, $data_str, 0, 1, 'R');
+            }
             $pdf->Ln(5);
         }
         
@@ -138,15 +218,6 @@ if (isset($_GET['gerar_pdf']) && isset($_GET['candidato_id'])) {
                 3 => 'Sem curatela'
             ];
             $pdf->Cell(0, 6, 'Curatela: ' . $curatela_tipos[$candidato['curatela']], 0, 1);
-        }
-        
-        // Mensagem adicional
-        if ($candidato['mensagem']) {
-            $pdf->Ln(5);
-            $pdf->SetFont('Arial', 'B', 14);
-            $pdf->Cell(0, 8, iconv("UTF-8", "ISO-8859-1", 'OBSERVAÇÕES'), 0, 1);
-            $pdf->SetFont('Arial', '', 12);
-            $pdf->MultiCell(0, 6, iconv("UTF-8", "ISO-8859-1", $candidato['mensagem']));
         }
         
         // Rodapé
@@ -348,7 +419,7 @@ $result_candidatos = mysqli_query($conexao, $query_candidatos);
                     </div>
                     <div class="col-md-4 text-right">
                       <?php if ($candidato['imagem_url']): ?>
-                        <img src="<?php echo htmlspecialchars($candidato['imagem_url']); ?>" 
+                        <img src="/<?php echo ltrim(htmlspecialchars($candidato['imagem_url']), '/'); ?>" 
                              alt="Foto de <?php echo htmlspecialchars($candidato['nome']); ?>" 
                              class="img-fluid rounded" 
                              style="max-width: 150px; max-height: 200px; object-fit: cover; border: 2px solid #ddd;">
@@ -361,6 +432,22 @@ $result_candidatos = mysqli_query($conexao, $query_candidatos);
                     </div>
                   </div>
                   
+                  <!-- Perfil Profissional (Se ativo) -->
+                  <?php if ($candidato['ativo'] == 1): ?>
+                    <?php
+                    $nomes = explode(' ', trim($candidato['nome']));
+                    $nome_curto = $nomes[0] . (isset($nomes[1]) ? ' ' . $nomes[1] : '');
+                    ?>
+                    <div class="row mb-3">
+                      <div class="col-md-12">
+                        <h5><i class="fas fa-id-card-alt mr-2"></i>Perfil Profissional</h5>
+                        <div class="alert alert-info bg-light text-dark">
+                          <strong><?php echo htmlspecialchars($nome_curto); ?></strong> é uma atendente ativa cadastrada no Projeto A.M.E. Realizou com sucesso o Curso Básico Comportamental, o Curso Prático em Evento Real, o Curso de Finanças para Vida, entre outros. Além disso, participou ativamente como atendente em vários eventos de renome no estado de São Paulo, demonstrando alta capacidade em hospitalidade, autonomia e dedicação profissional.
+                        </div>
+                      </div>
+                    </div>
+                  <?php endif; ?>
+                  
                   <div class="row">
                     <div class="col-md-6">
                       <h5><i class="fas fa-user-circle mr-2"></i>Dados Pessoais</h5>
@@ -368,7 +455,26 @@ $result_candidatos = mysqli_query($conexao, $query_candidatos);
                         <tr><td><strong>Nome:</strong></td><td><?php echo htmlspecialchars($candidato['nome']); ?></td></tr>
                         <?php if ($candidato['Email']): ?><tr><td><strong>Email:</strong></td><td><a href="mailto:<?php echo htmlspecialchars($candidato['Email']); ?>" class="text-primary"><i class="fas fa-envelope mr-1"></i><?php echo htmlspecialchars($candidato['Email']); ?></a></td></tr><?php endif; ?>
                         <?php if ($candidato['Telefone']): ?><tr><td><strong>Telefone:</strong></td><td><a href="tel:<?php echo preg_replace('/[^0-9+]/', '', $candidato['Telefone']); ?>" class="text-primary"><i class="fas fa-phone mr-1"></i><?php echo htmlspecialchars($candidato['Telefone']); ?></a></td></tr><?php endif; ?>
-                        <?php if ($candidato['Nascimento']): ?><tr><td><strong>Nascimento:</strong></td><td><?php echo htmlspecialchars($candidato['Nascimento']); ?></td></tr><?php endif; ?>
+                        <?php if ($candidato['Nascimento']): ?>
+                          <?php
+                          $nascimento = trim($candidato['Nascimento']);
+                          $idade_str = '';
+                          try {
+                              $data_nasc = null;
+                              if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $nascimento)) {
+                                  $data_nasc = new DateTime($nascimento);
+                              } elseif (preg_match('/^\d{2}\/\d{2}\/\d{4}$/', $nascimento)) {
+                                  $data_nasc = DateTime::createFromFormat('d/m/Y', $nascimento);
+                              }
+                              if ($data_nasc) {
+                                  $hoje = new DateTime();
+                                  $diff = $hoje->diff($data_nasc);
+                                  $idade_str = ' (' . $diff->y . ' anos)';
+                              }
+                          } catch (Exception $e) {}
+                          ?>
+                          <tr><td><strong>Nascimento:</strong></td><td><?php echo htmlspecialchars($candidato['Nascimento']) . $idade_str; ?></td></tr>
+                        <?php endif; ?>
                         <?php if ($candidato['genero']): ?><tr><td><strong>Gênero:</strong></td><td><?php echo htmlspecialchars($candidato['genero']); ?></td></tr><?php endif; ?>
                         <?php if ($candidato['RG']): ?><tr><td><strong>RG:</strong></td><td><?php echo htmlspecialchars($candidato['RG']); ?></td></tr><?php endif; ?>
                         <?php if ($candidato['CPF']): ?><tr><td><strong>CPF:</strong></td><td><?php echo htmlspecialchars($candidato['CPF']); ?></td></tr><?php endif; ?>
@@ -388,26 +494,69 @@ $result_candidatos = mysqli_query($conexao, $query_candidatos);
                     </div>
                   </div>
                   
-                  <?php if ($candidato['detalhes']): ?>
+                  <?php if (!empty($candidato['cursos_externos']) || !empty($candidato['detalhes'])): ?>
                   <div class="row mt-3">
                     <div class="col-md-12">
-                      <h5><i class="fas fa-graduation-cap mr-2"></i>Qualificações e Cursos</h5>
-                      <div class="alert alert-light">
-                        <?php echo nl2br(htmlspecialchars($candidato['detalhes'])); ?>
+                      <h5><i class="fas fa-graduation-cap mr-2"></i>Cursos Externos & Qualificações</h5>
+                      <div class="alert alert-light border">
+                        <?php if (!empty($candidato['cursos_externos'])): ?>
+                          <div class="mb-2"><strong>Formações e Cursos:</strong><br><?php echo nl2br(htmlspecialchars($candidato['cursos_externos'])); ?></div>
+                        <?php endif; ?>
+                        <?php if (!empty($candidato['detalhes'])): ?>
+                          <div><?php echo nl2br(htmlspecialchars($candidato['detalhes'])); ?></div>
+                        <?php endif; ?>
                       </div>
                     </div>
                   </div>
                   <?php endif; ?>
                   
-                  <?php if ($candidato['CTPS'] || $candidato['PIX']): ?>
+                  <!-- Experiência no Projeto A.M.E. -->
+                  <?php
+                  $query_eventos = "SELECT em.nome as evento_nome, MIN(h.data_inicio) as data_inicio, MAX(h.data_final) as data_final
+                                    FROM disponibilidade d
+                                    JOIN horarios h ON d.atividade_id = h.horario_id
+                                    JOIN eventos_marcados em ON h.evento_id = em.id
+                                    WHERE d.candidato_id = ? AND d.escalado = 1
+                                    GROUP BY em.id
+                                    ORDER BY MIN(h.data_inicio) DESC";
+                  $stmt_eventos = mysqli_prepare($conexao, $query_eventos);
+                  mysqli_stmt_bind_param($stmt_eventos, "i", $candidato_id);
+                  mysqli_stmt_execute($stmt_eventos);
+                  $result_eventos = mysqli_stmt_get_result($stmt_eventos);
+                  if (mysqli_num_rows($result_eventos) > 0):
+                  ?>
+                  <div class="row mt-3">
+                    <div class="col-md-12">
+                      <h5><i class="fas fa-history mr-2"></i>Experiência no Projeto A.M.E. (Eventos e Cursos)</h5>
+                      <div class="list-group">
+                        <?php while ($evt = mysqli_fetch_assoc($result_eventos)): ?>
+                          <div class="list-group-item bg-light text-dark mb-1 py-2">
+                            <strong><?php echo htmlspecialchars($evt['evento_nome']); ?></strong> 
+                            <span class="float-right text-muted font-small">
+                              <i class="far fa-calendar-alt mr-1"></i>
+                              <?php 
+                              $d_ini = new DateTime($evt['data_inicio']);
+                              $d_fim = new DateTime($evt['data_final']);
+                              if ($d_ini->format('Y-m-d') == $d_fim->format('Y-m-d')) {
+                                  echo $d_ini->format('d/m/Y');
+                              } else {
+                                  echo $d_ini->format('d/m/Y') . ' a ' . $d_fim->format('d/m/Y');
+                              }
+                              ?>
+                            </span>
+                          </div>
+                        <?php endwhile; ?>
+                      </div>
+                    </div>
+                  </div>
+                  <?php endif; ?>
+                  
+                  <?php if ($candidato['CTPS']): ?>
                   <div class="row mt-3">
                     <div class="col-md-6">
                       <h5><i class="fas fa-briefcase mr-2"></i>Dados Profissionais</h5>
                       <table class="table table-sm">
-                        <?php if ($candidato['CTPS']): ?>
                         <tr><td><strong>CTPS:</strong></td><td><?php echo htmlspecialchars($candidato['CTPS']); ?><?php if ($candidato['CTPS_serie']): ?> - Série: <?php echo htmlspecialchars($candidato['CTPS_serie']); ?><?php endif; ?></td></tr>
-                        <?php endif; ?>
-                        <?php if ($candidato['PIX']): ?><tr><td><strong>PIX:</strong></td><td><?php echo htmlspecialchars($candidato['PIX']); ?></td></tr><?php endif; ?>
                       </table>
                     </div>
                     
@@ -421,6 +570,17 @@ $result_candidatos = mysqli_query($conexao, $query_candidatos);
                       </table>
                     </div>
                     <?php endif; ?>
+                  </div>
+                  <?php elseif ($candidato['camisa'] || $candidato['calca'] || $candidato['sapato']): ?>
+                  <div class="row mt-3">
+                    <div class="col-md-6">
+                      <h5><i class="fas fa-tshirt mr-2"></i>Informações Adicionais</h5>
+                      <table class="table table-sm">
+                        <?php if ($candidato['camisa']): ?><tr><td><strong>Tamanho Camisa:</strong></td><td><?php echo htmlspecialchars($candidato['camisa']); ?></td></tr><?php endif; ?>
+                        <?php if ($candidato['calca']): ?><tr><td><strong>Tamanho Calça:</strong></td><td><?php echo htmlspecialchars($candidato['calca']); ?></td></tr><?php endif; ?>
+                        <?php if ($candidato['sapato']): ?><tr><td><strong>Tamanho Sapato:</strong></td><td><?php echo htmlspecialchars($candidato['sapato']); ?></td></tr><?php endif; ?>
+                      </table>
+                    </div>
                   </div>
                   <?php endif; ?>
                   
@@ -443,17 +603,6 @@ $result_candidatos = mysqli_query($conexao, $query_candidatos);
                           ?>
                         </td></tr>
                       </table>
-                    </div>
-                  </div>
-                  <?php endif; ?>
-                  
-                  <?php if ($candidato['mensagem']): ?>
-                  <div class="row mt-3">
-                    <div class="col-md-12">
-                      <h5><i class="fas fa-comment mr-2"></i>Observações</h5>
-                      <div class="alert alert-info">
-                        <?php echo nl2br(htmlspecialchars($candidato['mensagem'])); ?>
-                      </div>
                     </div>
                   </div>
                   <?php endif; ?>
