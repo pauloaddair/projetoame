@@ -102,22 +102,28 @@ if ($tipo === 'matricula') {
     }
 }
 
-// Converte strings UTF-8 para ISO-8859-1 para o FPDF
-$title_fpdf = iconv("UTF-8", "ISO-8859-1//TRANSLIT", $title);
-$texto_fpdf = iconv("UTF-8", "ISO-8859-1//TRANSLIT", $texto);
+// Converte a variável global $title para ISO-8859-1 para o Header()
+$title_utf8 = $title;
+$title = iconv("UTF-8", "ISO-8859-1//TRANSLIT", $title);
 
-$pdf->SetTitle($title_fpdf);
-$pdf->PrintChapter(1, $title_fpdf, $texto_fpdf);
+$pdf->SetTitle($title);
+$pdf->PrintChapter(1, $title_utf8, $texto);
 
 $pdf->Ln(20);
 $cidade_data = iconv("UTF-8", "ISO-8859-1//TRANSLIT", "São Paulo, " . $hoje_extenso);
 $pdf->Cell(0, 10, $cidade_data, 0, 1, 'R');
 
-$pdf->Ln(30);
+$pdf->Ln(20);
+if (file_exists('img/assinatura.png')) {
+    $pdf->Image('img/assinatura.png', 85, $pdf->GetY(), 40);
+}
+$pdf->Ln(15);
 $pdf->Cell(0, 0, '', 'T'); 
 $pdf->Ln(2);
 $pdf->SetFont('Arial', 'B', 12);
-$pdf->Cell(0, 10, iconv("UTF-8", "ISO-8859-1//TRANSLIT", "PROJETO AME - Atendentes Muito Especiais"), 0, 1, 'C');
+$pdf->Cell(0, 10, iconv("UTF-8", "ISO-8859-1//TRANSLIT", "Paulo Addair Daniel Filho - Presidente"), 0, 1, 'C');
+$pdf->SetFont('Arial', '', 10);
+$pdf->Cell(0, 5, iconv("UTF-8", "ISO-8859-1//TRANSLIT", "PROJETO AME - Atendentes Muito Especiais"), 0, 1, 'C');
 
 $diretorio = "docs/atestados/";
 if (!is_dir($diretorio)) {
