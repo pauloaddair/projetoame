@@ -87,6 +87,8 @@ Quando uma oportunidade for marcada como **Contrato Fechado / Ganho** no pipelin
   "nome_evento": "CONARH 2026",
   "local": "São Paulo Expo",
   "endereco": "Rodovia dos Imigrantes, 1,5 km",
+  "latitude": -23.647,
+  "longitude": -46.633,
   "inicio": "2026-08-18 14:00:00",
   "final": "2026-08-20 20:00:00",
   "obs": "Contrato fechado via iController. Trajes oficiais AME.",
