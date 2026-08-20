@@ -17,6 +17,10 @@ relacionados:
 
 # Histórico de Trabalho - Projeto AME
 
+- **20/08/2026 - Ativação das Rotas de Emissão de Atestados de Comparecimento:**
+    - **Registro de Rotas no Front Controller:** Mapeadas as rotas `/atestados` e `/gerar_atestado` no front-controller `index.php` para possibilitar a emissão e visualização de comprovantes em PDF.
+    - **Verificação dos Recursos do CONARH 2026:** Confirmada a presença de `conarh2026.sql` (evento cadastrado em banco) e dos arquivos `atestados.php` e `gerar_atestado.php` no diretório de páginas.
+
 - **17/08/2026 - Expansão do Portal do Responsável (/painel), Wizard Enriquecido e Vitrine Pública (/atividades):**
     - **Portal do Responsável (/painel):** Ativado alias e roteamento `/painel` no front-controller `index.php` apontando diretamente para `pages/meuperfil.php`.
     - **Wizard de 5 Passos:** Enriquecido o fluxo do perfil com novas seções:

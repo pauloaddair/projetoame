@@ -6,14 +6,22 @@ $base_path = __DIR__ . '/';
 require_once $base_path . 'database/conexao.php';
 require_once $base_path . 'include/funcoes.php';
 
-$app_web_root = '/';
-$GLOBALS['app_web_root'] = $app_web_root;
-
 // Sanitiza a URI recebida
 $request_uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $uri_limpa = trim($request_uri, '/');
-
 $parametros = explode('/', $uri_limpa);
+
+// Suporte automático para execução em subpasta local (ex: http://localhost/projetoame/...)
+if (!empty($parametros[0]) && strtolower($parametros[0]) === 'projetoame') {
+    $app_web_root = '/projetoame/';
+    array_shift($parametros);
+    if (empty($parametros)) {
+        $parametros = [''];
+    }
+} else {
+    $app_web_root = '/';
+}
+$GLOBALS['app_web_root'] = $app_web_root;
 
 // Requisições diretas a arquivos da pasta /include/ (APIs, AJAX)
 if ($parametros[0] === 'include' && !empty($parametros[1])) {
@@ -25,7 +33,7 @@ if ($parametros[0] === 'include' && !empty($parametros[1])) {
 }
 
 // Páginas que dispensam o header/footer padrão
-$paginas_sem_template = ['gerarcertificados', 'api_get_candidato', 'api_get_perfil', 'api_perfil_save', 'api_usuario_save', 'webhook_pagseguro'];
+$paginas_sem_template = ['gerarcertificados', 'api_get_candidato', 'api_get_perfil', 'api_perfil_save', 'api_usuario_save', 'webhook_pagseguro', 'gerar_atestado'];
 
 // Pré-carregamento de Meta Tags OpenGraph para rotas públicas específicas
 if ($parametros[0] === 'escala') {
@@ -137,6 +145,9 @@ if (in_array($parametros[0], $paginas_sem_template)) {
                 break;
             case 'trocafoto-usuario':
                 $page_to_load = $base_path . 'pages/trocafoto-usuario.php';
+                break;
+            case 'atestados':
+                $page_to_load = $base_path . 'pages/atestados.php';
                 break;
             default:
                 $page_to_load = $base_path . 'pages/inexiste.php';
