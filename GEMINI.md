@@ -102,17 +102,25 @@ Implementar o **Portal do Associado**, a **Automação de Eventos** (atualizaç�
   - ✅ Correção de encoding UTF-8 para ISO-8859-1 no gerador de PDF (eliminando caracteres quebrados como MendonÃ§a).
   - ✅ Deploy de todas as atualizações concluído na produção (VPS1).
 
-- **Migração em Lote de Escalas e Planilhas Históricas (2012-2026):**
-  - ✅ Migrados todos os dados de escalas marcados em vermelho na planilha de Março/2026 (`AME_ESCALA_MARÇO_2026.xlsx`) no VPS1.
-  - ✅ Desenvolvido script de importação automatizado (`migrate_historic_sheets.py`) para consolidar planilhas legadas de 2012 a 2025 (`AME_ESCALA_SETEMBRO 2024.xlsx`, `AME_ESCALA_AGOSTO_2025.xlsx`, `Planilha de Controle JULHO 2025.xlsx` e as planilhas da pasta `planilhas_antigas`).
-  - ✅ **Resultados da migração no VPS1:** 25 eventos históricos criados, 74 turnos (horários) vinculados e 687 registros de participação/escalas importados, populando o histórico dos atendentes de forma totalmente retroativa.
+- **Acessibilidade & VLibras (20/08/2026):**
+  - ✅ Integrada a barra flutuante de acessibilidade (com controle persistente de Alto Contraste e Fonte Grande via `localStorage`).
+  - ✅ Adicionado o widget oficial do VLibras em todo o site por meio do cabeçalho unificado.
+  - ✅ Corrigido o erro de ordenação do DataTables nas listagens de atestados (respeitando a ordenação cronológica decrescente vinda do banco).
+
+- **Impressão de Atestados & Assinatura (20/08/2026):**
+  - ✅ Resolvido bug de codificação e esvaziamento do PDF (iconv redundante removido em `gerar_atestado.php`).
+  - ✅ Integrada a assinatura digital do presidente no rodapé dos atestados (Paulo Addair Daniel Filho - Presidente).
+  - ✅ Deploy e ativação das rotas concluídos com sucesso na produção no VPS1.
 
 ## 4. Problemas Pendentes / Próximos Passos
-1. **Ficha de Inscrição de Voluntário:** Desenvolver `/inscrever-voluntario` gerando registro em `usuarios` (com senha `NULL`), `voluntarios_dados` e associando na tabela pivot `usuarios_atribuicoes`.
-2. **Ficha de Inscrição de Empresas Parceiras:** Desenvolver `/inscrever-empresa` registrando na tabela unificada `empresas` com flags booleanas de papéis.
-3. **Ficha de Solicitação de Contratação:** Desenvolver `/contratar` para que as empresas solicitem a contratação do Projeto AME para um evento, integrando e gerando Leads no CRM de Prospecção.
-4. **Interface de Atribuições no Admin:** Adaptar as telas de edição de usuários administrativas para gerenciar atribuições múltiplas.
-5. **Corresponsável:** Finalizar a interface de "Convidar Responsável" no `/meuperfil`.
+1. **Migração do CRM para o iController (Aprovado):**
+   - Remover arquivos locais de CRM/prospecção (rota `/admin/prospeccao`, scripts python de scraping e tabela `leads_expositores`).
+   - Desenvolver o webhook `/api/webhook/novo-evento` no Projeto AME para receber e cadastrar eventos/vagas do iController (com suporte a geolocalização: lat/lng).
+2. **Ficha de Inscrição de Voluntário:** Desenvolver `/inscrever-voluntario` gerando registro em `usuarios` (com senha `NULL`), `voluntarios_dados` e associando na tabela pivot `usuarios_atribuicoes`.
+3. **Ficha de Inscrição de Empresas Parceiras:** Desenvolver `/inscrever-empresa` registrando na tabela unificada `empresas` com flags booleanas de papéis.
+4. **Ficha de Solicitação de Contratação:** Desenvolver `/contratar` direcionando diretamente como Leads no iController CRM.
+5. **Interface de Atribuições no Admin:** Adaptar as telas de edição de usuários administrativas para gerenciar atribuições múltiplas.
+6. **Corresponsável:** Finalizar a interface de "Convidar Responsável" no `/meuperfil`.
 6. **Portfólio Visual (Foto Análise - Fase 2):** Criar script PHP para servir dados da nova tabela `fotos_reconhecidas` ao frontend React (Lovable).
 7. **CRM (Fase 4):** Conectar os componentes React com as rotas protegidas por Sanctum do backend Laravel (`crm-api`).
 8. **Comunicação:** Automatizar o envio da escala final para a FCEM (Jenifer).
