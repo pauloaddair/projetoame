@@ -17,8 +17,9 @@ relacionados:
 
 # Histórico de Trabalho - Projeto AME
 
-- **20/08/2026 - Ativação das Rotas de Emissão de Atestados de Comparecimento:**
+- **20/08/2026 - Ativação de Rotas e Correção da Landing Page:**
     - **Registro de Rotas no Front Controller:** Mapeadas as rotas `/atestados` e `/gerar_atestado` no front-controller `index.php` para possibilitar a emissão e visualização de comprovantes em PDF.
+    - **Correção de Redirecionamento da Raiz:** Ajustado o roteamento do root (`/` e `/index`) para redirecionar diretamente para o blog WordPress (`/home/`), corrigindo o erro de carregamento de constantes duplicadas do legado `conexao_vb.php`.
     - **Verificação dos Recursos do CONARH 2026:** Confirmada a presença de `conarh2026.sql` (evento cadastrado em banco) e dos arquivos `atestados.php` e `gerar_atestado.php` no diretório de páginas.
 
 - **17/08/2026 - Expansão do Portal do Responsável (/painel), Wizard Enriquecido e Vitrine Pública (/atividades):**
