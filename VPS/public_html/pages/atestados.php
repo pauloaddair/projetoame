@@ -23,6 +23,7 @@ if ($candidato_id > 0) {
     $candidato = mysqli_fetch_assoc($res_cand);
 }
 ?>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <body>
     <?php include_once('./include/nav.php'); ?>
     <div class="container mt-5">
@@ -158,11 +159,13 @@ if ($candidato_id > 0) {
     </div>
 
     <?php include_once('./include/footer-database.php'); ?>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     
     <script>
         $(document).ready(function() {
             $('.select2').select2();
             $('#atividades_table').DataTable({
+                "order": [],
                 "language": {
                     "url": "//cdn.datatables.net/plug-ins/1.10.24/i18n/Portuguese-Brasil.json"
                 }
