@@ -70,7 +70,8 @@ if (in_array($parametros[0], $paginas_sem_template)) {
     $page_to_load = '';
 
     if ($parametros[0] === '' || $parametros[0] === 'index') {
-        $page_to_load = $base_path . 'pages/base.php';
+        header('Location: ' . $app_web_root . 'home/');
+        exit;
     } elseif ($parametros[0] === 'admin') {
         // Roteamento de Administração (/admin/escala, /admin/novoevento, etc)
         $sub_rota = isset($parametros[1]) ? $parametros[1] : 'index';
