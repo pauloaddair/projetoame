@@ -17,6 +17,9 @@ relacionados:
 
 # Histórico de Trabalho - Projeto AME
 
+- **21/08/2026 - Correção de Redirecionamento e Headers no Front Controller:**
+    - **Resolução de Conflito de Headers:** Movido o redirecionamento da raiz (`/` e `/index`) para o topo de `index.php`, antes de qualquer carregamento de cabeçalho (`include/html_head.php`). Isto resolve o erro de "headers already sent" e restaura o redirecionamento automático para a landing page do WordPress (`/home/`).
+
 - **20/08/2026 - Ativação de Rotas e Correção da Landing Page:**
     - **Registro de Rotas no Front Controller:** Mapeadas as rotas `/atestados` e `/gerar_atestado` no front-controller `index.php` para possibilitar a emissão e visualização de comprovantes em PDF.
     - **Correção de Redirecionamento da Raiz:** Ajustado o roteamento do root (`/` e `/index`) para redirecionar diretamente para o blog WordPress (`/home/`), corrigindo o erro de carregamento de constantes duplicadas do legado `conexao_vb.php`.

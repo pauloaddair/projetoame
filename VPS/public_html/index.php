@@ -23,6 +23,12 @@ if (!empty($parametros[0]) && strtolower($parametros[0]) === 'projetoame') {
 }
 $GLOBALS['app_web_root'] = $app_web_root;
 
+// Redirecionamento da raiz/index antes de qualquer saída de cabeçalho (evita 'headers already sent')
+if ($parametros[0] === '' || $parametros[0] === 'index') {
+    header('Location: ' . $app_web_root . 'home/');
+    exit;
+}
+
 // Requisições diretas a arquivos da pasta /include/ (APIs, AJAX)
 if ($parametros[0] === 'include' && !empty($parametros[1])) {
     $inc_file = $base_path . 'include/' . $parametros[1];
@@ -69,10 +75,7 @@ if (in_array($parametros[0], $paginas_sem_template)) {
 
     $page_to_load = '';
 
-    if ($parametros[0] === '' || $parametros[0] === 'index') {
-        header('Location: ' . $app_web_root . 'home/');
-        exit;
-    } elseif ($parametros[0] === 'admin') {
+    if ($parametros[0] === 'admin') {
         // Roteamento de Administração (/admin/escala, /admin/novoevento, etc)
         $sub_rota = isset($parametros[1]) ? $parametros[1] : 'index';
         switch ($sub_rota) {
