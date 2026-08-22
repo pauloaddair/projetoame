@@ -18,6 +18,7 @@ relacionados:
 # Histórico de Trabalho - Projeto AME
 
 - **22/08/2026 - Revisão de Rotas, Datas e Módulo de Casting/Currículo**
+    - **Ações Rápidas de Contato no Casting:** Implementados links diretos `tel:+55...` no ícone/número de telefone (para discagem imediata), `mailto:...` no ícone/e-mail (para abertura do cliente de mensagens) e `https://wa.me/...` no ícone do WhatsApp.
     - **Filtros Dinâmicos no Casting (`/casting`):** Adicionada barra de filtros rápidos por status: "Apenas Ativos" (padrão inicial), "Mostrar Todos" e "Inativos" com contadores automáticos do banco.
     - **Estilização Visual de Inativos:** Implementado badge vermelho discreto (`Inativo`), linha esmaecida e foto de perfil com 50% de opacidade e grayscale para participantes inativos.
     - **Roteamento Dinâmico (Front Controller):** Substituído switch manual de rotas em `index.php` por resolução dinâmica em `pages/` com sanitização regex.

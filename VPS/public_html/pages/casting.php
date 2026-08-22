@@ -126,11 +126,30 @@ if (isset($_SESSION['nivel']) && $_SESSION['nivel'] >= 3) {
 									<br><small class="text-muted"><i class="fas fa-id-badge mr-1"></i>ID: <?php echo $row['candidato_id']; ?> | <?php echo $tipoInscrito; ?></small>
 								</td>
 								<td class="align-middle small">
-									<div><i class="far fa-envelope text-muted mr-1"></i><?php echo htmlspecialchars($row['Email'] ?? ''); ?></div>
 									<div>
-										<i class="fas fa-phone text-muted mr-1"></i><?php echo $telFormatado; ?>
-										<?php if ($waLink): ?>
-											<a href="<?php echo $waLink; ?>" target="_blank" class="text-success ml-1" title="Chamar no WhatsApp"><i class="fab fa-whatsapp"></i></a>
+										<?php if (!empty($row['Email'])): ?>
+											<a href="mailto:<?php echo htmlspecialchars($row['Email']); ?>" class="text-dark text-decoration-none" title="Enviar E-mail para <?php echo htmlspecialchars($row['nome']); ?>">
+												<i class="far fa-envelope text-primary mr-1"></i><?php echo htmlspecialchars($row['Email']); ?>
+											</a>
+										<?php else: ?>
+											<span class="text-muted"><i class="far fa-envelope text-muted mr-1"></i>Não inf.</span>
+										<?php endif; ?>
+									</div>
+									<div class="mt-1">
+										<?php if (!empty($row['Telefone'])): 
+											$numLimpo = preg_replace('/\D/', '', $row['Telefone']);
+											$telHref = (strlen($numLimpo) <= 11) ? '+55' . $numLimpo : '+' . $numLimpo;
+										?>
+											<a href="tel:<?php echo $telHref; ?>" class="text-dark text-decoration-none mr-2" title="Ligar para <?php echo $telFormatado; ?>">
+												<i class="fas fa-phone-alt text-info mr-1"></i><?php echo $telFormatado; ?>
+											</a>
+											<?php if ($waLink): ?>
+												<a href="<?php echo $waLink; ?>" target="_blank" class="text-success font-weight-bold" title="Chamar no WhatsApp" style="font-size: 1.15em;">
+													<i class="fab fa-whatsapp"></i>
+												</a>
+											<?php endif; ?>
+										<?php else: ?>
+											<span class="text-muted"><i class="fas fa-phone text-muted mr-1"></i>Não inf.</span>
 										<?php endif; ?>
 									</div>
 								</td>
