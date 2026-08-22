@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<dwsync>
-<file name="ExceptionInterface.php" server="191.101.235.83" local="133925972598156708" remote="133898299200000000" Dst="0" />
-<file name="InvalidArgumentException.php" server="191.101.235.83" local="133925972598156708" remote="133898299200000000" Dst="0" />
-<file name="RuntimeException.php" server="191.101.235.83" local="133925972598251829" remote="133898299200000000" Dst="0" />
-<file name="OutOfBoundsException.php" server="191.101.235.83" local="133925972598291846" remote="133898299200000000" Dst="0" />
-<file name="UnexpectedValueException.php" server="191.101.235.83" local="133925972608434686" remote="133898299200000000" Dst="0" />
-<file name="WriterException.php" server="191.101.235.83" local="133925972608895543" remote="133898299200000000" Dst="0" />
-</dwsync>

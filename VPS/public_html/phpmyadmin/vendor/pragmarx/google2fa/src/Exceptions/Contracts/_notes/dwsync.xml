@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<dwsync>
-<file name="Google2FA.php" server="191.101.235.83" local="133925972861596835" remote="133898299200000000" Dst="0" />
-<file name="IncompatibleWithGoogleAuthenticator.php" server="191.101.235.83" local="133925972861671964" remote="133898299200000000" Dst="0" />
-<file name="InvalidAlgorithm.php" server="191.101.235.83" local="133925972861763146" remote="133898299200000000" Dst="0" />
-<file name="InvalidCharacters.php" server="191.101.235.83" local="133925972861878454" remote="133898299200000000" Dst="0" />
-<file name="SecretKeyTooShort.php" server="191.101.235.83" local="133925972871924881" remote="133898299200000000" Dst="0" />
-</dwsync>

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<dwsync>
-<file name="ParameterBag.php" server="191.101.235.83" local="133925973177156891" remote="133898299200000000" Dst="0" />
-<file name="ParameterBagInterface.php" server="191.101.235.83" local="133925973177156891" remote="133898299200000000" Dst="0" />
-<file name="ContainerBag.php" server="191.101.235.83" local="133925973177297401" remote="133898299200000000" Dst="0" />
-<file name="ContainerBagInterface.php" server="191.101.235.83" local="133925973177297401" remote="133898299200000000" Dst="0" />
-<file name="EnvPlaceholderParameterBag.php" server="191.101.235.83" local="133925973177568588" remote="133898299200000000" Dst="0" />
-<file name="FrozenParameterBag.php" server="191.101.235.83" local="133925973177568588" remote="133898299200000000" Dst="0" />
-</dwsync>

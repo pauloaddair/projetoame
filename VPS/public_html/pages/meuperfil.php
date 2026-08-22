@@ -358,7 +358,7 @@ if ($logado) {
                                 $q_fotos = "SELECT f.*, e.nome AS evento_nome FROM fotos_reconhecidas f 
                                             LEFT JOIN eventos_marcados e ON f.evento_id = e.id 
                                             WHERE f.candidato_id = $cand_id 
-                                            ORDER BY f.data_reconhecimento DESC LIMIT 12";
+                                            ORDER BY f.data_registro DESC LIMIT 12";
                                 $res_fotos = mysqli_query($conexao, $q_fotos);
                                 ?>
 
@@ -367,10 +367,10 @@ if ($logado) {
                                         <?php while ($ft = mysqli_fetch_assoc($res_fotos)): ?>
                                             <div class="col-md-3 col-sm-6 mb-3">
                                                 <div class="card h-100 border-0 shadow-sm overflow-hidden">
-                                                    <img src="<?php echo htmlspecialchars($ft['url_foto']); ?>" class="card-img-top" style="height: 160px; object-fit: cover;" alt="Atuação em Feira">
+                                                    <img src="<?php echo htmlspecialchars($GLOBALS['app_web_root'] . $ft['foto_path']); ?>" class="card-img-top" style="height: 160px; object-fit: cover;" alt="Atuação em Feira">
                                                     <div class="card-body p-2 text-center bg-light">
                                                         <small class="font-weight-bold text-dark d-block text-truncate"><?php echo htmlspecialchars($ft['evento_nome'] ?? 'Evento AME'); ?></small>
-                                                        <small class="text-muted"><?php echo date('d/m/Y', strtotime($ft['data_reconhecimento'])); ?></small>
+                                                        <small class="text-muted"><?php echo date('d/m/Y', strtotime($ft['data_registro'])); ?></small>
                                                     </div>
                                                 </div>
                                             </div>

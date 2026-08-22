@@ -17,6 +17,10 @@ relacionados:
 
 # Histórico de Trabalho - Projeto AME
 
+- **22/08/2026 - Correção e Alinhamento do Banco para Portfólio de Fotos Biométricas (Fase 2):**
+    - **Correção da Tabela `fotos_reconhecidas`:** Identificada e corrigida a tabela que havia sido gerada erroneamente como `otos_reconhecidas` (devido ao escape do caractere `\f` no interpretador SQL). O banco de dados local foi ajustado para conter a tabela `fotos_reconhecidas` e colunas corretas (`foto_path` e `data_registro`).
+    - **Ajuste no Portal do Responsável (`/meuperfil`):** Atualizada a query e a renderização de imagens em `pages/meuperfil.php` para apontar corretamente para a tabela `fotos_reconhecidas` e colunas `foto_path` e `data_registro`, além de prepender `$GLOBALS['app_web_root']` para resolver o caminho relativo no servidor local e VPS.
+
 - **22/08/2026 - Fluxo de Presenças e Liberação de Ficha de Avaliação de Atendentes:**
     - **Liberação de Ficha de Avaliação por Presença:** Integrada a tabela `presenca` no ecossistema de eventos. A ficha individual de avaliação e a página pública `/avaliacao/{uuid}` agora disponibilizam e destacam prioritariamente os atendentes que tiveram presença confirmada no evento.
     - **Ações Rápidas na Escala (`/admin/escala`):** Adicionada a cópia com 1 clique do link de avaliação seguro de cada participante e botão direto para avaliação.

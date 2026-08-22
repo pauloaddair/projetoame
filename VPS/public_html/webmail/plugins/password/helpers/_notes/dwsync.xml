@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<dwsync>
-<file name="change_ldap_pass.pl" server="191.101.235.83" local="133925974071941266" remote="133898299200000000" Dst="0" />
-<file name="chgdbmailusers.c" server="191.101.235.83" local="133925974072085898" remote="133898299200000000" Dst="0" />
-<file name="chgsaslpasswd.c" server="191.101.235.83" local="133925974072160982" remote="133898299200000000" Dst="0" />
-<file name="chgvirtualminpasswd.c" server="191.101.235.83" local="133925974072211087" remote="133898299200000000" Dst="0" />
-<file name="chpass-wrapper.py" server="191.101.235.83" local="133925974072251078" remote="133898299200000000" Dst="0" />
-<file name="passwd-expect" server="191.101.235.83" local="133925974072346289" remote="133898299200000000" Dst="0" />
-</dwsync>

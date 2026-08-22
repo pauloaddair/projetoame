@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<dwsync>
-<file name="FallbackNodeProvider.php" server="191.101.235.83" local="133925972997961599" remote="133898299200000000" Dst="0" />
-<file name="NodeProviderCollection.php" server="191.101.235.83" local="133925972998036902" remote="133898299200000000" Dst="0" />
-<file name="RandomNodeProvider.php" server="191.101.235.83" local="133925972998036902" remote="133898299200000000" Dst="0" />
-<file name="StaticNodeProvider.php" server="191.101.235.83" local="133925972998096896" remote="133898299200000000" Dst="0" />
-<file name="SystemNodeProvider.php" server="191.101.235.83" local="133925972998291608" remote="133898299200000000" Dst="0" />
-</dwsync>

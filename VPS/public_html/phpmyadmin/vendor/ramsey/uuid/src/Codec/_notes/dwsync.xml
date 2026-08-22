@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<dwsync>
-<file name="CodecInterface.php" server="191.101.235.83" local="133925972975085228" remote="133898299200000000" Dst="0" />
-<file name="GuidStringCodec.php" server="191.101.235.83" local="133925972975095217" remote="133898299200000000" Dst="0" />
-<file name="OrderedTimeCodec.php" server="191.101.235.83" local="133925972975225750" remote="133898299200000000" Dst="0" />
-<file name="TimestampFirstCombCodec.php" server="191.101.235.83" local="133925972975225750" remote="133898299200000000" Dst="0" />
-<file name="TimestampLastCombCodec.php" server="191.101.235.83" local="133925972975225750" remote="133898299200000000" Dst="0" />
-<file name="StringCodec.php" server="191.101.235.83" local="133925972985165533" remote="133898299200000000" Dst="0" />
-</dwsync>

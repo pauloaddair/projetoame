@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<dwsync>
-<file name="DeflateMarshaller.php" server="191.101.235.83" local="133925973062594868" remote="133898299200000000" Dst="0" />
-<file name="MarshallerInterface.php" server="191.101.235.83" local="133925973062675519" remote="133898299200000000" Dst="0" />
-<file name="SodiumMarshaller.php" server="191.101.235.83" local="133925973062846111" remote="133898299200000000" Dst="0" />
-<file name="TagAwareMarshaller.php" server="191.101.235.83" local="133925973062846111" remote="133898299200000000" Dst="0" />
-<file name="DefaultMarshaller.php" server="191.101.235.83" local="133925973062886073" remote="133898299200000000" Dst="0" />
-</dwsync>

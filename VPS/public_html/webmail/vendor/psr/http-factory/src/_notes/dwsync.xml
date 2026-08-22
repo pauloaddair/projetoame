@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<dwsync>
-<file name="RequestFactoryInterface.php" server="191.101.235.83" local="133925975380355819" remote="133898299200000000" Dst="0" />
-<file name="ResponseFactoryInterface.php" server="191.101.235.83" local="133925975380411154" remote="133898299200000000" Dst="0" />
-<file name="StreamFactoryInterface.php" server="191.101.235.83" local="133925975380506378" remote="133898299200000000" Dst="0" />
-<file name="ServerRequestFactoryInterface.php" server="191.101.235.83" local="133925975390499666" remote="133898299200000000" Dst="0" />
-<file name="UriFactoryInterface.php" server="191.101.235.83" local="133925975390566102" remote="133898299200000000" Dst="0" />
-<file name="UploadedFileFactoryInterface.php" server="191.101.235.83" local="133925975390615839" remote="133898299200000000" Dst="0" />
-</dwsync>

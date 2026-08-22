@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<dwsync>
-<file name="ApcuCache.php" server="191.101.235.83" local="133925972797589808" remote="133898299200000000" Dst="0" />
-<file name="ApcuCacheFactory.php" server="191.101.235.83" local="133925972797715375" remote="133898299200000000" Dst="0" />
-<file name="CacheFactoryInterface.php" server="191.101.235.83" local="133925972797751020" remote="133898299200000000" Dst="0" />
-<file name="CacheInterface.php" server="191.101.235.83" local="133925972797921530" remote="133898299200000000" Dst="0" />
-<file name="GetAllInterface.php" server="191.101.235.83" local="133925972797961753" remote="133898299200000000" Dst="0" />
-<file name="InMemoryCache.php" server="191.101.235.83" local="133925972798107013" remote="133898299200000000" Dst="0" />
-</dwsync>

@@ -19,12 +19,17 @@ $migracoes = [
     "Adicionando expositor_id em 'eventos_marcados'" => 
         "ALTER TABLE eventos_marcados ADD COLUMN IF NOT EXISTS expositor_id INT DEFAULT NULL AFTER tipo",
 
-    "Adicionando campos de saúde na tabela 'candidatos'" => 
-        "ALTER TABLE candidatos
-            ADD COLUMN IF NOT EXISTS restricoes_alimentares TEXT,
-            ADD COLUMN IF NOT EXISTS medicacao_continuada TEXT,
-            ADD COLUMN IF NOT EXISTS cuidados_especiais TEXT,
-            ADD COLUMN IF NOT EXISTS orientacoes_responsaveis TEXT",
+    "Adicionando tipo_evento em 'eventos_marcados'" => 
+        "ALTER TABLE eventos_marcados ADD COLUMN IF NOT EXISTS tipo_evento ENUM('atendimento', 'curso', 'reuniao') NOT NULL DEFAULT 'atendimento' AFTER local",
+
+    "Adicionando status_evento em 'eventos_marcados'" => 
+        "ALTER TABLE eventos_marcados ADD COLUMN IF NOT EXISTS status_evento ENUM('agendado', 'realizado', 'cancelado') NOT NULL DEFAULT 'realizado' AFTER tipo_evento",
+
+    "Adicionando uuid em 'eventos_marcados'" => 
+        "ALTER TABLE eventos_marcados ADD COLUMN IF NOT EXISTS uuid CHAR(36) NULL DEFAULT NULL AFTER status_evento",
+
+    "Adicionando rodizio_processado em 'eventos_marcados'" => 
+        "ALTER TABLE eventos_marcados ADD COLUMN IF NOT EXISTS rodizio_processado TINYINT(1) NOT NULL DEFAULT 0 AFTER status_evento",
 
     "Criando tabela 'imagem_candidato' (Portfólio Visual)" => 
         "CREATE TABLE IF NOT EXISTS imagem_candidato (
@@ -37,7 +42,7 @@ $migracoes = [
             data_vinculo TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )",
 
-    "Criando tabela 'candidato_notas' (Prontuário/Anotações)" => 
+    "Criando tabela 'candidato_notes' (Prontuário/Anotações)" => 
         "CREATE TABLE IF NOT EXISTS candidato_notas (
             id INT AUTO_INCREMENT PRIMARY KEY,
             candidato_id INT NOT NULL,
@@ -56,7 +61,29 @@ $migracoes = [
             pode_editar TINYINT(1) DEFAULT 1,
             data_vinculo TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             UNIQUE KEY (candidato_id, usuario_id)
-        )"
+        )",
+
+    "Limpando tabela antiga de avaliacoes" => 
+        "DROP TABLE IF EXISTS avaliacoes",
+
+    "Criando tabela 'avaliacoes' com o novo formato" => 
+        "CREATE TABLE avaliacoes (
+            avaliacao_id INT AUTO_INCREMENT PRIMARY KEY,
+            evento_id INT NOT NULL,
+            candidato_id INT NOT NULL,
+            pontualidade INT NOT NULL,
+            asseio INT NOT NULL,
+            socializacao INT NOT NULL,
+            simpatia INT NOT NULL,
+            compreensao_instrucoes INT NOT NULL,
+            facilidade_orientacoes INT NOT NULL,
+            foco_atividades INT NOT NULL,
+            comportamento_geral INT NOT NULL,
+            observacoes TEXT NULL,
+            avaliador_nome VARCHAR(128) NULL,
+            avaliador_email VARCHAR(128) NULL,
+            data_avaliacao DATETIME NOT NULL
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci"
 ];
 
 foreach ($migracoes as $descricao => $sql) {
