@@ -6,6 +6,18 @@ include_once('./include/funcoes.php');
 include_once('./include/head-table.php');
 
 if (isset($_SESSION['nivel']) && $_SESSION['nivel'] >= 3) {
+	// Contagem de totais
+	$q_totais = "SELECT 
+	                SUM(CASE WHEN ativo = 1 THEN 1 ELSE 0 END) AS total_ativos,
+	                SUM(CASE WHEN ativo = 0 OR ativo IS NULL THEN 1 ELSE 0 END) AS total_inativos,
+	                COUNT(*) AS total_geral 
+	             FROM candidatos";
+	$r_totais = mysqli_query($conexao, $q_totais);
+	$totais = mysqli_fetch_assoc($r_totais);
+	$totAtivos = $totais['total_ativos'] ?? 0;
+	$totInativos = $totais['total_inativos'] ?? 0;
+	$totGeral = $totais['total_geral'] ?? 0;
+
 	$query = "SELECT c.*, i.url AS perfil 
 	          FROM candidatos c
 	          LEFT JOIN imagens i ON c.imagem_id = i.imagem_id 
@@ -26,7 +38,7 @@ if (isset($_SESSION['nivel']) && $_SESSION['nivel'] >= 3) {
 						</h1>
 						<p class="text-muted small mb-0">Gestão de associados, atendentes capacitados e treinandos do Projeto AME.</p>
 					</div>
-					<div class="mt-2 mt-md-0">
+					<div class="mt-2 mt-md-0 d-flex flex-wrap align-items-center">
 						<a href="<?php echo $app_web_root; ?>inscrever" class="btn btn-success btn-sm rounded-pill shadow-sm">
 							<i class="fas fa-user-plus mr-1"></i> Nova Inscrição
 						</a>
@@ -35,13 +47,32 @@ if (isset($_SESSION['nivel']) && $_SESSION['nivel'] >= 3) {
 						</a>
 					</div>
 				</div>
-				<nav aria-label="breadcrumb" class="mt-3">
-				  <ol class="breadcrumb bg-light p-2 rounded shadow-sm small">
-					<li class="breadcrumb-item"><a href="<?php echo $app_web_root; ?>admin">Painel</a></li>
-					<li class="breadcrumb-item"><a href="<?php echo $app_web_root; ?>admin/atividades">Atividades</a></li>
-					<li class="breadcrumb-item active" aria-current="page">Candidatos Cadastrados</li>
-				  </ol>
-				</nav>
+
+				<!-- Barra de Filtro de Status -->
+				<div class="d-flex justify-content-between align-items-center flex-wrap mt-3 pt-2 border-top">
+					<div class="btn-group btn-group-toggle shadow-sm rounded-pill p-1 bg-white border mb-2" data-toggle="buttons" id="filtrosStatusContainer">
+						<label class="btn btn-sm btn-outline-success active rounded-pill px-3 py-1 font-weight-bold" id="lbl_filtro_ativos" style="cursor: pointer;">
+							<input type="radio" name="filtro_status" id="filtro_ativos" value="ativo" autocomplete="off" checked> 
+							<i class="fas fa-check-circle mr-1"></i> Apenas Ativos <span class="badge badge-success ml-1"><?php echo $totAtivos; ?></span>
+						</label>
+						<label class="btn btn-sm btn-outline-secondary rounded-pill px-3 py-1 font-weight-bold ml-1" id="lbl_filtro_todos" style="cursor: pointer;">
+							<input type="radio" name="filtro_status" id="filtro_todos" value="todos" autocomplete="off"> 
+							<i class="fas fa-users mr-1"></i> Mostrar Todos <span class="badge badge-secondary ml-1"><?php echo $totGeral; ?></span>
+						</label>
+						<label class="btn btn-sm btn-outline-danger rounded-pill px-3 py-1 font-weight-bold ml-1" id="lbl_filtro_inativos" style="cursor: pointer;">
+							<input type="radio" name="filtro_status" id="filtro_inativos" value="inativo" autocomplete="off"> 
+							<i class="fas fa-user-slash mr-1"></i> Inativos <span class="badge badge-danger ml-1"><?php echo $totInativos; ?></span>
+						</label>
+					</div>
+
+					<nav aria-label="breadcrumb" class="mb-2">
+					  <ol class="breadcrumb bg-light p-2 rounded shadow-sm small mb-0">
+						<li class="breadcrumb-item"><a href="<?php echo $app_web_root; ?>admin">Painel</a></li>
+						<li class="breadcrumb-item"><a href="<?php echo $app_web_root; ?>admin/atividades">Atividades</a></li>
+						<li class="breadcrumb-item active" aria-current="page">Candidatos</li>
+					  </ol>
+					</nav>
+				</div>
 			</header>
 
 			<div class="card shadow-sm border-0 mb-4">
@@ -68,18 +99,30 @@ if (isset($_SESSION['nivel']) && $_SESSION['nivel'] >= 3) {
 								}
 								$telFormatado = !empty($row['Telefone']) ? telephone($row['Telefone']) : 'Não inf.';
 								$waLink = !empty($row['Telefone']) ? 'https://wa.me/' . formataWA($row['Telefone']) : '';
-								$statusAtivo = (isset($row['ativo']) && $row['ativo'] == 1) ? '<span class="badge badge-success">Ativo</span>' : '<span class="badge badge-secondary">Inativo</span>';
+								
+								$isAtivo = (isset($row['ativo']) && $row['ativo'] == 1);
+								$statusAttr = $isAtivo ? 'ativo' : 'inativo';
+								
+								$statusBadge = $isAtivo 
+									? '<span class="badge badge-success px-2 py-1"><i class="fas fa-check mr-1"></i>Ativo</span>' 
+									: '<span class="badge badge-danger px-2 py-1" style="background-color: #dc3545; font-size: 80%;"><i class="fas fa-ban mr-1"></i>Inativo</span>';
+								
+								$imgStyle = $isAtivo 
+									? 'object-fit: cover;' 
+									: 'object-fit: cover; opacity: 0.5; filter: grayscale(30%);';
+								
+								$rowClass = $isAtivo ? '' : 'table-light text-muted';
 								$tipoInscrito = !empty($row['inscrito']) ? ucfirst($row['inscrito']) : 'Atendente';
 							?>
-							<tr>
+							<tr class="<?php echo $rowClass; ?>" data-status="<?php echo $statusAttr; ?>">
 								<td class="align-middle text-muted small"><?php echo $i; ?></td>
 								<td class="align-middle text-center" style="width: 50px;">
 									<a href="<?php echo $app_web_root; ?>trocafoto/<?php echo digitos($row['candidato_id']); ?>" title="Alterar foto">
-										<img src="<?php echo $perfil; ?>" height="42" width="42" class="rounded-circle shadow-sm" style="object-fit: cover;">
+										<img src="<?php echo $perfil; ?>" height="42" width="42" class="rounded-circle shadow-sm" style="<?php echo $imgStyle; ?>">
 									</a>
 								</td>
 								<td class="align-middle">
-									<strong class="text-dark"><?php echo htmlspecialchars($row['nome']); ?></strong>
+									<strong class="<?php echo $isAtivo ? 'text-dark' : 'text-muted'; ?>"><?php echo htmlspecialchars($row['nome']); ?></strong>
 									<br><small class="text-muted"><i class="fas fa-id-badge mr-1"></i>ID: <?php echo $row['candidato_id']; ?> | <?php echo $tipoInscrito; ?></small>
 								</td>
 								<td class="align-middle small">
@@ -92,7 +135,7 @@ if (isset($_SESSION['nivel']) && $_SESSION['nivel'] >= 3) {
 									</div>
 								</td>
 								<td class="align-middle small">
-									<?php echo $statusAtivo; ?>
+									<?php echo $statusBadge; ?>
 									<span class="badge badge-light border ml-1">Rodízio: #<?php echo $row['rodizio'] ?? 0; ?></span>
 								</td>
 								<td class="align-middle text-center" style="white-space: nowrap;">
@@ -121,8 +164,40 @@ if (isset($_SESSION['nivel']) && $_SESSION['nivel'] >= 3) {
 	include_once('pages/restrito.php');
 }
 ?>
+<script type="text/javascript">
+$(document).ready(function () {
+	// Filtro personalizado do DataTables por status (Ativo / Todos / Inativo)
+	if ($.fn.dataTable && $.fn.dataTable.ext) {
+		$.fn.dataTable.ext.search.push(
+			function (settings, data, dataIndex) {
+				var filtroSelecionado = $('input[name="filtro_status"]:checked').val();
+				if (!filtroSelecionado || filtroSelecionado === 'todos') {
+					return true;
+				}
+				var rowNode = settings.aoData[dataIndex].nTr;
+				var statusLinha = $(rowNode).attr('data-status');
+				return statusLinha === filtroSelecionado;
+			}
+		);
+
+		$('input[name="filtro_status"]').on('change', function () {
+			if ($.fn.DataTable.isDataTable('#table')) {
+				$('#table').DataTable().draw();
+			}
+		});
+
+		// Aplica o filtro padrão (Apenas Ativos)
+		setTimeout(function () {
+			if ($.fn.DataTable.isDataTable('#table')) {
+				$('#table').DataTable().draw();
+			}
+		}, 100);
+	}
+});
+</script>
 </body>
 <?php
 include_once('./include/scripts.php');
 include_once('./include/end.php');
 ?>
+
