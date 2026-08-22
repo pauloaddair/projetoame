@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_horario'])) {
 }
 
 // Busca horários existentes para esta atividade
-$queryHorarios = "SELECT h.*, e.empresa as nome_empresa FROM horarios h JOIN expositores2024 e ON h.empresa_id = e.expositor_id WHERE h.evento_id = $evento_id ORDER BY h.data_inicio ASC";
+$queryHorarios = "SELECT h.*, e.empresa as nome_empresa FROM horarios h JOIN empresas e ON h.empresa_id = e.empresa_id WHERE h.evento_id = $evento_id ORDER BY h.data_inicio ASC";
 $respHorarios = mysqli_query($conexao, $queryHorarios);
 if ($respHorarios) {
     while ($row = mysqli_fetch_assoc($respHorarios)) {
@@ -60,11 +60,12 @@ if ($respHorarios) {
     }
 }
 
+include_once('./include/nav.php');
+include_once('./include/admin_sidebar.php');
 ?>
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 
-<body>
-    <div class="container mt-4">
+<div class="container mt-4">
         <header>
             <h1 class="text-center">Gerenciar: <?php echo htmlspecialchars($evento['nome']); ?></h1>
             <nav aria-label="breadcrumb">
@@ -110,6 +111,26 @@ if ($respHorarios) {
                             </div>
                             <button type="submit" class="btn btn-success btn-block rounded-pill mt-4">Salvar Turno</button>
                         </form>
+                    </div>
+                </div>
+
+                <!-- Card de Avaliação -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-info text-white">Avaliação do Evento</div>
+                    <div class="card-body">
+                        <?php if (!empty($evento['uuid'])): ?>
+                            <p class="text-xs text-muted mb-2">Compartilhe este link com as empresas e parceiros do evento para coletar avaliações dos atendentes.</p>
+                            <div class="input-group mb-3">
+                                <input type="text" id="eval_link_input" class="form-control text-xs" readonly value="<?php echo (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . $GLOBALS['app_web_root'] . 'avaliacao/' . $evento['uuid']; ?>">
+                                <div class="input-group-append">
+                                    <button class="btn btn-info m-0 px-3 py-2" type="button" id="btn_copy_eval_link" title="Copiar Link"><i class="fas fa-copy"></i></button>
+                                </div>
+                            </div>
+                        <?php else: ?>
+                            <div class="alert alert-warning text-xs mb-0">
+                                <i class="fas fa-exclamation-triangle mr-1"></i> UUID de avaliação não gerado para este evento.
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -166,8 +187,27 @@ if ($respHorarios) {
                 $("#empresa_id").val(ui.item.id);
             }
         });
+        
+        // Copiar link de avaliação
+        const btnCopy = document.getElementById('btn_copy_eval_link');
+        if (btnCopy) {
+            btnCopy.addEventListener('click', function(e) {
+                e.preventDefault();
+                var copyText = document.getElementById('eval_link_input');
+                copyText.select();
+                copyText.setSelectionRange(0, 99999);
+                navigator.clipboard.writeText(copyText.value).then(function() {
+                    var originalHtml = btnCopy.innerHTML;
+                    btnCopy.innerHTML = '<i class="fas fa-check"></i>';
+                    btnCopy.className = 'btn btn-success m-0 px-3 py-2';
+                    setTimeout(function() {
+                        btnCopy.innerHTML = originalHtml;
+                        btnCopy.className = 'btn btn-info m-0 px-3 py-2';
+                    }, 2000);
+                });
+            });
+        }
     });
     </script>
     <?php include_once('./include/scripts.php'); ?>
-</body>
-</html>
+<?php include_once('./include/admin_sidebar_footer.php'); ?>

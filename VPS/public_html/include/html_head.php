@@ -45,18 +45,20 @@ $meta_og_url = isset($og_url) ? htmlspecialchars($og_url) : 'https://projetoame.
 <link rel="manifest" href="<?php echo $GLOBALS['app_web_root']; ?>img/manifest.json">
 
 <meta name="msapplication-TileColor" content="#ffffff">
-<meta name="msapplication-TileImage" content="/img/ms-icon-144x144.png">
+<meta name="msapplication-TileImage" content="<?php echo $GLOBALS['app_web_root']; ?>img/ms-icon-144x144.png">
 <meta name="theme-color" content="#ffffff">
 
 <!-- Bootstrap core CSS -->
-<link href="<?php echo $GLOBALS['app_web_root']; ?>css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css">
 <!-- Material Design Bootstrap -->
-<link href="<?php echo $GLOBALS['app_web_root']; ?>css/mdb.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.20.0/css/mdb.min.css">
 <!-- Your custom styles -->
 <link href="<?php echo $GLOBALS['app_web_root']; ?>css/style.min.css" rel="stylesheet">
 <link rel="preconnect" href="https://fonts.gstatic.com">
+<?php if (!in_array($_SERVER['HTTP_HOST'] ?? '', ['localhost', '127.0.0.1'])): ?>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9127792999705320" crossorigin="anonymous"></script>
+<?php endif; ?>
 <!-- Font Awesome & Bootstrap Icons -->
 <script src="https://kit.fontawesome.com/d067a28273.js" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -99,46 +101,37 @@ $meta_og_url = isset($og_url) ? htmlspecialchars($og_url) : 'https://projetoame.
 	body.alto-contraste .btn {
 		background-color: #000000 !important;
 		color: #ffff00 !important;
-		border: 2px solid #ffff00 !important;
+		border: 1px solid #ffff00 !important;
 	}
 	
 	/* Fonte Grande */
 	body.fonte-grande {
-		font-size: 1.25rem !important;
-	}
-	body.fonte-grande p, 
-	body.fonte-grande td, 
-	body.fonte-grande li, 
-	body.fonte-grande span, 
-	body.fonte-grande input, 
-	body.fonte-grande select, 
-	body.fonte-grande textarea {
-		font-size: 1.25rem !important;
+		font-size: 120% !important;
 	}
 	body.fonte-grande h1 { font-size: 2.5rem !important; }
-	body.fonte-grande h2 { font-size: 2rem !important; }
-	body.fonte-grande h3 { font-size: 1.75rem !important; }
+	body.fonte-grande h2 { font-size: 2.2rem !important; }
+	body.fonte-grande h3 { font-size: 1.8rem !important; }
+	body.fonte-grande h4 { font-size: 1.5rem !important; }
+	body.fonte-grande p, 
+	body.fonte-grande span, 
+	body.fonte-grande a, 
+	body.fonte-grande li, 
+	body.fonte-grande td, 
+	body.fonte-grande th {
+		font-size: 1.25rem !important;
+	}
 </style>
 
 <script>
-	// Executa imediatamente para evitar flash visual
-	(function() {
-		const contrast = localStorage.getItem('alto-contraste');
-		const fontSize = localStorage.getItem('fonte-grande');
-		if (contrast === 'true') {
+	// Carrega preferências ao iniciar
+	document.addEventListener('DOMContentLoaded', () => {
+		if (localStorage.getItem('alto-contraste') === 'true') {
+			document.body.classList.add('alto-contraste');
 			document.documentElement.classList.add('alto-contraste');
 		}
-		if (fontSize === 'true') {
-			document.documentElement.classList.add('fonte-grande');
-		}
-	})();
-	
-	window.addEventListener('DOMContentLoaded', () => {
-		if (document.documentElement.classList.contains('alto-contraste')) {
-			document.body.classList.add('alto-contraste');
-		}
-		if (document.documentElement.classList.contains('fonte-grande')) {
+		if (localStorage.getItem('fonte-grande') === 'true') {
 			document.body.classList.add('fonte-grande');
+			document.documentElement.classList.add('fonte-grande');
 		}
 	});
 
@@ -160,18 +153,3 @@ $meta_og_url = isset($og_url) ? htmlspecialchars($og_url) : 'https://projetoame.
 	<button onclick="toggleContrast()" class="btn btn-sm btn-dark px-2 py-1 m-0" title="Alto Contraste" style="border-radius: 4px; font-size: 12px; box-shadow: 0px 2px 5px rgba(0,0,0,0.3); border: 1px solid #ccc; background-color: #333; color: #fff;"><i class="fas fa-adjust"></i> Contraste</button>
 	<button onclick="toggleFontSize()" class="btn btn-sm btn-info px-2 py-1 m-0" title="Aumentar Fonte" style="border-radius: 4px; font-size: 12px; box-shadow: 0px 2px 5px rgba(0,0,0,0.3); border: 1px solid #ccc; background-color: #17a2b8; color: #fff;"><i class="fas fa-font"></i> A +</button>
 </div>
-
-<!-- VLibras Widget -->
-<div vlibras-widget class="vlibras-widget">
-	<div class="vlibras-widget-wrapper">
-		<div class="vlibras-widget-content">
-			<div class="vlibras-widget-content-buttons">
-				<div class="vlibras-widget-content-buttons-button vlibras-widget-content-buttons-button-close"></div>
-			</div>
-		</div>
-	</div>
-</div>
-<script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
-<script>
-	new window.VLibras.Widget('https://vlibras.gov.br/app');
-</script>

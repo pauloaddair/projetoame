@@ -140,8 +140,8 @@ if ($_SERVER['REQUEST_METHOD']=="POST"){
 	}
 }
 ?>
-<body>
-	<div class="container">
+	<?php include_once('./include/nav.php'); ?>
+	<div class="container mt-5 pt-4">
 		<header>
 		<h1 class="text-center">Atividades confirmadas</h1>
 			<nav aria-label="breadcrumb">
@@ -166,15 +166,15 @@ $resp = mysqli_query($conexao,$queryeventos);
 			while ($row0 = mysqli_fetch_assoc($resp)){
 			?>
 		<div class="col col-md-6 align-items-stretch d-flex mb-2">
-			<div class="card">
-				<div class="card-header">
-					<img class="card-img-top" src="/<?php echo $row0['url']?>">
-					<h1 class="text-center"><?php echo $row0['nome']?></h1>
-					<p class="text-center">De <?php echo Date("d/M",strtotime($row0['inicio']))?> a <?php echo Date("d/M",strtotime($row0['final']))?></p>
-					<p><a href="<?php echo $row0['maps']?>" target="_blank"><i class="far fa-map grey-text mr-1"></i><strong><?php echo $row0['local']?></strong></a>&nbsp;<?php echo $row0['endereco']?></p>
+			<div class="card shadow-sm w-100">
+				<div class="card-header bg-light">
+					<img class="card-img-top rounded mb-2" src="<?php echo $GLOBALS['app_web_root'] . ltrim($row0['url'], '/'); ?>" style="max-height: 220px; object-fit: cover;">
+					<h2 class="text-center h4 font-weight-bold"><?php echo htmlspecialchars($row0['nome']); ?></h2>
+					<p class="text-center text-muted mb-2">De <?php echo formataDataEventoBR($row0['inicio']); ?> a <?php echo formataDataEventoBR($row0['final']); ?></p>
+					<p class="mb-1"><a href="<?php echo htmlspecialchars($row0['maps']); ?>" target="_blank"><i class="far fa-map text-primary mr-1"></i><strong><?php echo htmlspecialchars($row0['local']); ?></strong></a>&nbsp;<?php echo htmlspecialchars($row0['endereco']); ?></p>
 					<?php
-					if ($row0['obs']<>""){
-						echo "<p><small><strong class='bg-warning p-1 rounded-pill'>Obs.:</strong> ".$row0['obs']."</small></p>";
+					if (!empty($row0['obs'])){
+						echo "<p class='mb-0'><small><strong class='badge badge-warning text-dark p-1 mr-1'>Obs.:</strong> ".htmlspecialchars($row0['obs'])."</small></p>";
 					}
 					?>
 				</div>
@@ -193,16 +193,18 @@ $resp = mysqli_query($conexao,$queryeventos);
 						$disable = " disabled";
 					}
 					?>
-					<div class="custom-control custom-switch">
+					<div class="custom-control custom-switch mb-2">
 					<input type="checkbox" class="custom-control-input" name="<?php echo digitos($row0['horario_id'])?>" id="<?php echo digitos($row0['horario_id'])?>" <?php echo $checked?> <?php echo $disable?>>
-					<label class="custom-control-label" for="<?php echo digitos($row0['horario_id'])?>"><?php echo Date("d/M, D",strtotime($row0['data_inicio'])). " - ". $row0['tipo']?><br>
-						<?php echo "das ".date("H:i",strtotime($row0['data_inicio'])). " às ".date("H:i",strtotime($row0['data_final']));
+					<label class="custom-control-label" for="<?php echo digitos($row0['horario_id'])?>">
+						<strong><?php echo formataDataEventoBR($row0['data_inicio']); ?></strong> &bull; <?php echo htmlspecialchars($row0['tipo']); ?><br>
+						<small class="text-muted"><?php echo "das ".date("H:i",strtotime($row0['data_inicio'])). " às ".date("H:i",strtotime($row0['data_final']));
 						$vagas = "";
-						If (intval($row0['vagas'])>0){
+						if (intval($row0['vagas'])>0){
 							$vagas = " (".intval($row0['vagas'])." vagas)";
 						}
 						echo $vagas;
 						?>
+						</small>
 						</label>
 					</div>
 					<?php }

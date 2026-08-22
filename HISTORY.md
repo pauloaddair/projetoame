@@ -17,6 +17,15 @@ relacionados:
 
 # Histórico de Trabalho - Projeto AME
 
+- **22/08/2026 - Revisão de Rotas, Datas e Módulo de Casting/Currículo**
+    - **Roteamento Dinâmico (Front Controller):** Substituído switch manual de rotas em `index.php` por resolução dinâmica em `pages/` com sanitização regex.
+    - **Redirecionamento Home:** Mantido redirecionamento automático da raiz (`/` ou `/index`) para o WordPress em `/home/`.
+    - **Formatação de Datas:** Criada função `formataDataEventoBR()` em `include/funcoes.php` e aplicada em `pages/atendentes.php` corrigindo exibição em português.
+    - **Casting & Candidatos:** Reformulado `pages/casting.php` com DataTables, pesquisa em tempo real e links rápidos para WhatsApp, CV e edição.
+    - **Módulo de Currículo (`/curriculo/{id}`):** Refatorado `pages/curriculo.php` com suporte a `$app_web_root`, preview integrado, emissão em PDF sem conflito de cabeçalhos e inclusão do rodapé `footer-database.php`.
+    - **Padronização de Assets (Bootstrap / MDB / jQuery / DataTables):** Migradas as dependências legadas inexistentes em disco (`/js/jquery-3.4.1.min.js`, `popper.min.js`, `bootstrap.min.js`, `mdb.min.js`) para CDNs oficiais estáveis em `include/footer-database.php`, `include/footer-table.php` e `include/html_head.php`, eliminando erros de sintaxe (`Unexpected token '<'`) e dependências não definidas (`jQuery is not defined`, `WOW is not defined`).
+    - **PWA Manifest & Acessibilidade:** Criado `img/manifest.json` eliminando erro 404/sintaxe de manifest, ajustado AdSense para suprimir 403 em localhost e movida a inicialização do widget VLibras para o fechamento do `<body>` em `include/end.php`.
+
 - **21/08/2026 - Correção de Redirecionamento e Headers no Front Controller:**
     - **Resolução de Conflito de Headers:** Movido o redirecionamento da raiz (`/` e `/index`) para o topo de `index.php`, antes de qualquer carregamento de cabeçalho (`include/html_head.php`). Isto resolve o erro de "headers already sent" e restaura o redirecionamento automático para a landing page do WordPress (`/home/`).
 

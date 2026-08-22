@@ -582,4 +582,36 @@ function encrypt_decrypt($action, $string)
      return after_last($string, before_last($that, $inthat));
     };
 
+    function gen_uuid() {
+        return sprintf( '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+            mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff ),
+            mt_rand( 0, 0xffff ),
+            mt_rand( 0, 0x0fff ) | 0x4000,
+            mt_rand( 0, 0x3fff ) | 0x8000,
+            mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff )
+        );
+    }
+
+    function formataDataEventoBR($dataString, $mostrarHorario = false) {
+        if (empty($dataString)) return '';
+        $timestamp = is_numeric($dataString) ? (int)$dataString : strtotime($dataString);
+        if (!$timestamp) return $dataString;
+        
+        $diasSemana = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+        $meses = ['', 'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+        
+        $diaSemanaNum = (int)date('w', $timestamp);
+        $diaSemana = $diasSemana[$diaSemanaNum] ?? '';
+        
+        $dia = date('d', $timestamp);
+        $mesNum = (int)date('n', $timestamp);
+        $mes = $meses[$mesNum] ?? date('m', $timestamp);
+        
+        $res = "{$dia}/{$mes} ({$diaSemana})";
+        if ($mostrarHorario) {
+            $res .= ' às ' . date('H:i', $timestamp);
+        }
+        return $res;
+    }
+
 ?>

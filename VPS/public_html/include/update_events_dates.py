@@ -5,6 +5,7 @@ import urllib.parse
 import requests
 from bs4 import BeautifulSoup
 import litellm
+from duckduckgo_search import DDGS
 
 def load_gemini_api_key():
     if "GEMINI_API_KEY" in os.environ:
@@ -39,21 +40,18 @@ def load_gemini_api_key():
     return None
 
 def ddg_search(query):
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-    }
-    url = f"https://html.duckduckgo.com/html/?q={urllib.parse.quote(query)}"
     try:
-        r = requests.get(url, headers=headers, timeout=10)
-        if r.status_code != 200:
-            return ""
-        soup = BeautifulSoup(r.text, 'html.parser')
-        results = []
-        for a in soup.find_all('a', class_='result__snippet'):
-            results.append(a.text.strip())
-        return "\n".join(results[:5])
+        with DDGS() as ddgs:
+            results = list(ddgs.text(query, max_results=5))
+            snippets = []
+            for r in results:
+                title = r.get('title', '')
+                body = r.get('body', '')
+                snippets.append(f"{title}: {body}")
+            return "\n".join(snippets)
     except Exception as e:
         return f"Error searching: {str(e)}"
+
 
 def clean_json_response(content):
     content = content.strip()

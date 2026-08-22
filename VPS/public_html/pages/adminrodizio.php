@@ -67,15 +67,20 @@ $sqlColumns = "
 
 $resultColumns = $conexao->query($sqlColumns);
 if (!$resultColumns) {
-    die("Erro ao buscar colunas dinâmicas: " . $mysqli->error);
+    die("Erro ao buscar colunas dinâmicas: " . $conexao->error);
 }
 
 $row = $resultColumns->fetch_assoc();
 $dynamicColumns = $row['dynamic_columns'];
 
+$dynamicColumnsPart = "";
+if (!empty($dynamicColumns)) {
+    $dynamicColumnsPart = ", " . $dynamicColumns;
+}
+
 // Consulta principal para montar a tabela
 $sqlMain = "
-    SELECT candidatos.candidato_id, candidatos.nome, candidatos.ativo,  $dynamicColumns
+    SELECT candidatos.candidato_id, candidatos.nome, candidatos.ativo" . $dynamicColumnsPart . "
     FROM candidatos
     LEFT JOIN disponibilidade ON candidatos.candidato_id = disponibilidade.candidato_id
     LEFT JOIN horarios ON disponibilidade.atividade_id = horarios.horario_id
@@ -92,7 +97,7 @@ exit;
 
 $resultMain = $conexao->query($sqlMain);
 if (!$resultMain) {
-    die("Erro ao buscar dados: " . $mysqli->error);
+    die("Erro ao buscar dados: " . $conexao->error);
 }
 
 	$nplanilha = 1;
@@ -148,58 +153,21 @@ if (!$resultMain) {
 		background-color:aquamarine;
 	}
 </style>
-<body>
-	<div class='container'>
-		<header>
-			<h1 class='text-center'>Disponibilidade</h1><p class="text-center"><?php echo $msg?></p>
-		</header>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light rounded">
-<!--    <a class="navbar-brand" href="#">Navbar</a>-->
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample09" aria-controls="navbarsExample09" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarsExample09">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
-          <a class="nav-link" href="/home">Home <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/atendentes">Próximos eventos</a>
-        </li>
-        <li class="nav-item active">
-          <a class="nav-link" href="/admin/rodizio" tabindex="-1" aria-disabled="true">Rodizio</a>
-        </li>
-<!--
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="dropdown09" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
-          <div class="dropdown-menu" aria-labelledby="dropdown09">
-            <a class="dropdown-item" href="#">Action</a>
-            <a class="dropdown-item" href="#">Another action</a>
-            <a class="dropdown-item" href="#">Something else here</a>
-          </div>
-        </li>
--->
-      </ul>
-		<?php 
-		if (isset($_SESSION['nivel']) && $_SESSION['nivel']>4){
-		?>
-		<a href="/logout"><div class="btn p-2 rounded" data-toggle="tooltip" data-placement="right" title="Clique para sair"><?php echo $nome?><img clas='img ms-4' src="/<?php echo $perfil?>" width="32" alt="<?php echo $nome?>"></div></a>
-		
-		<?php 
-		} else {
-		?>
-<a class="form-inline" href='/login'>Login</a>
-		<?php 
-		}
-		?>
-<!--
-      <form class="form-inline my-2 my-md-0">
-        <input class="form-control" type="text" placeholder="Search" aria-label="Search">
-      </form>
--->
-    </div>
-  </nav>
+<?php
+include_once('./include/nav.php');
+include_once('./include/admin_sidebar.php');
+?>
+<div class="container mt-4">
+    <header>
+        <h1 class="text-center">Fila & Rodízio</h1>
+        <p class="text-center"><?php echo $msg; ?></p>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/admin">Painel</a></li>
+                <li class="breadcrumb-item active">Fila & Rodízio</li>
+            </ol>
+        </nav>
+    </header>
 <?php 
 // Montagem da tabela em HTML
 echo "<table border='1' cellspacing='0' cellpadding='5'>";
@@ -323,12 +291,9 @@ echo "</tbody></table>";
 	$writer->save("./docs/".$fileName);
 	$msg = "Arquivo <strong><em>$fileName</em></strong> salvo com sucesso!";
 
-// Fecha a conexão com o banco de dados
 $conexao->close();
-include_once('./include/footer.php');
-echo "</body>";
 include_once('./include/scripts.php');
-include_once('./include/end.php');
+include_once('./include/admin_sidebar_footer.php');
 ?>
 
 

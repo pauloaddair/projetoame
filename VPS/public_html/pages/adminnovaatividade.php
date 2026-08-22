@@ -48,8 +48,9 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['criar_evento'])) {
         $obs = mysqli_real_escape_string($conexao, $_POST['obs']);
         $empresa_id = !empty($_POST['empresa_id']) ? (int)$_POST['empresa_id'] : 'NULL';
 
-        $queryInsert = "INSERT INTO eventos_marcados (nome, tipo, inicio, final, local, endereco, maps, imagem_id, obs, aval_grupo, escala_fechada, empresa_id)
-                        VALUES ('$nome', '$tipo', '$inicio', '$final', '$local', '$endereco', '$maps', $imagem_id, '$obs', 1, 1, $empresa_id)";
+        $uuid = gen_uuid();
+        $queryInsert = "INSERT INTO eventos_marcados (nome, tipo, inicio, final, local, endereco, maps, imagem_id, obs, aval_grupo, escala_fechada, empresa_id, uuid)
+                        VALUES ('$nome', '$tipo', '$inicio', '$final', '$local', '$endereco', '$maps', $imagem_id, '$obs', 1, 1, $empresa_id, '$uuid')";
         if (mysqli_query($conexao, $queryInsert)) {
             $evento_id = mysqli_insert_id($conexao);
             header("Location: /admin/atividade/" . $evento_id . "?msg=success");
@@ -93,11 +94,12 @@ if ($evento_id > 0) {
     $evento_atual = mysqli_fetch_assoc($res);
 }
 
+include_once('./include/nav.php');
+include_once('./include/admin_sidebar.php');
 ?>
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 
-<body>
-    <div class="container mt-4">
+<div class="container mt-4">
         <header>
             <h1 class="text-center"><?php echo ($evento_id > 0) ? "Gerenciar Atividade: " . $evento_atual['nome'] : "Nova Atividade AME"; ?></h1>
             <nav aria-label="breadcrumb">
@@ -307,5 +309,4 @@ if ($evento_id > 0) {
     });
     </script>
     <?php include_once('./include/scripts.php'); ?>
-</body>
-</html>
+<?php include_once('./include/admin_sidebar_footer.php'); ?>

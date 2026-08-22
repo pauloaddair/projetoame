@@ -2,7 +2,7 @@
 include 'conexao.php';
 
 $query = $_POST['query'];
-$sql = "SELECT expositor_id AS id, empresa AS nome FROM expositores2024 WHERE empresa LIKE ? LIMIT 5";
+$sql = "SELECT empresa_id AS id, empresa AS nome FROM empresas WHERE empresa LIKE ? LIMIT 5";
 $stmt = $conexao->prepare($sql);
 $search = "%".$query."%";
 $stmt->bind_param("s", $search);

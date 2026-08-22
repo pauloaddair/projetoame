@@ -1,8 +1,9 @@
 <?php
 include_once('./include/head-table.php');
+include_once('./include/nav.php');
+include_once('./include/admin_sidebar.php');
 ?>
-<body>
-	<div class="container">
+<div class="container mt-4">
 		<header>
 			<h1 class="text-center">Gestão de Atividades</h1>
 			<hr>
@@ -37,8 +38,7 @@ include_once('./include/head-table.php');
 
 	</div>
 <?php
-	include_once('./include/footer.php');
-	include_once('./include/scripts.php');
+	include_once('./include/footer-database-noorder.php');
 ?>
 <script>
 	$(document).ready(function() {
@@ -56,7 +56,24 @@ include_once('./include/head-table.php');
                 {
                     "data": "id",
                     "render": function (data, type, row) {
-                        return '<a href="' + AppWebRoot + 'admin/escala?evento_id=' + data + '" class="btn btn-primary btn-sm">Gerenciar Escala</a>';
+                        var html = '<a href="' + AppWebRoot + 'admin/escala?evento_id=' + data + '" class="btn btn-primary btn-sm mr-1">Gerenciar Escala</a>';
+                        
+                        // Verifica se o evento já iniciou
+                        var inicioDate = new Date(row.inicio.replace(/-/g, "/"));
+                        var now = new Date();
+                        
+                        if (inicioDate <= now) {
+                            if (row.uuid) {
+                                var evalUrl = window.location.origin + AppWebRoot + 'avaliacao/' + row.uuid;
+                                html += '<button class="btn btn-outline-success btn-sm btn-copy-eval ml-1" data-url="' + evalUrl + '" title="Copiar Ficha de Avaliação"><i class="fas fa-copy mr-1"></i> Ficha Avaliação</button>';
+                            } else {
+                                html += '<button class="btn btn-outline-secondary btn-sm ml-1" disabled title="UUID não gerado"><i class="fas fa-exclamation-circle mr-1"></i> Ficha Indisponível</button>';
+                            }
+                        } else {
+                            html += '<button class="btn btn-outline-secondary btn-sm ml-1" disabled title="O evento ainda não iniciou"><i class="fas fa-clock mr-1"></i> Não Iniciado</button>';
+                        }
+                        
+                        return html;
                     },
                     "orderable": false
                 }
@@ -67,7 +84,24 @@ include_once('./include/head-table.php');
                 "url": "//cdn.datatables.net/plug-ins/1.13.1/i18n/pt-BR.json"
             }
         });
+        // Evento de clique para copiar o link da avaliação
+        $('#eventos-datatable').on('click', '.btn-copy-eval', function(e) {
+            e.preventDefault();
+            var $btn = $(this);
+            var url = $btn.data('url');
+            
+            navigator.clipboard.writeText(url).then(function() {
+                var originalHtml = $btn.html();
+                $btn.html('<i class="fas fa-check mr-1"></i> Copiado!');
+                $btn.removeClass('btn-outline-success').addClass('btn-success');
+                setTimeout(function() {
+                    $btn.html(originalHtml);
+                    $btn.removeClass('btn-success').addClass('btn-outline-success');
+                }, 2000);
+            }).catch(function(err) {
+                alert('Erro ao copiar link: ' + err);
+            });
+        });
 	});
 </script>
-</body>
-</html>
+<?php include_once('./include/admin_sidebar_footer.php'); ?>

@@ -268,6 +268,9 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 					<li class="breadcrumb-item"><a href="/atendentes">Atividades</a></li>
 					<li class="breadcrumb-item"><a href="/casting">Atendentes</a></li>
 					<li class="breadcrumb-item active" aria-current="page">Editando candidato</li>
+					<?php if ($id > 0): ?>
+						<li class="breadcrumb-item"><a href="/curriculo/<?php echo digitos($id); ?>" class="blue-text font-weight-bold"><i class="fas fa-file-pdf mr-1"></i>Currículo</a></li>
+					<?php endif; ?>
 				  </ol>
 				</nav>
 				</div>

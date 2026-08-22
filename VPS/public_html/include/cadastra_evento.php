@@ -1,24 +1,33 @@
 <?php
 session_start(); // Inicia a sessão
 
-include 'conexao.php';
+$base_path = dirname(__DIR__) . '/';
+include_once($base_path . 'database/conexao.php');
+
+if (!$conexao) {
+    echo json_encode(['success' => false, 'message' => 'Erro de conexão com o banco de dados.']);
+    exit;
+}
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $nome = $_POST['nome'];
-    $data = $_POST['data'];
-    $local = $_POST['local'];
-    $site = $_POST['site'];
-//	echo $_SESSION['id']."<br>";
-	$u_id = $_SESSION['id'] ?? 1;
+    $nome = $_POST['nome'] ?? '';
+    $data = !empty($_POST['data']) ? $_POST['data'] : null;
+    $local = $_POST['local'] ?? '';
+    $site = $_POST['site'] ?? '';
 
-    $sql = "INSERT INTO leads_eventos (nome, data, local, site, u_id) VALUES (?, ?, ?, ?, ?)";
+    if (empty($nome)) {
+        echo json_encode(['success' => false, 'message' => 'O nome do evento é obrigatório.']);
+        exit;
+    }
+
+    $sql = "INSERT INTO eventos (Evento, Inicio, Local, SITE, `Data Confirmada`) VALUES (?, ?, ?, ?, 1)";
     $stmt = $conexao->prepare($sql);
-    $stmt->bind_param("ssssi", $nome, $data, $local, $site, $u_id);
+    $stmt->bind_param("ssss", $nome, $data, $local, $site);
 
     if ($stmt->execute()) {
         echo json_encode(['success' => true, 'message' => 'Evento cadastrado com sucesso!']);
     } else {
-        echo json_encode(['success' => false, 'message' => 'Erro ao cadastrar evento.']);
+        echo json_encode(['success' => false, 'message' => 'Erro ao cadastrar evento: ' . $stmt->error]);
     }
     $stmt->close();
 }

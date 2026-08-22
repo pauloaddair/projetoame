@@ -1,8 +1,8 @@
 <?php
 header('Content-Type: application/json');
-include_once('conexao.php');
+include_once(dirname(__DIR__) . '/database/conexao.php');
 
-$query = "SELECT id, nome, inicio, final, status_evento FROM eventos_marcados ORDER BY inicio DESC";
+$query = "SELECT id, nome, inicio, final, status_evento, uuid FROM eventos_marcados ORDER BY inicio DESC";
 $result = mysqli_query($conexao, $query);
 
 $eventos = [];

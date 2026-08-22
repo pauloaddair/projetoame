@@ -63,9 +63,12 @@ if ($parametros[0] === 'escala') {
     }
 }
 
-if (in_array($parametros[0], $paginas_sem_template)) {
-    if (file_exists($base_path . 'pages/' . $parametros[0] . '.php')) {
-        include_once($base_path . 'pages/' . $parametros[0] . '.php');
+$rota_limpa = preg_replace('/[^a-zA-Z0-9_\-]/', '', $parametros[0]);
+
+if (in_array($rota_limpa, $paginas_sem_template) || ($rota_limpa === 'curriculo' && isset($_GET['gerar_pdf']))) {
+    $target = $base_path . 'pages/' . $rota_limpa . '.php';
+    if (file_exists($target)) {
+        include_once($target);
     } else {
         include_once($base_path . 'pages/inexiste.php');
     }
@@ -75,91 +78,61 @@ if (in_array($parametros[0], $paginas_sem_template)) {
 
     $page_to_load = '';
 
-    if ($parametros[0] === 'admin') {
-        // Roteamento de Administração (/admin/escala, /admin/novoevento, etc)
-        $sub_rota = isset($parametros[1]) ? $parametros[1] : 'index';
-        switch ($sub_rota) {
-            case 'index':
-                $page_to_load = $base_path . 'pages/admin.php';
-                break;
-            case 'novoevento':
-                $page_to_load = $base_path . 'pages/admin_novo_evento.php';
-                break;
-            case 'escala':
-                $page_to_load = $base_path . 'pages/adminescala.php';
-                break;
-            case 'atividades':
-                $page_to_load = $base_path . 'pages/admin_atividades.php';
-                break;
-            case 'novofolheto':
-                $page_to_load = $base_path . 'pages/admin_novo_folheto.php';
-                break;
-            case 'prospeccao':
-                $page_to_load = $base_path . 'pages/prospeccao.php';
-                break;
-            case 'atendentes':
-                $page_to_load = $base_path . 'pages/atendentes.php';
-                break;
-            case 'candidatos':
-                $page_to_load = $base_path . 'pages/candidatos.php';
-                break;
-            default:
-                $page_to_load = $base_path . 'pages/inexiste.php';
-                break;
+    if ($rota_limpa === 'admin') {
+        // Roteamento dinâmico de Administração (/admin, /admin/atividades, /admin/escala, etc.)
+        $sub_rota = isset($parametros[1]) ? preg_replace('/[^a-zA-Z0-9_\-]/', '', $parametros[1]) : '';
+        
+        if ($sub_rota === '' || $sub_rota === 'index') {
+            $page_to_load = $base_path . 'pages/adminindex.php';
+        } else {
+            $candidatos_admin = [
+                $base_path . 'pages/admin' . $sub_rota . '.php',
+                $base_path . 'pages/admin_' . $sub_rota . '.php',
+                $base_path . 'pages/' . $sub_rota . '.php',
+                $base_path . 'pages/admin' . str_replace('-', '_', $sub_rota) . '.php',
+                $base_path . 'pages/admin_' . str_replace('-', '_', $sub_rota) . '.php'
+            ];
+            
+            // Atalhos convenientes
+            if ($sub_rota === 'novoevento' || $sub_rota === 'novaatividade') {
+                array_unshift($candidatos_admin, $base_path . 'pages/adminnovaatividade.php');
+            } elseif ($sub_rota === 'candidatos') {
+                array_unshift($candidatos_admin, $base_path . 'pages/casting.php');
+            } elseif ($sub_rota === 'atividade') {
+                array_unshift($candidatos_admin, $base_path . 'pages/adminatividade.php');
+            }
+            
+            foreach ($candidatos_admin as $arq) {
+                if (file_exists($arq)) {
+                    $page_to_load = $arq;
+                    break;
+                }
+            }
         }
     } else {
-        // Roteamento de Páginas Públicas & Portal do Responsável
-        switch ($parametros[0]) {
-            case 'painel':
-            case 'meuperfil':
-                $page_to_load = $base_path . 'pages/meuperfil.php';
+        // Roteamento dinâmico de Páginas Públicas & Portal do Responsável
+        $rota_alvo = $rota_limpa;
+        if ($rota_alvo === 'painel') {
+            $rota_alvo = 'meuperfil';
+        } elseif ($rota_alvo === 'novoevento') {
+            $rota_alvo = 'adminnovaatividade';
+        }
+        
+        $candidatos_publico = [
+            $base_path . 'pages/' . $rota_alvo . '.php',
+            $base_path . 'pages/' . str_replace('-', '_', $rota_alvo) . '.php',
+            $base_path . 'pages/' . str_replace('-', '', $rota_alvo) . '.php'
+        ];
+        
+        foreach ($candidatos_publico as $arq) {
+            if (file_exists($arq)) {
+                $page_to_load = $arq;
                 break;
-            case 'atividades':
-                $page_to_load = $base_path . 'pages/atividades.php';
-                break;
-            case 'atendentes':
-                $page_to_load = $base_path . 'pages/atendentes.php';
-                break;
-            case 'disponibilidade':
-                $page_to_load = $base_path . 'pages/disponibilidade.php';
-                break;
-            case 'escala':
-                $page_to_load = $base_path . 'pages/escala.php';
-                break;
-            case 'nossaatuacao':
-                $page_to_load = $base_path . 'pages/nossaatuacao.php';
-                break;
-            case 'transparencia':
-                $page_to_load = $base_path . 'pages/transparencia.php';
-                break;
-            case 'inscrever':
-                $page_to_load = $base_path . 'pages/inscrever.php';
-                break;
-            case 'curriculo':
-                $page_to_load = $base_path . 'pages/curriculo.php';
-                break;
-            case 'login':
-                $page_to_load = $base_path . 'pages/login.php';
-                break;
-            case 'logout':
-                $page_to_load = $base_path . 'pages/logout.php';
-                break;
-            case 'trocafoto':
-                $page_to_load = $base_path . 'pages/trocafoto.php';
-                break;
-            case 'trocafoto-usuario':
-                $page_to_load = $base_path . 'pages/trocafoto-usuario.php';
-                break;
-            case 'atestados':
-                $page_to_load = $base_path . 'pages/atestados.php';
-                break;
-            default:
-                $page_to_load = $base_path . 'pages/inexiste.php';
-                break;
+            }
         }
     }
 
-    if (file_exists($page_to_load)) {
+    if (!empty($page_to_load) && file_exists($page_to_load)) {
         include_once($page_to_load);
     } else {
         include_once($base_path . 'pages/inexiste.php');

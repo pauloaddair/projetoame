@@ -63,7 +63,7 @@
   <!-- DataTable JavaScript -->
 	<script type="text/javascript" src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 	<script type="text/javascript" src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
-	<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
   <!-- Initializations -->
   <script type="text/javascript">
 

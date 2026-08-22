@@ -4,14 +4,16 @@
 // include_once('./include/conexao.php');
 
 // Função para gerar um UUID v4 (padrão para IDs aleatórias)
-function gen_uuid() {
-    return sprintf( '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
-        mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff ),
-        mt_rand( 0, 0xffff ),
-        mt_rand( 0, 0x0fff ) | 0x4000,
-        mt_rand( 0, 0x3fff ) | 0x8000,
-        mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff )
-    );
+if (!function_exists('gen_uuid')) {
+    function gen_uuid() {
+        return sprintf( '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+            mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff ),
+            mt_rand( 0, 0xffff ),
+            mt_rand( 0, 0x0fff ) | 0x4000,
+            mt_rand( 0, 0x3fff ) | 0x8000,
+            mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff )
+        );
+    }
 }
 
 $query = "SELECT id FROM eventos_marcados WHERE uuid IS NULL";

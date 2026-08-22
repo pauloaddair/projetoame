@@ -20,11 +20,12 @@ if (!empty($evento_uuid)) {
     if ($evento && $evento['status_evento'] !== 'cancelado') {
         // 2. Busca os atendentes escalados para este evento
         $evento_id = $evento['id'];
-        $query_atendentes = "SELECT c.candidato_id, c.nome, i.url 
+        $query_atendentes = "SELECT DISTINCT c.candidato_id, c.nome, i.url 
                              FROM candidatos c
                              JOIN disponibilidade d ON c.candidato_id = d.candidato_id
+                             JOIN horarios h ON d.atividade_id = h.horario_id
                              LEFT JOIN imagens i ON c.imagem_id = i.imagem_id
-                             WHERE d.evento_id = {$evento_id} AND d.escalado = 1
+                             WHERE h.evento_id = {$evento_id} AND d.escalado = 1
                              ORDER BY c.nome ASC";
         $result_atendentes = mysqli_query($conexao, $query_atendentes);
         while ($row = mysqli_fetch_assoc($result_atendentes)) {

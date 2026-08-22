@@ -42,48 +42,41 @@
   </footer>
   <!--/.Footer-->
   <!-- SCRIPTS -->
-
   <!-- JQuery -->
-  <script src="https://kit.fontawesome.com/d067a28273.js" crossorigin="18592B3C-6385-48D7-8605-5E63E600000B"></script>
-  <!-- JQuery -->
-  <script type="text/javascript" src="/js/jquery-3.4.1.min.js"></script>
-<!--  <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>-->
-<!--<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>-->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-  <!-- Bootstrap tooltips -->
-  <script type="text/javascript" src="<?php echo $GLOBALS['app_web_root']?>js/popper.min.js"></script>
+  <!-- Bootstrap tooltips (Popper) -->
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 
-<!-- Bootstrap core JavaScript -->
-  <script type="text/javascript" src="<?php echo $GLOBALS['app_web_root']?>js/bootstrap.min.js"></script>
-
+  <!-- Bootstrap core JavaScript -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"></script>
 
   <!-- MDB core JavaScript -->
-  <script type="text/javascript" src="<?php echo $GLOBALS['app_web_root']?>js/mdb.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.20.0/js/mdb.min.js"></script>
 
   <!-- DataTable JavaScript -->
-	<script type="text/javascript" src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-	<script type="text/javascript" src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
-	<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+
   <!-- Initializations -->
   <script type="text/javascript">
-
-    // Animations initialization
-    new WOW().init();
+    if (typeof WOW !== 'undefined') {
+      new WOW().init();
+    }
   </script>
 
-  <!-- Time Counter -->
   <script type="text/javascript">
-
-/*
-*/
-	$(document).ready(function () {
-//		$('#example').DataTable();
-		var table = new DataTable('#table', {
-			language: {
-				url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/pt-BR.json',
-			},
-			colReorder: true,
-		});		
-	});
-	</script>
+    $(document).ready(function () {
+      if ($('#table').length && !$.fn.DataTable.isDataTable('#table')) {
+        $('#table').DataTable({
+          language: {
+            url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/pt-BR.json',
+          },
+          colReorder: true,
+          responsive: true
+        });
+      }
+    });
+  </script>
 

@@ -195,8 +195,9 @@ if (!$result_list_neg) {
 <body>
     <?php 
     include_once('./include/nav.php');
+    include_once('./include/admin_sidebar.php');
     ?>
-    <div class="container mt-5">
+    <div class="container mt-4">
         <?php 
         if (isset($_SESSION['id']) && $_SESSION['id'] !== "") {
         ?>
@@ -489,7 +490,6 @@ if (!$result_list_neg) {
             </div>
         </div>
     </div>
-    </div>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             fetch('<?php echo $app_web_root; ?>include/get_saldo_mensal.php')
@@ -625,6 +625,7 @@ include_once('./include/footer-database-noorder.php');
         }
 	});
 </script>
+    <?php include_once('./include/admin_sidebar_footer.php'); ?>
 <?php 
 include_once('./include/scripts.php');
 } else {

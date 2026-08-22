@@ -42,12 +42,12 @@ if (mysqli_num_rows($resp)){
 	$qtd_expositores = $row['qtd'];
 }
 ?>
-<body>
-<main class="flex-shrink-0">
 <?php
-	include_once('./include/nav.php');
+include_once('./include/nav.php');
+include_once('./include/admin_sidebar.php');
 ?>
-	<div class="container mt-5">
+<main class="flex-shrink-0">
+	<div class="container mt-4">
 		<header class="mt-5">
 			<nav aria-label="breadcrumb">
 			<ol class="breadcrumb">
@@ -156,17 +156,16 @@ if (mysqli_num_rows($resp)){
 	<div class="row justify-content-center text-center">
 	<div class="col">
 		<h3 class="text-center">Empresas</h3>
-		<table class="table" id="table">
+		<table class="table table-striped table-bordered w-100" id="table">
 		<thead>
-			<th>
-			Empresa</th>
-			<th>
-			Responsável</th>
-			<th>
-			Telefone</th>
-			<th>
-			E-mail</th>
+			<tr>
+				<th>Empresa</th>
+				<th>Responsável</th>
+				<th>Telefone</th>
+				<th>E-mail</th>
+			</tr>
 		</thead>
+		<tbody>
 			<?php
 		if (mysqli_num_rows($atividades)>0){
 				$i = 1;
@@ -188,7 +187,7 @@ if (mysqli_num_rows($resp)){
 				?>
 					</a>
 				</td>
-				</a><td><a href="<?php echo '/admin/contato/'.digitos($atividade['empresa_id'])?>/empresas">
+				<td><a href="<?php echo '/admin/contato/'.digitos($atividade['empresa_id'])?>/empresas">
 				<?php echo $atividade['nome']?>
 				</a></td>
 				<td><a href="<?php echo '/admin/contato/'.digitos($atividade['empresa_id'])?>/empresas">
@@ -203,17 +202,18 @@ if (mysqli_num_rows($resp)){
 		} else {
 			?>
 					
-			<tr><td colspan=3><?php echo $mensagem?></td></tr>
+			<tr><td colspan="4"><?php echo $mensagem?></td></tr>
 			<?php
 		}	
 			?>
+		</tbody>
 		</table>
 	</div>
 	</div>
 	</div>
 </main>
-</body>
 <?php
 include_once("include/footer-database.php");
+include_once("include/admin_sidebar_footer.php");
 include_once("include/scripts.php");
 ?>
