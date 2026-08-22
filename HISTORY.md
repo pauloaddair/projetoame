@@ -17,7 +17,8 @@ relacionados:
 
 # Histórico de Trabalho - Projeto AME
 
-- **22/08/2026 - Revisão de Rotas, Datas e Módulo de Casting/Currículo**
+- **22/08/2026 - Revisão de Rotas, Datas e Módulo de Casting/Currículo/Atividades**
+    - **Correção da Gestão de Atividades (`/admin/atividades`):** Resolvido erro 403 no endpoint `/include/lista_todos_eventos.php` com ajuste de permissões e padronização do `include/footer-database-noorder.php` para CDNs oficiais do DataTables/Bootstrap/jQuery.
     - **Ações Rápidas de Contato no Casting:** Implementados links diretos `tel:+55...` no ícone/número de telefone (para discagem imediata), `mailto:...` no ícone/e-mail (para abertura do cliente de mensagens) e `https://wa.me/...` no ícone do WhatsApp.
     - **Filtros Dinâmicos no Casting (`/casting`):** Adicionada barra de filtros rápidos por status: "Apenas Ativos" (padrão inicial), "Mostrar Todos" e "Inativos" com contadores automáticos do banco.
     - **Estilização Visual de Inativos:** Implementado badge vermelho discreto (`Inativo`), linha esmaecida e foto de perfil com 50% de opacidade e grayscale para participantes inativos.

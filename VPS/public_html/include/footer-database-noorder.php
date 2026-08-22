@@ -1,38 +1,5 @@
 <!--Footer-->
  	<footer class="page-footer text-center font-small primary-color-dark darken-2 mt-4 wow fadeIn">
-
-    <!--Call to action-->
-<!--
-    <div class="pt-4">
-      <a class="btn btn-outline-white" href="/sobre" target="_blank" role="button">SAIBA+
-        <i class="fas fa-graduation-cap ml-2"></i>
-      </a>
-    </div>
--->
-	
-	<!--/.Call to action-->
-
-<!--    <hr class="my-4">-->
-
-    <!-- Social icons -->
-<!--
-    <div class="pb-4">
-      <a href="https://www.facebook.com/projetoatendentesmuitoespeciais" target="_blank">
-        <i class="fab fa-facebook-f mr-3"></i>
-      </a>
-
-      <a href="https://twitter.com/projetoameorg" target="_blank">
-        <i class="fab fa-twitter mr-3"></i>
-      </a>
-
-      <a href="https://www.instagram.com/atendentesmuitoespeciais/" target="_blank">
-        <i class="fab fa-instagram mr-3"></i>
-      </a>
-
-    </div>
--->
-    <!-- Social icons -->
-
     <!--Copyright-->
     <div class="footer-copyright py-3">
 		site desenvolvido por <a href="https://novaeratec.com.br" target="_blank">Nova Era Tecnologia</a> | © 2016-2025 Copyright:
@@ -41,35 +8,29 @@
     <!--/.Copyright-->
   </footer>
   <!--/.Footer-->
+
   <!-- SCRIPTS -->
-
   <!-- JQuery -->
-  <script src="https://kit.fontawesome.com/d067a28273.js" crossorigin="18592B3C-6385-48D7-8605-5E63E600000B"></script>
-  <!-- JQuery -->
-  <script type="text/javascript" src="/js/jquery-3.4.1.min.js"></script>
-<!--  <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>-->
-<!--<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>-->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-  <!-- Bootstrap tooltips -->
-  <script type="text/javascript" src="/js/popper.min.js"></script>
+  <!-- Bootstrap tooltips (Popper) -->
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 
-<!-- Bootstrap core JavaScript -->
-  <script type="text/javascript" src="/js/bootstrap.min.js"></script>
-
+  <!-- Bootstrap core JavaScript -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"></script>
 
   <!-- MDB core JavaScript -->
-  <script type="text/javascript" src="/js/mdb.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.20.0/js/mdb.min.js"></script>
 
   <!-- DataTable JavaScript -->
-	<script type="text/javascript" src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-	<script type="text/javascript" src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
-	<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+
   <!-- Initializations -->
   <script type="text/javascript">
-
-    // Animations initialization
-    new WOW().init();
+    if (typeof WOW !== 'undefined') {
+      new WOW().init();
+    }
   </script>
-
-  <!-- Time Counter -->
 
