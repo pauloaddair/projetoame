@@ -45,6 +45,23 @@ if (isset($data['action']) && $data['action'] === 'get_escala_details') {
         $horario_ids_in_event[] = $horario['horario_id'];
     }
 
+    // Fetch presenca and avaliacao status for this event
+    $presencas_map = [];
+    $q_pres = mysqli_query($conexao, "SELECT candidato_id, presente FROM presenca WHERE evento_id = {$evento_id}");
+    if ($q_pres) {
+        while ($p = mysqli_fetch_assoc($q_pres)) {
+            $presencas_map[$p['candidato_id']] = intval($p['presente']);
+        }
+    }
+
+    $avaliados_map = [];
+    $q_aval = mysqli_query($conexao, "SELECT DISTINCT candidato_id FROM avaliacoes WHERE evento_id = {$evento_id}");
+    if ($q_aval) {
+        while ($av = mysqli_fetch_assoc($q_aval)) {
+            $avaliados_map[$av['candidato_id']] = 1;
+        }
+    }
+
     // 2. Fetch all candidates (active and training) with rodizio >= 1
     $query_candidatos = "SELECT c.candidato_id, c.nome, c.rodizio, i.url, c.ativo
                          FROM candidatos c
@@ -59,12 +76,15 @@ if (isset($data['action']) && $data['action'] === 'get_escala_details') {
     $candidatos_data = [];
     $candidatos_map = []; // Map for quick lookup by candidato_id
     while ($candidato = mysqli_fetch_assoc($result_candidatos)) {
-        $data_string = "evento_id={$evento_id}&candidato_id={$candidato['candidato_id']}";
+        $c_id = $candidato['candidato_id'];
+        $data_string = "evento_id={$evento_id}&candidato_id={$c_id}";
         $sig = hash_hmac('sha256', $data_string, 'ProjetoAME_ChaveSecreta_#2025@');
-        $candidato['link_avaliacao'] = "avaliar_atendente?evento_id={$evento_id}&candidato_id={$candidato['candidato_id']}&sig={$sig}";
+        $candidato['link_avaliacao'] = "avaliar_atendente?evento_id={$evento_id}&candidato_id={$c_id}&sig={$sig}";
+        $candidato['presenca_confirmada'] = $presencas_map[$c_id] ?? 0;
+        $candidato['ja_avaliado'] = $avaliados_map[$c_id] ?? 0;
         $candidato['horarios_status'] = []; // Initialize status for each horario
         $candidatos_data[] = $candidato;
-        $candidatos_map[$candidato['candidato_id']] = &$candidatos_data[count($candidatos_data) - 1]; // Reference to the last added candidate
+        $candidatos_map[$c_id] = &$candidatos_data[count($candidatos_data) - 1]; // Reference to the last added candidate
     }
 
     // 3. Fetch all disponibilidade records for the event's horarios
@@ -273,6 +293,11 @@ if (isset($data['action']) && $data['action'] === 'confirmar_presencas') {
         $candidato_id = intval($cand_id);
         $compareceu = intval($compareceu);
 
+        // Grava registro na tabela oficial de presencas
+        mysqli_query($conexao, "INSERT INTO presenca (evento_id, candidato_id, presente, data_confirmacao, confirmadopor) 
+                                VALUES ({$evento_id}, {$candidato_id}, {$compareceu}, NOW(), 'coordenacao') 
+                                ON DUPLICATE KEY UPDATE presente = {$compareceu}, data_confirmacao = NOW()");
+
         $q_cand = mysqli_query($conexao, "SELECT rodizio, nome FROM candidatos WHERE candidato_id = {$candidato_id}");
         if ($q_cand && $cand_data = mysqli_fetch_assoc($q_cand)) {
             $rodizio_atual = intval($cand_data['rodizio']);
@@ -301,7 +326,29 @@ if (isset($data['action']) && $data['action'] === 'confirmar_presencas') {
 
     echo json_encode([
         'success' => true, 
-        'message' => "Confirmação de presenças concluída com sucesso! {$processados_sucesso} atendente(s) movido(s) para o final do rodízio e {$preservados_ausencia} atendente(s) com rodízio preservado."
+        'message' => "Confirmação de presenças concluída com sucesso! {$processados_sucesso} atendente(s) presente(s) com fichas de avaliação liberadas e rodízio atualizado."
+    ]);
+    exit;
+}
+
+if (isset($data['action']) && $data['action'] === 'toggle_presenca_individual') {
+    $evento_id = intval($data['evento_id']);
+    $candidato_id = intval($data['candidato_id']);
+    $presente = intval($data['presente']);
+
+    mysqli_query($conexao, "INSERT INTO presenca (evento_id, candidato_id, presente, data_confirmacao, confirmadopor) 
+                            VALUES ({$evento_id}, {$candidato_id}, {$presente}, NOW(), 'coordenacao_checkin') 
+                            ON DUPLICATE KEY UPDATE presente = {$presente}, data_confirmacao = NOW()");
+
+    $data_string = "evento_id={$evento_id}&candidato_id={$candidato_id}";
+    $sig = hash_hmac('sha256', $data_string, 'ProjetoAME_ChaveSecreta_#2025@');
+    $link_avaliacao = "avaliar_atendente?evento_id={$evento_id}&candidato_id={$candidato_id}&sig={$sig}";
+
+    echo json_encode([
+        'success' => true,
+        'presente' => $presente,
+        'link_avaliacao' => $link_avaliacao,
+        'message' => $presente ? 'Presença confirmada! Ficha de avaliação do atendente liberada.' : 'Presença desmarcada.'
     ]);
     exit;
 }

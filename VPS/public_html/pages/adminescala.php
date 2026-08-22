@@ -316,24 +316,18 @@ document.addEventListener('DOMContentLoaded', function() {
                     const rowClass = candidato.ativo == 0 ? 'table-success' : '';
                     tableHtml += `<tr class="${rowClass}">`;
                     tableHtml += `<td>${candidato.rodizio}</td>`;
-                    tableHtml += `<td><img src="${AppWebRoot}${candidato.url}" class="img-thumbnail" width="40"></td>`;
-                    tableHtml += `<td class="font-weight-bold">${candidato.nome}</td>`;
+                    tableHtml += `<td><img src="${AppWebRoot}${candidato.url}" class="img-thumbnail rounded-circle" width="40" height="40" style="object-fit:cover;"></td>`;
+                    tableHtml += `<td class="font-weight-bold">
+                        ${candidato.nome}
+                        ${candidato.presenca_confirmada == 1 ? '<span class="badge badge-success ml-1"><i class="fas fa-check mr-1"></i>Presente</span>' : ''}
+                        ${candidato.ja_avaliado == 1 ? '<span class="badge badge-warning text-dark ml-1"><i class="fas fa-star mr-1"></i>Avaliado</span>' : ''}
+                    </td>`;
                     tableHtml += `<td>${candidato.ativo == 1 ? 'Atendente' : 'Treinamento'}</td>`;
     
                     data.horarios.forEach(horario => {
                         const status = candidato.horarios_status[horario.horario_id] || { is_disponivel: 0, is_escalado: 0 };
                         const isAvailable = status.is_disponivel == 1;
-                        let isChecked = '';
-    
-                        if (isScheduleSaved) {
-                            isChecked = status.is_escalado == 1 ? 'checked' : '';
-                        } else {
-                            const currentCount = preSelectedCounts.get(horario.horario_id) || 0;
-                            if (isAvailable && currentCount < horario.vagas) {
-                                isChecked = 'checked';
-                                preSelectedCounts.set(horario.horario_id, currentCount + 1);
-                            }
-                        }
+                        let isChecked = status.is_escalado == 1 ? 'checked' : '';
     
                         tableHtml += `
                             <td>
@@ -359,10 +353,10 @@ document.addEventListener('DOMContentLoaded', function() {
                         </tbody>
                     </table>
                 `;
-                escalaContainer.innerHTML += tableHtml;
+                escalaContainer.innerHTML = tableHtml;
     
                 const btnContainer = document.createElement('div');
-                btnContainer.className = 'mt-3 mb-4';
+                btnContainer.className = 'mt-3 mb-4 d-flex flex-wrap gap-2';
                 
                 const saveButton = document.createElement('button');
                 saveButton.className = 'btn btn-primary font-weight-bold';
@@ -385,7 +379,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const presencasButton = document.createElement('button');
                 presencasButton.className = 'btn btn-success font-weight-bold ml-2';
                 presencasButton.id = 'presencas-btn';
-                presencasButton.innerHTML = '<i class="fas fa-user-check mr-1"></i> Confirmar Presença (Pós-Evento)';
+                presencasButton.innerHTML = '<i class="fas fa-user-check mr-1"></i> Confirmar Presença (No Dia / Pós-Evento)';
                 btnContainer.appendChild(presencasButton);
 
                 const contratanteButton = document.createElement('button');
@@ -428,30 +422,24 @@ document.addEventListener('DOMContentLoaded', function() {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
-                        action: 'save_escala', 
+                        action: 'salvar_escala',
                         evento_id: eventoId, 
                         escalados: escalados
                     })
                 })
                 .then(response => response.json())
                 .then(data => {
-                    const modalTitle = document.getElementById('messageModalLabel');
-                    const modalBody = document.getElementById('messageModalBody');
-                    if (modalTitle && modalBody) {
-                        if (data.success) {
-                            modalTitle.innerText = 'Sucesso!';
-                            modalTitle.className = 'modal-title text-success font-weight-bold';
-                        } else {
-                            modalTitle.innerText = 'Erro!';
-                            modalTitle.className = 'modal-title text-danger font-weight-bold';
-                        }
-                        modalBody.innerHTML = data.message || 'Ocorreu uma falha na operação.';
-                        if (window.jQuery && typeof $('#messageModal').modal === 'function') {
-                            $('#messageModal').modal('show');
-                        } else {
-                            alert(data.message || 'Escala salva!');
-                        }
+                    const mensagemDiv = document.getElementById('mensagem-escala');
+                    if (data.success) {
+                        mensagemDiv.innerHTML = '<div class="alert alert-success">Escala salva com sucesso!</div>';
+                    } else {
+                        mensagemDiv.innerHTML = '<div class="alert alert-danger">Erro ao salvar a escala: ' + data.message + '</div>';
                     }
+                })
+                .catch(error => {
+                    console.error('Erro na requisição AJAX:', error);
+                    const mensagemDiv = document.getElementById('mensagem-escala');
+                    mensagemDiv.innerHTML = '<div class="alert alert-danger">Erro ao salvar a escala. Verifique o console para mais detalhes.</div>';
                 });
             });
         }
@@ -460,155 +448,126 @@ document.addEventListener('DOMContentLoaded', function() {
     function attachSuggestListener() {
         const suggestButton = document.getElementById('sugerir-escala-btn');
         if (suggestButton) {
-            suggestButton.addEventListener('click', function(event) {
-                event.preventDefault();
+            suggestButton.addEventListener('click', function(e) {
+                e.preventDefault();
                 fetch(AppWebRoot + 'include/api_escala.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        action: 'suggest_escala', 
-                        evento_id: eventoId
-                    })
+                    body: JSON.stringify({ action: 'get_escala_details', evento_id: eventoId })
                 })
-                .then(response => response.json())
+                .then(r => r.json())
                 .then(data => {
-                    if (data.success) {
-                        const allSwitches = document.querySelectorAll('#escala-container input[type="checkbox"]');
-                        allSwitches.forEach(cb => cb.checked = false);
-
-                        for (const horarioId in data.sugestao) {
-                            data.sugestao[horarioId].forEach(candidatoId => {
-                                const switchId = `switch-${candidatoId}-${horarioId}`;
-                                const cb = document.getElementById(switchId);
-                                if (cb) cb.checked = true;
-                            });
-                        }
-                    } else {
-                        alert('Erro ao obter sugestão: ' + data.message);
-                    }
+                    if (!data.success) return;
+                    document.querySelectorAll('#escala-container input[type="checkbox"]').forEach(cb => cb.checked = false);
+                    const counts = new Map();
+                    data.candidatos.forEach(c => {
+                        data.horarios.forEach(h => {
+                            const status = c.horarios_status[h.horario_id];
+                            if (status && status.is_disponivel == 1) {
+                                const current = counts.get(h.horario_id) || 0;
+                                if (current < h.vagas) {
+                                    const cb = document.getElementById(`switch-${c.candidato_id}-${h.horario_id}`);
+                                    if (cb) {
+                                        cb.checked = true;
+                                        counts.set(h.horario_id, current + 1);
+                                    }
+                                }
+                            }
+                        });
+                    });
                 });
             });
         }
     }
 
     function attachCredenciamentoListener() {
-        const credBtn = document.getElementById('credenciamento-btn');
-        if (!credBtn) return;
+        const btn = document.getElementById('credenciamento-btn');
+        if (!btn) return;
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const modalEl = document.getElementById('credenciamentoModal');
+            const tbody = document.getElementById('credenciamento-tbody');
+            const printBtn = document.getElementById('print-credenciamento-btn');
+            const copyBtn = document.getElementById('copy-credenciamento-btn');
 
-        credBtn.addEventListener('click', function(event) {
-            event.preventDefault();
-            carregarExibirCredenciamento();
-        });
-    }
-
-    function carregarExibirCredenciamento() {
-        const modalEl = document.getElementById('credenciamentoModal');
-        const container = document.getElementById('credenciamento-container');
-
-        // Exibe o modal via jQuery ou via manipulador CSS nativo
-        if (window.jQuery && typeof $('#credenciamentoModal').modal === 'function') {
-            $('#credenciamentoModal').modal('show');
-        } else if (modalEl) {
-            modalEl.classList.add('show');
-            modalEl.style.display = 'block';
-            modalEl.style.backgroundColor = 'rgba(0,0,0,0.5)';
-        }
-
-        if (container) {
-            container.innerHTML = `
-                <div class="text-center py-4">
-                    <div class="spinner-border text-info mb-2" role="status" style="width: 3rem; height: 3rem;"></div>
-                    <p class="text-muted font-weight-bold mt-2">Buscando dados de credenciamento...</p>
-                </div>
-            `;
-        }
-
-        fetch(AppWebRoot + 'include/api_escala.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action: 'get_credenciamento', evento_id: eventoId })
-        })
-        .then(response => {
-            if (!response.ok) throw new Error('HTTP ' + response.status + ' ' + response.statusText);
-            return response.json();
-        })
-        .then(data => {
-            if (!data.success) {
-                if (container) container.innerHTML = `<div class="alert alert-danger"><i class="fas fa-exclamation-circle mr-2"></i>Erro: ${data.message || 'Falha ao obter dados.'}</div>`;
-                return;
-            }
-
-            const titleEl = document.getElementById('cred-evento-nome');
-            if (titleEl) titleEl.innerText = data.evento_nome;
-
-            const badgeEl = document.getElementById('cred-total-badge');
-            if (badgeEl) badgeEl.innerText = `${data.total_geral} Credenciados (${data.total_coordenadores} Coord. + ${data.total_escalados} Atendentes)`;
-
-            let html = `
-                <table class="table table-bordered table-striped align-middle mb-0">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th style="width: 50px;" class="text-center">#</th>
-                            <th>Função / Papel</th>
-                            <th>Nome Completo</th>
-                            <th>Data Nasc.</th>
-                            <th>RG</th>
-                            <th>CPF</th>
-                            <th class="text-center">Camiseta</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-            `;
-
-            let textFormat = `📋 LISTA DE CREDENCIAMENTO — ${data.evento_nome.toUpperCase()}\n`;
-            textFormat += `Total: ${data.total_geral} pessoas (${data.total_coordenadores} Coordenador(es), ${data.total_escalados} Atendente(s))\n\n`;
+            if (tbody) tbody.innerHTML = '<tr><td colspan="7" class="text-center py-4"><i class="fas fa-spinner fa-spin mr-2"></i>Carregando dados da equipe...</td></tr>';
             
-            let tsvFormat = "Nome\tPapel\tData Nascimento\tRG\tCPF\tTamanho Camiseta\n";
-
-            data.credenciados.forEach((c, idx) => {
-                const isCoord = c.papel === 'Coordenador(a)';
-                const papelBadge = isCoord 
-                    ? '<span class="badge badge-warning text-dark"><i class="fas fa-user-shield mr-1"></i>Coordenador(a)</span>' 
-                    : '<span class="badge badge-primary"><i class="fas fa-user-check mr-1"></i>Atendente</span>';
-                
-                const rowClass = isCoord ? 'table-warning' : '';
-
-                const nasc = c.Nascimento_fmt || '—';
-                const rg = c.RG || '—';
-                const cpf = c.CPF || '—';
-                const camisa = c.camisa || '—';
-
-                html += `
-                    <tr class="${rowClass}">
-                        <td class="font-weight-bold text-center">${idx + 1}</td>
-                        <td>${papelBadge}</td>
-                        <td class="font-weight-bold">${c.nome}</td>
-                        <td>${nasc}</td>
-                        <td>${rg}</td>
-                        <td>${cpf}</td>
-                        <td class="text-center"><span class="badge badge-secondary">${camisa}</span></td>
-                    </tr>
-                `;
-
-                textFormat += `${idx + 1}. ${c.nome} (${c.papel}) | Nasc: ${nasc} | RG: ${rg} | CPF: ${cpf} | Camiseta: ${camisa}\n`;
-                tsvFormat += `${c.nome}\t${c.papel}\t${nasc}\t${rg}\t${cpf}\t${camisa}\n`;
-            });
-
-            html += `</tbody></table>`;
-
-            if (container) container.innerHTML = html;
-
-            if (modalEl) {
-                modalEl.dataset.textFormat = textFormat;
-                modalEl.dataset.tsvFormat = tsvFormat;
+            if (window.jQuery && typeof $('#credenciamentoModal').modal === 'function') {
+                $('#credenciamentoModal').modal('show');
+            } else if (modalEl) {
+                modalEl.classList.add('show');
+                modalEl.style.display = 'block';
+                modalEl.style.backgroundColor = 'rgba(0,0,0,0.5)';
             }
-        })
-        .catch(err => {
-            if (container) container.innerHTML = `<div class="alert alert-danger"><i class="fas fa-exclamation-triangle mr-2"></i>Erro ao carregar credenciamento: ${err.message}</div>`;
+
+            fetch(AppWebRoot + 'include/api_escala.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'get_credenciamento', evento_id: eventoId })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    const eventTitleEl = document.getElementById('credenciamento-evento-nome');
+                    if (eventTitleEl) eventTitleEl.innerText = data.evento_nome || '';
+
+                    let html = '';
+                    let seq = 1;
+                    
+                    data.equipe.forEach(p => {
+                        const papelBadge = p.papel === 'Coordenador(a)' 
+                            ? '<span class="badge badge-dark">Coordenador(a)</span>' 
+                            : (p.papel === 'Atendente' ? '<span class="badge badge-primary">Atendente</span>' : '<span class="badge badge-info">Treinamento</span>');
+                        
+                        html += `
+                            <tr>
+                                <td class="text-center font-weight-bold">${seq++}</td>
+                                <td class="font-weight-bold text-dark">${p.nome}</td>
+                                <td>${papelBadge}</td>
+                                <td>${p.Nascimento_fmt || '-'}</td>
+                                <td>${p.RG || '-'}</td>
+                                <td>${p.CPF || '-'}</td>
+                                <td class="text-center font-weight-bold">${p.camisa || '-'}</td>
+                            </tr>
+                        `;
+                    });
+                    
+                    if (tbody) tbody.innerHTML = html;
+
+                    if (printBtn) {
+                        printBtn.onclick = function() {
+                            const printContents = document.getElementById('credenciamento-print-area').innerHTML;
+                            const origContents = document.body.innerHTML;
+                            document.body.innerHTML = printContents;
+                            window.print();
+                            document.body.innerHTML = origContents;
+                            location.reload();
+                        };
+                    }
+
+                    if (copyBtn) {
+                        copyBtn.onclick = function() {
+                            let text = `FICHA DE CREDENCIAMENTO - ${data.evento_nome}\n\n`;
+                            text += `Seq\tNome\tPapel\tNascimento\tRG\tCPF\tCamisa\n`;
+                            let s = 1;
+                            data.equipe.forEach(p => {
+                                text += `${s++}\t${p.nome}\t${p.papel}\t${p.Nascimento_fmt || ''}\t${p.RG || ''}\t${p.CPF || ''}\t${p.camisa || ''}\n`;
+                            });
+                            navigator.clipboard.writeText(text).then(() => {
+                                alert('Dados copiados para a área de transferência!');
+                            });
+                        };
+                    }
+                } else {
+                    if (tbody) tbody.innerHTML = `<tr><td colspan="7" class="text-center text-danger">${data.message || 'Erro ao carregar dados.'}</td></tr>`;
+                }
+            })
+            .catch(err => {
+                if (tbody) tbody.innerHTML = `<tr><td colspan="7" class="text-center text-danger">Erro de comunicação: ${err.message}</td></tr>`;
+            });
         });
     }
 
-    // Fechamento manual do modal (suporte a data-dismiss nativo)
     document.querySelectorAll('#credenciamentoModal [data-dismiss="modal"]').forEach(btn => {
         btn.addEventListener('click', function() {
             if (window.jQuery && typeof $('#credenciamentoModal').modal === 'function') {
@@ -622,62 +581,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
-
-    function execCopy(text, successMsg) {
-        if (!text) {
-            alert('Aguarde o carregamento dos dados antes de copiar.');
-            return;
-        }
-        if (navigator.clipboard && window.isSecureContext) {
-            navigator.clipboard.writeText(text).then(() => {
-                alert(successMsg);
-            }).catch(() => {
-                execFallbackCopy(text, successMsg);
-            });
-        } else {
-            execFallbackCopy(text, successMsg);
-        }
-    }
-
-    function execFallbackCopy(text, successMsg) {
-        const textArea = document.createElement("textarea");
-        textArea.value = text;
-        textArea.style.position = "fixed";
-        textArea.style.left = "-999999px";
-        textArea.style.top = "-999999px";
-        document.body.appendChild(textArea);
-        textArea.focus();
-        textArea.select();
-        try {
-            const successful = document.execCommand('copy');
-            if (successful) {
-                alert(successMsg);
-            } else {
-                alert('Não foi possível copiar automaticamente.');
-            }
-        } catch (err) {
-            alert('Erro ao copiar dados: ' + err);
-        }
-        document.body.removeChild(textArea);
-    }
-
-    const copyTextBtn = document.getElementById('copy-text-btn');
-    if (copyTextBtn) {
-        copyTextBtn.addEventListener('click', function() {
-            const modalEl = document.getElementById('credenciamentoModal');
-            const text = modalEl ? modalEl.dataset.textFormat : '';
-            execCopy(text, '📋 Lista em texto copiada com sucesso para a área de transferência!\nPronto para colar no WhatsApp ou E-mail.');
-        });
-    }
-
-    const copyTsvBtn = document.getElementById('copy-tsv-btn');
-    if (copyTsvBtn) {
-        copyTsvBtn.addEventListener('click', function() {
-            const modalEl = document.getElementById('credenciamentoModal');
-            const tsv = modalEl ? modalEl.dataset.tsvFormat : '';
-            execCopy(tsv, '📊 Tabela para Excel copiada com sucesso!\nAbra o Excel/Google Sheets e aperte Ctrl+V.');
-        });
-    }
 
     function attachPresencasListener(dataDetails) {
         const presencasBtn = document.getElementById('presencas-btn');
@@ -713,19 +616,24 @@ document.addEventListener('DOMContentLoaded', function() {
             escaladosMap.forEach(c => {
                 const imgUrl = c.url ? AppWebRoot + c.url : AppWebRoot + 'img/ame2023.jpg';
                 const linkAval = c.link_avaliacao ? AppWebRoot + c.link_avaliacao : '#';
+                const fullEvalUrl = window.location.origin + linkAval;
                 html += `
-                    <div class="list-group-item d-flex align-items-center justify-content-between flex-wrap gap-2">
+                    <div class="list-group-item d-flex align-items-center justify-content-between flex-wrap gap-2 p-3">
                         <div class="d-flex align-items-center">
-                            <img src="${imgUrl}" class="rounded-circle mr-3" width="45" height="45" style="object-fit:cover;" onerror="this.src='${AppWebRoot}img/ame2023.jpg';">
+                            <img src="${imgUrl}" class="rounded-circle mr-3 shadow-sm" width="46" height="46" style="object-fit:cover;" onerror="this.src='${AppWebRoot}img/ame2023.jpg';">
                             <div>
                                 <strong class="d-block text-dark">${c.nome}</strong>
-                                <small class="text-muted">Rodízio atual: #${c.rodizio} | ${c.ativo == 1 ? 'Atendente' : 'Treinamento'}</small>
+                                <small class="text-muted">Rodízio: #${c.rodizio} | ${c.ativo == 1 ? 'Atendente' : 'Treinamento'}</small>
+                                ${c.ja_avaliado == 1 ? '<span class="badge badge-warning text-dark ml-1"><i class="fas fa-star mr-1"></i>Já Avaliado</span>' : ''}
                             </div>
                         </div>
-                        <div class="d-flex align-items-center">
-                            <a href="${linkAval}" target="_blank" class="btn btn-sm btn-outline-info font-weight-bold mr-3" title="Preencher Ficha de Avaliação do Atendente">
-                                <i class="fas fa-edit mr-1"></i> Avaliar Atendente
+                        <div class="d-flex align-items-center flex-wrap gap-2">
+                            <a href="${linkAval}" target="_blank" class="btn btn-sm btn-outline-info font-weight-bold mr-1" title="Preencher Ficha de Avaliação do Atendente">
+                                <i class="fas fa-star mr-1"></i> Avaliar Atendente
                             </a>
+                            <button type="button" class="btn btn-sm btn-outline-secondary btn-copy-cand-eval mr-3" data-url="${fullEvalUrl}" title="Copiar link de avaliação deste atendente">
+                                <i class="fas fa-copy"></i>
+                            </button>
                             <div class="custom-control custom-checkbox custom-control-inline">
                                 <input type="checkbox" class="custom-control-input presenca-checkbox" id="presenca-cand-${c.candidato_id}" value="${c.candidato_id}" checked>
                                 <label class="custom-control-label font-weight-bold text-success" for="presenca-cand-${c.candidato_id}">
@@ -737,6 +645,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 `;
             });
             if (listContainer) listContainer.innerHTML = html;
+
+            document.querySelectorAll('.btn-copy-cand-eval').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const url = this.getAttribute('data-url');
+                    const originalHtml = this.innerHTML;
+                    const el = this;
+                    navigator.clipboard.writeText(url).then(() => {
+                        el.innerHTML = '<i class="fas fa-check text-success"></i>';
+                        setTimeout(() => { el.innerHTML = originalHtml; }, 1500);
+                    });
+                });
+            });
 
             if (window.jQuery && typeof $('#presencasModal').modal === 'function') {
                 $('#presencasModal').modal('show');

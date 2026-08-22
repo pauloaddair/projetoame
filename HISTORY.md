@@ -17,8 +17,12 @@ relacionados:
 
 # Histórico de Trabalho - Projeto AME
 
-- **22/08/2026 - Revisão de Rotas, Datas e Módulo de Casting/Currículo/Atividades**
+- **22/08/2026 - Fluxo de Presenças e Liberação de Ficha de Avaliação de Atendentes:**
+    - **Liberação de Ficha de Avaliação por Presença:** Integrada a tabela `presenca` no ecossistema de eventos. A ficha individual de avaliação e a página pública `/avaliacao/{uuid}` agora disponibilizam e destacam prioritariamente os atendentes que tiveram presença confirmada no evento.
+    - **Ações Rápidas na Escala (`/admin/escala`):** Adicionada a cópia com 1 clique do link de avaliação seguro de cada participante e botão direto para avaliação.
+    - **Mensagem Automatizada para o Contratante:** O modal de envio ao contratante agora formata o texto para o WhatsApp com link dinâmico da página pública de avaliação da equipe presente.
     - **Correção da Gestão de Atividades (`/admin/atividades`):** Resolvido erro 403 no endpoint `/include/lista_todos_eventos.php` com ajuste de permissões e padronização do `include/footer-database-noorder.php` para CDNs oficiais do DataTables/Bootstrap/jQuery.
+    - **Ajuste de Status de Eventos:** Evento 71 (CONARH 2026) marcado como `realizado` e Evento 72 (MD MAKE A DIFFERENCE) como `agendado`.
     - **Ações Rápidas de Contato no Casting:** Implementados links diretos `tel:+55...` no ícone/número de telefone (para discagem imediata), `mailto:...` no ícone/e-mail (para abertura do cliente de mensagens) e `https://wa.me/...` no ícone do WhatsApp.
     - **Filtros Dinâmicos no Casting (`/casting`):** Adicionada barra de filtros rápidos por status: "Apenas Ativos" (padrão inicial), "Mostrar Todos" e "Inativos" com contadores automáticos do banco.
     - **Estilização Visual de Inativos:** Implementado badge vermelho discreto (`Inativo`), linha esmaecida e foto de perfil com 50% de opacidade e grayscale para participantes inativos.
