@@ -46,17 +46,13 @@ Atuar como desenvolvedor full-stack e arquiteto de soluções inclusivas, auxili
 ## 2. Objetivo Atual
 Implementar o **Portal do Associado**, a **Automação de Eventos** (atualização de datas) e a estabilização do **CRM/Dashboard Financeiro**, reduzindo o atrito de acesso e garantindo dados auditados.
 
-## 3. Status Atual do Projeto (11 de Agosto de 2026)
+## 3. Status Atual do Projeto (22 de Agosto de 2026)
 
-**Arquitetura de UX & Portal do Responsável (Impeccable Design Standard):**
-- **Documento de Arquitetura (docs/UX_PAINEL_DO_RESPONSAVEL_IMPECCABLE.md):** Mapeamento dos 5 pilares de UX para o Painel do Responsável (/meuperfil e /atendentes):
-  1. Cartão Virtual Contacte.me (contacte.me/projetoame/{id}): Destaque no topo do painel, com gerador de QR Code para crachás de feiras e vínculo no currículo.
-  2. Acompanhamento de atividades e confirmação de presença com 1 clique (integrado ao WhatsApp via n8n).
-  2. Histórico retroativo (2012-2026) com emissão em tempo real de Comprovantes de Participação e Certificados em PDF.
-  3. Galeria de Fotos Biométrica conectada ao acervo do blog (projetoame.org/home) via motor Foto_analise.
-  4. Gerador de Currículo Inclusivo (/curriculo/{id}) com privacidade de dados sensíveis.
-  5. Módulo GED & Documentos: Upload e gestão isolada em /docs/{candidato_id}/ para ASO (com controle de validade e alertas WhatsApp via n8n), Autorização de Imagem/Voz, Comprovantes de Pagamento/Ajuda de custo de eventos e Laudos Médicos/T21.
-  6. Gestão de Multi-dependentes e convite de Co-responsável via WhatsApp.
+**Módulos Operacionais e Atualizações Recentes:**
+- **Filtros e Gestão de Candidatos/Casting (`/casting`):** Filtros rápidos por status (Ativos/Todos/Inativos), contadores dinâmicos, estilização para participantes inativos e links diretos para chamada telefônica (`tel:`), e-mail (`mailto:`) e WhatsApp.
+- **Módulo de Currículo Inclusivo (`/curriculo/{id}`):** Visualização dinâmica e geração de PDF via FPDF sem conflitos de cabeçalho, com suporte a cursos externos.
+- **Gestão de Atividades & Escalas (`/admin/atividades` e `/admin/escala`):** Resolução de permissões, padronização de CDNs oficiais, listagem de eventos com badges de status, cópia de ficha de avaliação e ficha de credenciamento formatada.
+- **Fluxo de Presença & Ficha de Avaliação (`/avaliacao/{uuid}` e `api_escala.php`):** Tabela `presenca` integrada; liberação automática e destaque de formulários de avaliação após confirmação de comparecimento do atendente no evento.
 
 **Governança Institucional (Mandato 2024-2026):**
 - **Organização de Atas:** Resgatada a Ata da AGO de 04/10/2024 (eleição da diretoria 2024-2026) e centralizada em F:\OneDrive\Projeto A.M.E\01_Institucional_e_Legal\ATA E ESTATUTO ATUAL\.
