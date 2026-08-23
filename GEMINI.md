@@ -26,6 +26,61 @@ skills:
   - security-review
 ---
 
+## ⚡ Quick Start Card
+
+> Leia **apenas este bloco** para iniciar qualquer tarefa.
+> O restante deste arquivo é referência aprofundada — leia sob demanda.
+> Para deploy/automação/IA: consulte também `F:\01_Projetos\INFRA.md`.
+
+| Chave           | Valor                                                          |
+|-----------------|----------------------------------------------------------------|
+| **Stack**       | PHP 8.x / MariaDB / Bootstrap 4 / FPDF / PHPMailer            |
+| **Framework**   | Vanilla PHP — Front Controller em `index.php`                  |
+| **MVP Status**  | ✅ **LIVE** — `projetoame.org`                                 |
+| **Job ID**      | `item_17`                                                      |
+| **Domínios**    | `projetoame.org`, `abiat.org.br`, `projetoame.ong.br`, `projetoame.org.br` |
+
+### 🖥️ Ambiente Local (SOHO)
+| Campo         | Valor                                                                   |
+|---------------|-------------------------------------------------------------------------|
+| Raiz local    | `F:\01_Projetos\Ativos\PROJETO_AME\VPS\public_html\`                    |
+| URL local     | `http://localhost/projetoame` *(ou vhost configurado via vhosts_manager)*|
+| DB host       | `localhost` · schema: `projetoame` · XAMPP MySQL (sem senha)            |
+| Conexão DB    | `include/conexao.php`                                                   |
+
+### 🌐 Ambiente de Produção (VPS1)
+| Campo          | Valor                                                    |
+|----------------|----------------------------------------------------------|
+| SSH            | `ssh vps1.novaera`                                       |
+| Raiz VPS       | `/home/projetoame/public_html/`                          |
+| DB host        | `localhost` · schema: `projetoame`                       |
+| DB user/pass   | `projetoame` / `vp3imJizMOgWxbM`                        |
+| Deploy         | `ssh vps1.novaera "cd /home/projetoame/public_html && git pull"` |
+| Logs Apache    | `ssh vps1.novaera "tail -50 /home/projetoame/logs/error_log"`    |
+
+### 🔑 Integrações Ativas
+| Serviço           | Endpoint / Config                                          |
+|-------------------|------------------------------------------------------------|
+| Evolution API     | `https://evoapi.netmailing.com.br` · inst: `ProjetoAME`   |
+| LiteLLM Pool      | `hermes-local` via `llm.netmailing.com.br`                 |
+| PHPMailer SMTP    | `mail.projetoame.org:587` · user: `noreply@projetoame.org` |
+| PHPMailer Pass    | `PittJusto@3802`                                           |
+
+### 📂 Arquivos-Chave
+| Arquivo                         | Função                                       |
+|---------------------------------|----------------------------------------------|
+| `index.php`                     | Front Controller — todas as rotas            |
+| `include/conexao.php`           | Credenciais e conexão com o banco            |
+| `include/funcoes.php`           | Helpers globais (`formataDataEventoBR` etc.) |
+| `include/funcoes-eventos.php`   | Lógica de eventos, escala e presença         |
+| `pages/atendentes.php`          | Disponibilidade pública de atendentes        |
+| `pages/adminescala.php`         | Painel admin de escala (41 KB)               |
+| `pages/adminindex.php`          | Dashboard administrativo                     |
+| `pages/meuperfil.php`           | Portal do Associado (abas + dependentes)     |
+| `pages/curriculo.php`           | Currículo inclusivo + geração PDF            |
+
+---
+
 # Projeto AME - CRM - Painel de Controle
 
 ## 0. Regras Críticas (MANDATÓRIO)

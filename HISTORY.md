@@ -17,6 +17,11 @@ relacionados:
 
 # Histórico de Trabalho - Projeto AME
 
+- **23/08/2026 - Correção de Data do Evento MD MAKE A DIFFERENCE na Tabela `horarios` (VPS1):**
+    - **Bug identificado:** A página `/atendentes` exibia "16/setembro, terça-feira" para o evento MD MAKE A DIFFERENCE. A causa raiz foi identificada diretamente no banco de dados da VPS1: a tabela `eventos_marcados` continha a data correta (`inicio = 2026-09-16`, quarta-feira), mas a tabela `horarios` (que é a fonte dos checkboxes de disponibilidade exibidos na página) continha o `data_inicio = 2025-09-16` (ano errado — terça-feira em 2025).
+    - **Correção aplicada:** `UPDATE horarios SET data_inicio = DATE_ADD(data_inicio, INTERVAL 1 YEAR), data_final = DATE_ADD(data_final, INTERVAL 1 YEAR) WHERE horario_id = 195;`
+    - **Resultado:** `horarios.horario_id = 195` agora aponta para `2026-09-16` (quarta-feira), alinhado com `eventos_marcados.id = 72`.
+
 - **22/08/2026 - Varredura Automática do Blog WordPress (Biometria) e Ocultação de Fotos:**
     * **Varredura e Mapeamento Histórico (`scan_blog_biometrics.py`):** Criado e executado na VPS1 o script de automação que varre a base de dados do WordPress (`projetoame_wordpress`), associa posts com eventos do CRM por proximidade de data e título, salva as URLs de posts nos eventos correspondentes, resolve os caminhos das mídias físicas no servidor (de 2016 a 2026) e realiza o reconhecimento facial dos atendentes de forma 100% automatizada (identificando 668 fotos).
     * **Ocultação de Fotos pelo Usuário:**
