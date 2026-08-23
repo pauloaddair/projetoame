@@ -369,6 +369,24 @@ if (!$result_list_neg) {
             <!-- Coluna Lateral -->
             <div class="col-md-12 col-lg-4 mb-4">
                 
+                <!-- Card Automação de Biometria -->
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3 bg-light">
+                        <h6 class="m-0 font-weight-bold text-primary">
+                            <i class="fas fa-robot mr-2"></i>Automação de Biometria
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted small">Acione os motores de inteligência biométrica diretamente no servidor VPS:</p>
+                        <button id="btnRunBlog" class="btn btn-primary btn-block rounded-pill mb-2 font-weight-bold">
+                            <i class="fas fa-rss mr-2"></i>Sincronizar Blog (WP)
+                        </button>
+                        <button class="btn btn-outline-primary btn-block rounded-pill font-weight-bold" data-toggle="modal" data-target="#runFolderModal">
+                            <i class="fas fa-folder-open mr-2"></i>Processar Pasta Local
+                        </button>
+                    </div>
+                </div>
+                
                 <!-- Card 1: Próximas Atividades -->
                 <div class="card shadow mb-4">
                     <div class="card-header py-3 bg-light d-flex align-items-center justify-content-between">
@@ -623,8 +641,98 @@ include_once('./include/footer-database-noorder.php');
                 }
             });
         }
+
+        // Handler para sincronizar WordPress Blog
+        $('#btnRunBlog').on('click', function(e) {
+          e.preventDefault();
+          const btn = $(this);
+          const originalText = btn.html();
+          
+          if (confirm('Deseja realmente iniciar a varredura biométrica de todos os posts e imagens do WordPress? Isso roda em segundo plano no servidor.')) {
+            btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin mr-1"></i> Executando...');
+            
+            $.ajax({
+              url: '<?php echo $app_web_root; ?>api_run_biometrics',
+              type: 'POST',
+              data: { action: 'blog' },
+              dataType: 'json',
+              success: function(resp) {
+                alert(resp.message);
+                btn.prop('disabled', false).html(originalText);
+              },
+              error: function() {
+                alert('Erro de comunicação com o servidor.');
+                btn.prop('disabled', false).html(originalText);
+              }
+            });
+          }
+        });
+
+        // Handler para processar pasta local
+        $('#runFolderForm').on('submit', function(e) {
+          e.preventDefault();
+          const form = $(this);
+          const submitBtn = form.find('button[type="submit"]');
+          const originalText = submitBtn.html();
+          
+          submitBtn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin mr-1"></i> Iniciando...');
+          
+          $.ajax({
+            url: '<?php echo $app_web_root; ?>api_run_biometrics',
+            type: 'POST',
+            data: form.serialize(),
+            dataType: 'json',
+            success: function(resp) {
+              if (resp.success) {
+                alert(resp.message);
+                $('#runFolderModal').modal('hide');
+                form.trigger('reset');
+              } else {
+                alert('Erro: ' + resp.message);
+              }
+              submitBtn.prop('disabled', false).html(originalText);
+            },
+            error: function() {
+              alert('Erro de comunicação com o servidor.');
+              submitBtn.prop('disabled', false).html(originalText);
+            }
+          });
+        });
 	});
 </script>
+
+<!-- Modal Processar Pasta Local -->
+<div class="modal fade" id="runFolderModal" tabindex="-1" role="dialog" aria-labelledby="runFolderModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="runFolderModalLabel"><i class="fas fa-robot mr-2"></i>Processar Pasta de Evento</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form id="runFolderForm">
+        <div class="modal-body">
+          <p class="text-muted small">Insira o ID do evento cadastrado no CRM e o caminho absoluto da pasta que contém as fotos físicas no servidor.</p>
+          <div class="form-group">
+            <label for="evento_id">ID do Evento</label>
+            <input type="number" class="form-control" id="evento_id" name="evento_id" placeholder="Ex: 72" required>
+          </div>
+          <div class="form-group">
+            <label for="pasta_fotos">Caminho da Pasta no Servidor</label>
+            <input type="text" class="form-control" id="pasta_fotos" name="pasta_fotos" placeholder="Ex: /home/projetoame/public_html/img/eventos/makeup/" required>
+          </div>
+          <input type="hidden" name="action" value="event">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary rounded-pill" data-dismiss="modal">Fechar</button>
+          <button type="submit" class="btn btn-primary rounded-pill">Iniciar Processamento</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
     <?php include_once('./include/admin_sidebar_footer.php'); ?>
 <?php 
 include_once('./include/scripts.php');

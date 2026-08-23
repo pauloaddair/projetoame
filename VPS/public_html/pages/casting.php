@@ -161,6 +161,9 @@ if (isset($_SESSION['nivel']) && $_SESSION['nivel'] >= 3) {
 									<a href="<?php echo $app_web_root; ?>curriculo/<?php echo digitos($row['candidato_id']); ?>" class="btn btn-sm btn-outline-info rounded-pill py-1 px-2" title="Ver Currículo Inclusivo">
 										<i class="fas fa-file-pdf mr-1"></i>CV
 									</a>
+									<a href="<?php echo $app_web_root; ?>meuperfil?cand_id=<?php echo $row['candidato_id']; ?>" class="btn btn-sm btn-outline-secondary rounded-pill py-1 px-2 ml-1" title="Ver Portfólio/Perfil">
+										<i class="fas fa-camera mr-1"></i>Portfólio
+									</a>
 									<a href="<?php echo $app_web_root; ?>editacandidato/<?php echo digitos($row['candidato_id']); ?>" class="btn btn-sm btn-outline-primary rounded-pill py-1 px-2 ml-1" title="Editar Ficha">
 										<i class="fas fa-edit mr-1"></i>Editar
 									</a>

@@ -62,16 +62,16 @@ if ($logado) {
             <!-- Abas de Navegação -->
             <ul class="nav nav-tabs md-tabs bg-primary bg-gradient rounded mb-4" id="perfilMenuTabs" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link active font-weight-bold" id="meus-dados-tab" data-toggle="tab" href="#meus-dados" role="tab" aria-controls="meus-dados" aria-selected="true">Meus Dados Cadastrais</a>
+                    <a class="nav-link <?php echo isset($_GET['cand_id']) ? '' : 'active'; ?> font-weight-bold" id="meus-dados-tab" data-toggle="tab" href="#meus-dados" role="tab" aria-controls="meus-dados" aria-selected="<?php echo isset($_GET['cand_id']) ? 'false' : 'true'; ?>">Meus Dados Cadastrais</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link font-weight-bold" id="associados-tab" data-toggle="tab" href="#associados" role="tab" aria-controls="associados" aria-selected="false">Dependentes / Associados (<?php echo count($candidatos_vinculados); ?>)</a>
+                    <a class="nav-link <?php echo isset($_GET['cand_id']) ? 'active' : ''; ?> font-weight-bold" id="associados-tab" data-toggle="tab" href="#associados" role="tab" aria-controls="associados" aria-selected="<?php echo isset($_GET['cand_id']) ? 'true' : 'false'; ?>">Dependentes / Associados (<?php echo count($candidatos_vinculados); ?>)</a>
                 </li>
             </ul>
 
             <div class="tab-content" id="perfilMenuTabsContent">
                 <!-- Aba 1: Meus Dados Cadastrais -->
-                <div class="tab-pane fade show active" id="meus-dados" role="tabpanel" aria-labelledby="meus-dados-tab">
+                <div class="tab-pane fade <?php echo isset($_GET['cand_id']) ? '' : 'show active'; ?>" id="meus-dados" role="tabpanel" aria-labelledby="meus-dados-tab">
                     <div class="card shadow border-0 mb-4">
                         <div class="card-body p-4">
                             <h5 class="mb-4 text-primary font-weight-bold"><i class="fas fa-user-cog mr-2"></i>Minhas Informações Pessoais</h5>
@@ -142,7 +142,7 @@ if ($logado) {
                 </div>
 
                 <!-- Aba 2: Dependentes / Associados -->
-                <div class="tab-pane fade" id="associados" role="tabpanel" aria-labelledby="associados-tab">
+                <div class="tab-pane fade <?php echo isset($_GET['cand_id']) ? 'show active' : ''; ?>" id="associados" role="tabpanel" aria-labelledby="associados-tab">
                     <?php if (count($candidatos_vinculados) === 0): ?>
                         <div class="alert alert-warning text-center p-5 shadow-sm border-0 bg-white rounded-lg">
                             <i class="fas fa-exclamation-circle fa-3x text-warning mb-3"></i>
@@ -173,7 +173,29 @@ if ($logado) {
                         </div>
                     <?php else: 
                         // Pega o candidato selecionado ou o único existente
-                        $cand_id = isset($_GET['cand_id']) ? (int)$_GET['cand_id'] : $candidatos_vinculados[0]['candidato_id'];
+                        $nivel_usuario = isset($_SESSION['nivel']) ? (int)$_SESSION['nivel'] : 0;
+                        $is_admin = ($nivel_usuario >= 4);
+                        
+                        $cand_id = isset($_GET['cand_id']) ? (int)$_GET['cand_id'] : 0;
+                        if ($cand_id <= 0 && !empty($candidatos_vinculados)) {
+                            $cand_id = $candidatos_vinculados[0]['candidato_id'];
+                        }
+                        
+                        // Valida se o usuário comum tem permissão para ver este candidato específico
+                        if (!$is_admin && $cand_id > 0) {
+                            $tem_perm = false;
+                            foreach ($candidatos_vinculados as $cv) {
+                                if ((int)$cv['candidato_id'] === $cand_id) {
+                                    $tem_perm = true;
+                                    break;
+                                }
+                            }
+                            if (!$tem_perm) {
+                                echo '<div class="alert alert-danger mt-3">Você não tem permissão para visualizar o perfil deste associado.</div>';
+                                exit;
+                            }
+                        }
+                        
                         $res_c = mysqli_query($conexao, "SELECT * FROM candidatos WHERE candidato_id = $cand_id");
                         $cand = mysqli_fetch_assoc($res_c);
                     ?>
@@ -354,10 +376,10 @@ if ($logado) {
                                 <p class="text-muted small">Fotos reconhecidas automaticamente pela inteligência biométrica durante as participações do atendente em feiras e eventos oficiais:</p>
 
                                 <?php
-                                // Busca fotos reconhecidas para o candidato
+                                // Busca fotos reconhecidas para o candidato (apenas as que não foram ocultadas)
                                 $q_fotos = "SELECT f.*, e.nome AS evento_nome FROM fotos_reconhecidas f 
                                             LEFT JOIN eventos_marcados e ON f.evento_id = e.id 
-                                            WHERE f.candidato_id = $cand_id 
+                                            WHERE f.candidato_id = $cand_id AND f.oculta = 0
                                             ORDER BY f.data_registro DESC LIMIT 12";
                                 $res_fotos = mysqli_query($conexao, $q_fotos);
                                 ?>
@@ -365,8 +387,13 @@ if ($logado) {
                                 <?php if ($res_fotos && mysqli_num_rows($res_fotos) > 0): ?>
                                     <div class="row">
                                         <?php while ($ft = mysqli_fetch_assoc($res_fotos)): ?>
-                                            <div class="col-md-3 col-sm-6 mb-3">
-                                                <div class="card h-100 border-0 shadow-sm overflow-hidden">
+                                            <div class="col-md-3 col-sm-6 mb-3 col-card-foto" id="foto-card-<?php echo $ft['id']; ?>">
+                                                <div class="card h-100 border-0 shadow-sm overflow-hidden position-relative">
+                                                    <button class="btn btn-danger btn-sm rounded-circle position-absolute btn-ocultar-foto" 
+                                                            style="top: 8px; right: 8px; z-index: 10; width: 28px; height: 28px; padding: 0; display: flex; align-items: center; justify-content: center; opacity: 0.8;" 
+                                                            data-foto-id="<?php echo $ft['id']; ?>" title="Remover foto do portfólio">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
                                                     <img src="<?php echo htmlspecialchars($GLOBALS['app_web_root'] . $ft['foto_path']); ?>" class="card-img-top" style="height: 160px; object-fit: cover;" alt="Atuação em Feira">
                                                     <div class="card-body p-2 text-center bg-light">
                                                         <small class="font-weight-bold text-dark d-block text-truncate"><?php echo htmlspecialchars($ft['evento_nome'] ?? 'Evento AME'); ?></small>
@@ -532,6 +559,42 @@ $(document).ready(function(){
       const err = xhr.responseJSON ? xhr.responseJSON.message : 'Erro ao enviar convite';
       $('#inviteResult').html('<div class="alert alert-danger">'+err+'</div>');
     });
+  });
+
+  // Handler para ocultar fotos reconhecidas
+  $('.btn-ocultar-foto').on('click', function(e) {
+    e.preventDefault();
+    const btn = $(this);
+    const fotoId = btn.data('foto-id');
+    
+    if (confirm('Deseja realmente remover esta foto do portfólio? Ela não será exibida no perfil nem no currículo.')) {
+      btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i>');
+      
+      $.ajax({
+        url: '<?php echo $GLOBALS['app_web_root']; ?>api_ocultar_foto',
+        type: 'POST',
+        data: { foto_id: fotoId },
+        dataType: 'json',
+        success: function(resp) {
+          if (resp.success) {
+            $(`#foto-card-${fotoId}`).fadeOut(400, function() {
+              $(this).remove();
+              // Se não restarem fotos, recarrega a página para exibir o placeholder
+              if ($('.col-card-foto').length === 0) {
+                window.location.reload();
+              }
+            });
+          } else {
+            alert('Erro: ' + resp.message);
+            btn.prop('disabled', false).html('<i class="fas fa-times"></i>');
+          }
+        },
+        error: function() {
+          alert('Erro de comunicação com o servidor.');
+          btn.prop('disabled', false).html('<i class="fas fa-times"></i>');
+        }
+      });
+    }
   });
 });
 </script>

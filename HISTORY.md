@@ -17,6 +17,13 @@ relacionados:
 
 # Histórico de Trabalho - Projeto AME
 
+- **22/08/2026 - Varredura Automática do Blog WordPress (Biometria) e Ocultação de Fotos:**
+    * **Varredura e Mapeamento Histórico (`scan_blog_biometrics.py`):** Criado e executado na VPS1 o script de automação que varre a base de dados do WordPress (`projetoame_wordpress`), associa posts com eventos do CRM por proximidade de data e título, salva as URLs de posts nos eventos correspondentes, resolve os caminhos das mídias físicas no servidor (de 2016 a 2026) e realiza o reconhecimento facial dos atendentes de forma 100% automatizada (identificando 668 fotos).
+    * **Ocultação de Fotos pelo Usuário:**
+        - Criada a coluna `oculta` (TINYINT) na tabela `fotos_reconhecidas` locais e na VPS1.
+        - Criado o endpoint API seguro `pages/api_ocultar_foto.php` que marca `oculta = 1` após validar autenticação e permissão de acesso ao associado.
+        - Atualizada a consulta e renderização de fotos no Portal do Responsável (`pages/meuperfil.php`) para filtrar fotos ativas (`oculta = 0`) e renderizar um botão de remoção discreto por hover com animação de fadeOut via AJAX/jQuery.
+
 - **22/08/2026 - Correção e Alinhamento do Banco para Portfólio de Fotos Biométricas (Fase 2):**
     - **Correção da Tabela `fotos_reconhecidas`:** Identificada e corrigida a tabela que havia sido gerada erroneamente como `otos_reconhecidas` (devido ao escape do caractere `\f` no interpretador SQL). O banco de dados local foi ajustado para conter a tabela `fotos_reconhecidas` e colunas corretas (`foto_path` e `data_registro`).
     - **Ajuste no Portal do Responsável (`/meuperfil`):** Atualizada a query e a renderização de imagens em `pages/meuperfil.php` para apontar corretamente para a tabela `fotos_reconhecidas` e colunas `foto_path` e `data_registro`, além de prepender `$GLOBALS['app_web_root']` para resolver o caminho relativo no servidor local e VPS.
