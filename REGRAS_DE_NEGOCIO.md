@@ -91,6 +91,11 @@ graph TD
     G --> H["Portfólio Físico de Alta Qualidade para o Atendente"]
 ```
 
+### 6.1 Monetização Institucional via Amazon Merch on Demand (Print-on-Demand Global)
+- **Zero Risco / Zero Estoque**: Cadastro da marca Projeto AME no **Amazon Merch on Demand** para comercialização de produtos oficiais com repasse automático de royalties.
+- **Linha Oficial de Inclusão**: Camisetas, moletons, ecobags e canecas com estampas autorais voltadas à inclusão social e neurodiversidade no mercado de trabalho ("Inclusão em Ação", "Eu Apoio o Trabalho Atípico", "Projeto AME").
+- **Logística Integrada**: A Amazon gerencia manufatura sob demanda, embalagem, envio internacional/nacional e cobrança, direcionando os lucros líquidos para o sustento dos treinamentos dos atendentes.
+
 ---
 
 ## 7. Diretrizes Futuras de Governança
