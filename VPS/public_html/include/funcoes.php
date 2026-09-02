@@ -614,4 +614,76 @@ function encrypt_decrypt($action, $string)
         return $res;
     }
 
+    /**
+     * Garante que as tabelas de suporte do ecossistema de escalas (presenca, avaliacoes, historico_rodizio)
+     * existam com a estrutura e colunas adequadas em qualquer ambiente (Local/VPS).
+     */
+    function garantir_tabelas_suporte_escala($conexao) {
+        if (!$conexao) return;
+        try {
+            // 1. Cria tabela presenca se não existir
+            @mysqli_query($conexao, "CREATE TABLE IF NOT EXISTS `presenca` (
+                `id` INT AUTO_INCREMENT PRIMARY KEY,
+                `evento_id` INT NOT NULL,
+                `candidato_id` INT NOT NULL,
+                `presente` TINYINT(1) NOT NULL DEFAULT 1,
+                `data_confirmacao` DATETIME DEFAULT CURRENT_TIMESTAMP,
+                `confirmadopor` VARCHAR(100) DEFAULT 'sistema',
+                UNIQUE KEY `idx_evento_candidato` (`evento_id`, `candidato_id`),
+                KEY `idx_evento` (`evento_id`),
+                KEY `idx_candidato` (`candidato_id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+
+            // 2. Valida e adiciona colunas faltantes na tabela presenca se ela já existia
+            $res_col = @mysqli_query($conexao, "SHOW COLUMNS FROM `presenca` LIKE 'presente'");
+            if ($res_col && mysqli_num_rows($res_col) === 0) {
+                @mysqli_query($conexao, "ALTER TABLE `presenca` ADD `presente` TINYINT(1) NOT NULL DEFAULT 1 AFTER `candidato_id`");
+            }
+            $res_dt = @mysqli_query($conexao, "SHOW COLUMNS FROM `presenca` LIKE 'data_confirmacao'");
+            if ($res_dt && mysqli_num_rows($res_dt) === 0) {
+                @mysqli_query($conexao, "ALTER TABLE `presenca` ADD `data_confirmacao` DATETIME DEFAULT CURRENT_TIMESTAMP");
+            }
+            $res_cp = @mysqli_query($conexao, "SHOW COLUMNS FROM `presenca` LIKE 'confirmadopor'");
+            if ($res_cp && mysqli_num_rows($res_cp) === 0) {
+                @mysqli_query($conexao, "ALTER TABLE `presenca` ADD `confirmadopor` VARCHAR(100) DEFAULT 'sistema'");
+            }
+
+            // 3. Cria tabela historico_rodizio se não existir
+            @mysqli_query($conexao, "CREATE TABLE IF NOT EXISTS `historico_rodizio` (
+                `id` INT AUTO_INCREMENT PRIMARY KEY,
+                `candidato_id` INT NOT NULL,
+                `rodizio_anterior` INT NOT NULL,
+                `rodizio_novo` INT NOT NULL,
+                `evento_id` INT DEFAULT NULL,
+                `tipo_movimento` VARCHAR(50) DEFAULT 'pos_evento',
+                `observacao` TEXT DEFAULT NULL,
+                `data_registro` DATETIME DEFAULT CURRENT_TIMESTAMP,
+                KEY `idx_candidato` (`candidato_id`),
+                KEY `idx_evento` (`evento_id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+
+            // 4. Cria tabela avaliacoes se não existir
+            @mysqli_query($conexao, "CREATE TABLE IF NOT EXISTS `avaliacoes` (
+                `avaliacao_id` INT AUTO_INCREMENT PRIMARY KEY,
+                `evento_id` INT NOT NULL,
+                `candidato_id` INT NOT NULL,
+                `pontualidade` INT NOT NULL DEFAULT 0,
+                `asseio` INT NOT NULL DEFAULT 0,
+                `socializacao` INT NOT NULL DEFAULT 0,
+                `simpatia` INT NOT NULL DEFAULT 0,
+                `compreensao_instrucoes` INT NOT NULL DEFAULT 0,
+                `facilidade_orientacoes` INT NOT NULL DEFAULT 0,
+                `foco_atividades` INT NOT NULL DEFAULT 0,
+                `comportamento_geral` INT NOT NULL DEFAULT 0,
+                `observacoes` TEXT NULL,
+                `avaliador_nome` VARCHAR(128) NULL,
+                `avaliador_email` VARCHAR(128) NULL,
+                `data_avaliacao` DATETIME DEFAULT CURRENT_TIMESTAMP,
+                KEY `idx_ev_cand` (`evento_id`, `candidato_id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+        } catch (Throwable $e) {
+            // Silencia para não interromper fluxo principal
+        }
+    }
+
 ?>

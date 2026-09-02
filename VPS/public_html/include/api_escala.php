@@ -1,6 +1,11 @@
 <?php
 header('Content-Type: application/json');
 include_once(dirname(__DIR__) . '/database/conexao.php');
+include_once(__DIR__ . '/funcoes.php');
+
+if (function_exists('garantir_tabelas_suporte_escala')) {
+    garantir_tabelas_suporte_escala($conexao);
+}
 
 function format_data_nascimento($date_str) {
     if (empty($date_str)) return '';
@@ -14,53 +19,62 @@ function format_data_nascimento($date_str) {
     return $clean;
 }
 
-$data = json_decode(file_get_contents('php://input'), true);
+try {
+    $data = json_decode(file_get_contents('php://input'), true);
 
-if (isset($data['action']) && $data['action'] === 'get_escala_details') {
-    $evento_id = intval($data['evento_id']);
-    
-    // Fetch event details (image, uuid, name)
-    $event_image_url = null;
-    $event_uuid = null;
-    $event_nome = '';
-    $query_event_info = "SELECT e.nome, e.uuid, i.url FROM eventos_marcados e LEFT JOIN imagens i ON e.imagem_id = i.imagem_id WHERE e.id = {$evento_id}";
-    $result_event_info = mysqli_query($conexao, $query_event_info);
-    if ($result_event_info && $row_info = mysqli_fetch_assoc($result_event_info)) {
-        $event_image_url = $row_info['url'];
-        $event_uuid = $row_info['uuid'];
-        $event_nome = $row_info['nome'];
-    }
-    
-    // 1. Fetch all horarios for the event
-    $query_horarios = "SELECT horario_id, data_inicio, data_final, vagas FROM horarios WHERE evento_id = {$evento_id} ORDER BY data_inicio ASC";
-    $result_horarios = mysqli_query($conexao, $query_horarios);
-    if (!$result_horarios) {
-        echo json_encode(['success' => false, 'message' => 'Erro na consulta de horários: ' . mysqli_error($conexao)]);
-        exit;
-    }
-    $horarios_data = [];
-    $horario_ids_in_event = []; // To store all horario_ids for the event
-    while ($horario = mysqli_fetch_assoc($result_horarios)) {
-        $horarios_data[] = $horario;
-        $horario_ids_in_event[] = $horario['horario_id'];
-    }
-
-    // Fetch presenca and avaliacao status for this event
-    $presencas_map = [];
-    $q_pres = mysqli_query($conexao, "SELECT candidato_id, presente FROM presenca WHERE evento_id = {$evento_id}");
-    if ($q_pres) {
-        while ($p = mysqli_fetch_assoc($q_pres)) {
-            $presencas_map[$p['candidato_id']] = intval($p['presente']);
+    if (isset($data['action']) && $data['action'] === 'get_escala_details') {
+        $evento_id = intval($data['evento_id']);
+        
+        // Fetch event details (image, uuid, name)
+        $event_image_url = null;
+        $event_uuid = null;
+        $event_nome = '';
+        $query_event_info = "SELECT e.nome, e.uuid, i.url FROM eventos_marcados e LEFT JOIN imagens i ON e.imagem_id = i.imagem_id WHERE e.id = {$evento_id}";
+        $result_event_info = mysqli_query($conexao, $query_event_info);
+        if ($result_event_info && $row_info = mysqli_fetch_assoc($result_event_info)) {
+            $event_image_url = $row_info['url'];
+            $event_uuid = $row_info['uuid'];
+            $event_nome = $row_info['nome'];
         }
-    }
-
-    $avaliados_map = [];
-    $q_aval = mysqli_query($conexao, "SELECT DISTINCT candidato_id FROM avaliacoes WHERE evento_id = {$evento_id}");
-    if ($q_aval) {
-        while ($av = mysqli_fetch_assoc($q_aval)) {
-            $avaliados_map[$av['candidato_id']] = 1;
+        
+        // 1. Fetch all horarios for the event
+        $query_horarios = "SELECT horario_id, data_inicio, data_final, vagas FROM horarios WHERE evento_id = {$evento_id} ORDER BY data_inicio ASC";
+        $result_horarios = mysqli_query($conexao, $query_horarios);
+        if (!$result_horarios) {
+            echo json_encode(['success' => false, 'message' => 'Erro na consulta de horários: ' . mysqli_error($conexao)]);
+            exit;
         }
-    }
+        $horarios_data = [];
+        $horario_ids_in_event = []; // To store all horario_ids for the event
+        while ($horario = mysqli_fetch_assoc($result_horarios)) {
+            $horarios_data[] = $horario;
+            $horario_ids_in_event[] = $horario['horario_id'];
+        }
+
+        // Fetch presenca and avaliacao status for this event com proteção contra erro de schema
+        $presencas_map = [];
+        try {
+            $q_pres = mysqli_query($conexao, "SELECT candidato_id, presente FROM presenca WHERE evento_id = {$evento_id}");
+            if ($q_pres) {
+                while ($p = mysqli_fetch_assoc($q_pres)) {
+                    $presencas_map[$p['candidato_id']] = intval($p['presente']);
+                }
+            }
+        } catch (Throwable $e) {
+            $presencas_map = [];
+        }
+
+        $avaliados_map = [];
+        try {
+            $q_aval = mysqli_query($conexao, "SELECT DISTINCT candidato_id FROM avaliacoes WHERE evento_id = {$evento_id}");
+            if ($q_aval) {
+                while ($av = mysqli_fetch_assoc($q_aval)) {
+                    $avaliados_map[$av['candidato_id']] = 1;
+                }
+            }
+        } catch (Throwable $e) {
+            $avaliados_map = [];
+        }
 
     // 2. Fetch all candidates (active and training) with rodizio >= 1
     $query_candidatos = "SELECT c.candidato_id, c.nome, c.rodizio, i.url, c.ativo
@@ -375,4 +389,12 @@ if (isset($data['action']) && $data['action'] === 'get_historico_rodizio') {
 }
 
 echo json_encode(['success' => false, 'message' => 'Ação inválida']);
+exit;
+} catch (Throwable $e) {
+    echo json_encode([
+        'success' => false,
+        'message' => 'Erro interno na API de escala: ' . $e->getMessage()
+    ]);
+    exit;
+}
 ?>

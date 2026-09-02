@@ -17,6 +17,14 @@ relacionados:
 
 # Histórico de Trabalho - Projeto AME
 
+- **02/09/2026 - Correção de Erro de Conexão na Escala (/admin/escala) e Autocura de Tabelas de Apoio:**
+    - **Diagnóstico da Causa Raiz:** O acesso a `https://projetoame.org/admin/escala?evento_id=72` exibia o erro `Erro de conexão: Unexpected token '<', "..." is not valid JSON`. O rastreamento revelou que a requisição assíncrona para `include/api_escala.php` (e na página pública de avaliação `pages/avaliacao.php`) disparava um erro fatal do PHP: `Fatal error: Uncaught mysqli_sql_exception: Unknown column 'presente' in 'field list' / 'p.presente' in 'SELECT'`. Como a tabela `presenca` no banco de dados de produção existia sem a coluna `presente`, o MySQL no PHP 8.1+ abortava a execução cuspindo HTML de erro com `<br /><b>Fatal error</b>`, quebrando o parser JSON do JavaScript.
+    - **Solução & Autocura Implementadas:**
+        - **Autocura de Schema (`include/funcoes.php`):** Criada a rotina `garantir_tabelas_suporte_escala($conexao)` que verifica automaticamente e cria se não existirem (ou adiciona via `ALTER TABLE` colunas ausentes) as tabelas `presenca` (`presente`, `data_confirmacao`, `confirmadopor`), `historico_rodizio` e `avaliacoes`.
+        - **Proteção e Fallback na API (`include/api_escala.php`):** Chamada de autocura integrada no bootstrap do endpoint, consultas de `presenca` e `avaliacoes` encapsuladas em blocos `try...catch` com inicialização vazia segura e encapsulamento global em `try...catch (Throwable $e)` garantindo que o endpoint **sempre** retorne JSON válido (`{"success": false, "message": ...}`).
+        - **Proteção da Página Pública de Avaliação (`pages/avaliacao.php`):** Integrada a autocura de tabelas e query protegida com fallback automático sem join em caso de inconsistência de schema.
+        - **Resiliência no Frontend (`pages/adminescala.php`):** Tratamento do `fetch()` refatorado para ler texto bruto e sanitizar respostas não-JSON antes de lançar erro, evitando quebras genéricas de sintaxe na interface.
+
 - **23/08/2026 - Correção de Data do Evento MD MAKE A DIFFERENCE na Tabela `horarios` (VPS1):**
     - **Bug identificado:** A página `/atendentes` exibia "16/setembro, terça-feira" para o evento MD MAKE A DIFFERENCE. A causa raiz foi identificada diretamente no banco de dados da VPS1: a tabela `eventos_marcados` continha a data correta (`inicio = 2026-09-16`, quarta-feira), mas a tabela `horarios` (que é a fonte dos checkboxes de disponibilidade exibidos na página) continha o `data_inicio = 2025-09-16` (ano errado — terça-feira em 2025).
     - **Correção aplicada:** `UPDATE horarios SET data_inicio = DATE_ADD(data_inicio, INTERVAL 1 YEAR), data_final = DATE_ADD(data_final, INTERVAL 1 YEAR) WHERE horario_id = 195;`

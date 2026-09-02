@@ -262,9 +262,17 @@ document.addEventListener('DOMContentLoaded', function() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ action: 'get_escala_details', evento_id: id })
         })
-        .then(response => {
-            if (!response.ok) throw new Error('HTTP ' + response.status);
-            return response.json();
+        .then(async response => {
+            const text = await response.text();
+            let data;
+            try {
+                data = JSON.parse(text);
+            } catch (jsonErr) {
+                console.error("Resposta não-JSON do servidor:", text);
+                throw new Error(text.replace(/<[^>]*>?/gm, ' ').substring(0, 180).trim() || 'Resposta inválida do servidor.');
+            }
+            if (!response.ok) throw new Error('HTTP ' + response.status + ': ' + (data.message || 'Erro no servidor'));
+            return data;
         })
         .then(data => {
             if (data.success && data.horarios && data.candidatos) {

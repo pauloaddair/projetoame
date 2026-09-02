@@ -4,6 +4,9 @@ date_default_timezone_set('America/Sao_Paulo');
 $app_web_root = $GLOBALS['app_web_root'] ?? '/';
 $titulo = "Avaliação de Atendentes";
 include_once('./include/funcoes.php');
+if (function_exists('garantir_tabelas_suporte_escala')) {
+    garantir_tabelas_suporte_escala($conexao);
+}
 
 define('HMAC_SECRET_KEY', 'ProjetoAME_ChaveSecreta_#2025@');
 
@@ -21,22 +24,44 @@ if (!empty($evento_uuid)) {
         $evento_id = $evento['id'];
 
         // 2. Busca atendentes escalados e cruza com presencas e avaliacoes
-        $query_atendentes = "SELECT DISTINCT c.candidato_id, c.nome, i.url,
-                                    COALESCE(p.presente, 0) AS presenca_confirmada,
-                                    (SELECT COUNT(*) FROM avaliacoes av WHERE av.evento_id = {$evento_id} AND av.candidato_id = c.candidato_id) AS total_avaliacoes
-                             FROM candidatos c
-                             JOIN disponibilidade d ON c.candidato_id = d.candidato_id
-                             JOIN horarios h ON d.atividade_id = h.horario_id
-                             LEFT JOIN imagens i ON c.imagem_id = i.imagem_id
-                             LEFT JOIN presenca p ON p.evento_id = {$evento_id} AND p.candidato_id = c.candidato_id
-                             WHERE h.evento_id = {$evento_id} AND d.escalado = 1
-                             ORDER BY presenca_confirmada DESC, c.nome ASC";
-        $result_atendentes = mysqli_query($conexao, $query_atendentes);
-        while ($row = mysqli_fetch_assoc($result_atendentes)) {
-            $data_string = "evento_id={$evento_id}&candidato_id={$row['candidato_id']}";
-            $signature = hash_hmac('sha256', $data_string, HMAC_SECRET_KEY);
-            $row['link_seguro'] = "avaliar_atendente?evento_id={$evento_id}&candidato_id={$row['candidato_id']}&sig={$signature}";
-            $atendentes[] = $row;
+        try {
+            $query_atendentes = "SELECT DISTINCT c.candidato_id, c.nome, i.url,
+                                        COALESCE(p.presente, 0) AS presenca_confirmada,
+                                        (SELECT COUNT(*) FROM avaliacoes av WHERE av.evento_id = {$evento_id} AND av.candidato_id = c.candidato_id) AS total_avaliacoes
+                                 FROM candidatos c
+                                 JOIN disponibilidade d ON c.candidato_id = d.candidato_id
+                                 JOIN horarios h ON d.atividade_id = h.horario_id
+                                 LEFT JOIN imagens i ON c.imagem_id = i.imagem_id
+                                 LEFT JOIN presenca p ON p.evento_id = {$evento_id} AND p.candidato_id = c.candidato_id
+                                 WHERE h.evento_id = {$evento_id} AND d.escalado = 1
+                                 ORDER BY presenca_confirmada DESC, c.nome ASC";
+            $result_atendentes = mysqli_query($conexao, $query_atendentes);
+            if ($result_atendentes) {
+                while ($row = mysqli_fetch_assoc($result_atendentes)) {
+                    $data_string = "evento_id={$evento_id}&candidato_id={$row['candidato_id']}";
+                    $signature = hash_hmac('sha256', $data_string, HMAC_SECRET_KEY);
+                    $row['link_seguro'] = "avaliar_atendente?evento_id={$evento_id}&candidato_id={$row['candidato_id']}&sig={$signature}";
+                    $atendentes[] = $row;
+                }
+            }
+        } catch (Throwable $e) {
+            // Fallback seguro sem presenca caso ocorra erro inesperado
+            $query_fallback = "SELECT DISTINCT c.candidato_id, c.nome, i.url, 1 AS presenca_confirmada, 0 AS total_avaliacoes
+                               FROM candidatos c
+                               JOIN disponibilidade d ON c.candidato_id = d.candidato_id
+                               JOIN horarios h ON d.atividade_id = h.horario_id
+                               LEFT JOIN imagens i ON c.imagem_id = i.imagem_id
+                               WHERE h.evento_id = {$evento_id} AND d.escalado = 1
+                               ORDER BY c.nome ASC";
+            $res_fb = @mysqli_query($conexao, $query_fallback);
+            if ($res_fb) {
+                while ($row = mysqli_fetch_assoc($res_fb)) {
+                    $data_string = "evento_id={$evento_id}&candidato_id={$row['candidato_id']}";
+                    $signature = hash_hmac('sha256', $data_string, HMAC_SECRET_KEY);
+                    $row['link_seguro'] = "avaliar_atendente?evento_id={$evento_id}&candidato_id={$row['candidato_id']}&sig={$signature}";
+                    $atendentes[] = $row;
+                }
+            }
         }
     }
 }
