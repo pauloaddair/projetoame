@@ -155,6 +155,9 @@ include_once('./include/admin_sidebar.php');
                     <button type="button" class="btn btn-outline-primary font-weight-bold ml-2" id="copy-tsv-btn">
                         <i class="fas fa-file-excel mr-1"></i> Copiar Tabela (para Excel)
                     </button>
+                    <button type="button" class="btn btn-outline-secondary font-weight-bold ml-2" id="print-cred-btn">
+                        <i class="fas fa-print mr-1"></i> Imprimir
+                    </button>
                 </div>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
             </div>
@@ -522,11 +525,18 @@ document.addEventListener('DOMContentLoaded', function() {
         btn.addEventListener('click', function(e) {
             e.preventDefault();
             const modalEl = document.getElementById('credenciamentoModal');
-            const tbody = document.getElementById('credenciamento-tbody');
-            const printBtn = document.getElementById('print-credenciamento-btn');
-            const copyBtn = document.getElementById('copy-credenciamento-btn');
+            const container = document.getElementById('credenciamento-container');
+            const credNome = document.getElementById('cred-evento-nome');
+            const credBadge = document.getElementById('cred-total-badge');
+            const copyTextBtn = document.getElementById('copy-text-btn');
+            const copyTsvBtn = document.getElementById('copy-tsv-btn');
+            const printBtn = document.getElementById('print-cred-btn');
 
-            if (tbody) tbody.innerHTML = '<tr><td colspan="7" class="text-center py-4"><i class="fas fa-spinner fa-spin mr-2"></i>Carregando dados da equipe...</td></tr>';
+            if (credNome) credNome.textContent = 'Carregando...';
+            if (credBadge) credBadge.textContent = 'Carregando...';
+            if (container) {
+                container.innerHTML = '<div class="text-center py-5 text-muted"><i class="fas fa-spinner fa-spin fa-2x mb-2 text-info"></i><p class="font-weight-bold">Carregando dados da equipe para credenciamento...</p></div>';
+            }
             
             if (window.jQuery && typeof $('#credenciamentoModal').modal === 'function') {
                 $('#credenciamentoModal').modal('show');
@@ -541,21 +551,28 @@ document.addEventListener('DOMContentLoaded', function() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ action: 'get_credenciamento', evento_id: eventoId })
             })
-            .then(r => r.json())
+            .then(async r => {
+                const text = await r.text();
+                try {
+                    return JSON.parse(text);
+                } catch (err) {
+                    throw new Error("Resposta inválida: " + text.replace(/<[^>]*>?/gm, ' ').substring(0, 150));
+                }
+            })
             .then(data => {
                 if (data.success) {
-                    const eventTitleEl = document.getElementById('credenciamento-evento-nome');
-                    if (eventTitleEl) eventTitleEl.innerText = data.evento_nome || '';
+                    const equipe = data.credenciados || data.equipe || [];
+                    if (credNome) credNome.textContent = data.evento_nome || '';
+                    if (credBadge) credBadge.textContent = `${data.total_geral || equipe.length} Pessoas (${data.total_coordenadores || 0} Coord. + ${data.total_escalados || 0} Atendentes)`;
 
-                    let html = '';
+                    let rows = '';
                     let seq = 1;
-                    
-                    data.equipe.forEach(p => {
+                    equipe.forEach(p => {
                         const papelBadge = p.papel === 'Coordenador(a)' 
-                            ? '<span class="badge badge-dark">Coordenador(a)</span>' 
-                            : (p.papel === 'Atendente' ? '<span class="badge badge-primary">Atendente</span>' : '<span class="badge badge-info">Treinamento</span>');
+                            ? '<span class="badge badge-dark px-2 py-1">Coordenador(a)</span>' 
+                            : (p.papel === 'Atendente' ? '<span class="badge badge-primary px-2 py-1">Atendente</span>' : '<span class="badge badge-info px-2 py-1">Treinamento</span>');
                         
-                        html += `
+                        rows += `
                             <tr>
                                 <td class="text-center font-weight-bold">${seq++}</td>
                                 <td class="font-weight-bold text-dark">${p.nome}</td>
@@ -567,39 +584,85 @@ document.addEventListener('DOMContentLoaded', function() {
                             </tr>
                         `;
                     });
-                    
-                    if (tbody) tbody.innerHTML = html;
+
+                    if (container) {
+                        container.innerHTML = `
+                            <div id="credenciamento-print-area">
+                                <table class="table table-bordered table-striped table-hover align-middle mb-0">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th class="text-center" style="width: 50px;">#</th>
+                                            <th>Nome Completo</th>
+                                            <th>Função / Papel</th>
+                                            <th>Nascimento</th>
+                                            <th>RG</th>
+                                            <th>CPF</th>
+                                            <th class="text-center">Tamanho Camisa</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${rows || '<tr><td colspan="7" class="text-center py-3 text-muted">Nenhum integrante encontrado na escala deste evento.</td></tr>'}
+                                    </tbody>
+                                </table>
+                            </div>
+                        `;
+                    }
+
+                    if (copyTextBtn) {
+                        copyTextBtn.onclick = function() {
+                            let text = `*FICHA DE CREDENCIAMENTO — ${data.evento_nome}*\n\n`;
+                            text += `*Equipe do Projeto A.M.E. (${equipe.length} pessoas)*\n\n`;
+                            let s = 1;
+                            equipe.forEach(p => {
+                                text += `${s++}. ${p.nome} (${p.papel})\n   Nasc: ${p.Nascimento_fmt || '-'} | RG: ${p.RG || '-'} | CPF: ${p.CPF || '-'} | Camisa: ${p.camisa || '-'}\n\n`;
+                            });
+                            navigator.clipboard.writeText(text).then(() => {
+                                const orig = copyTextBtn.innerHTML;
+                                copyTextBtn.innerHTML = '<i class="fas fa-check text-success mr-1"></i> Copiado!';
+                                setTimeout(() => { copyTextBtn.innerHTML = orig; }, 2000);
+                            });
+                        };
+                    }
+
+                    if (copyTsvBtn) {
+                        copyTsvBtn.onclick = function() {
+                            let tsv = "Seq\tNome\tFuncao\tNascimento\tRG\tCPF\tCamisa\n";
+                            let s = 1;
+                            equipe.forEach(p => {
+                                tsv += `${s++}\t${p.nome}\t${p.papel}\t${p.Nascimento_fmt || ''}\t${p.RG || ''}\t${p.CPF || ''}\t${p.camisa || ''}\n`;
+                            });
+                            navigator.clipboard.writeText(tsv).then(() => {
+                                const orig = copyTsvBtn.innerHTML;
+                                copyTsvBtn.innerHTML = '<i class="fas fa-check text-success mr-1"></i> Tabela Copiada!';
+                                setTimeout(() => { copyTsvBtn.innerHTML = orig; }, 2000);
+                            });
+                        };
+                    }
 
                     if (printBtn) {
                         printBtn.onclick = function() {
-                            const printContents = document.getElementById('credenciamento-print-area').innerHTML;
+                            const printArea = document.getElementById('credenciamento-print-area');
+                            if (!printArea) return;
+                            const printContents = printArea.innerHTML;
                             const origContents = document.body.innerHTML;
-                            document.body.innerHTML = printContents;
+                            document.body.innerHTML = `<div style="padding: 20px;"><h2>Ficha de Credenciamento - ${data.evento_nome}</h2>${printContents}</div>`;
                             window.print();
                             document.body.innerHTML = origContents;
                             location.reload();
                         };
                     }
-
-                    if (copyBtn) {
-                        copyBtn.onclick = function() {
-                            let text = `FICHA DE CREDENCIAMENTO - ${data.evento_nome}\n\n`;
-                            text += `Seq\tNome\tPapel\tNascimento\tRG\tCPF\tCamisa\n`;
-                            let s = 1;
-                            data.equipe.forEach(p => {
-                                text += `${s++}\t${p.nome}\t${p.papel}\t${p.Nascimento_fmt || ''}\t${p.RG || ''}\t${p.CPF || ''}\t${p.camisa || ''}\n`;
-                            });
-                            navigator.clipboard.writeText(text).then(() => {
-                                alert('Dados copiados para a área de transferência!');
-                            });
-                        };
-                    }
                 } else {
-                    if (tbody) tbody.innerHTML = `<tr><td colspan="7" class="text-center text-danger">${data.message || 'Erro ao carregar dados.'}</td></tr>`;
+                    if (credBadge) credBadge.textContent = 'Erro';
+                    if (container) {
+                        container.innerHTML = `<div class="alert alert-danger"><i class="fas fa-exclamation-triangle mr-2"></i>Erro ao carregar dados: ${data.message || 'Resposta inválida.'}</div>`;
+                    }
                 }
             })
             .catch(err => {
-                if (tbody) tbody.innerHTML = `<tr><td colspan="7" class="text-center text-danger">Erro de comunicação: ${err.message}</td></tr>`;
+                if (credBadge) credBadge.textContent = 'Erro';
+                if (container) {
+                    container.innerHTML = `<div class="alert alert-danger"><i class="fas fa-exclamation-triangle mr-2"></i>Erro de comunicação: ${err.message}</div>`;
+                }
             });
         });
     }

@@ -201,7 +201,8 @@ if (isset($data['action']) && $data['action'] === 'get_credenciamento') {
         'total_coordenadores' => count($coordenadores),
         'total_escalados' => count($escalados),
         'total_geral' => count($todos_credenciados),
-        'credenciados' => $todos_credenciados
+        'credenciados' => $todos_credenciados,
+        'equipe' => $todos_credenciados
     ]);
     exit;
 }
