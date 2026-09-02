@@ -163,6 +163,13 @@ Implementar o **Portal do Associado**, a **Automação de Eventos** (atualizaç�
   - ✅ Integrada a assinatura digital do presidente no rodapé dos atestados (Paulo Addair Daniel Filho - Presidente).
   - ✅ Deploy e ativação das rotas concluídos com sucesso na produção no VPS1.
 
+- **Gestão de Escala & Ficha de Credenciamento (/admin/escala — 02/09/2026):**
+  - ✅ Autocura e equalização da tabela `presenca` no MariaDB da VPS1 (adicionadas as colunas `candidato_id`, `presente`, `data_confirmacao`, `confirmadopor` e índice único `idx_evento_candidato`).
+  - ✅ Blindagem de exceções PDO/MySQLi em `include/api_escala.php` e `pages/avaliacao.php`, garantindo retorno 100% JSON e eliminando o erro de parser JavaScript.
+  - ✅ Correção do fluxo de salvamento de escala (`salvar_escala`), com persistência do container de mensagens e upsert em `disponibilidade` para atendentes atribuídos manualmente.
+  - ✅ Refatoração da Ficha de Credenciamento (`#credenciamentoModal`), com atualização dinâmica de badge/título, tabela completa de equipe (coordenadores + atendentes escalados) e botões de cópia para WhatsApp, Excel (TSV) e impressão.
+  - ✅ Deploy concluído via SCP para VPS1 e validação em produção.
+
 ## 4. Problemas Pendentes / Próximos Passos
 1. **Migração do CRM para o iController (Aprovado):**
    - Remover arquivos locais de CRM/prospecção (rota `/admin/prospeccao`, scripts python de scraping e tabela `leads_expositores`).
