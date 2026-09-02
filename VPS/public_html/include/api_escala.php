@@ -257,14 +257,14 @@ if (isset($data['action']) && $data['action'] === 'suggest_escala') {
     exit;
 }
 
-if (isset($data['action']) && $data['action'] === 'save_escala') {
+if (isset($data['action']) && ($data['action'] === 'save_escala' || $data['action'] === 'salvar_escala')) {
     $evento_id = intval($data['evento_id']);
     $escalados_por_horario = $data['escalados'] ?? [];
     $query_get_horarios = "SELECT horario_id FROM horarios WHERE evento_id = {$evento_id}";
     $result_horarios = mysqli_query($conexao, $query_get_horarios);
     $horario_ids = [];
     while($row = mysqli_fetch_assoc($result_horarios)) {
-        $horario_ids[] = $row['horario_id'];
+        $horario_ids[] = intval($row['horario_id']);
     }
     if (!empty($horario_ids)) {
         $ids_string = implode(',', $horario_ids);
@@ -273,9 +273,18 @@ if (isset($data['action']) && $data['action'] === 'save_escala') {
     }
     foreach ($escalados_por_horario as $horario_id => $candidatos_ids) {
         if (!empty($candidatos_ids)) {
-            $candidatos_ids_string = implode(',', array_map('intval', $candidatos_ids));
-            $query_escalar = "UPDATE disponibilidade SET escalado = 1 WHERE atividade_id = ".intval($horario_id)." AND candidato_id IN ({$candidatos_ids_string})";
-            mysqli_query($conexao, $query_escalar);
+            $h_id = intval($horario_id);
+            foreach ($candidatos_ids as $c_raw) {
+                $c_id = intval($c_raw);
+                if ($c_id <= 0) continue;
+                // Atualiza se já existir registro na tabela, ou insere se foi escalado manualmente sem ficha prévia
+                $check = mysqli_query($conexao, "SELECT id FROM disponibilidade WHERE atividade_id = {$h_id} AND candidato_id = {$c_id} LIMIT 1");
+                if ($check && mysqli_num_rows($check) > 0) {
+                    mysqli_query($conexao, "UPDATE disponibilidade SET escalado = 1 WHERE atividade_id = {$h_id} AND candidato_id = {$c_id}");
+                } else {
+                    mysqli_query($conexao, "INSERT INTO disponibilidade (candidato_id, atividade_id, escalado) VALUES ({$c_id}, {$h_id}, 1)");
+                }
+            }
         }
     }
     // Automatically close scale when saved

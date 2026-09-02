@@ -89,11 +89,11 @@ include_once('./include/admin_sidebar.php');
     </h1>
     <p><a href="/admin/atividades">&laquo; Voltar para a lista de eventos</a></p>
     <hr>
+    <div id="mensagem-escala" class="mb-3"></div>
     <div id="escala-container">
         <?php if (!$evento_id_selecionado): ?>
             <div class="alert alert-danger">Nenhum evento foi especificado.</div>
         <?php else: ?>
-            <div id="mensagem-escala"></div>
             <div class="text-center py-4" id="escala-loading">
                 <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;"></div>
                 <p class="mt-2 text-muted font-weight-bold">Carregando horários e atendentes da escala...</p>
@@ -435,19 +435,47 @@ document.addEventListener('DOMContentLoaded', function() {
                         escalados: escalados
                     })
                 })
-                .then(response => response.json())
+                .then(async response => {
+                    const text = await response.text();
+                    try {
+                        return JSON.parse(text);
+                    } catch (e) {
+                        throw new Error("Resposta inválida do servidor: " + text.replace(/<[^>]*>?/gm, ' ').substring(0, 150));
+                    }
+                })
                 .then(data => {
-                    const mensagemDiv = document.getElementById('mensagem-escala');
+                    let mensagemDiv = document.getElementById('mensagem-escala');
+                    if (!mensagemDiv) {
+                        mensagemDiv = document.createElement('div');
+                        mensagemDiv.id = 'mensagem-escala';
+                        mensagemDiv.className = 'mb-3';
+                        const container = document.getElementById('escala-container');
+                        if (container && container.parentNode) {
+                            container.parentNode.insertBefore(mensagemDiv, container);
+                        }
+                    }
                     if (data.success) {
-                        mensagemDiv.innerHTML = '<div class="alert alert-success">Escala salva com sucesso!</div>';
+                        mensagemDiv.innerHTML = '<div class="alert alert-success alert-dismissible fade show"><i class="fas fa-check-circle mr-2"></i>Escala salva com sucesso!<button type="button" class="close" data-dismiss="alert">&times;</button></div>';
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
                     } else {
-                        mensagemDiv.innerHTML = '<div class="alert alert-danger">Erro ao salvar a escala: ' + data.message + '</div>';
+                        mensagemDiv.innerHTML = '<div class="alert alert-danger alert-dismissible fade show"><i class="fas fa-exclamation-triangle mr-2"></i>Erro ao salvar a escala: ' + data.message + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>';
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
                     }
                 })
                 .catch(error => {
                     console.error('Erro na requisição AJAX:', error);
-                    const mensagemDiv = document.getElementById('mensagem-escala');
-                    mensagemDiv.innerHTML = '<div class="alert alert-danger">Erro ao salvar a escala. Verifique o console para mais detalhes.</div>';
+                    let mensagemDiv = document.getElementById('mensagem-escala');
+                    if (!mensagemDiv) {
+                        mensagemDiv = document.createElement('div');
+                        mensagemDiv.id = 'mensagem-escala';
+                        mensagemDiv.className = 'mb-3';
+                        const container = document.getElementById('escala-container');
+                        if (container && container.parentNode) {
+                            container.parentNode.insertBefore(mensagemDiv, container);
+                        }
+                    }
+                    mensagemDiv.innerHTML = '<div class="alert alert-danger alert-dismissible fade show"><i class="fas fa-exclamation-triangle mr-2"></i>Erro ao salvar a escala: ' + error.message + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>';
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
                 });
             });
         }
