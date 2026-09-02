@@ -24,6 +24,11 @@ relacionados:
         - **Proteção e Fallback na API (`include/api_escala.php`):** Chamada de autocura integrada no bootstrap do endpoint, consultas de `presenca` e `avaliacoes` encapsuladas em blocos `try...catch` com inicialização vazia segura e encapsulamento global em `try...catch (Throwable $e)` garantindo que o endpoint **sempre** retorne JSON válido (`{"success": false, "message": ...}`).
         - **Proteção da Página Pública de Avaliação (`pages/avaliacao.php`):** Integrada a autocura de tabelas e query protegida com fallback automático sem join em caso de inconsistência de schema.
         - **Resiliência no Frontend (`pages/adminescala.php`):** Tratamento do `fetch()` refatorado para ler texto bruto e sanitizar respostas não-JSON antes de lançar erro, evitando quebras genéricas de sintaxe na interface.
+        - **Deploy & Homologação em Produção (VPS1):**
+            - Verificado que o diretório `/home/projetoame/public_html` na VPS1 não opera como repositório Git clone.
+            - Os arquivos atualizados (`funcoes.php`, `api_escala.php`, `avaliacao.php`, `adminescala.php`) foram sincronizados via `scp` diretamente para a VPS1 e alinhados com `chown projetoame:projetoame`.
+            - As colunas ausentes na tabela legada `presenca` (`candidato_id`, `presente`, `data_confirmacao`, `confirmadopor`) e o índice único `idx_evento_candidato` foram criados no MariaDB de produção.
+            - Validação end-to-end realizada com sucesso: a requisição JSON de `get_escala_details` para o evento 72 retornou status 200 com payload completo (`success: true`), e a rota pública de avaliação (`/avaliacao/{uuid}`) renderizou perfeitamente os atendentes e horários.
 
 - **23/08/2026 - Correção de Data do Evento MD MAKE A DIFFERENCE na Tabela `horarios` (VPS1):**
     - **Bug identificado:** A página `/atendentes` exibia "16/setembro, terça-feira" para o evento MD MAKE A DIFFERENCE. A causa raiz foi identificada diretamente no banco de dados da VPS1: a tabela `eventos_marcados` continha a data correta (`inicio = 2026-09-16`, quarta-feira), mas a tabela `horarios` (que é a fonte dos checkboxes de disponibilidade exibidos na página) continha o `data_inicio = 2025-09-16` (ano errado — terça-feira em 2025).
