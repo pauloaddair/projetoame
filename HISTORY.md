@@ -17,6 +17,26 @@ relacionados:
 
 # Histórico de Trabalho - Projeto AME
 
+- **04/09/2026 - Restauração e Correção da Página de Inscrição (`/inscrever`) & Recuperação do Candidato Luiz Renato (ID 45):**
+    - **Diagnóstico da Causa Raiz (/inscrever):** O acesso a `https://projetoame.org/inscrever` apresentava `Warning: Undefined variable $inscrito on line 253` e truncava a renderização logo após a tag de breadcrumb. O arquivo `pages/inscrever.php` estava incompleto (apenas 258 linhas), sem o formulário HTML de cadastro, sem os campos de entrada e sem os includes de rodapé (`footer-botton.php`), scripts (`html_footer_scripts.php`) e acessibilidade/VLibras (`end.php`).
+    - **Soluções Implementadas em /inscrever:**
+        - **Inicialização Segura de Variáveis:** Definidos valores padrão para `$inscrito`, `$msg`, `$status` e array `$dados`, eliminando qualquer aviso ou warning de variável indefinida.
+        - **Formulário Completo e Acessível:** Implementado formulário estruturado e responsivo (Bootstrap 4 + MDBootstrap) com seções organizadas (1. Dados do Atendente, 2. Responsável & Contato, 3. Documentos & Informações Complementares) e suporte integral aos modos de Alto Contraste e Fonte Grande.
+        - **Tratamento Resiliente de POST:** Inserção e atualização protegidas com escape de caracteres, cálculo dinâmico de rodízio para novos cadastros (status `ativo = -1` para moderação prévia), criação/vinculação de usuário na tabela `usuarios` e `candidatos_usuarios`, upload de anexos em `docs/` registrado na tabela `documentos` e disparo de e-mail de notificação administrativa com botões de moderação rápida.
+        - **Card de Confirmação:** Exibição de tela de sucesso amigável e intuitiva com opções de retorno ao início ou consulta de escalas.
+        - **Deploy & Homologação:** Arquivo sincronizado com o servidor de produção (VPS1 via `scp`) e validado ao vivo em `https://projetoame.org/inscrever`.
+    - **Reposicionamento dos Botões de Acessibilidade (Navbar Topo):**
+        - A barra de acessibilidade flutuante lateral (`#barra-acessibilidade` a `left: 10px; top: 120px;`) foi removida de `include/html_head.php` pois sobrepunha e bloqueava os menus laterais (ex: no painel administrativo `#admin-sidebar` e no casting).
+        - Os controles de acessibilidade (Alto Contraste e Aumento de Fonte `A+`) foram integrados diretamente em linha no topo da barra de navegação principal (`include/nav.php`), posicionados em grupo estilo pílula antes do menu de usuário/login, proporcionando layout limpo, elegante e 100% livre de sobreposição em todas as páginas.
+        - Deploy sincronizado com a VPS1 e validado ao vivo.
+
+        - O candidato havia sido excluído em teste acidental via `/excluircandidato/45`.
+        - Como a rotina de exclusão atingia apenas a tabela principal `candidatos`, todas as tabelas dependentes (165 registros de `disponibilidade`, 95 fotos reconhecidas em `fotos_reconhecidas`, documentos de autorização de uso de imagem em `documentos` e vínculos em `candidatos_usuarios`) permaneceram 100% íntegras no banco da VPS1.
+        - O registro de `candidatos` (ID 45, Luiz Renato Justo Daniel, ativo = 1, rodizio = 23, foto 24) foi resgatado com precisão cirúrgica a partir dos backups consolidados e reinserido no MariaDB de produção da VPS1.
+        - Validado acesso e visualização em `/curriculo?c=45` e `/casting`.
+
+
+
 - **02/09/2026 - Correção de Erro de Conexão na Escala (/admin/escala) e Autocura de Tabelas de Apoio:**
     - **Diagnóstico da Causa Raiz:** O acesso a `https://projetoame.org/admin/escala?evento_id=72` exibia o erro `Erro de conexão: Unexpected token '<', "..." is not valid JSON`. O rastreamento revelou que a requisição assíncrona para `include/api_escala.php` (e na página pública de avaliação `pages/avaliacao.php`) disparava um erro fatal do PHP: `Fatal error: Uncaught mysqli_sql_exception: Unknown column 'presente' in 'field list' / 'p.presente' in 'SELECT'`. Como a tabela `presenca` no banco de dados de produção existia sem a coluna `presente`, o MySQL no PHP 8.1+ abortava a execução cuspindo HTML de erro com `<br /><b>Fatal error</b>`, quebrando o parser JSON do JavaScript.
     - **Solução & Autocura Implementadas:**

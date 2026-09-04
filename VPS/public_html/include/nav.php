@@ -34,31 +34,26 @@
         </ul>
 
         <!-- Right -->
-        <ul class="navbar-nav nav-flex-icons">
-<!--
-          <li class="nav-item">
-            <a href="" class="nav-link" target="_blank">
-              <i class="fab fa-facebook-f"></i>
-            </a>
+        <ul class="navbar-nav nav-flex-icons ml-auto d-flex flex-row align-items-center">
+          <!-- Botões de Acessibilidade Inline na Barra Superior -->
+          <li class="nav-item mr-2">
+            <div class="btn-group btn-group-sm" role="group" aria-label="Recursos de Acessibilidade">
+              <button type="button" onclick="toggleContrast()" class="btn btn-sm text-white px-2 py-1 m-0 shadow-none border-0 d-inline-flex align-items-center" title="Alternar Alto Contraste" style="border-radius: 20px 0 0 20px; font-size: 11px; background-color: rgba(0, 0, 0, 0.45); border-right: 1px solid rgba(255,255,255,0.2) !important;">
+                <i class="fas fa-adjust mr-1"></i> Contraste
+              </button>
+              <button type="button" onclick="toggleFontSize()" class="btn btn-sm text-white px-2 py-1 m-0 shadow-none border-0 d-inline-flex align-items-center" title="Aumentar / Restaurar Tamanho da Fonte" style="border-radius: 0 20px 20px 0; font-size: 11px; background-color: rgba(23, 162, 184, 0.85);">
+                <i class="fas fa-font mr-1"></i> A+
+              </button>
+            </div>
           </li>
-          <li class="nav-item">
-            <a href="" class="nav-link" target="_blank">
-              <i class="fab fa-twitter"></i>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="" class="nav-link" target="_blank">
-              <i class="fab fa-instagram"></i>
-            </a>
-          </li>
--->
+
 			<?php $logado = "none";
             $login = "visible";
 				$perfil = "Visitante";
 				if (isset($_SESSION['nome'])){
 					$perfil = $_SESSION['nome'];
-                    $logado = "visible";
-                    $login = "none";
+                     $logado = "visible";
+                     $login = "none";
 				}
 				$foto = "img/profile.png";
 				if (isset($_SESSION['perfil'])){

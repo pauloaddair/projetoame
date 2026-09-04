@@ -147,9 +147,3 @@ $meta_og_url = isset($og_url) ? htmlspecialchars($og_url) : 'https://projetoame.
 		localStorage.setItem('fonte-grande', isLarge);
 	}
 </script>
-
-<!-- Barra Flutuante de Acessibilidade -->
-<div id="barra-acessibilidade" style="position: fixed; top: 120px; left: 10px; z-index: 99999; display: flex; flex-direction: column; gap: 8px;">
-	<button onclick="toggleContrast()" class="btn btn-sm btn-dark px-2 py-1 m-0" title="Alto Contraste" style="border-radius: 4px; font-size: 12px; box-shadow: 0px 2px 5px rgba(0,0,0,0.3); border: 1px solid #ccc; background-color: #333; color: #fff;"><i class="fas fa-adjust"></i> Contraste</button>
-	<button onclick="toggleFontSize()" class="btn btn-sm btn-info px-2 py-1 m-0" title="Aumentar Fonte" style="border-radius: 4px; font-size: 12px; box-shadow: 0px 2px 5px rgba(0,0,0,0.3); border: 1px solid #ccc; background-color: #17a2b8; color: #fff;"><i class="fas fa-font"></i> A +</button>
-</div>
