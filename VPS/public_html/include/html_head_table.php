@@ -1,6 +1,10 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="notranslate" translate="no">
+<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta charset="utf-8"/>
+<meta http-equiv="Content-Language" content="pt-BR">
+<meta name="google" content="notranslate">
 
 <!-- HTML Meta Tags -->
 <title>A.B.I.A.T. - <?php echo $titulo?></title>
@@ -73,3 +77,4 @@
         background-color:white; 
     }
 </style>
+</head>

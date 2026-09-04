@@ -17,6 +17,14 @@ relacionados:
 
 # Histórico de Trabalho - Projeto AME
 
+- **04/09/2026 - Correção de Reconhecimento de Idioma (Galego -> pt-BR) e Supressão de Tradução Indevida:**
+    - **Diagnóstico:** O Google Chrome estava exibindo o popup de tradução automática identificando o idioma da página incorretamente como "Galego". A causa raiz era a ausência da tag `<!DOCTYPE html>`, atributos `lang="pt-BR"` e meta tags de identificação de idioma nos templates legados (`include/html_head.php` e `include/html_head_table.php`).
+    - **Solução Implementada:**
+        - Adicionado `<!DOCTYPE html>` e `<html lang="pt-BR" class="notranslate" translate="no">` no início dos arquivos de cabeçalho global.
+        - Inseridas as meta tags `<meta http-equiv="Content-Language" content="pt-BR">` e `<meta name="google" content="notranslate">`.
+        - Limpeza de fechamentos prematuros (`</body></html>`) no topo de `include/html_footer_scripts.php`.
+        - Sincronização via SCP com a VPS1 e validação em produção.
+
 - **04/09/2026 - Restauração e Correção da Página de Inscrição (`/inscrever`) & Recuperação do Candidato Luiz Renato (ID 45):**
     - **Diagnóstico da Causa Raiz (/inscrever):** O acesso a `https://projetoame.org/inscrever` apresentava `Warning: Undefined variable $inscrito on line 253` e truncava a renderização logo após a tag de breadcrumb. O arquivo `pages/inscrever.php` estava incompleto (apenas 258 linhas), sem o formulário HTML de cadastro, sem os campos de entrada e sem os includes de rodapé (`footer-botton.php`), scripts (`html_footer_scripts.php`) e acessibilidade/VLibras (`end.php`).
     - **Soluções Implementadas em /inscrever:**

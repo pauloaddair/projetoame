@@ -1,5 +1,10 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="notranslate" translate="no">
+<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Language" content="pt-BR">
+<meta name="google" content="notranslate">
 
 <?php
 $site_title = isset($titulo) ? htmlspecialchars($titulo) : 'A.B.I.A.T. — Projeto A.M.E.';
@@ -147,3 +152,4 @@ $meta_og_url = isset($og_url) ? htmlspecialchars($og_url) : 'https://projetoame.
 		localStorage.setItem('fonte-grande', isLarge);
 	}
 </script>
+</head>
