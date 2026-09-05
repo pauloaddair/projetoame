@@ -17,6 +17,18 @@ relacionados:
 
 # Histórico de Trabalho - Projeto AME
 
+- **05/09/2026 - Concepção do AME Web-to-Print Studio (AME Magazine & Álbuns de Memória) & Proposta AlphaGraphics:**
+    - **Conceito & Arquitetura Editorial:** Estruturação do motor Web-to-Print para geração de publicações personalizadas sob demanda para os responsáveis dos atendentes da AME, transformando fotos reconhecidas por IA nos eventos oficiais em publicações físicas.
+    - **4 Modelos Editoriais Definidos no MVP:**
+        1. *Revista Celebridades (Estilo CARAS / Quem):* Edição de gala com matéria de capa, cobertura dos eventos e depoimento da família.
+        2. *História em Quadrinhos (HQ AME):* Narrativa visual em estilo comic book destacando o atendente como protagonista de inclusão.
+        3. *Livro de Colorir & Atividades:* Conversão automática de fotos em traço *Line Art* (P&B) para colorir com passatempos e labirintos da inclusão.
+        4. *Álbum de Figurinhas AME:* Álbum A4 (grid 4x) com marca d'água/esboço a 20% de opacidade nas molduras dos cromos (estimulando foco e percepção motora) + matérias-tampão institucionais (*calhau*) + cartela de figurinhas autoadesivas A4.
+    - **Acesso Seguro sem Senha:** Planejado o fluxo por Link Mágico com assinatura criptográfica HMAC-SHA256 e expiração temporal.
+    - **Documentação & Planejamento:** Criado `PLANO_AME_MAGAZINE_WEB_TO_PRINT.md` com o diagrama de arquitetura e modelo de dados.
+    - **Proposta Institucional AlphaGraphics (Etapa 5):** Elaborado o documento `PROPOSTA_PARCERIA_ALPHAGRAPHICS.md` e compilado em `.docx` via Pandoc (também replicado para a pasta `/apoio`), estruturando cotas de patrocínio ESG e apoio gráfico sob demanda.
+
+
 - **04/09/2026 - Correção de Reconhecimento de Idioma (Galego -> pt-BR) e Supressão de Tradução Indevida:**
     - **Diagnóstico:** O Google Chrome estava exibindo o popup de tradução automática identificando o idioma da página incorretamente como "Galego". A causa raiz era a ausência da tag `<!DOCTYPE html>`, atributos `lang="pt-BR"` e meta tags de identificação de idioma nos templates legados (`include/html_head.php` e `include/html_head_table.php`).
     - **Solução Implementada:**
