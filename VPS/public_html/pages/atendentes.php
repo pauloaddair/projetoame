@@ -225,7 +225,7 @@ $resp = mysqli_query($conexao,$queryeventos);
 							   echo " value='".$_POST['nome']."'";
 						   }
 						   ?>>
-					<label for="nome">digite o nome do atendente</label>
+					<label for="nome" class="sr-only">digite o nome do atendente</label>
 				</div>
 				<div class="md-form">
 					<i class="far fa-map prefix grey-text"></i>
@@ -234,7 +234,7 @@ $resp = mysqli_query($conexao,$queryeventos);
 							   echo " value='".$_POST['email']."'";
 						   }
 						   ?>>
-					<label for="email">digite seu e-mail</label>
+					<label for="email" class="sr-only">digite seu e-mail</label>
 				</div>
 <!--
 				<div class="md-form">

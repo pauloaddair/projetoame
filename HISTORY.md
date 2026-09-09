@@ -17,6 +17,13 @@ relacionados:
 
 # Histórico de Trabalho - Projeto AME
 
+- **09/09/2026 - Correção de CSS/UX: textos sobrepostos nos campos de `/atendentes`:**
+    - **Sintoma:** No print do usuário (`apoio/Captura de tela 2026-09-09 193729.png`), os campos "nome do atendente" e "e-mail" exibiam dois textos sobrepostos dentro da mesma caixa (label escuro do MDB + placeholder cinza).
+    - **Causa raiz:** Os campos usam o componente `md-form` do Material Design Bootstrap v4 (CSS carregado via CDN em `include/html_head.php`), que posiciona o `<label>` flutuante **dentro** do input. A flutuação do label para cima depende do **JS do MDB** (`mdb.min.js`), que **não é carregado** na página `/atendentes` (`include/scripts.php` está vazio e não há jQuery/MDB JS no rodapé). Resultado: label e placeholder convivem sobrepostos.
+    - **Correção aplicada:** Os labels dos dois campos foram marcados como `class="sr-only"` em `pages/atendentes.php` — ocultos visualmente (o placeholder descritivo permanece visível dentro do campo) e preservados para leitores de tela (acessibilidade). Deploy via scp + `chown projetoame:projetoame` na VPS1 e validado no HTML servido.
+    - **Nota adicional:** O texto "16 | SETEMBRO" visto sobre o card do MD MAKE A DIFFERENCE é **parte da imagem promocional** `img/MIRANTE-PARK-MD-2025.jpg` (arte do flyer), não é sobreposição de CSS — nenhuma alteração necessária no card.
+    - **Recomendação futura:** O padrão `md-form` (label flutuante) exige o bundle jQuery+MDB JS; ao usar `md-form` em páginas que não carregam esses scripts, aplicar `sr-only` nos labels ou remover o atributo `placeholder` para evitar duplicidade visual.
+
 - **09/09/2026 - Correção: Evento "3ª turma CURSO DJ para Eventos" (id 73) não aparecia em `/atendentes`:**
     - **Sintoma:** Evento criado na base da VPS1 (início 15/09/2026) não era listado em `https://projetoame.org/atendentes`, embora existisse em `eventos_marcados` com horário cadastrado (`horarios.horario_id = 196`, 15 vagas).
     - **Causa raiz:** A query da página pública faz INNER JOIN implícito com `imagens` (`WHERE eventos_marcados.imagem_id = imagens.imagem_id AND final >= CURDATE()`). O evento foi inserido com `imagem_id = 0` (inserção direta na base, fora das telas oficiais `adminnovaatividade.php`/`novoevento.php`, que exigem `imagem_id > 0`), sendo silenciosamente descartado do JOIN por não existir imagem com id 0.
