@@ -17,6 +17,16 @@ relacionados:
 
 # Histórico de Trabalho - Projeto AME
 
+- **09/09/2026 - Correção: Evento "3ª turma CURSO DJ para Eventos" (id 73) não aparecia em `/atendentes`:**
+    - **Sintoma:** Evento criado na base da VPS1 (início 15/09/2026) não era listado em `https://projetoame.org/atendentes`, embora existisse em `eventos_marcados` com horário cadastrado (`horarios.horario_id = 196`, 15 vagas).
+    - **Causa raiz:** A query da página pública faz INNER JOIN implícito com `imagens` (`WHERE eventos_marcados.imagem_id = imagens.imagem_id AND final >= CURDATE()`). O evento foi inserido com `imagem_id = 0` (inserção direta na base, fora das telas oficiais `adminnovaatividade.php`/`novoevento.php`, que exigem `imagem_id > 0`), sendo silenciosamente descartado do JOIN por não existir imagem com id 0.
+    - **Correção aplicada (produção VPS1):**
+        1. Upload do pôster local `public_html/img/poster_AMEDJs.jpg` para `/home/projetoame/public_html/img/` (via scp) com `chown projetoame:projetoame` + `chmod 644`.
+        2. `INSERT INTO imagens (url) VALUES ('img/poster_AMEDJs.jpg');` → nova `imagem_id = 102`.
+        3. `UPDATE eventos_marcados SET imagem_id = 102 WHERE id = 73;`
+    - **Validação:** Query da página retorna o evento 73 com a imagem; página pública `https://projetoame.org/atendentes` exibe o card "3ª turma CURSO DJ para Eventos" (15/Set a 06/Out, 15 vagas).
+    - **Lições / Recomendação:** Ao criar eventos fora da interface oficial (SQL direto), garantir sempre um `imagem_id` válido existente em `imagens`; caso contrário o evento fica invisível nas páginas públicas que usam o JOIN.
+
 - **05/09/2026 - Concepção do AME Web-to-Print Studio (AME Magazine & Álbuns de Memória) & Proposta AlphaGraphics:**
     - **Conceito & Arquitetura Editorial:** Estruturação do motor Web-to-Print para geração de publicações personalizadas sob demanda para os responsáveis dos atendentes da AME, transformando fotos reconhecidas por IA nos eventos oficiais em publicações físicas.
     - **4 Modelos Editoriais Definidos no MVP:**
@@ -239,7 +249,7 @@ relacionados:
 - Ajustada a consulta de escalas pblicas para exibir apenas atendentes ativos (tivo = 1).
 
 ## [2026-07-30] - Padronizao do Esquema de Status e Rodzio
-- Documentada a especificao de status: candidatos.ativo = -1 (Inativo/Spam),   (Treinamento), 1 (Ativo).
+- Documentada a especificao de status: candidatos.ativo = -1 (Inativo/Spam), 0 (Treinamento), 1 (Ativo).
 - Ajustado o cadastro (inscrever.php) para gravar tivo = -1 por padro para moderao prvia.
 - Atualizado registro do bot oqjffddvik para tivo = -1.
 
