@@ -26,6 +26,12 @@ revisao_alvo: "2026-09-26 (Assembleia)"
 > aplicável a entidades beneficentes/OSC** e aos pilares de **transparência, segurança e
 > acessibilidade**, entregando até a **Assembleia de 26/09/2026** um site moderno, transparente e acessível.
 
+> ⚠️ **Atualização 09/09/2026 — convocação da assembleia:** ver parecer dedicado em
+> [[PARECER_CONVOCACAO_ASSEMBLEIA_26SET]]. **O estatuto vigente exige apenas 7 dias** de antecedência
+> (art. 14, §2º — edital afixado na sede **e no sítio** da Associação); o prazo de **15 dias** consta
+> somente de uma **minuta proposta**. Risco real: **quórum** (presença mínima de 30% dos Associados
+> Família e 50%+1 dos presentes para os itens do art. 13) e a **ausência de cadastro formal de associados**.
+
 ---
 
 ## 1. Contexto & Premissas
