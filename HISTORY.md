@@ -17,6 +17,12 @@ relacionados:
 
 # Histórico de Trabalho - Projeto AME
 
+- **09/09/2026 - Registro do Plano de Análise Funcional & Compliance para a Assembleia de 26/09/2026:**
+    - **Contexto:** Paulo solicitou registrar a necessidade de análise completa das funcionalidades do Projeto AME (melhores práticas + legislação para entidades beneficentes) visando entregar um site moderno, transparente e acessível na Assembleia de 26/09/2026.
+    - **Escopo registrado (5 pilares):** A) Transparência institucional pública (estatuto/atas/balanços/prestação de contas/editais); B) Portal do Responsável seguro (informações da associação + dados do(s) filho(s)/atendente(s) por vínculo); C) Primeiro acesso sem senha (`senha = NULL` + e-mail com link de validação) e convite de novos responsáveis (M:N — 1 usuário → N candidatos e 1 candidato → N responsáveis); D) Álbuns e currículos com fotos identificadas por candidato (base para books/revistas/álbuns de figurinha futuros); E) Compliance LGPD, LBI/WCAG, Lei 12.101/2009, MROSC 13.019/2014, Lei 9.608/1998, governança e OWASP.
+    - **Levantamento de estado atual:** pivot `candidatos_usuarios` já modela o M:N com `vinculo_tipo`/`pode_editar`; rotas de token/ativação e tabela `tokens` existem parcialmente; `/meuperfil` filtra por vínculo; foto-análise (VPS3) e tabelas de fotos existem; pendências mapeadas (senha NULL em produção, migração MD5→bcrypt, autorização por vínculo em todas as telas, convite/aceite, consentimento de imagem e LGPD).
+    - **Artefato criado:** `PLANO_ANALISE_COMPLIANCE_ASSEMBLEIA_26SET.md` (raiz do projeto; com diagramas mermaid de fluxos e modelo M:N, roadmap por fases até 26/09 e perguntas em aberto) + cópia do relatório geral em `F:\01_Projetos\apoio\2026-09-09 — Plano Análise Compliance Projeto AME.md`.
+
 - **09/09/2026 - Correção de CSS/UX: textos sobrepostos nos campos de `/atendentes`:**
     - **Sintoma:** No print do usuário (`apoio/Captura de tela 2026-09-09 193729.png`), os campos "nome do atendente" e "e-mail" exibiam dois textos sobrepostos dentro da mesma caixa (label escuro do MDB + placeholder cinza).
     - **Causa raiz:** Os campos usam o componente `md-form` do Material Design Bootstrap v4 (CSS carregado via CDN em `include/html_head.php`), que posiciona o `<label>` flutuante **dentro** do input. A flutuação do label para cima depende do **JS do MDB** (`mdb.min.js`), que **não é carregado** na página `/atendentes` (`include/scripts.php` está vazio e não há jQuery/MDB JS no rodapé). Resultado: label e placeholder convivem sobrepostos.
