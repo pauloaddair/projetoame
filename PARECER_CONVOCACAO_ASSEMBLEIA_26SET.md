@@ -107,10 +107,11 @@ flowchart LR
 | 6.2 | **Edital da AGO de 04/10/2024 ausente** do acervo, embora listado como anexo do requerimento de averbação | **Alta** | Localizar/reconstituir e instruir o processo de averbação |
 | 6.3 | **AGO de 2025 não localizada** — o art. 14 exige assembleia ordinária **anual**; o último relatório aprovado cobre até set/2024 | **Alta** | Incluir na pauta de 26/09 a prestação de contas de out/2024 a set/2026 (absorvendo o exercício 2025) |
 | 6.4 | **Averbação do mandato 2024–2026 em aberto** (requerimento sem data/protocolo) | **Alta** | Confirmar protocolo no 6º RTDPJ e concluir antes/junto da nova averbação |
-| 6.5 | **Divergência estatuto × prática:** o art. 14 atribui a presidência da assembleia ao **Presidente do Conselho Consultivo**, mas as atas de 2022 e 2024 registram o **Presidente da Diretoria** presidindo | **Média** | Verificar a existência do Conselho Consultivo; se não houver, regularizar por alteração estatutária (com ordem do dia expressa) ou registrar justificativa em ata |
-| 6.6 | **Inconsistência de nomenclatura:** art. 13 fala em “Conselho de Administração”; art. 15 trata da “Diretoria” | **Média** | Consolidar a redação do estatuto (texto único) e averbar |
-| 6.7 | **Mito interno dos “15 dias”** (origem: minuta proposta) | **Baixa** | Alinhar a diretoria: prazo vigente = 7 dias; adotar 15 por prudência é facultativo |
-| 6.8 | Edital vigente de 2022 cita local físico e “primeira convocação” apenas | **Média** | Atualizar o modelo: local + **formato híbrido** (presencial e online), 1ª e 2ª convocação com horários, link de acesso |
+| 6.5 | **Mesa da assembleia:** o art. 14, caput (texto confirmado em render de 300 dpi) determina que a assembleia seja **presidida pelo Presidente do Conselho Consultivo** — órgão previsto nos **arts. 26 e ss.** (não deliberativo, sem voto, integrado automaticamente pelos ex-presidentes e **referendado pela Assembleia Geral**). Como o Conselho Consultivo **não está formalizado**, é preciso constituí-lo antes/junto da AGO para a mesa estar regular | **Alta** | Constituir/referendar o Conselho Consultivo (art. 26) e registrar em ata; na abertura, o Presidente da Diretoria conduz o item de constituição e, em seguida, passa a mesa ao presidente do Conselho Consultivo |
+| 6.6 | **Conselho Fiscal vago:** o art. 24 exige **3 membros efetivos + 1 suplente** eleitos pela Assembleia Geral, com **mandato coincidente com o da Diretoria**; a AGO de 04/10/2024 (que elegeu a Diretoria 2024–2026) **não elegeu o Conselho Fiscal**, cuja composição de 2022 tinha mandato 2022–2024 | **Alta** | Incluir na ordem do dia a **eleição do Conselho Fiscal** (art. 24) e a apreciação de seus pareceres (art. 25) |
+| 6.7 | **Inconsistência de nomenclatura:** art. 13 fala em “Conselho de Administração”; art. 15 trata da “Diretoria” | **Média** | Consolidar a redação do estatuto (texto único) e averbar |
+| 6.8 | **Mito interno dos “15 dias”** (origem: minuta proposta) | **Baixa** | Alinhar a diretoria: prazo vigente = 7 dias; adotar 15 por prudência é facultativo |
+| 6.9 | Edital vigente de 2022 cita local físico e “primeira convocação” apenas | **Média** | Atualizar o modelo: local + **formato híbrido** (presencial e online), 1ª e 2ª convocação com horários, link de acesso |
 
 ---
 
@@ -142,10 +143,11 @@ flowchart LR
 
 1. A assembleia de 26/09 é **AGO anual** apenas, ou inclui **eleição da diretoria 2026–2028**?
 2. Há **alteração estatutária** na pauta? Se sim, quais artigos (para constarem do edital)?
-3. Existe formalmente o **Conselho Consultivo** (e quem é seu presidente)? Isso define quem preside a mesa (art. 14).
-4. Quem é o **universo de Associados Família** aptos a votar hoje (lista nominal)?
+3. Quem integrará o **Conselho Consultivo** (art. 26: entidades/pessoas de setores econômicos + ex-presidentes automáticos)? Ele será referendado na própria AGO?
+4. Quem são os **Associados Família** aptos a votar hoje (lista nominal) e como será o referendo das novas admissões (art. 13)?
 5. A averbação do mandato 2024–2026 foi **protocolada**? Qual o número/status?
 6. Autoriza adotar o **prazo de 15 dias** como padrão de convocação (embora o estatuto exija 7), por prudência e alinhamento à minuta futura?
+7. Quem serão os **3 efetivos + 1 suplente** do Conselho Fiscal (art. 24) a eleger em 26/09?
 
 ---
 
