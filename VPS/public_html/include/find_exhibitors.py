@@ -76,7 +76,7 @@ def main():
         api_base = None
     else:
         # Fallback to LiteLLM proxy
-        api_key = "sk-Pjbj4sgDUf6lH-exN2jPdQ"
+        api_key = "sk-q9jlSjI9QLZavKEmQbUHrw"
         model_name = "openai/text-chat"
         api_base = "https://llm.netmailing.com.br"
         
