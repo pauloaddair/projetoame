@@ -346,6 +346,26 @@ Solange Aparecida Brigo
 | **VIII.4** | Art. 26, §2º | "Integram automaticamente os **Ex-Presidentes**" — **sem definir** se o ex-presidente que se desligou do quadro social permanece; a **ex-presidente** citada por Paulo precisa ser formalmente integrada | Acrescentar: *"§ Os Ex-Presidentes integram o Conselho Consultivo **automaticamente**, independentemente de nova referendo, pelo prazo de **4 (quatro) anos** contados do término do mandato, podendo ser reconduzidos por deliberação da Assembleia."* — e **registrar nominalmente** a ex-presidente na ata de constituição. |
 | **VIII.5** | Art. 26 | **Não fixa** número máximo de membros, forma de indicação, nem **duração do referendo** | Acrescentar: *"§ O Conselho Consultivo será composto por **até 15 (quinze) membros**, indicados pela Diretoria e **referendados pela Assembleia Geral**, com mandato coincidente com o da Diretoria."* |
 
+### BLOCO VIII-B — Composição nominal do Conselho Consultivo (respondido em 15/09/2026)
+
+**Ex-presidentes identificados** (art. 26, §2º — integração **automática**, sem necessidade de referendo):
+
+| Ex-presidente | Mandato | Base |
+|---|---|---|
+| **Marisa Evangelista** | **2018–2020** (1ª presidente) | Informado por Paulo em 15/09/2026 — **é a "primeira presidente" e a "ex-presidente" a integrar o Conselho** |
+| **Paulo Addair Daniel Filho** | **2020–2022 e 2022–2024** (dois mandatos) | ATA da AGO de 30/07/2022 (reeleição) + ATA da AGO de 04/10/2024 |
+
+> ⚠️ **Ponto de atenção:** o **próprio Paulo** integra automaticamente o Conselho Consultivo como
+> ex-presidente **assim que seu mandato 2024–2026 se encerrar em 17/10/2026**. Isso significa que, se
+> ele **não** se reeleger em 03/10, ele passa ao Conselho Consultivo — órgão **não deliberativo e sem
+> voto**. A cláusula do Bloco VIII.1 (presidência da mesa pelo Presidente da Diretoria) é o que evita
+> que a associação perca o comando da assembleia nesse cenário. **Confirmar com o advogado** se Paulo
+> pretende concorrer a novo mandato.
+>
+> ⚠️ **Nome civil completo** de Marisa Evangelista ainda não consta do acervo consultado — necessário
+> para o termo de aceite e o registro na ata (buscar nas ATAs de 2018/2020: `Ata e Estatuto A.M.E-2020`
+> e `Assembleias\`).
+
 ### BLOCO IX — Transparência, LGPD e governança (**artigos novos**)
 
 | # | Tema | Situação atual | Proposta |
@@ -368,6 +388,158 @@ Solange Aparecida Brigo
 | **X.6** | Art. 30 | Dissolução: 50%+1 "do total dos associados família **presentes**", exigindo maioria absoluta em 1ª convocação | ⚠️ **Inconsistência com o art. 13, §1º**, que fala em 50%+1 **do total** (não dos presentes). Uniformizar para **50%+1 do total dos Associados Família**. |
 | **X.7** | Art. 30, §1º | *"O Diretor Presidente é liquidante nato"* | ✅ Manter. |
 
+### BLOCO XI — Gestão profissional remunerada (CLT) — **viabilidade e minuta**
+
+> **Pergunta de Paulo (15/09/2026):** *"Quero permitir a contratação de um diretor/gestor
+> administrativo CLT, para termos alguém (que depois pode ser uma equipe) que possa trabalhar sob
+> remuneração na prospecção/administração da entidade. Isso é viável? Precisa mudança estatutária?
+> Não seriam membros da diretoria ou conselhos. Seriam funcionários, remunerados pela monetização/
+> patrocínios. É possível caminhar nesse sentido?"*
+
+#### XI.1 Veredito: **SIM, é viável — e a arquitetura que você descreveu é exatamente a correta**
+
+A chave é a **separação entre GOVERNANÇA e EXECUÇÃO**:
+
+```mermaid
+flowchart TD
+    subgraph GOV["GOVERNANÇA — voluntária, sem remuneração (art. 11, §1º)"]
+        AG["Assembleia Geral"]
+        DIR["Diretoria Executiva<br/>5 cargos estatutários<br/>SEM remuneração"]
+        CF["Conselho Fiscal<br/>3 + 1 suplente<br/>SEM remuneração"]
+        CC["Conselho Consultivo<br/>não deliberativo<br/>SEM remuneração"]
+    end
+    subgraph EXE["EXECUÇÃO — remunerada, vínculo CLT ou autônomo"]
+        GA["Gestor(a) Administrativo(a)<br/>cargo de confiança"]
+        CAP["Captador(a) de Recursos<br/>prospecção e patrocínios"]
+        EQ["Equipe de apoio<br/>futura"]
+    end
+    DIR -->|"contrata, dirige e avalia"| GA
+    DIR -->|"contrata, dirige e avalia"| CAP
+    GA --> EQ
+    CAP --> EQ
+    MON["Monetização · patrocínios · licenciamento<br/>editais · convênios"] -->|"custeia"| EXE
+    EXE -->|"resultado alimenta"| MON
+    style GOV fill:#e8f4ff
+    style EXE fill:#fff4e8
+```
+
+**Por que funciona:** a **vedação do art. 11, §1º** (*"o trabalho dos **dirigentes** é voluntário e não
+será remunerado em hipótese alguma"*) recai sobre **dirigentes** — Diretoria e Conselhos. Um
+**funcionário celetista** que **não seja diretor nem conselheiro** **não é dirigente** e, portanto,
+**não é alcançado pela vedação**. Já existe base no estatuto para contratar: **art. 16, V** —
+*"admitir, contratar e dispensar funcionários ou serviços de terceiros"*.
+
+#### XI.2 O que **falta** no estatuto (por isso a mudança é necessária)
+
+| Lacuna | Onde | Efeito prático |
+|---|---|---|
+| **Nenhuma menção a pessoal remunerado** | todo o estatuto | Não há previsão de **plano de cargos e salários**, nem de **fonte de custeio vinculada** — abre flanco para questionamento de desvio de finalidade |
+| **Art. 11, §1º pode ser lido de forma amplíssima** | art. 11, §1º | Risco de interpretação de que **qualquer** trabalho na associação seria voluntário |
+| **Art. 16, V só permite contratar — não disciplina** | art. 16, V | Falta: quem aprova, qual o limite, qual a fonte, e a **incompatibilidade com cargos de governança** |
+| **Art. 36 (não distribuição de resultados)** | art. 36 | Precisa de cláusula que **salvaguarde expressamente a remuneração de empregados** como despesa operacional legítima (não é distribuição de resultado) |
+| **Ausência de regra para o caso de dirigente contratado** | — | Se um Diretor for contratado como CLT, há **acumulação** de governança e execução — precisa vedações claras |
+| **Ausência de previsão orçamentária** | art. 16, III | O orçamento do ano subsequente deve contemplar a rubrica de pessoal |
+
+> 🔴 **RESTRIÇÃO CRÍTICA — CEBAS / imunidade (Lei 12.101/2009, art. 30):** a certificação CEBAS **veda
+> a remuneração dos dirigentes** da entidade. Portanto: **é possível remunerar funcionários, mas
+> NÃO é possível remunerar diretores e conselheiros** se a associação quiser/precisar manter CEBAS ou
+> imunidade. **É exatamente por isso que a sua arquitetura está correta** — o gestor remunerado deve
+> **entrar como empregado, nunca como Diretor**. Se ele precisar de poderes de gestão, resolva por
+> **procuração** ou **delegação de competência** outorgada pela Diretoria, **não** por cargo
+> estatutário. **Validar com o advogado** qual o enquadramento atual da AME (CEBAS, Utilidade Pública,
+> OSCIP, imunidade) antes de fechar a redação.
+
+#### XI.3 Cumulatividade — vedação necessária
+
+Se um **Diretor** for também **empregado** (CLT), cria-se conflito estrutural: ele **fiscaliza a si
+mesmo**, vota sobre o próprio salário e contamina o **parecer do Conselho Fiscal**. A proposta veda
+isso de forma expressa.
+
+#### XI.4 Minuta proposta
+
+**Alterar o art. 11, §1º** para:
+
+> **§ 1º** O trabalho dos **dirigentes** — assim entendidos os membros da Diretoria Executiva e dos
+> Conselhos Fiscal e Consultivo — **é voluntário e não será remunerado a qualquer título**, vedada a
+> percepção de remuneração, pró-labore, honorários, participação em resultados ou vantagens
+> pecuniárias pelo exercício dessas funções, ressalvado o reembolso de despesas comprovadamente
+> realizadas no exercício das atribuições.
+>
+> **§ 1º-A** A Associação poderá **contratar, sob regime da Consolidação das Leis do Trabalho (CLT)
+> ou como prestadores de serviços autônomos**, empregados e profissionais para o exercício de
+> **funções executivas, administrativas, técnicas e de captação de recursos**, cuja remuneração
+> constitui **despesa operacional legítima** da Associação e **não configura distribuição de
+> resultados** para os fins do art. 36 deste Estatuto.
+>
+> **§ 1º-B** Os empregados e prestadores de serviços de que trata o § 1º-A **não integram** a
+> Diretoria Executiva nem os Conselhos, **não participam** das deliberações da Assembleia Geral e
+> **não exercem voto** em qualquer órgão da Associação, ainda que participem das reuniões para
+> prestar informações, mediante convite.
+>
+> **§ 1º-C** É **vedada a acumulação** da condição de empregado ou prestador remunerado com cargo na
+> Diretoria Executiva ou nos Conselhos Fiscal e Consultivo. O associado eleito para cargo de
+> governança que já exerça função remunerada deverá **optar** expressamente por uma das condições,
+> no prazo de 30 (trinta) dias contados da posse, sob pena de vacância do cargo de governança.
+>
+> **§ 1º-D** Os poderes de gestão que a Diretoria entender necessários ao desempenho das funções
+> remuneradas serão conferidos por **delegação de competência ou procuração com poderes expressos e
+> delimitados**, com prazo determinado e revogabilidade a qualquer tempo, **não** se convertendo em
+> cargo estatutário.
+
+**Acrescentar ao art. 16** (competência da Diretoria) — novo inciso:
+
+> **(xi)** aprovar o **plano de cargos, funções e remuneração** dos empregados e prestadores de
+> serviços, fixando **limites de despesa com pessoal**, e contratar, dirigir, avaliar e dispensar os
+> profissionais de que trata o art. 11, § 1º-A, **observado o orçamento aprovado pela Assembleia
+> Geral** (art. 13, VII) e a **vinculação de custeio** prevista no art. 16, § 2º.
+
+**Acrescentar ao art. 16** — novo parágrafo:
+
+> **§ 1º** As contratações de que trata o art. 11, § 1º-A dependem de **prévia dotação
+> orçamentária** e serão precedidas de **processo seletivo simplificado**, com critérios objetivos
+> de qualificação técnica, registrado em ata.
+>
+> **§ 2º** **Vinculação de custeio:** a remuneração do pessoal contratado para **prospecção,
+> captação de recursos, patrocínios e administração** será preferencialmente custeada por
+> **receitas próprias de monetização, patrocínios, licenciamento de marca, editais e convênios**,
+> com **demonstração separada** em rubrica contábil específica, apresentada anualmente à Assembleia
+> Geral com o **parecer do Conselho Fiscal**. A Assembleia fixará, anualmente, o **limite máximo**
+> da despesa com pessoal em relação à receita corrente.
+>
+> **§ 3º** O **gestor remunerado** apresenta **relatório de atividades e de resultados** à Diretoria
+> **mensalmente** e à **Assembleia Geral** anualmente, integrando o relatório de gestão.
+
+**Acrescentar ao art. 13** (competência da Assembleia Geral) — novo inciso:
+
+> **(xiii)** aprovar o **plano de cargos, funções e remuneração** e fixar o **limite anual de
+> despesa com pessoal** remunerado, ouvido o Conselho Fiscal.
+
+**Acrescentar ao art. 36** (não distribuição de resultados) — novo parágrafo:
+
+> **§ único** O disposto no *caput* **não se aplica** à remuneração de empregados e prestadores de
+> serviços contratados na forma do art. 11, § 1º-A, que constitui **contraprestação por trabalho
+> efetivamente prestado** e legítima despesa operacional, sujeita às regras de mercado e à
+> legislação trabalhista e previdenciária aplicável.
+
+#### XI.5 Estrutura sugerida de implantação (faseada)
+
+| Fase | Escopo | Fonte de custeio | Observação |
+|---|---|---|---|
+| **1 — Gestor Administrativo (CLT, meio período ou integral)** | Administração, rotinas, prestação de contas, apoio à Diretoria, interface com contabilidade | Monetização + patrocínios recorrentes | **É o cargo que destrava tudo** — sem ele a diretoria voluntária não consegue executar |
+| **2 — Captador de Recursos / Prospecção** | Prospecção de patrocínios, editais, convênios, parcerias, licenciamento de marca | **Comissão por resultado** sobre recursos captados (a ser validada juridicamente) ou salário + meta | ⚠️ Remuneração variável sobre recurso público captado tem **vedações legais** — validar com o advogado |
+| **3 — Equipe de apoio** | Comunicação, social media, produção de eventos, atendimento ao associado | Receita de produtos/licenciamento (Bloco VI) | Cresce com a monetização |
+| **4 — Assessoria jurídica e contábil** | Pareceres, vistos em atas, contabilidade, CEBAS/OSC | Despesa recorrente fixa | Já é necessidade imediata (Frente D do plano de formalização) |
+
+> ⚠️ **Atenção — Lei 13.019/2014 (MROSC):** se houver **termo de fomento/colaboração com o poder
+> público**, a **remuneração da equipe** é permitida, mas **com limites e vedação à remuneração de
+> dirigentes** (art. 45 e parágrafos) e com prestação de contas específica. **Não misturar** as
+> rubricas de convênio com as de receita própria — a associação precisa de **contabilidade
+> segregada** por fonte.
+>
+> ⚠️ **Lei 9.608/1998 (voluntariado):** a existência de **empregados** não impede o **voluntariado**,
+> mas exige que o **termo de adesão do voluntário** deixe claro que **não há vínculo empregatício** e
+> que a atividade é **espontânea e não remunerada**. Redação proposta no Bloco IX.4.
+
 ---
 
 ## 6. Quadro-resumo da reforma (para o edital — "artigo por artigo")
@@ -387,6 +559,7 @@ Solange Aparecida Brigo
 | VIII | 26 | Conselho Consultivo: presidência, atribuições, até 15 membros, ex-presidentes | 🔴 Alta |
 | IX | novos (LGPD, transparência, conflito, voluntariado, certificações) | Governança e conformidade | 🟡 Média |
 | X | 29, 30, 33, 34 | Prazos, quórum de dissolução, auditoria, bens móveis | 🟡 Média |
+| **XI** | **11 §1º e novos §§1º-A a 1º-D, 16 (xi e §§), 13 (xiii), 36 (parágrafo único)** | **Gestão profissional remunerada (CLT) — separação governança × execução** | 🔴 **Alta** |
 
 ---
 
@@ -397,16 +570,17 @@ Solange Aparecida Brigo
 > Interno é que se referendam as **novas admissões** (item 7), evitando circularidade.
 
 1. **Verificação de quórum e instalação** — 1ª convocação (maioria absoluta) e, se necessário, 2ª convocação (qualquer número).
-2. **Eleição da mesa** (presidente e secretário) e, em seguida, **constituição e referendo do Conselho Consultivo** (art. 26) — com o Presidente da Diretoria conduzindo este item e passando a palavra ao presidente do Conselho Consultivo na sequência.
+2. **Eleição da mesa** (presidente e secretário) e, em seguida, **constituição e referendo do Conselho Consultivo** (art. 26) — com o Presidente da Diretoria conduzindo este item e passando a palavra ao presidente do Conselho Consultivo na sequência. **Integram automaticamente** os ex-presidentes **Marisa Evangelista (2018–2020)** e **Paulo Addair Daniel Filho (2020–2024)**.
 3. **Leitura, discussão e aprovação da ata da AGO de 04/10/2024** e **RATIFICAÇÃO expressa de todos os seus atos** (prestação de contas out/2022–set/2024; alteração do art. 15, §1º; eleição e posse da Diretoria 2024–2026).
 4. **Prestação de contas e relatório de atividades do período out/2024 a set/2026** (absorvendo o exercício 2025 não apreciado), com **parecer do Conselho Fiscal**.
-5. **Reforma do Estatuto Social** — deliberação **artigo por artigo**, conforme o quadro do item 6 deste documento, com quórum qualificado do art. 13, §1º.
+5. **Reforma do Estatuto Social** — deliberação **artigo por artigo**, conforme o quadro do item 6 deste documento, com quórum qualificado do art. 13, §1º — **incluindo o Bloco XI (gestão profissional remunerada / CLT)**.
 6. **Aprovação do Regimento Interno** (ingresso no quadro social, direitos, deveres, contribuições, suspensão e exclusão) e **instituição do Livro de Associados**.
 7. **Enquadramento e admissão dos associados** nas categorias Família / Honorário / Mantenedor, com **referendo** das admissões e registro no Livro.
 8. **Eleição do Conselho Fiscal** (3 efetivos + 1 suplente — art. 24) e **eleição da Diretoria para o mandato 2026–2028**, com posse.
 9. **Aprovação das políticas institucionais**: privacidade e proteção de dados (LGPD), uso de imagem, transparência ativa e conflito de interesses; apresentação do **portal de transparência** e do **Portal do Responsável**.
 10. **Autorização para licenciamento de marca e comercialização de produtos** (álbuns, revistas, portfólio, álbum de figurinhas, mochilas, necessaires, cadernos, agendas), com fixação do **limite** para contratos de licenciamento que dependam de nova autorização.
-11. **Assuntos gerais** e encerramento.
+11. **Autorização para a gestão profissional remunerada** (art. 11, §§1º-A a 1º-D): aprovação do **plano de cargos, funções e remuneração**, fixação do **limite anual de despesa com pessoal** e da **vinculação de custeio** às receitas de monetização/patrocínio — com **parecer do Conselho Fiscal**.
+12. **Assuntos gerais** e encerramento.
 
 ---
 
@@ -423,24 +597,36 @@ Solange Aparecida Brigo
 | 8.7 | **Mandato termina em 17–18/10** e a AGO é em 03/10 — margem de só 14 dias para lavratura, visto e averbação | 🟡 Média | Advogado precisa estar contratado **até 24/09**, com minutas prontas |
 | 8.8 | Reforma ampla aumenta o **risco de questionamento** se algum item não constar do edital | 🔴 Alta | **Listar artigo por artigo** no edital (quadro do item 6) |
 | 8.9 | Denominação "**Conselho de Administração**" (arts. 10 §1º, 13 III/IV/V) | 🟡 Média | Padronizar para "Diretoria Executiva" em **todo** o texto consolidado |
-| 8.10 | Nomes para o **Conselho Consultivo** (entidades: UBRAFE, WTC/Sheraton, SENAI/Theobaldo de Nigris, ABEOC) + **ex-presidentes** | 🟡 Média | Definir lista nominal até 24/09; identificar formalmente a **ex-presidente** a integrar |
+| 8.10 | **Conselho Consultivo** — ✅ ex-presidentes identificados (**Marisa Evangelista 2018–2020** e **Paulo Addair 2020–2024**). Faltam as **entidades** (UBRAFE, WTC/Sheraton, SENAI/Theobaldo de Nigris, ABEOC) e o **nome civil completo** de Marisa | 🟡 Média | Fechar a lista de entidades até 24/09; buscar o nome civil nas ATAs de 2018/2020 |
 | 8.11 | **Nome do Conselho Consultivo x presidência da mesa** — mudança do art. 14 tem efeito imediato sobre quem preside a própria AGO | 🔴 Alta | Se a reforma for aprovada no item 5, ela **não** retroage para a mesa da mesma assembleia — consignar isso na ata |
 | 8.12 | **LGPD**: a associação trata dados de **crianças/adolescentes** e **dados de saúde** (deficiência = dado sensível) | 🔴 Alta | Nomear **DPO** e aprovar política na AGO; adequar Portal do Responsável |
+| **8.13** | **Remuneração de pessoal vs. CEBAS/imunidade (Lei 12.101/2009, art. 30)** — a certificação **veda a remuneração de dirigentes**; a linha entre "dirigente" e "empregado" precisa ser inequívoca | 🔴 **Alta** | Levantar o **enquadramento fiscal atual da AME** (CEBAS, Utilidade Pública, OSCIP, imunidade) **antes** de fechar a redação do Bloco XI; validar com o advogado e o contador |
+| **8.14** | **Paulo passa ao Conselho Consultivo em 17/10/2026** (art. 26, §2º) se **não** se reeleger — órgão **sem voto e não deliberativo**. Risco de perda de comando da assembleia | 🔴 **Alta** | Decidir se Paulo concorre ao mandato 2026–2028 e confirmar a cláusula do Bloco VIII.1 (presidência da mesa pelo Presidente da Diretoria) |
+| **8.15** | **Remuneração variável por captação de recursos** (comissão sobre patrocínio/edital captado) tem **vedações legais** em recursos públicos | 🟡 Média | Validar modelo de remuneração do captador com o advogado antes de contratar (Bloco XI.5, Fase 2) |
+| **8.16** | **Contabilidade segregada por fonte** (receita própria vs. convênio/parceria pública) é exigência prática do MROSC e do CEBAS | 🟡 Média | Definir com o contador o plano de contas segregado antes de contratar pessoal remunerado |
 
 ---
 
 ## 9. Perguntas para decisão (antes de 24/09)
 
-1. **Nome do Conselho Consultivo:** confirmar **quem é a ex-presidente** a integrar (e se há outros ex-presidentes).
-2. **Composição da Diretoria 2026–2028:** quem são os **4 Associados Família + eventual Honorário**? Haverá renovação?
-3. **Conselho Fiscal 2026–2028:** quem são os **3 efetivos + 1 suplente**?
-4. **Regra de parentesco:** aceita a proposta de **até 2 membros da mesma família**, com mínimo de 2 famílias distintas?
-5. **Cargo público (art. 11, §3º):** confirma a atenuação para **conflito específico**?
-6. **Contribuição social:** haverá **contribuição obrigatória** de Associados Família? Qual valor? (impacta o Regimento Interno)
-7. **Licenciamento de marca:** qual o **limite de valor/prazo** que a Diretoria poderá contratar **sem** nova assembleia?
-8. **Assembleia híbrida:** a AGO de 03/10 será **presencial, híbrida ou online**? (o edital precisa informar local/formato/link)
-9. **Auditoria externa:** contratar para o exercício 2026?
-10. **Data final:** confirma **03/10/2026 (sábado)** como data da AGO? Se não, qual?
+> ✅ **Respondidas em 15/09/2026:** (1) ex-presidentes = **Marisa Evangelista (2018–2020)** e
+> **Paulo Addair (2020–2024)**; (11) **deseja-se contratar gestor administrativo CLT remunerado**
+> — viável, com reforma (Bloco XI).
+
+1. **Conselho Consultivo — entidades:** quais entidades/pessoas dos setores econômicos serão referendadas (UBRAFE, WTC/Sheraton, SENAI/Theobaldo de Nigris, ABEOC, outras)? **Qual será o presidente do Conselho Consultivo?**
+2. **Nome civil completo de Marisa Evangelista** (para termo de aceite e ata) — buscar nas ATAs de 2018/2020.
+3. **Paulo concorre ao mandato 2026–2028?** (define se ele passa ao Conselho Consultivo em 17/10)
+4. **Composição da Diretoria 2026–2028:** quem são os **4 Associados Família + eventual Honorário**?
+5. **Conselho Fiscal 2026–2028:** quem são os **3 efetivos + 1 suplente**?
+6. **Regra de parentesco:** aceita a proposta de **até 2 membros da mesma família**, com mínimo de 2 famílias distintas?
+7. **Cargo público (art. 11, §3º):** confirma a atenuação para **conflito específico**?
+8. **Contribuição social:** haverá **contribuição obrigatória** de Associados Família? Qual valor? (impacta o Regimento Interno)
+9. **Licenciamento de marca:** qual o **limite de valor/prazo** que a Diretoria poderá contratar **sem** nova assembleia?
+10. **Gestão remunerada:** qual o **perfil e a faixa salarial** do gestor administrativo? Contratação **já em 2026** ou na próxima gestão? Quem custeia até a monetização engrenar?
+11. **Enquadramento fiscal atual da AME:** CEBAS? Utilidade Pública? OSCIP? Imunidade? (condiciona o Bloco XI — ver risco 8.13)
+12. **Assembleia híbrida:** a AGO de 03/10 será **presencial, híbrida ou online**? (o edital precisa informar local/formato/link)
+13. **Auditoria externa:** contratar para o exercício 2026?
+14. **Data final:** confirma **03/10/2026 (sábado)** como data da AGO? Se não, qual?
 
 ---
 
