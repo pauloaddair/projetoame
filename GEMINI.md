@@ -38,6 +38,8 @@ skills:
 | **Framework**   | Vanilla PHP — Front Controller em `index.php`                  |
 | **MVP Status**  | ✅ **LIVE** — `projetoame.org`                                 |
 | **Job ID**      | `item_17`                                                      |
+| **AGO 2026**    | 🏛️ **Adiada para 03/10/2026** (fim do mandato: **17/10/2026**) — **edital a publicar até 25/09/2026** |
+| **Governança**  | Estatuto integral (38 arts.) em `ESTATUTO_VIGENTE_TEXTO_INTEGRAL.md` · reforma proposta em `ANALISE_ESTATUTO_E_REFORMA_2026.md` |
 | **Domínios**    | `projetoame.org`, `abiat.org.br`, `projetoame.ong.br`, `projetoame.org.br` |
 
 ### 🖥️ Ambiente Local (SOHO)
@@ -171,6 +173,20 @@ Implementar o **Portal do Associado**, a **Automação de Eventos** (atualizaç�
   - ✅ Deploy concluído via SCP para VPS1 e validação em produção.
 
 ## 4. Problemas Pendentes / Próximos Passos
+
+> 🏛️ **[ATUALIZAÇÃO 15/09/2026 — GOVERNANÇA É A PRIORIDADE ABSOLUTA]**
+> A **AGO foi adiada de 26/09 para 03/10/2026** (mandato 2024–2026 encerra em **17/10/2026**).
+> **Prazos duros:** ordem do dia e minutas até **23–24/09** · advogado contratado e revisão até
+> **24/09** · **edital publicado (sítio + afixação na sede) até 25/09** · prestação de contas
+> out/2024–set/2026 fechada até **30/09** · **AGO 03/10** · averbação no 6º RTDPJ até **02/11**.
+> **Documentos de trabalho:** [[ESTATUTO_VIGENTE_TEXTO_INTEGRAL]] · [[ANALISE_ESTATUTO_E_REFORMA_2026]] ·
+> [[PARECER_CONVOCACAO_ASSEMBLEIA_26SET]] · [[PLANO_FORMALIZACAO_QUADRO_SOCIAL_E_GOVERNANCA]].
+> **Bloqueios:** (1) **Livro de Associados inexistente** — precisa existir antes do edital (base do quórum);
+> (2) **art. 15, §1º** — alteração de 2024 não averbada, Diretoria atual tem 1 não-Família em situação
+> irregular; (3) **art. 15, §2º** — vedação de parentes na Diretoria provavelmente violada;
+> (4) **edital da AGO de 04/10/2024 ausente**; (5) **Conselho Fiscal vago desde out/2024**;
+> (6) **Conselho Consultivo nunca constituído** (o art. 14 dava-lhe a presidência da assembleia).
+
 1. **Migração do CRM para o iController (Aprovado):**
    - Remover arquivos locais de CRM/prospecção (rota `/admin/prospeccao`, scripts python de scraping e tabela `leads_expositores`).
    - Desenvolver o webhook `/api/webhook/novo-evento` no Projeto AME para receber e cadastrar eventos/vagas do iController (com suporte a geolocalização: lat/lng).
