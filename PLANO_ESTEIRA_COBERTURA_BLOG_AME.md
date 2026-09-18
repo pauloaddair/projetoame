@@ -146,16 +146,25 @@ Fotos de pessoas com deficiência são **dado pessoal sensível** (LGPD, art. 5�
 
 ## 6. Roadmap proposto
 
-| Fase | Entrega | Depende de |
+| Fase | Entrega | Status |
 |---|---|---|
-| **F0** | Corrigir os 12 `link_artigo` + fechar a base de 57 registros | — (feito nesta sessão: base consolidada) |
-| **F1** | Ampliar enrollment biométrico de 39 para todos os atendentes ativos | Fotos de perfil atualizadas no CRM |
-| **F2** | Indexador EXIF do acervo `POCO_PADF` -> tabela `midia_exif` | Download do celular concluído |
-| **F3** | Cruzamento EXIF x `eventos_marcados` + fila de revisão humana | F2 |
-| **F4** | `fetch_activity_pauta()` no gerador + `pauta_source: "activities"` + `strict_scope` no tenant | Aprovação do texto do `editorial_anchor` |
-| **F5** | Write-back do `link_artigo` + contador de cobertura | F4 |
-| **F6** | Rodar as 5 ondas editoriais (38 atividades) em cadência noturna | F1-F5 |
-| **F7** | Termo de consentimento de imagem/biometria assinado pelos associados | Jurídico |
+| **F0** | Consolidar a base (73 → 57) e corrigir os 15 `link_artigo` | ✅ **feito** 18/09/2026 |
+| **F1** | Ampliar enrollment biométrico (39 de 112 candidatos) | ⏳ pendente |
+| **F2** | Indexador EXIF do acervo `POCO_PADF` | ✅ **feito** 18/09/2026 — `tools/indexar_midia_exif.py`, 57.921 arquivos, 944 com EXIF real |
+| **F3** | Cruzamento EXIF × `eventos_marcados` + fila de revisão humana | ✅ **feito** 18/09/2026 — `tools/cruzar_midia_atividades.py`, 21 atividades com fotos, 13 ambíguas isoladas |
+| **F4** | Pauta por atividade no Content Factory + `strict_scope` no tenant | ✅ **feito** 18/09/2026 — endpoint, provedor, patches no motor e trava de ancoragem |
+| **F5** | Write-back do `link_artigo` + contador de cobertura | ✅ **feito** 18/09/2026 — `POST` no endpoint, verificado idempotente |
+| **F6** | Rodar as 5 ondas editoriais (38 atividades) em cadência noturna | ⏳ pronto para rodar — ver nota de cadência abaixo |
+| **F7** | Termo de consentimento de imagem/biometria assinado pelos associados | ⏳ jurídico |
+
+### Nota de cadência (F6)
+
+Na cadência atual do cron (`0 0,6,9,12,15,18,21` = 7 slots/dia) com `--round-robin` entre **15 tenants**, o AME recebe ~1 slot a cada 2 dias. Cobrir as 42 pendências levaria **~80 dias**. Alternativas: (a) rodar `--slug projetoame` em um slot dedicado; (b) reduzir o rodízio do AME para prioridade; (c) aceitar a cadência lenta como "publicação contínua".
+
+### Resultado parcial do pipeline de mídia (F2/F3) — ver relatório dedicado
+
+`RELATORIO_MIDIA_EXIF_ATIVIDADES_18SET2026.md`. Resumo: das 42 lacunas, **19 já têm fotos candidatas**; 8 sem ambiguidade e 13 exigindo decisão humana. O reconhecimento facial ainda **não** rodou nas atividades pendentes (as 365 linhas de `fotos_reconhecidas` cobrem só eventos antigos), então a pauta chega ao redator com `atendentes_presentes: 0` para as lacunas de 2025-2026 — próximo passo é rodar `scan_events.py` por atividade.
+
 
 ## 7. Riscos
 
