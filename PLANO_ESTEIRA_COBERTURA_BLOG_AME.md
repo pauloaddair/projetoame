@@ -23,30 +23,43 @@ relacionados:
 
 ## 1. Diagnóstico: por que os artigos recentes ficaram genéricos
 
-Os dois últimos posts do blog (12 e 15/09/2026, "Trabalho e Deficiência no Brasil" e "Acolhimento e Equidade Corporativa") não foram um erro do agente — são o comportamento **esperado** do motor atual:
+> **Correção do diagnóstico inicial.** A primeira hipótese era "o tenant cai no RSS de tecnologia do G1". A investigação do motor mostrou algo mais preciso — e pior.
 
-| Componente | Situação atual | Consequência |
+Os dois últimos posts do blog têm origem rastreável:
+
+| Componente | Situação encontrada | Consequência |
 |---|---|---|
-| `RSS_FEED_URL` em `content_factory_critic_engine.py` | Hardcoded em `https://g1.globo.com/rss/g1/tecnologia/` | A pauta nasce de notícia de **tecnologia**, não de atividade do AME |
-| `TENANT_CURATED_PAUTAS` | Existe para PAPONET e Marília; **não existe entrada para `projetoame`** | O tenant cai direto no RSS genérico |
-| Bloco `projetoame` em `wp_content_factory_tenants.json` | Tem `theme`, `author`, `affiliate_*`; **não tem** `strict_scope`, `editorial_anchor` nem `primary_cta_url` | O redator escreve sobre o tema em abstrato, sem ancorar em fato real |
-| `eventos_marcados.link_artigo` | Existe (varchar 255), preenchido em só 12 de 57 registros | O motor **não sabe** quais atividades já têm artigo |
+| `TENANT_CURATED_PAUTAS["projetoame"]` | Contém **exatamente 2 pautas genéricas**: *"Inclusão Produtiva Através do Trabalho…"* e *"Acolhimento e Equidade Corporativa…"* | Foram **exatamente** os dois artigos de 12 e 15/09/2026 |
+| Pool curado esgotado | `get_already_covered_topics()` já marca as duas como cobertas | O **próximo** artigo cairia no `RSS_FEED_URL` — `g1.globo.com/rss/g1/tecnologia/`, hardcoded |
+| Bloco `projetoame` em `wp_content_factory_tenants.json` | Tinha `theme` e `author`, mas **não tinha** `strict_scope`, `editorial_anchor` nem `primary_cta_url` | O redator escrevia sobre o tema em abstrato, sem ancorar em fato real |
+| `eventos_marcados.link_artigo` | Preenchido em 12 de 57 registros, com vínculos errados | O motor **não sabia** quais atividades já tinham artigo |
 
-Ou seja: o agente escreve sobre *inclusão* porque foi isso que pedimos a ele — o nicho. Nunca pedimos que escrevesse sobre *a atividade de 30/05 no SENAI Osasco*.
+Ou seja: o agente escreveu sobre *inclusão* porque foi isso que o pool de pautas pediu. Nunca foi pedido a ele que escrevesse sobre *a atividade de 30/05 no SENAI Osasco* — e, esgotado o pool, a fonte degradaria para notícia de tecnologia.
 
-## 2. Correção 1 — Fonte de pauta por atividade (o núcleo da solução)
+### 1.1 Achado adicional durante o dry-run: o refinamento derrubava a ancoragem
 
-Criar um modo **event-driven** de pauta, análogo ao que já existe para PAPONET, mas alimentado pelo banco:
+Ao rodar o pipeline com a pauta por atividade, o **ciclo 1 saiu perfeito** ("CONARH 2026: Projeto AME leva atendimento inclusivo ao São Paulo Expo", 89 pts) e o **ciclo 2 regrediu** para "Inclusão Produtiva: Quando o Trabalho Deixa de Ser Favor e Vira Estratégia" (82 pts).
+
+Causa: o revisor avalia voz, clichê, SEO, afiliado e fluidez — dimensões em que um ensaio genérico pontua bem — e o prompt de refinamento (ciclo ≥ 2) não repetia a atividade. Sem reancoragem, "aprofunde o texto" significa abandonar o fato.
+
+**Correção aplicada:** a âncora factual passou para o *system prompt* (vale em todos os ciclos), o ciclo ≥ 2 recebe lembrete de ancoragem, e o revisor ganhou uma **trava programática** — se o texto não citar a atividade, a nota é limitada a 60 e o artigo é reprovado, independentemente de o LLM obedecer ao prompt.
+
+## 2. Correção 1 — Fonte de pauta por atividade (IMPLEMENTADO em 18/09/2026)
+
+> **Status:** entregue e em produção. Endpoint na VPS1 (`include/api_ame_pautas.php`), provedor `ame_pautas_provider.py` e patches no motor, ambos implantados na VPS2 em `/root/nasanet/content_factory/`.
+
+Modo **event-driven** de pauta, análogo ao que já existe para PAPONET, mas alimentado pelo banco de atividades:
 
 ```mermaid
 flowchart LR
-    A["eventos_marcados<br/>VPS1 (57 registros)"] -->|SELECT sem link_artigo<br/>status=realizado| B["Fila de pautas<br/>AME"]
-    B --> C{"Ciclo 6h<br/>Content Factory"}
-    C --> D["Redator<br/>(persona Redacao AME)"]
-    D --> E["Revisor Actor-Critic<br/>nota >= 90"]
-    E -->|draft| F["WordPress<br/>projetoame.org/home"]
-    F -->|URL do post| G["UPDATE link_artigo<br/>eventos_marcados"]
-    G --> A
+    A["eventos_marcados<br/>VPS1 (57 registros)"] -->|SELECT sem link_artigo<br/>status=realizado| B["api_ame_pautas.php<br/>token X-AME-Token"]
+    B --> C["ame_pautas_provider.py<br/>VPS2 (40 pendentes)"]
+    C --> D{"Ciclo 6h<br/>Content Factory"}
+    D --> E["Redator<br/>(persona Redacao AME)"]
+    E --> F["Revisor Actor-Critic<br/>+ trava de ancoragem"]
+    F -->|draft| G["WordPress<br/>projetoame.org/home"]
+    G -->|URL do post| H["POST api_ame_pautas.php<br/>UPDATE link_artigo"]
+    H --> A
 ```
 
 **Contrato da pauta por atividade** (o que o motor passa ao redator em vez do RSS):
@@ -54,14 +67,26 @@ flowchart LR
 | Campo | Origem | Uso no prompt |
 |---|---|---|
 | `nome`, `slug` | `eventos_marcados` | Título e URL |
-| `inicio` / `final` | `eventos_marcados` | Data no título e na linha-fina |
-| `local` | `eventos_marcados` | Contexto geográfico e de credibilidade |
-| `tipo_evento` | `eventos_marcados` | Define o enquadramento (atendimento / curso / reunião) |
+| `inicio` / `final` | `eventos_marcados` | Data explícita no título e no corpo |
+| `local`, `endereco` | `eventos_marcados` | Contexto geográfico e credibilidade |
+| `tipo_evento` | `eventos_marcados` | Enquadramento (atendimento / curso / reunião) |
 | Empresa contratante | `horarios.empresa_id` → `empresas` | Case de cliente nomeado |
-| Atendentes presentes | `fotos_reconhecidas` (distinct candidato) | Número real de escalados + depoimentos |
+| Atendentes presentes | `fotos_reconhecidas` (distinct, `oculta = 0`) | Número real de escalados |
 | Fotos | `fotos_reconhecidas.foto_path` | Galeria real, sem banco de imagem genérico |
 
-**Implementação sugerida:** um resolvedor `fetch_activity_pauta(slug)` no engine, consultado **antes** do RSS quando o tenant tiver `pauta_source: "activities"`. Assim nada muda para os outros 14 tenants.
+### 2.1 Endpoint `GET/POST https://projetoame.org/include/api_ame_pautas.php`
+
+- `GET ?limit=N` — atividades realizadas **sem** artigo (`link_artigo` vazio), ordenadas da mais recente.
+- `GET ?id=N` — uma atividade específica, com fotos e empresas contratantes.
+- `GET ?modo=completo` — inclui primeiro nome dos atendentes (padrão é `contagem`, sem dado pessoal).
+- `POST {"id": N, "url": "..."}` — **write-back** do `link_artigo`; aceita apenas URLs do blog do AME.
+- **Autenticação fail-closed:** header `X-AME-Token`, segredo em `/home/projetoame/ame_pautas.token`, **fora do web root**. Sem o arquivo, o endpoint responde 503 e não entrega nada.
+
+### 2.2 Isolamento e reversibilidade
+
+- O desvio só ocorre se o tenant tiver `"pauta_source": "activities"` — os outros **14 canais não mudam de comportamento** (verificado).
+- O motor cai para a fonte antiga automaticamente se o endpoint estiver fora do ar.
+- Backup do motor e do arquivo de tenants em `/root/backups/` na VPS2 antes do deploy.
 
 ## 3. Correção 2 — Escopo e ancoragem do tenant `projetoame`
 

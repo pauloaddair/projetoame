@@ -4,3 +4,16 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^(.*)$ index.php [L,QSA]
 </IfModule>
+
+# Bloqueia acesso HTTP direto a arquivos sensiveis (segredos, dumps, logs).
+# O .htaccess apenas reescreve rotas; sem esta regra um .token/.sql/.env/.log
+# colocado na arvore publica seria servido como arquivo estatico.
+<FilesMatch "\.(token|sql|env|log|bak|ini)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
