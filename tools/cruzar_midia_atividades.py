@@ -33,7 +33,8 @@ import collections
 from datetime import datetime, timedelta
 
 CAMPOS_SAIDA = ['evento_id', 'atividade', 'inicio', 'final', 'local', 'status_match',
-                'fotos', 'primeira', 'ultima', 'pastas']
+                'fotos', 'dias_distintos', 'dia_pico', 'fotos_dia_pico', 'concentracao_pct',
+                'alerta', 'primeira', 'ultima', 'pastas']
 
 
 def carregar_atividades(caminho):
@@ -67,26 +68,27 @@ def main():
     atividades = carregar_atividades(args.base)
     print('atividades carregadas: %d' % len(atividades))
 
-    # Indexa fotos por dia. Criterio de confianca: `fonte_data == 'exif'` (data real
-    # de captura, gravada pela camera). NAO usar a pasta como criterio: o acervo tem
-    # 666 miniaturas, 14 mil thumbnails, 4,8 mil imagens de redes sociais e 38 mil
-    # caches de app (`device\Pictures\...`) cuja unica data disponivel e o mtime da
-    # copia — que geraria "eventos" falsos. Descoberto em 18/09/2026.
+    # Indexa fotos por dia, com confianca em camadas:
+    #   ALTA  = exif          (data gravada pela camera)
+    #   MEDIA = nome_arquivo  (IMG_20240613_164329) / nome_data (IMG-20250325-WA0004)
+    #   BAIXA = pasta_ano_mes (so o mes — nao serve para casar por dia)
+    #   DESCARTADO = mtime    (data da copia, nao da captura)
+    FONTES_OK = {'exif', 'nome_arquivo', 'nome_data'}
     por_dia = collections.defaultdict(list)
     total_exif = 0
     for r in csv.DictReader(io.open(args.exif, encoding='utf-8-sig'), delimiter=';'):
-        if r.get('fonte_data') != 'exif':
+        if r.get('fonte_data') not in FONTES_OK:
             continue
         d = (r.get('data_captura') or '')[:10]
         if not d:
             continue
         total_exif += 1
         por_dia[d].append(r)
-    print('fotos com EXIF real (data confiavel): %d em %d dias' % (total_exif, len(por_dia)))
+    print('fotos com data confiavel: %d em %d dias' % (total_exif, len(por_dia)))
 
     if not total_exif:
-        print('\nNenhuma foto com EXIF real no indice. Confira a coluna `fonte_data` '
-              'do CSV gerado por indexar_midia_exif.py.')
+        print('\nNenhuma foto com data confiavel no indice. Confira a coluna '
+              '`fonte_data` do CSV gerado por indexar_midia_exif.py.')
         return
 
     # cobertura de cada atividade
@@ -120,6 +122,23 @@ def main():
 
         datas = sorted((f.get('data_captura') or '')[:10] for f in fotos)
         pastas = sorted({os.path.dirname(f['caminho']) for f in fotos})
+
+        # Metricas de concentracao. Uma atividade de 1 dia deve concentrar as fotos
+        # em 1-3 dias; se as fotos se espalham por dezenas de dias, o casamento esta
+        # pegando imagem aleatoria do periodo (WhatsApp do dia a dia), nao o evento.
+        contagem_dia = collections.Counter(datas)
+        dia_pico, fotos_pico = (contagem_dia.most_common(1)[0] if contagem_dia else ('', 0))
+        dias_distintos = len(contagem_dia)
+        concentracao = round(100.0 * fotos_pico / max(1, len(fotos)), 1)
+
+        span = (datetime.strptime(a['fim'], '%Y-%m-%d').date()
+                - datetime.strptime(a['inicio'], '%Y-%m-%d').date()).days + 1
+        alertas = []
+        if span > 7 and dias_distintos > 5:
+            alertas.append('janela longa (%dd) — risco de varrer imagem nao relacionada' % span)
+        if concentracao < 40:
+            alertas.append('fotos difusas no periodo — provavel ruido')
+
         linhas.append({
             'evento_id': a['id'],
             'atividade': a['nome'][:70],
@@ -128,6 +147,11 @@ def main():
             'local': a['local'][:40],
             'status_match': 'AMBIGUO (concorre com %s)' % concorrentes if concorrentes else 'ok',
             'fotos': len(fotos),
+            'dias_distintos': dias_distintos,
+            'dia_pico': dia_pico,
+            'fotos_dia_pico': fotos_pico,
+            'concentracao_pct': concentracao,
+            'alerta': ' | '.join(alertas),
             'primeira': datas[0],
             'ultima': datas[-1],
             'pastas': ' | '.join(p.replace('E:\\06_Backup_Local\\POCO_PADF', '') for p in pastas[:3]),
@@ -142,15 +166,27 @@ def main():
         cw.writerows(linhas)
 
     ambiguos = [r for r in linhas if r['status_match'] != 'ok']
+    difusos = [r for r in linhas if r['alerta']]
     print('\n--- RESULTADO ---')
     print('atividades com fotos sugeridas : %d' % len(linhas))
     print('  sem ambiguidade              : %d' % (len(linhas) - len(ambiguos)))
     print('  ambiguas (revisao humana)    : %d' % len(ambiguos))
+    print('  com alerta de qualidade      : %d' % len(difusos))
     print('CSV                            : %s' % args.out)
 
-    print('\nTop 12 atividades por volume de fotos:')
+    print('\nTop 12 por volume — confira a CONCENTRACAO antes de confiar:')
+    print('  %-4s %-36s %6s %6s %8s %s' % ('id', 'atividade', 'fotos', 'dias', 'pico%', 'obs'))
     for r in linhas[:12]:
-        print('  #%-3s %-42s %4d fotos  [%s]' % (r['evento_id'], r['atividade'][:42], r['fotos'], r['status_match'][:22]))
+        print('  #%-3s %-36s %6d %6d %7s%% %s' % (
+            r['evento_id'], r['atividade'][:36], r['fotos'], r['dias_distintos'],
+            r['concentracao_pct'], ('AMBIGUO' if r['status_match'] != 'ok' else '')))
+
+    if difusos:
+        print('\nATENCAO — concentracao baixa (provavel ruido, NAO usar como galeria):')
+        for r in difusos[:8]:
+            print('  #%-3s %-36s %5d fotos em %3d dias (pico %s%%) -> %s' % (
+                r['evento_id'], r['atividade'][:36], r['fotos'], r['dias_distintos'],
+                r['concentracao_pct'], r['alerta'][:52]))
 
     if ambiguos:
         print('\nATENCAO — matches ambiguos (o script NAO escolhe; precisa de decisao humana):')

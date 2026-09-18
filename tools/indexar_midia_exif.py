@@ -43,6 +43,14 @@ EXT_VIDEO = {'.mp4', '.mov', '.avi', '.mkv', '.3gp'}
 
 # IMG_20240613_164329.jpg  /  VID_20240613_164329.mp4  /  20240613_164329.jpg
 RE_NOME = re.compile(r'(20\d{2})(\d{2})(\d{2})[_\-\s]?(\d{2})(\d{2})(\d{2})')
+# IMG-20250325-WA0004.jpg  /  null-20250329-WA0053.jpg  /  20250325.jpg
+# (WhatsApp e afins: data SEM hora. Achado de 18/09/2026: 37.972 arquivos em
+#  MIDIA\imagens\ ficavam sem data por causa disso.)
+RE_NOME_DATA = re.compile(r'(20\d{2})(\d{2})(\d{2})(?!\d)')
+# share_2024-06-27_04_36_33_588.jpeg — padrao do compartilhamento do Android (DCIM\share_*)
+RE_NOME_DASH = re.compile(r'(20\d{2})-(\d{2})-(\d{2})[_\s](\d{2})[_:](\d{2})[_:](\d{2})')
+# Pasta MIDIA\imagens\AAAA\MM — dica mais fraca, usada apenas como ultimo recurso
+RE_PASTA_ANO_MES = re.compile(r'[\\/](20\d{2})[\\/](\d{2})(?:[\\/]|$)')
 
 GPS_IFD = 34853
 
@@ -157,7 +165,7 @@ def extrair(caminho):
         except Exception as e:
             rec['erro'] = 'img: %s' % str(e)[:60]
 
-    # 3) nome do arquivo
+    # 3) nome do arquivo — com hora (mais preciso)
     if not rec['data_captura']:
         m = RE_NOME.search(nome)
         if m:
@@ -170,7 +178,42 @@ def extrair(caminho):
             except Exception:
                 pass
 
-    # 4) mtime
+    # 3a) nome com separadores — share_2024-06-27_04_36_33_588.jpeg
+    if not rec['data_captura']:
+        m = RE_NOME_DASH.search(nome)
+        if m:
+            try:
+                rec['data_captura'] = datetime(
+                    int(m.group(1)), int(m.group(2)), int(m.group(3)),
+                    int(m.group(4)), int(m.group(5)), int(m.group(6))
+                ).strftime('%Y-%m-%d %H:%M:%S')
+                rec['fonte_data'] = 'nome_arquivo'
+            except Exception:
+                pass
+
+    # 3b) nome do arquivo — apenas data (WhatsApp: IMG-20250325-WA0004.jpg)
+    if not rec['data_captura']:
+        m = RE_NOME_DATA.search(nome)
+        if m:
+            try:
+                rec['data_captura'] = datetime(
+                    int(m.group(1)), int(m.group(2)), int(m.group(3))
+                ).strftime('%Y-%m-%d 00:00:00')
+                rec['fonte_data'] = 'nome_data'
+            except Exception:
+                pass
+
+    # 3c) pasta AAAA\MM — precisao de mes, so como ultimo recurso antes do mtime
+    if not rec['data_captura']:
+        m = RE_PASTA_ANO_MES.search(caminho.replace('/', '\\'))
+        if m:
+            try:
+                rec['data_captura'] = '%s-%s-01 00:00:00' % (m.group(1), m.group(2))
+                rec['fonte_data'] = 'pasta_ano_mes'
+            except Exception:
+                pass
+
+    # 4) mtime (data de copia — baixa confianca, o cruzamento ignora)
     if not rec['data_captura'] and rec['mtime']:
         rec['data_captura'] = rec['mtime']
         rec['fonte_data'] = 'mtime'

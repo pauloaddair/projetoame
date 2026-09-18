@@ -41,6 +41,26 @@ function responder($codigo, $payload)
 // Token guardado ACIMA do web root (/home/projetoame/ame_pautas.token),
 // pois o .htaccess do site nao bloqueia arquivos estaticos sensiveis.
 $token_file = __DIR__ . '/../../ame_pautas.token';
+
+// Indice de midia do acervo (EXIF), gerado por tools/gerar_midia_json.py e
+// publicado no servidor. Opcional: se ausente, a pauta simplemente nao traz
+// a evidencia de fotos — o endpoint continua funcionando.
+function carregar_midia_acervo()
+{
+    $caminhos = [
+        __DIR__ . '/../../midia_por_atividade.json',
+        __DIR__ . '/../midia_por_atividade.json',
+    ];
+    foreach ($caminhos as $c) {
+        if (is_file($c)) {
+            $j = json_decode((string) file_get_contents($c), true);
+            if (is_array($j) && isset($j['atividades']) && is_array($j['atividades'])) {
+                return $j['atividades'];
+            }
+        }
+    }
+    return [];
+}
 if (!file_exists($token_file)) {
     responder(503, ['erro' => 'Endpoint desativado: arquivo de token ausente.']);
 }
@@ -157,6 +177,7 @@ if (isset($_GET['id']) && (int) $_GET['id'] > 0) {
 }
 
 // ------------------------------------------- contexto por atividade (empresas + fotos)
+$midia_acervo = carregar_midia_acervo();
 $pautas = [];
 foreach ($atividades as $ev) {
     $eid = (int) $ev['id'];
@@ -230,6 +251,20 @@ foreach ($atividades as $ev) {
 
     if ($modo === 'completo') {
         $pauta['atendentes_primeiro_nome'] = array_values(array_unique($atendentes));
+    }
+
+    // Evidencia de midia do acervo (indice EXIF). Informa ao redator que existem
+    // fotos reais desta atividade — mesmo antes de o reconhecimento facial rodar.
+    if (isset($midia_acervo[(string) $eid])) {
+        $m = $midia_acervo[(string) $eid];
+        $pauta['midia_acervo'] = [
+            'fotos'         => isset($m['fotos']) ? (int) $m['fotos'] : 0,
+            'data_confiavel' => !empty($m['confiavel']),
+            'observacao'    => isset($m['observacao']) ? $m['observacao'] : '',
+            'periodo_fotos' => (isset($m['primeira']) ? $m['primeira'] : '') . ' a ' . (isset($m['ultima']) ? $m['ultima'] : ''),
+        ];
+    } else {
+        $pauta['midia_acervo'] = null;
     }
 
     $pautas[] = $pauta;

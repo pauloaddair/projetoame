@@ -5,7 +5,6 @@ tags:
   - "#tipo/relatorio"
   - "#modulo/biometria"
   - "#modulo/midia"
-  - "#tipo/plano"
 relacionados:
   - "[[PROJETO_AME]]"
   - "[[RELATORIO_COBERTURA_BLOG_ATIVIDADES]]"
@@ -14,99 +13,102 @@ relacionados:
 
 # Projeto AME — Índice de Mídia (EXIF) × Atividades
 
-> **Data:** 18/09/2026 · **Acervo indexado:** `E:\06_Backup_Local\POCO_PADF\` · **Ferramentas:** `tools/indexar_midia_exif.py` e `tools/cruzar_midia_atividades.py`
+> **Data:** 18/09/2026 · **Acervo:** `E:\06_Backup_Local\POCO_PADF\` · **Ferramentas:** `tools/indexar_midia_exif.py`, `tools/cruzar_midia_atividades.py`, `tools/gerar_midia_json.py`
 
-## 1. O que foi feito
-
-Duas ferramentas novas, ambas somente-leitura sobre o acervo:
+## 1. O que foi construído
 
 | Ferramenta | Função |
 |---|---|
-| `tools/indexar_midia_exif.py` | Varre o acervo e extrai, por arquivo: data de captura (EXIF/nome/mtime), GPS, modelo da câmera, dimensões, orientação e **categoria de origem** |
-| `tools/cruzar_midia_atividades.py` | Cruza as fotos com `eventos_marcados` por janela de data e propõe quais fotos pertencem a qual atividade |
+| `tools/indexar_midia_exif.py` | Varre o acervo e extrai data de captura, GPS, modelo da câmera, dimensões, orientação e **categoria de origem** por arquivo |
+| `tools/cruzar_midia_atividades.py` | Cruza as fotos com `eventos_marcados` por janela de data, com controle de ambiguidade e **métrica de concentração** |
+| `tools/gerar_midia_json.py` | Publica o cruzamento em JSON consumido pelo endpoint de pautas |
 
-## 2. Resultado da indexação
+Todas são somente-leitura sobre o acervo.
 
-**57.921 arquivos de mídia** processados em `E:\06_Backup_Local\POCO_PADF\`:
+## 2. Indexação: 62.963 arquivos de mídia
 
-| Categoria | Arquivos | Utilidade para cobertura de atividades |
+| Fonte da data | Arquivos | Confiança |
 |---|---|---|
-| `outros` (cache de apps em `device\Pictures\`) | 38.141 | ❌ ruído — só tem data de cópia |
-| `thumbnail` (miniaturas de vídeo `.thumbnails`) | 14.030 | ❌ ruído |
-| `social` (Facebook, WhatsApp, Instagram) | 4.851 | ❌ ruído |
-| `screenshot` | 363 | ❌ ruído |
-| **`camera` (`DCIM\Camera`)** | **512** | ✅ **fonte confiável** |
-| `download` / `scan` | 24 | ❌ ruído |
+| `nome_data` — `IMG-20250325-WA0004.jpg` | **46.750** | média (data sem hora) |
+| `exif` — `DateTimeOriginal` da câmera | **1.036** | **alta** |
+| `nome_arquivo` — `IMG_20240613_164329.jpg` | 160 | alta (data e hora) |
+| `pasta_ano_mes` — `MIDIA\imagens\2025\03\` | 326 | baixa (só o mês) |
+| `mtime` — data da cópia | 14.691 | ❌ **descartada** |
 
-### 2.1 Achado crítico: a data de arquivo não serve
+**Total com data utilizável: 47.946 fotos em 2.134 dias.**
 
-Das 57.921 mídias, **apenas 944 (1,6%) têm EXIF real** com `DateTimeOriginal`. As outras 56.977 só têm o `mtime` — que é a **data da cópia**, não da captura.
+### 2.1 Achado 1 — a data de arquivo é inútil, o nome do arquivo é ouro
 
-Na prática: os arquivos de `DCIM\Camera` têm `mtime` de 06/10/2024 e 16/10/2024, mas EXIF de 13/06/2024 e 25/06/2024. Usar `mtime` produziria "eventos" inteiramente falsos — por exemplo, um agrupamento de **617 fotos em 26/02/2026** que era, na verdade, um lote de miniaturas de vídeo copiadas naquele dia.
+As 14.691 mídias que só têm `mtime` carregam a **data da cópia**, não da captura. O risco é concreto: um agrupamento inicial sugeria "617 fotos em 26/02/2026", que era apenas um lote de miniaturas de vídeo copiadas naquele dia. Por isso `mtime` está fora do cruzamento.
 
-**Consequência de projeto:** o critério de confiança do cruzamento é `fonte_data == 'exif'`, não a pasta nem o nome do arquivo.
+O ganho veio de outro lugar. O acervo tem **37.972 imagens de WhatsApp** em `MIDIA\imagens\<ano>\<mês>\`, com nomes como `IMG-20250325-WA0004.jpg`. O extrator inicial só reconhecia nomes com hora (`IMG_20240613_164329.jpg`) e descartava essas — depois da correção, a base utilizável saltou de **944 para 47.946 fotos (50×)**.
 
-### 2.2 Equipamentos identificados nos EXIF
+### 2.2 Achado 2 — a pasta não é critério de confiança
 
-| Modelo | Fotos |
-|---|---|
-| `21061110AG` (POCO M3 Pro 5G) | 783 |
-| `Mi A3` | 125 |
-| `NIKON D800` / `NIKON D5100` / `SM-M225FV` | 6 |
+A classificação por pasta mostrou que a fonte mais rica (`MIDIA\imagens\`) não estava na categoria `camera`. E o acervo tem muito ruído estrutural:
+
+| Categoria | Arquivos | Serve para evento? |
+|---|---|---|
+| `outros` (cache de apps, `device\Pictures\`) | 38.141 | ❌ |
+| `thumbnail` (`.thumbnails` de vídeo) | 14.030 | ❌ |
+| `social` (WhatsApp, Facebook, Instagram) | 9.893 | ⚠️ só como indício de data |
+| **`camera` (`DCIM\Camera`)** | **512** | ✅ |
+| `screenshot` | 363 | ❌ |
+
+**Conclusão de projeto:** a confiança vem da **fonte da data** (`fonte_data`), nunca da pasta.
+
+### 2.3 Equipamentos nos EXIF
+
+`21061110AG` (POCO M3 Pro 5G, 783 fotos), `Mi A3` (125), `NIKON D800`/`D5100`/`SM-M225FV` (6).
 
 ## 3. Cruzamento com as atividades
 
-**944 fotos com data confiável**, distribuídas em 252 dias. Cruzando com as 56 atividades da base:
+- **36 atividades** têm fotos candidatas (de 56 na base)
+- **16 sem ambiguidade** estrutural
+- **20 marcadas como AMBÍGUAS** — o script **não escolhe**
+- **19 com alerta de qualidade** (fotos difusas ou janela longa)
 
-- **21 atividades** têm fotos candidatas
-- **8 sem ambiguidade** — podem ir direto para a galeria do artigo
-- **13 marcadas como AMBÍGUAS** — o script **não escolhe**; exige decisão humana
+### 3.1 Ressalva importante: volume ≠ precisão
 
-Exemplos de ambiguidade legítima: as turmas I e II do Curso de DJ aconteceram nos mesmos dias (11/03 a 01/04/2025) e compartilham as mesmas 80 fotos; o Curso de Fotografia SENAI se sobrepõe a seis outras atividades.
+A concentração mede quanto do volume cai no dia de pico. Resultado real:
 
-### 3.1 Lacunas de cobertura que agora têm fotos
+| Atividade | Fotos | Dias | Pico | Leitura |
+|---|---|---|---|---|
+| `31` Curso Fotografia SENAI | 3.096 | 96 | 5,7% | ❌ varre 3 meses de WhatsApp, não é o curso |
+| `22`/`23` Curso de DJ (turmas I e II) | 1.785 | 24 | 7,8% | ❌ difuso e inseparável entre as turmas |
+| `21` FESPA 2025 | 324 | 5 | 26,5% | ⚠️ curadoria necessária |
+| `9` ABF EXPO 2024 | 285 | 6 | 28,1% | ⚠️ curadoria necessária |
+| `63` IX Congresso Síndrome de Down | 236 | 3 | 35,2% | ⚠️ o mais concentrado do lote |
 
-**19 das 42 lacunas** passam a ter material fotográfico real:
+**Nenhuma atividade passou do limiar de 40%.** Ou seja: o índice responde bem **"houve movimento nestes dias"**, mas **não** autoriza usar o conjunto inteiro como galeria do artigo. Somente as 1.036 fotos com EXIF real carregam contexto de captura (câmera e, às vezes, GPS) e podem ir direto para curadoria.
 
-| Prioridade | Atividade | Fotos | Status |
-|---|---|---|---|
-| ALTA | `71` CONARH 2026 | 5 | ok |
-| ALTA | `21` FESPA DIGITAL PRINTING 2025 | 24 | ambíguo |
-| ALTA | `19` FEBRATÊXTIL (2025) | 23 | ambíguo |
-| ALTA | `35` CURSO de Automaquiagem O Boticário | 17 | ambíguo |
-| ALTA | `30` ALPHAGRAPHICS AGENTES DA TRANSFORMAÇÃO 2026 | 15 | ok |
-| ALTA | `9` ABF EXPO 2024 | 12 | ok |
-| ALTA | `33` EXPOPRINT CONVER FLEXO 2026 | 9 | ambíguo |
-| ALTA | `13` ABUP SHOW 2025 | 6 | ambíguo |
-| ALTA | `36` FEBRATÊXTIL 2026 | 5 | ambíguo |
-| ALTA | `34` DOWNLANDIA no SBT | 4 | ambíguo |
-| MÉDIA | `25` ABF EXPO 2025 | 55 | ok |
-| MÉDIA | `31` CURSO de Fotografia SENAI | 67 | ambíguo |
-| BAIXA | `22`/`23` Curso de DJ Turmas I e II | 80 cada | ambíguo |
-| BAIXA | `18` Aniversário Henri Zylberstajn | 9 | ambíguo |
-| BAIXA | `26` MD MAKE A DIFFERENCE | 11 | ok |
+### 3.2 Lacunas de cobertura que ganharam evidência de mídia
 
-Saídas: `apoio/midia_exif_poco_padf.csv` (índice completo) e `apoio/midia_por_atividade.csv` (cruzamento).
+Com o índice publicado, **cada pauta do endpoint agora informa as fotos disponíveis**. Exemplos diretos do `api_ame_pautas.php`:
 
-## 4. Limites e próximos passos
+| Atividade | Fotos no acervo | Flag |
+|---|---|---|
+| `71` CONARH 2026 | 145 | difusas — curadoria |
+| `34` DOWNLANDIA no SBT | 172 | curadoria |
+| `35` Curso de Automaquiagem O Boticário | 705 | janela longa |
+| `33` EXPOPRINT CONVER FLEXO 2026 | 582 | janela longa |
+| `37` DOWNLANDIA no MORUMBI TOWN | 101 | curadoria |
+| `36` FEBRATÊXTIL 2026 | 95 | curadoria |
 
-1. **O acervo atual é modesto para eventos.** 944 fotos com data confiável é pouco diante de 15 anos de atividades — e o download do celular atual ainda está em andamento. Reexecutar as duas ferramentas quando ele terminar deve multiplicar a base.
-2. **O reconhecimento facial ainda não rodou nas atividades pendentes.** As 365 linhas de `fotos_reconhecidas` cobrem só eventos antigos (2017-2024). Consequência: a pauta por atividade hoje chega ao redator com `atendentes_presentes: 0` para as lacunas de 2025-2026.
-3. **Enrollment biométrico incompleto:** apenas **39 dos 112 candidatos** têm vetor `face_encoding`. Sem ampliar isso, o reconhecimento não nomeia ninguém.
-4. **Fluxo proposto por atividade:** (a) definir a pasta da atividade pelo cruzamento EXIF; (b) revisar humanamente os casos ambíguos; (c) rodar `scan_events.py <evento_id> <pasta>` na VPS3; (d) a partir daí a pauta passa a trazer contagem e fotos reais.
-5. **Vídeos (`.mp4`) não entram por EXIF** — precisam de `QuickTime CreateDate` ou do nome do arquivo, em trilha própria. São 8.278 no acervo.
-6. **Preservação de data na cópia:** recomenda-se `robocopy /COPY:DAT` (ou equivalente) no próximo offload do celular, para que o `mtime` deixe de ser inútil.
+## 4. Próximos passos
 
-### ⚠️ LGPD — reforço
+1. **Curadoria humana por atividade.** O índice aponta a janela e a pasta; a seleção final das fotos é decisão humana — não há como automatizar isso com segurança.
+2. **Ampliar o EXIF real.** Só 1.036 fotos têm data de câmera. O acervo atual é um backup antigo (Mi A3 + POCO M3); com o download do celular atual concluído, reexecutar as duas ferramentas deve elevar muito esse número. **Recomendação: usar `robocopy /COPY:DAT`** para preservar as datas na cópia.
+3. **Rodar o reconhecimento facial nas atividades pendentes.** As 365 linhas de `fotos_reconhecidas` cobrem apenas 2017-2024; por isso a pauta ainda chega com `atendentes_presentes: 0`. Fluxo: definir a pasta pelo cruzamento → revisar ambíguos → `scan_events.py <evento_id> <pasta>` na VPS3.
+4. **Ampliar o enrollment biométrico** — apenas **39 dos 112 candidatos** têm vetor `face_encoding`.
+5. **Vídeos (`.mp4`)** não entram por EXIF; precisam de `QuickTime CreateDate`, em trilha própria. São 8.278 no acervo.
 
-O cruzamento **não publica nada** e não nomeia ninguém: ele apenas sugere conjuntos de fotos por proximidade de data. Antes de qualquer uso público:
+### ⚠️ LGPD
 
-- respeitar `fotos_reconhecidas.oculta = 1` (direito de oposição já implementado em `api_ocultar_foto.php`);
-- ter base legal e consentimento para uso de imagem **e** para o tratamento biométrico;
-- manter **revisão humana obrigatória** — a esteira publica em `draft`.
+O cruzamento **não publica e não nomeia ninguém** — apenas sugere conjuntos de fotos por proximidade de data. Antes de uso público: respeitar `fotos_reconhecidas.oculta = 1` (direito de oposição já em `api_ocultar_foto.php`), ter base legal e consentimento para imagem **e** biometria, e manter **revisão humana obrigatória** (a esteira publica em `draft`).
 
 ## 5. 🔗 Conexões & Ecossistema
 
 - [[PROJETO_AME]] · [[GEMINI]] · [[HISTORY]] · `RELATORIO_COBERTURA_BLOG_ATIVIDADES_18SET2026.md` · `PLANO_ESTEIRA_COBERTURA_BLOG_AME.md`
-- Infra: `#infra/vps1` (site + `fotos_reconhecidas`), `#infra/vps3` (`scan_events.py`, `biometria_venv`)
-- Módulos: `#modulo/biometria`, `#modulo/midia`, `#modulo/crm`
+- Infra: `#infra/vps1` (site, `fotos_reconhecidas`, endpoint de pautas), `#infra/vps3` (`scan_events.py`, `biometria_venv`)
+- Módulos: `#modulo/biometria`, `#modulo/midia`, `#modulo/crm`, `#modulo/content-factory`

@@ -161,9 +161,13 @@ Fotos de pessoas com deficiência são **dado pessoal sensível** (LGPD, art. 5�
 
 Na cadência atual do cron (`0 0,6,9,12,15,18,21` = 7 slots/dia) com `--round-robin` entre **15 tenants**, o AME recebe ~1 slot a cada 2 dias. Cobrir as 42 pendências levaria **~80 dias**. Alternativas: (a) rodar `--slug projetoame` em um slot dedicado; (b) reduzir o rodízio do AME para prioridade; (c) aceitar a cadência lenta como "publicação contínua".
 
-### Resultado parcial do pipeline de mídia (F2/F3) — ver relatório dedicado
+### Resultado do pipeline de mídia (F2/F3) — ver relatório dedicado
 
-`RELATORIO_MIDIA_EXIF_ATIVIDADES_18SET2026.md`. Resumo: das 42 lacunas, **19 já têm fotos candidatas**; 8 sem ambiguidade e 13 exigindo decisão humana. O reconhecimento facial ainda **não** rodou nas atividades pendentes (as 365 linhas de `fotos_reconhecidas` cobrem só eventos antigos), então a pauta chega ao redator com `atendentes_presentes: 0` para as lacunas de 2025-2026 — próximo passo é rodar `scan_events.py` por atividade.
+`RELATORIO_MIDIA_EXIF_ATIVIDADES_18SET2026.md`. Resumo: **62.963 arquivos indexados**, dos quais **47.946 com data utilizável** — um salto de 50× depois de o extrator passar a reconhecer o padrão de nome do WhatsApp (`IMG-20250325-WA0004.jpg`), que sozinho responde por 46.750 fotos. O `mtime` (data de cópia) foi descartado: usá-lo gerava eventos falsos.
+
+Cruzamento: **36 atividades com fotos candidatas**, 16 sem ambiguidade estrutural e 20 isoladas para revisão humana. **O volume não é precisão:** nenhuma atividade passou de 40% de concentração no dia de pico, então o índice serve para localizar candidatos, não para montar a galeria automaticamente. A evidência já chega à pauta via `midia_acervo` no endpoint.
+
+O reconhecimento facial ainda **não** rodou nas atividades pendentes (as 365 linhas de `fotos_reconhecidas` cobrem só 2017-2024), então a pauta chega ao redator com `atendentes_presentes: 0` nas lacunas de 2025-2026 — próximo passo é rodar `scan_events.py` por atividade.
 
 
 ## 7. Riscos
