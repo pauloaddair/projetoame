@@ -111,6 +111,14 @@ Implementar o **Portal do Associado**, a **Automação de Eventos** (atualizaç�
 - **Gestão de Atividades & Escalas (`/admin/atividades` e `/admin/escala`):** Resolução de permissões, padronização de CDNs oficiais, listagem de eventos com badges de status, cópia de ficha de avaliação e ficha de credenciamento formatada.
 - **Fluxo de Presença & Ficha de Avaliação (`/avaliacao/{uuid}` e `api_escala.php`):** Tabela `presenca` integrada; liberação automática e destaque de formulários de avaliação após confirmação de comparecimento do atendente no evento.
 
+**Blog Institucional — Cobertura das Atividades (auditoria de 18/09/2026):**
+- **Base de atividades:** a fonte correta é a tabela **`eventos_marcados`** (73 registros na produção, 09/2017 → 10/2026). A tabela `eventos` **não** deve ser usada para isso: em produção ela contém 981 registros, todos datados de 2027 (calendário de feiras prospectadas).
+- **Blog:** 72 posts públicos (`projetoame.org/home`), de 03/2016 a 09/2026. O `/home/rss` expõe apenas os 10 mais recentes — para auditorias completas use a REST API (`/wp-json/wp/v2/posts`), que informa o total em `X-WP-Total`.
+- **Cobertura apurada:** apenas **15 atividades (20,5%)** têm artigo próprio; 4 têm cobertura parcial; **38 não têm nenhum artigo** (29 do núcleo com ficha de avaliação, 7 registros legados únicos, 1 histórica e 1 agendada).
+- **Higiene da base:** 16 registros legados (ids `47`-`62`) são duplicatas de importação antiga do núcleo — candidatos a consolidação.
+- **Lacuna reversa:** há atividades no blog ausentes da base (ALESP 20/03/2026, Maio Amarelo/Multa Moral, Dia da Mulher no MASP, FESPA 2023, 9º Simpósio Internacional da Síndrome de Down).
+- **Referência completa:** `RELATORIO_COBERTURA_BLOG_ATIVIDADES_18SET2026.md` (tabelas de cobertura, lacunas priorizadas e plano editorial em 5 ondas).
+
 **Governança Institucional (Mandato 2024-2026):**
 - **Organização de Atas:** Resgatada a Ata da AGO de 04/10/2024 (eleição da diretoria 2024-2026) e centralizada em F:\OneDrive\Projeto A.M.E\01_Institucional_e_Legal\ATA E ESTATUTO ATUAL\.
 - **Minutas Jurídicas Geradas:** Criados o REQUERIMENTO DE AVERBACAO - 6 RTDPJ e o TERMO DE DOACAO E CESSAO DE DIREITOS AUTORAIS - LIVROS AME (em .md e .docx via Pandoc).

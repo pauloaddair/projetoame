@@ -364,6 +364,18 @@ odizio = MAX(rodizio) + 1 no ato da inscrio inicial do candidato.
     - Implementados botões de envio direto via WhatsApp, cópia rápida de mensagem e validação de telefone.
     - Deploy e testes de sintaxe concluídos com sucesso no VPS1.
 
+
+- **18/09/2026 - Auditoria de Cobertura do Blog x Base de Atividades:**
+    - **Objetivo:** medir quantas das atividades cadastradas no CRM já têm artigo publicado no blog (`projetoame.org/home`) e listar as lacunas para cobertura completa.
+    - **Coleta do blog:** 72 posts públicos obtidos via REST API do WordPress (`/wp-json/wp/v2/posts`, `X-WP-Total = 72`), de 03/03/2016 a 15/09/2026. O feed `/home/rss` só expõe os 10 posts mais recentes — por isso a coleta foi feita pela REST, com paginação.
+    - **Coleta da base:** tabela `eventos_marcados` do schema `projetoame` na **VPS1 (produção)** — 73 registros, de 01/09/2017 a 06/10/2026. A cópia local (XAMPP) estava defasada em 6 registros (parava em 14/04/2026) e foi descartada como fonte.
+    - **Achado de integridade 1:** a tabela `eventos` de produção (981 registros) está **inteiramente preenchida com datas de 2027** (calendário de feiras prospectadas), enquanto a cópia local tem 245 registros entre 2023 e 2027. Não é a base de atividades — a base real é `eventos_marcados`. Registrado para verificação futura.
+    - **Achado de integridade 2:** 16 registros legados (ids `47`-`62`) são duplicatas de importação antiga do núcleo com ficha de avaliação (ids `1`-`38`). Sugerida consolidação para não poluir relatórios.
+    - **Resultado:** 15 atividades (20,5%) com artigo próprio; 4 com cobertura apenas parcial/duvidosa; **38 sem nenhum artigo** (29 do núcleo com UUID, 7 legados únicos, 1 histórica "Dr. Zan" e 1 agendada — 3ª turma do Curso de DJ).
+    - **Lacuna reversa:** o blog documenta atividades ausentes da base (ALESP 20/03/2026, Maio Amarelo/Multa Moral, Dia da Mulher no MASP, barraca de café na FESPA 2023, 9º Simpósio Internacional da Síndrome de Down).
+    - **Entregável:** `RELATORIO_COBERTURA_BLOG_ATIVIDADES_18SET2026.md` (raiz do projeto + cópia em `F:\01_Projetos\apoio\`), com tabelas de cobertura, lacunas priorizadas e plano editorial em 5 ondas.
+    - Nenhuma alteração de código ou de banco — auditoria somente-leitura (consultas `SELECT` em produção).
+
 ---
 
 ## 🔗 Conexões & Ecossistema
