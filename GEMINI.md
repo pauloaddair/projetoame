@@ -112,11 +112,14 @@ Implementar o **Portal do Associado**, a **Automação de Eventos** (atualizaç�
 - **Fluxo de Presença & Ficha de Avaliação (`/avaliacao/{uuid}` e `api_escala.php`):** Tabela `presenca` integrada; liberação automática e destaque de formulários de avaliação após confirmação de comparecimento do atendente no evento.
 
 **Blog Institucional — Cobertura das Atividades (auditoria de 18/09/2026):**
-- **Base de atividades:** a fonte correta é a tabela **`eventos_marcados`** (73 registros na produção, 09/2017 → 10/2026). A tabela `eventos` **não** deve ser usada para isso: em produção ela contém 981 registros, todos datados de 2027 (calendário de feiras prospectadas).
+- **Base de atividades:** a fonte correta é a tabela **`eventos_marcados`** — **57 registros** após a consolidação de 18/09/2026 (era 73). A tabela `eventos` **não** deve ser usada para isso: em produção ela contém 981 registros, todos datados de 2027 (calendário de feiras prospectadas).
+- **Schema de produção:** `eventos_marcados` tem `slug` e **`link_artigo`** (URL do post que cobre a atividade) e **não** tem `empresa_id`. A cópia local do XAMPP diverge e está defasada — sempre ler da VPS1.
 - **Blog:** 72 posts públicos (`projetoame.org/home`), de 03/2016 a 09/2026. O `/home/rss` expõe apenas os 10 mais recentes — para auditorias completas use a REST API (`/wp-json/wp/v2/posts`), que informa o total em `X-WP-Total`.
-- **Cobertura apurada:** apenas **15 atividades (20,5%)** têm artigo próprio; 4 têm cobertura parcial; **38 não têm nenhum artigo** (29 do núcleo com ficha de avaliação, 7 registros legados únicos, 1 histórica e 1 agendada).
-- **Higiene da base:** 16 registros legados (ids `47`-`62`) são duplicatas de importação antiga do núcleo — candidatos a consolidação.
-- **Lacuna reversa:** há atividades no blog ausentes da base (ALESP 20/03/2026, Maio Amarelo/Multa Moral, Dia da Mulher no MASP, FESPA 2023, 9º Simpósio Internacional da Síndrome de Down).
+- **Cobertura apurada:** **15 atividades (26,3%)** têm artigo próprio; 4 têm cobertura parcial; **38 não têm nenhum artigo** (29 do núcleo com ficha de avaliação, 7 registros legados únicos, 1 histórica e 1 agendada).
+- **`link_artigo`:** existe desde antes, mas está preenchido em só **12 dos 57 registros** e com erros (o post do Curso de DJ aparece em 4 atividades; `24` e `44` têm artigo e estão sem link). É o campo que a esteira vai usar para medir cobertura e evitar retrabalho.
+- **Consolidação executada:** 16 duplicatas legadas (`id` 47-62) arquivadas em `eventos_marcados_legado_20260918`; 303 `fotos_reconhecidas` e 48 `horarios` remapeados; 48 placeholders de horário arquivados em `horarios_legado_20260918`. Backup em `/root/backups/ame_pre_consolidacao_20260918.sql`.
+- **Esteira de cobertura:** plano completo em **`PLANO_ESTEIRA_COBERTURA_BLOG_AME.md`**. Causa raiz dos artigos genéricos: `RSS_FEED_URL` hardcoded em G1 Tecnologia e ausência de pauta curada/`strict_scope` no tenant `projetoame`.
+- **Biometria:** a VPS3 já tem `enrollment.py`, `scan_events.py` e `biometria_venv` (face_recognition/dlib) operacionais; `fotos_reconhecidas` tem 365 matches de 35 atendentes (39 de 112 candidatos com vetor biométrico). Respeitar sempre `oculta = 1` e a base legal LGPD.
 - **Referência completa:** `RELATORIO_COBERTURA_BLOG_ATIVIDADES_18SET2026.md` (tabelas de cobertura, lacunas priorizadas e plano editorial em 5 ondas).
 
 **Governança Institucional (Mandato 2024-2026):**

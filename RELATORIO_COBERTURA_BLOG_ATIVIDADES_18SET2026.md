@@ -4,7 +4,9 @@ tags:
   - "#projeto/ame"
   - "#tipo/relatorio"
   - "#modulo/blog"
+  - "#modulo/content-factory"
   - "#modulo/crm"
+  - "#modulo/biometria"
   - "#infra/vps1"
 relacionados:
   - "[[PROJETO_AME]]"
@@ -14,34 +16,33 @@ relacionados:
 
 # Projeto AME — Cobertura do Blog x Base de Atividades
 
-> Relatorio gerado em **18/09/2026**. Fonte do blog: feed/REST de `projetoame.org` (72 posts). Fonte da base: tabela `eventos_marcados` do schema `projetoame` na **VPS1 (producao)**, 73 registros.
+> Versao **2 — 18/09/2026**, apos a consolidacao das duplicatas legadas na producao. Blog: 72 posts publicos de `projetoame.org/home` (03/2016 a 09/2026). Base: tabela `eventos_marcados` do schema `projetoame` na **VPS1**, agora com **57 registros** (09/2017 a 10/2026).
 
 ## 1. Metodo
 
-1. Coleta de **todos os posts publicos** do blog via REST API do WordPress (`/wp-json/wp/v2/posts`, `X-WP-Total = 72`), de 03/03/2016 a 15/09/2026.
-2. Coleta da **base de atividades cadastradas** no CRM (`eventos_marcados`) na VPS1: 73 registros, de 01/09/2017 a 06/10/2026.
-3. Casamento por **nome do evento/projeto + janela de data** (atividade -> post ate 45 dias depois da realizacao).
-4. Classificacao de cada atividade em: **coberta**, **cobertura parcial** ou **sem artigo**.
+1. Coleta de **todos os posts publicos** via REST API do WordPress (`X-WP-Total = 72`). O feed `/home/rss` expoe apenas os 10 mais recentes e nao serve para auditoria completa.
+2. Coleta da base de atividades em `eventos_marcados` na VPS1 (fonte de verdade — a copia local do XAMPP esta defasada).
+3. Casamento por **nome do evento/projeto + janela de data** (atividade -> post ate 45 dias depois).
+4. Validacao cruzada com o campo **`link_artigo`** da propria tabela (ver secao 6).
 
 ## 2. Panorama dos dois acervos
 
 | Acervo | Volume | Periodo |
 |---|---|---|
-| Posts no blog | **72** | 03/03/2016 → 15/09/2026 |
-| Atividades em `eventos_marcados` | **73** | 01/09/2017 → 06/10/2026 |
-| — com ficha de avaliacao (UUID) = nucleo vivo | **40** | 11/03/2024 → 15/09/2026 |
-| — historicas 2017-2021 (sem UUID) | **6** | 2017 → 2021 |
-| — registros legados (importacao antiga) | **26** | 26/10/2023 → 22/11/2025 |
+| Posts no blog | **72** | 03/03/2016 -> 15/09/2026 |
+| Atividades em `eventos_marcados` | **57** | 01/09/2017 -> 06/10/2026 |
+| — com ficha de avaliacao (UUID) = nucleo vivo | **40** | 11/03/2024 -> 15/09/2026 |
+| — historicas 2017-2021 (sem UUID) | **6** | 2017 -> 2021 |
+| — legado unico remanescente | **10** | 10/2023 -> 11/2025 |
 | — agendada sem UUID | **1** | 15/09/2026 |
 
 **Resultado do cruzamento:**
 
 | Situacao | Registros | % da base |
 |---|---|---|
-| Com artigo proprio no blog | **15** | 20,5% |
-| Com cobertura apenas parcial/duvidosa | **4** | 5,5% |
-| **Sem nenhum artigo** | **38** | **52,1%** |
-| Duplicatas legadas (nao contam como lacuna) | 16 | 21,9% |
+| Com artigo proprio no blog | **15** | 26,3% |
+| Com cobertura apenas parcial/duvidosa | **4** | 7,0% |
+| **Sem nenhum artigo** | **38** | **66,7%** |
 
 Os 38 sem artigo se decompõem em: **29** do nucleo com ficha de avaliacao, **7** registros legados unicos, **1** historica (Dr. Zan) e **1** agendada (3a turma do Curso de DJ).
 
@@ -100,9 +101,10 @@ Os 38 sem artigo se decompõem em: **29** do nucleo com ficha de avaliacao, **7*
 | `7` | 21/05/2024 | HOSPITALAR 2024 | São Paulo Expo | ALTA |
 | `6` | 23/04/2024 | BETT BRAZIL 2024 | Expo Center Norte | ALTA |
 | `3` | 15/03/2024 | II Summit de Responsabilidade Social – Diversidade e Inclusão no Ambiente de Trabalho | Fiesp - Federação das Indústrias do  | ALTA |
+
 Caso a parte: a atividade `1` **Assembleia Geral Extraordinaria de 13/04/2024** (Hotel Sheraton WTC) tem apenas o edital de convocacao publicado em 30/03/2024 — nao existe artigo sobre a assembleia realizada.
 
-### 4.2 Historicas 2017-2021 (sem UUID) — 1 sem artigo + 3 com cobertura parcial
+### 4.2 Historicas 2017-2021 — 1 sem artigo + 3 com cobertura parcial
 
 | id | Data | Atividade | Local | Observacao |
 |---|---|---|---|---|
@@ -111,7 +113,7 @@ Caso a parte: a atividade `1` **Assembleia Geral Extraordinaria de 13/04/2024** 
 | `65` | 01/09/2017 | Feiras & Negócios 2017 | São Paulo | post "Grande Encontro Feiras & Negocios" (2019) - aderencia incerta ao registro de 2017 |
 | `66` | 08/07/2018 | Green Nations | Pavilhão da Bienal no Ibirapue | post "Green Nation 2019" - edicao diferente da registrada (2018) |
 
-### 4.3 Registros legados unicos — 7 atividades
+### 4.3 Registros legados unicos remanescentes — 7 atividades
 
 | id | Data | Atividade | Local |
 |---|---|---|---|
@@ -129,11 +131,11 @@ Caso a parte: a atividade `1` **Assembleia Geral Extraordinaria de 13/04/2024** 
 |---|---|---|---|
 | `73` | 15/09/2026 a 06/10/2026 | 3ª turma CURSO DJ para Eventos | Faculdade Theobaldo de Nigris |
 
-## 5. Higiene da base: duplicatas legadas (16 de 26 registros legados)
+## 5. Consolidacao das duplicatas legadas (executada em 18/09/2026)
 
-Os ids `39` a `64` sao uma **importacao antiga** que refaz registros do nucleo. Recomenda-se consolidar (arquivar ou marcar como `legado`) para nao poluir relatorios de cobertura.
+A tabela `eventos_marcados` continha **16 registros de um lote de importacao antiga** que refaziam registros do nucleo vivo (mesmo evento, mesma data, nome abreviado, sem ficha de avaliacao). Eles foram arquivados e as referencias filhas foram remapeadas.
 
-| id legado | Nome legado | Data | Duplica id |
+| id legado | Nome legado | Data | Passou a apontar para |
 |---|---|---|---|
 | `47` | FESPA | 14/03/2024 | `2` (FESPA DIGITAL PRINTING 2024) |
 | `48` | OLGA KOS / FIESP | 15/03/2024 | `3` (II Summit de Responsabilidade Social – Divers) |
@@ -145,54 +147,87 @@ Os ids `39` a `64` sao uma **importacao antiga** que refaz registros do nucleo. 
 | `54` | ABUP | 12/08/2024 | `10` (ABUP DECOR SHOW 2024) |
 | `55` | ALPHAGRAPHICS | 18/10/2024 | `11` (ALPHAGRAPHICS SENAI) |
 | `56` | Tecnologia para Eventos | 18/01/2025 | `15` (CURSO TECNOLOGIA PARA EVENTOS) |
-| `57` | Finanças para Vida | 18/01/2025 | `16` (CURSO FINANÇAS PARA VIDA) |
-| `58` | Reunião de Voluntários | 18/01/2025 | `17` (REUNIÃO DOS VOLUNTÁRIOS) |
+| `57` | Financas para Vida | 18/01/2025 | `16` (CURSO FINANÇAS PARA VIDA) |
+| `58` | Reuniao de Voluntarios | 18/01/2025 | `17` (REUNIÃO DOS VOLUNTÁRIOS) |
 | `59` | CURSO DJ | 08/02/2025 | `20` (CURSO DJ para Eventos) |
 | `60` | HENRI | 22/02/2025 | `18` (Aniversário Henri Zylberstajn) |
 | `61` | FESPA - MONTAGEM | 14/03/2025 | `21` (FESPA DIGITAL PRINTING 2025) |
 | `62` | MAKE THE DIFFERENCE | 16/09/2025 | `26` (MD MAKE A DIFFERENCE) |
 
-Os ids `39`-`46` e `63`-`64` **nao** sao duplicatas e seguem na lista de lacunas (secao 4.3).
-
-## 6. Lacuna reversa: o blog registra o que o CRM nao cadastrou
-
-Ha posts de atividade **sem registro correspondente** em `eventos_marcados` — prova de que a base de atividades nao e a fonte unica da verdade. Os casos mais recentes:
-
-| Post | Data | Tema |
+| Efeito | Antes | Depois |
 |---|---|---|
-| _Superação e Visibilidade: Projeto AME brilha em Evento na ALESP pelo Dia_ | 21/03/2026 | atividade citada no blog, ausente da base |
-| _Maio Amarelo: Secretaria Municipal da Pessoa com Deficiência realiza açã_ | 23/07/2023 | atividade citada no blog, ausente da base |
-| _Dia Internacional da Mulher no MASP_ | 08/03/2023 | atividade citada no blog, ausente da base |
-| _EPSON fecha parceria com associação de inclusão de pessoas com síndrome _ | 25/03/2023 | atividade citada no blog, ausente da base |
-| _Dia 21 de Março - Dia Internacional da Síndrome de Down_ | 21/03/2023 | atividade citada no blog, ausente da base |
-| _Sheraton e WTC apoiam o Projeto A.M.E._ | 29/07/2022 | atividade citada no blog, ausente da base |
-| _Grande Encontro Feiras & Negócios_ | 24/03/2019 | atividade citada no blog, ausente da base |
-| _Encontro ABEOC no Hotel Intercontinental em São Paulo_ | 20/12/2016 | atividade citada no blog, ausente da base |
+| `eventos_marcados` | 73 | **57** |
+| `eventos_marcados_legado_20260918` (arquivo) | — | 16 |
+| `horarios` | 189 | **141** |
+| `horarios_legado_20260918` (arquivo) | — | 48 |
+| `fotos_reconhecidas` | 668 | **365** |
+| Referencias orfas | — | **0** |
+
+Backup previo: `/root/backups/ame_pre_consolidacao_20260918.sql` (md5 `f35ee4dcfeedf7444dc3b38602312c37`), replicado em `scratch/backups/`. Nenhuma linha foi destruida — tudo esta nas tabelas de arquivo.
+
+## 6. O campo `link_artigo` e o que ele revela
+
+A tabela `eventos_marcados` **ja possui** a coluna `link_artigo` (varchar 255), feita para guardar a URL do post que cobre a atividade. Hoje ela esta preenchida em apenas **12 dos 57 registros (12 atividades distintas)** e com problemas:
+
+| id | Atividade | link_artigo |
+|---|---|---|
+| `70` | Salão Duas Rodas 2017 | .../salao-duas-rodas-2017/ |
+| `69` | FCE-Cosmetique | .../fce-cosmetique-2019/ |
+| `45` | ABUP DECOR SHOW | .../atendentes-muito-especiais-brilham-na-abup-decor-show-2024/ |
+| `46` | HOME & GIFT / TÊXTIL & HOME | .../atendentes-muito-especiais-na-abup-home-gift-textil-home-2024-uma- |
+| `2` | FESPA DIGITAL PRINTING 2024 | .../projeto-ame-brilha-na-fespa-digital-printing-2024/ |
+| `4` | HOUS DECOR SHOW 2024 | .../atendentes-do-projeto-ame-brilham-no-hous-decor-show/ |
+| `5` | AUTOCOM | .../atendentes-muito-especiais-encantam-visitantes-na-feira-autocom-20 |
+| `11` | ALPHAGRAPHICS SENAI | .../inclusao-e-acolhimento-marcam-o-evento-da-alphagraphics-com-partic |
+| `14` | CURSO BÁSICO | .../projeto-a-m-e-lanca-curso-de-dj-para-eventos-inclusao-e-oportunida |
+| `15` | CURSO TECNOLOGIA PARA EVENTOS | .../projeto-a-m-e-lanca-curso-de-dj-para-eventos-inclusao-e-oportunida |
+| `16` | CURSO FINANÇAS PARA VIDA | .../projeto-a-m-e-lanca-curso-de-dj-para-eventos-inclusao-e-oportunida |
+| `17` | REUNIÃO DOS VOLUNTÁRIOS | .../capacitacao-e-planejamento-para-2025-projeto-ame-realiza-cursos-e- |
+
+**Problemas identificados:**
+
+- O post do Curso de DJ (`.../projeto-a-m-e-lanca-curso-de-dj.../`) esta replicado em **4 atividades diferentes** (`14`, `15`, `16`, `20`), sendo que apenas `20` corresponde de fato ao lancamento do curso.
+- `47` (legado), `49` (legado), `50` (legado), `55` (legado), `56` (legado) e `58` (legado) tinham o campo preenchido — agora arquivados; os valores foram herdados pelos nucleos `2`, `4`, `5`, `11`, `15` e `17`.
+- Ficaram **sem preenchimento** atividades que TEM artigo, como `24` (III Evento de Extensao Universitaria) e `44` (Museu da Lingua Portuguesa).
+- `link_artigo` deve virar a fonte de verdade operacional: e por ele que a esteira vai medir cobertura e evitar retrabalho.
+
+## 7. Lacuna reversa: o blog registra o que o CRM nao cadastrou
+
+| Post | Data |
+|---|---|
+| _Superação e Visibilidade: Projeto AME brilha em Evento na ALESP pelo Dia Internacional d_ | 21/03/2026 |
+| _Maio Amarelo: Secretaria Municipal da Pessoa com Deficiência realiza ação Multa Moral co_ | 23/07/2023 |
+| _Dia Internacional da Mulher no MASP_ | 08/03/2023 |
+| _EPSON fecha parceria com associação de inclusão de pessoas com síndrome de down_ | 25/03/2023 |
+| _Dia 21 de Março - Dia Internacional da Síndrome de Down_ | 21/03/2023 |
+| _Sheraton e WTC apoiam o Projeto A.M.E._ | 29/07/2022 |
+| _Grande Encontro Feiras & Negócios_ | 24/03/2019 |
+| _Encontro ABEOC no Hotel Intercontinental em São Paulo_ | 20/12/2016 |
 
 Casos notaveis: **evento na ALESP em 20/03/2026** (Dia Internacional da Sindrome de Down), **Maio Amarelo / Multa Moral**, **Dia Internacional da Mulher no MASP**, **barraca de cafe na FESPA 2023** e a participacao no **9o Simposio Internacional da Sindrome de Down**.
 
-## 7. Plano editorial sugerido
+## 8. Plano editorial sugerido
 
-| Onda | Foco | Atividades | Justificativa |
-|---|---|---|---|
-| 1 | Cobertura 2026 (retroativa curta) | `71` CONARH 2026, `38` SENAI Osasco, `37` DOWNLANDIA Morumbi, `36` FEBRATEXTIL 2026, `35` Curso Automaquiagem, `34` DOWNLANDIA no SBT, `33` EXPOPRINT 2026, `30` ALPHAGRAPHICS 2026 | Frescor de SEO, provas sociais recentes e forte apelo visual (fotos/videos ja existentes) |
-| 2 | Grandes feiras sem cobertura | `19` FEBRATEXTIL 2025, `13` ABUP SHOW 2025, `21` FESPA 2025, `10` ABUP DECOR SHOW 2024, `9` ABF EXPO 2024, `7` HOSPITALAR 2024, `6` BETT BRASIL 2024 | Eventos de grande porte em que o AME atuou: cada um sustenta um case de cliente |
-| 3 | Trilha de capacitacao | `22`/`23` Turmas I e II de DJ, `29`/`31`/`32` Fotografia SENAI, `28` Espanhol, `12`/`30` Agentes da Transformacao | Bloco tematico unico ("como formamos nossos atendentes") em vez de posts isolados |
-| 4 | Recorrentes | `8`, `26`, `27`, `72` MD Make a Difference | Um unico artigo-conceito + atualizacoes anuais |
-| 5 | Historico e governanca | `67`, `68`, `65`, `66`, `39`-`43`, `63`, `64` | Resgatar a memoria 2017-2023 e as assembleias |
+| Onda | Foco | Atividades |
+|---|---|---|
+| 1 | Cobertura 2026 (retroativa curta) | `71` CONARH 2026, `38` SENAI Osasco, `37` DOWNLANDIA Morumbi, `36` FEBRATEXTIL 2026, `35` Curso Automaquiagem, `34` DOWNLANDIA no SBT, `33` EXPOPRINT 2026, `30` ALPHAGRAPHICS 2026 |
+| 2 | Grandes feiras sem cobertura | `19` FEBRATEXTIL 2025, `13` ABUP SHOW 2025, `21` FESPA 2025, `10` ABUP DECOR SHOW 2024, `9` ABF EXPO 2024, `7` HOSPITALAR 2024, `6` BETT BRASIL 2024 |
+| 3 | Trilha de capacitacao | `22`/`23` Turmas I e II de DJ, `29`/`31`/`32` Fotografia SENAI, `28` Espanhol, `12`/`30` Agentes da Transformacao |
+| 4 | Recorrentes | `8`, `26`, `27`, `72` MD Make a Difference |
+| 5 | Historico e governanca | `67`, `68`, `65`, `66`, `39`-`43`, `63`, `64`, `1` |
 
-Sugestao de padrao minimo por artigo de atividade: nome e data no titulo, local, numero de atendentes escalados, empresa/parceiro contratante, depoimento curto, galeria e CTA para `contacte.me/projetoame`.
+Padrao minimo por artigo de atividade: nome e data no titulo, local, numero de atendentes escalados, empresa/parceiro contratante, depoimento curto, galeria (alimentada por `fotos_reconhecidas`) e CTA para `contacte.me/projetoame`.
 
-## 8. Fluxo do cruzamento
+## 9. Fluxo do cruzamento
 
 ```mermaid
 flowchart LR
     A["Blog WordPress<br/>projetoame.org/home<br/>72 posts"] --> C{"Cruzamento<br/>nome + data"}
-    B["CRM VPS1<br/>eventos_marcados<br/>73 atividades"] --> C
-    C --> D["15 com artigo<br/>(20,5%)"]
+    B["CRM VPS1<br/>eventos_marcados<br/>57 atividades"] --> C
+    L["link_artigo<br/>12 preenchidos"] --> C
+    C --> D["15 com artigo (26,3%)"]
     C --> E["4 com cobertura parcial"]
-    C --> F["38 SEM artigo"]
-    C --> I["16 duplicatas legadas"]
+    C --> F["38 SEM artigo (66,7%)"]
     F --> F1["29 nucleo com avaliacao"]
     F --> F2["1 historica sem cobertura"]
     F --> F3["7 legado unico"]
@@ -202,9 +237,9 @@ flowchart LR
     G --> H["Cobertura completa<br/>do blog"]
 ```
 
-## 9. 🔗 Conexões & Ecossistema
+## 10. 🔗 Conexões & Ecossistema
 
 - [[PROJETO_AME]] · [[GEMINI]] · [[HISTORY]] · [[REGRAS_DE_NEGOCIO]]
-- Infra: `#infra/vps1` (site + WordPress + banco `projetoame`), `#infra/vps2` (Evolution API / LiteLLM)
-- Modulos: `#modulo/crm` (`eventos_marcados`, `/admin/atividades`), `#modulo/portal-responsavel`, `#modulo/avaliacao`
-- Projetos irmaos: [[novaeraeditorial]] (recomendacao editorial nos posts), [[contacteme]] (cartao virtual do CTA)
+- Infra: `#infra/vps1` (site + WordPress + banco `projetoame`), `#infra/vps2` (Content Factory / n8n / LiteLLM), `#infra/vps3` (biometria / face_recognition)
+- Modulos: `#modulo/crm` (`eventos_marcados`, `link_artigo`), `#modulo/biometria` (`fotos_reconhecidas`), `#modulo/content-factory` (tenant `projetoame` em `wp_content_factory_tenants.json`)
+- Projetos irmaos: [[novaeraeditorial]] (recomendacao editorial), [[contacteme]] (cartao virtual do CTA)

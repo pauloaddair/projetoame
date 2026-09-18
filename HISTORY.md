@@ -374,7 +374,22 @@ odizio = MAX(rodizio) + 1 no ato da inscrio inicial do candidato.
     - **Resultado:** 15 atividades (20,5%) com artigo próprio; 4 com cobertura apenas parcial/duvidosa; **38 sem nenhum artigo** (29 do núcleo com UUID, 7 legados únicos, 1 histórica "Dr. Zan" e 1 agendada — 3ª turma do Curso de DJ).
     - **Lacuna reversa:** o blog documenta atividades ausentes da base (ALESP 20/03/2026, Maio Amarelo/Multa Moral, Dia da Mulher no MASP, barraca de café na FESPA 2023, 9º Simpósio Internacional da Síndrome de Down).
     - **Entregável:** `RELATORIO_COBERTURA_BLOG_ATIVIDADES_18SET2026.md` (raiz do projeto + cópia em `F:\01_Projetos\apoio\`), com tabelas de cobertura, lacunas priorizadas e plano editorial em 5 ondas.
-    - Nenhuma alteração de código ou de banco — auditoria somente-leitura (consultas `SELECT` em produção).
+- **18/09/2026 - Consolidação das Duplicatas Legadas de `eventos_marcados` (VPS1):**
+    - **Diagnóstico:** 16 registros (`id` 47 a 62) eram um **lote de importação antiga** que refazia registros do núcleo vivo (mesmo evento e data, nome abreviado, sem ficha de avaliação). Ex.: `47` "FESPA" duplicava `2` "FESPA DIGITAL PRINTING 2024".
+    - **Backup prévio:** `/root/backups/ame_pre_consolidacao_20260918.sql` (md5 `f35ee4dcfeedf7444dc3b38602312c37`), replicado em `scratch/backups/`. **Nenhuma linha foi destruída** — todas foram movidas para tabelas de arquivo.
+    - **Arquivamento:** criada `eventos_marcados_legado_20260918` (16 linhas, com colunas `duplica_de` e `arquivado_em`).
+    - **Remapeamento de filhas:** `fotos_reconhecidas` (303 linhas legadas, todas com correspondente 1:1 idêntico em `candidato_id + foto_path` no núcleo — 117/28/51/26/1/80 casados) e `horarios` (48 linhas remapeadas para os eventos núcleo).
+    - **Limpeza de placeholders:** identificados via dump de backup os 48 `horario_id` do lote legado — 100% deles eram placeholder puro (`empresa_id=0`, `vagas=0`, `tipo='evento'`), sem nenhuma atribuição real. Arquivados em `horarios_legado_20260918` e removidos.
+    - **Resultado:** `eventos_marcados` 73 → **57** · `horarios` 189 → **141** · `fotos_reconhecidas` 668 → **365** · **0 referências órfãs**.
+    - **Validação:** rotas `/`, `/home/`, `/admin/atividades`, `/admin/escala` e `/avaliacao` respondendo HTTP 200 após a operação.
+    - **Achado relevante:** a tabela já possui a coluna **`link_artigo`** (varchar 255), preenchida em apenas 12 dos 57 registros e com 3 problemas (o post do Curso de DJ está replicado em 4 atividades; `24` e `44` têm artigo mas estão sem link). O campo é a chave para a esteira automatizada de cobertura.
+    - **Achado de schema:** a produção tem `slug` e `link_artigo`, e **não** tem `empresa_id` — a cópia local (XAMPP) divergia e foi descartada como fonte.
+
+- **18/09/2026 - Plano da Esteira de Cobertura do Blog (`PLANO_ESTEIRA_COBERTURA_BLOG_AME.md`):**
+    - **Diagnóstico da causa raiz dos artigos genéricos:** o motor `content_factory_critic_engine.py` tem `RSS_FEED_URL` hardcoded em `g1.globo.com/rss/g1/tecnologia/` e o pool `TENANT_CURATED_PAUTAS` não tem entrada para `projetoame` — logo o tenant cai no RSS genérico. O bloco `projetoame` em `wp_content_factory_tenants.json` não tem `strict_scope`, `editorial_anchor` nem `primary_cta_url`.
+    - **Solução proposta:** modo de pauta *event-driven* (`fetch_activity_pauta()`) alimentado por `eventos_marcados`, com `pauta_source: "activities"` e `strict_scope: true` no tenant; write-back do `link_artigo` após publicação (contador de cobertura = `57 - COUNT(link_artigo <> '')`).
+    - **Pipeline de fotos mapeado:** a VPS3 já tem `enrollment.py`, `scan_events.py` e `biometria_venv` (face_recognition/dlib) operacionais; `fotos_reconhecidas` já tem 365 matches de 35 atendentes. Falta ampliar o enrollment (39 de 112 candidatos têm vetor) e indexar o acervo `E:\06_Backup_Local\POCO_PADF\` (73.069 arquivos / 118,55 GB) por EXIF `DateTimeOriginal` para cruzar com as datas dos eventos.
+    - **Alerta LGPD registrado:** fotos de pessoas com deficiência são dado sensível e face encoding é dado biométrico — exige base legal, registro de consentimento, respeito ao `fotos_reconhecidas.oculta` (rota `api_ocultar_foto.php`) e revisão humana obrigatória antes de publicar.
 
 ---
 
