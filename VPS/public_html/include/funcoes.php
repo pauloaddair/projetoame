@@ -226,150 +226,18 @@ function timeDiff($firstTime, $lastTime) {
     return $timeDiff;
 }
 
-function apibrasilfridahh($img, $txt, $tel) {
-    $to = $tel;
-
-    $curl = curl_init();
-
-    curl_setopt_array($curl, array(
-        CURLOPT_URL => 'https://cluster.apigratis.com/api/v2/whatsapp/sendFile64',
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_ENCODING => '',
-        CURLOPT_SSL_VERIFYHOST => false,
-        CURLOPT_SSL_VERIFYPEER => false,
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 0,
-        CURLOPT_FOLLOWLOCATION => true,
-        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        CURLOPT_CUSTOMREQUEST => 'POST',
-        CURLOPT_POSTFIELDS => '{
-            "number": "' . $to . '",
-            "caption": "' . $txt . '",
-            "path": "' . $img . '"
-        }',
-        CURLOPT_HTTPHEADER => array(
-            'Content-Type: application/json',
-            'DeviceToken: 4c5204c5-8dba-4dc2-8ab8-41f407fa5629',
-            'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9....'
-        ),
-    ));
-
-    $response = curl_exec($curl);
-    $resp = json_decode($response);
-    curl_close($curl);
-    return $resp;
-}
-
-function apibrasilNET($img, $txt, $tel) {
-    $to = $tel;
-
-    $curl = curl_init();
-
-    curl_setopt_array($curl, array(
-        CURLOPT_URL => 'https://cluster.apigratis.com/api/v2/whatsapp/sendFile64',
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_ENCODING => '',
-        CURLOPT_SSL_VERIFYHOST => false,
-        CURLOPT_SSL_VERIFYPEER => false,
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 0,
-        CURLOPT_FOLLOWLOCATION => true,
-        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        CURLOPT_CUSTOMREQUEST => 'POST',
-        CURLOPT_POSTFIELDS => '{
-            "number": "' . $to . '",
-            "caption": "' . $txt . '",
-            "path": "' . $img . '"
-        }',
-        CURLOPT_HTTPHEADER => array(
-            'Content-Type: application/json',
-            'DeviceToken: 68b3aef2-615a-4dd5-af4a-06ed38550942',
-            'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9....'
-        ),
-    ));
-
-    $response = curl_exec($curl);
-    $resp = json_decode($response);
-    curl_close($curl);
-    return $resp;
-}
-
-function enviaWA_msg($to='5511963573778',$msg='mensagem'){
-
-	$params=array(
-	'token' => 'coc46iyy1tveqcwb',
-	'to' => $to,
-	'body' => $msg
-	);
-	$curl = curl_init();
-	curl_setopt_array($curl, array(
-	  CURLOPT_URL => "https://api.ultramsg.com/instance59827/messages/chat",
-	  CURLOPT_RETURNTRANSFER => true,
-	  CURLOPT_ENCODING => "",
-	  CURLOPT_MAXREDIRS => 10,
-	  CURLOPT_TIMEOUT => 30,
-	  CURLOPT_SSL_VERIFYHOST => 0,
-	  CURLOPT_SSL_VERIFYPEER => 0,
-	  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-	  CURLOPT_CUSTOMREQUEST => "POST",
-	  CURLOPT_POSTFIELDS => http_build_query($params),
-	  CURLOPT_HTTPHEADER => array(
-		"content-type: application/x-www-form-urlencoded"
-	  ),
-	));
-
-	$response = curl_exec($curl);
-	$err = curl_error($curl);
-
-	curl_close($curl);
-
-	if ($err) {
-	  $resposta = "cURL Error #:" . $err;
-	} else {
-	  $resposta = $response;
-	}
-	return $resposta;
-}
-
 /*
-function enviaWA_img ($to='5511963573778',$msg='enviando imagem',$url)
-	{
-$params=array(
-'token' => 'coc46iyy1tveqcwb',
-'to' => "'.$to.'",
-'image' => "'.$url.'",
-'caption' => ".$msg."
-);
-$curl = curl_init();
-curl_setopt_array($curl, array(
-  CURLOPT_URL => "https://api.ultramsg.com/instance59827/messages/image",
-  CURLOPT_RETURNTRANSFER => true,
-  CURLOPT_ENCODING => "",
-  CURLOPT_MAXREDIRS => 10,
-  CURLOPT_TIMEOUT => 30,
-  CURLOPT_SSL_VERIFYHOST => 0,
-  CURLOPT_SSL_VERIFYPEER => 0,
-  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-  CURLOPT_CUSTOMREQUEST => "POST",
-  CURLOPT_POSTFIELDS => http_build_query($params),
-  CURLOPT_HTTPHEADER => array(
-    "content-type: application/x-www-form-urlencoded"
-  ),
-));
-
-$response = curl_exec($curl);
-$err = curl_error($curl);
-
-curl_close($curl);
-
-	if ($err) {
-	  $resposta = "cURL Error #:" . $err;
-	} else {
-	  $resposta = $response;
-	}
-	return $resposta;
-}
-*/
+ * REMOVIDO em 26/09/2026 -- APIBrasil (cluster.apigratis.com) e UltraMsg
+ * (api.ultramsg.com) estao DEPRECADAS. Saíram daqui: apibrasilNET, apibrasilfridahh, enviaWA_img, enviaWA_msg
+ *
+ * O envio de WhatsApp do ecossistema e EXCLUSIVAMENTE pela Evolution API
+ * (evoapi.netmailing.com.br) e Evolution GO (evogo.netmailing.com.br).
+ * Nenhuma outra API de envio deve ser reintroduzida neste arquivo.
+ *
+ * Verificado antes de remover: zero chamadas a essas funcoes no projeto.
+ * Elas carregavam em claro o DeviceToken/Bearer da APIBrasil e o token da
+ * instancia UltraMsg -- credencial morta versionada no Git.
+ */
 
 function formataWA($phoneNumber) 
 	{
