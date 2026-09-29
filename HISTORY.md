@@ -17,6 +17,18 @@ relacionados:
 
 # Histórico de Trabalho - Projeto AME
 
+- **29/09/2026 - Mapeamento, Integração Visual e Melhorias no Módulo de Atestados & Certificados:**
+    - **Localização e Diagnóstico:** Identificado que o sistema de emissão de atestados e confirmações de matrícula já estava implementado em `pages/atestados.php` e `pages/gerar_atestado.php` (com geração via FPDF e assinatura digital da presidência), porém não estava acessível na interface por ausência de links no menu.
+    - **Acessibilidade na Interface (UI/UX):**
+        1) Inserido item "Atestados & Certificados" no menu lateral administrativo (`include/admin_sidebar.php`).
+        2) Inserido botão de ação rápida "Atestado" em cada linha da tabela do Casting (`pages/casting.php`), permitindo acesso em 1 clique direto para o aluno selecionado (`/atestados/{candidato_id}`).
+        3) Inserido atalho para "Atestados" no menu dropdown do usuário logado (`include/nav.php`) para gestores com nível >= 3.
+    - **Aprimoramentos no PDF & FPDF:**
+        - Em `include/funcoes-fpdf.php`, adicionado suporte às tags `<p>` e `<li>` no interpretador `WriteHTML`, garantindo que listagens de cronogramas e datas quebrem linhas com marcadores (`- `) e recuo adequado.
+        - Em `pages/gerar_atestado.php`, corrigido erro de concordância textual ("Perfocendo" corrigido para "Perfazendo uma carga horária...").
+    - **Mapeamento do 3º Curso de DJ para Eventos (Evento #73):** Identificado que a candidata Marcella Provenzano Daniel (`candidato_id: 106`) está matriculada no evento #73 (`horarios: 196`). Atestado de Matrícula funcional imediatamente via `/atestados/106`, e estrutura para Atestado de Participação detalhado mapeada.
+    - **Deploy & Validação:** Arquivos sincronizados para VPS1 via SCP e validados com `php -l` sem erros de sintaxe.
+
 - **29/09/2026 - Correção Crítica do Sistema de Autenticação (Login), Endpoints AJAX e Revisão do Casting:**
     - **Diagnóstico da Causa Raiz:** O endurecimento de segurança aplicado em 26/09/2026 havia introduzido a diretriz `Require all denied` em `/home/projetoame/public_html/include/.htaccess` na VPS1, sob a premissa de que a pasta apenas continha scripts de backend lidos via `include_once`. Contudo, a arquitetura do Projeto AME consome scripts em `include/` diretamente via requisições HTTP (o form do `login.php` submete para `include/valida.php`, e painéis administrativos como `adminatividades.php` usam DataTables AJAX apontando para `include/lista_todos_eventos.php`). Isso causava retorno imediato de **HTTP 403 Forbidden**, impedindo completamente o login de qualquer usuário e quebrando carregamento de tabelas administrativas e webhooks de automação (`api_ame_pautas.php`).
     - **Correção da Governança no `.htaccess`:** Atualizado `/home/projetoame/public_html/include/.htaccess` (e espelhado no repositório) para desativar listagem (`Options -Indexes`), manter bloqueio estrito a arquivos de dados e scripts não-web (`.sql`, `.py`, `.env`, `.bak`, `.log`, `.token`, `.sh`, `.json`, `.md`), mas conceder explicitamente permissão para execução de scripts `.php` via HTTP (`<FilesMatch "\.php$"> Require all granted`).

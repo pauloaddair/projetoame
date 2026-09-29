@@ -81,6 +81,9 @@
     <?php if (isset($_SESSION['nivel']) && $_SESSION['nivel'] >= 4): ?>
 		<a class="dropdown-item" href="<?php echo $app_web_root; ?>admin"><i class="fas fa-columns light-blue-text mx-2"></i>Painel</a>
     <?php endif; ?>
+    <?php if (isset($_SESSION['nivel']) && $_SESSION['nivel'] >= 3): ?>
+		<a class="dropdown-item" href="<?php echo $app_web_root; ?>atestados"><i class="fas fa-certificate light-blue-text mx-2"></i>&nbsp;Atestados</a>
+    <?php endif; ?>
 		<a class="dropdown-item" href="<?php echo $app_web_root; ?>documentos"><i class="fas fa-file-alt light-blue-text mx-2"></i>&nbsp;Documentos</a>
 		<a class="dropdown-item" href="<?php echo $app_web_root; ?>dre"><i class="fas fa-chart-line light-blue-text mx-2"></i>&nbsp;Transparência DRE</a>
 		<hr class="dropdown-divider" />

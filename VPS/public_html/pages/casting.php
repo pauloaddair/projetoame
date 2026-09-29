@@ -167,6 +167,9 @@ if (isset($_SESSION['nivel']) && $_SESSION['nivel'] >= 3) {
 									<a href="<?php echo $app_web_root; ?>editacandidato/<?php echo digitos($row['candidato_id']); ?>" class="btn btn-sm btn-outline-primary rounded-pill py-1 px-2 ml-1" title="Editar Ficha">
 										<i class="fas fa-edit mr-1"></i>Editar
 									</a>
+									<a href="<?php echo $app_web_root; ?>atestados/<?php echo digitos($row['candidato_id']); ?>" class="btn btn-sm btn-outline-success rounded-pill py-1 px-2 ml-1" title="Emitir Atestado/Certificado">
+										<i class="fas fa-certificate mr-1"></i>Atestado
+									</a>
 								</td>
 							</tr>
 							<?php 

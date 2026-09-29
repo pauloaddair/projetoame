@@ -53,8 +53,13 @@ function OpenTag($tag, $attr)
         $this->SetStyle($tag,true);
     if($tag=='A')
         $this->HREF = $attr['HREF'];
-    if($tag=='BR')
+    if($tag=='BR' || $tag=='P')
         $this->Ln(5);
+    if($tag=='LI') {
+        $this->Ln(6);
+        $this->SetX($this->GetX() + 5);
+        $this->Write(5, "- ");
+    }
 }
 
 function CloseTag($tag)

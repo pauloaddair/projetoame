@@ -94,7 +94,7 @@ if ($tipo === 'matricula') {
     } else {
         $texto = "Atestamos para os devidos fins que <b>" . $candidato['nome'] . "</b>, portador(a) do CPF nº <b>" . $candidato['CPF'] . "</b>, participou das atividades do projeto <b>" . $evento['nome'] . "</b>, conforme cronograma abaixo:
         <br><ul>" . $participacoes . "</ul>
-        <br>Perfocendo uma carga horária total de aproximadamente <b>" . round($total_horas, 1) . " horas</b>.
+        <br>Perfazendo uma carga horária total de aproximadamente <b>" . round($total_horas, 1) . " horas</b>.
         <br><br>
         O presente atestado é emitido para fins de justificativa de ausência em outras atividades no referido período.
         <br><br>

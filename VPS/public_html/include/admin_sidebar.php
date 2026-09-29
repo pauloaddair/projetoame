@@ -17,6 +17,8 @@ if (strpos($current_uri, 'admin/atividades') !== false || strpos($current_uri, '
     $active_page = 'financeiro';
 } elseif (strpos($current_uri, 'admin/expositores') !== false) {
     $active_page = 'expositores';
+} elseif (strpos($current_uri, 'atestados') !== false) {
+    $active_page = 'atestados';
 }
 ?>
 <style>
@@ -170,6 +172,11 @@ if (strpos($current_uri, 'admin/atividades') !== false || strpos($current_uri, '
         box-shadow: 0 4px 12px rgba(139, 92, 246, 0.25);
     }
     
+    #admin-sidebar ul li.item-atestados.active a {
+        background: #059669; /* Emerald Green */
+        box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
+    }
+    
     #admin-main-content {
         flex: 1;
         background: #f8fafc; /* Slate 50 */
@@ -225,6 +232,13 @@ if (strpos($current_uri, 'admin/atividades') !== false || strpos($current_uri, '
                 <a href="<?php echo $GLOBALS['app_web_root']; ?>admin/candidatos">
                     <i class="fas fa-users"></i>
                     <span>Casting & Candidatos</span>
+                </a>
+            </li>
+
+            <li class="item-atestados <?php echo $active_page === 'atestados' ? 'active' : ''; ?>">
+                <a href="<?php echo $GLOBALS['app_web_root']; ?>atestados">
+                    <i class="fas fa-certificate"></i>
+                    <span>Atestados & Certificados</span>
                 </a>
             </li>
 
