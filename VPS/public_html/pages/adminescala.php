@@ -178,9 +178,26 @@ include_once('./include/admin_sidebar.php');
                 </button>
             </div>
             <div class="modal-body">
-                <div class="alert alert-info border shadow-sm mb-3">
+                <!-- Controle de Realização de Rodízio -->
+                <div class="card mb-3 border-primary shadow-sm" style="background-color: #f8faff;">
+                    <div class="card-body py-2 px-3">
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="realizar-rodizio-switch" checked>
+                            <label class="custom-control-label font-weight-bold text-dark mb-0" for="realizar-rodizio-switch" style="cursor: pointer;">
+                                <i class="fas fa-sync-alt text-primary mr-1"></i> Realizar Rodízio ao Confirmar Presenças
+                            </label>
+                        </div>
+                        <small id="realizar-rodizio-help" class="form-text mt-1 text-muted">
+                            Atividades de trabalho realizam o rodízio. Cursos e treinamentos não devem movimentar a fila de rodízio.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="alert alert-info border shadow-sm mb-3" id="presencas-info-alert">
                     <i class="fas fa-info-circle mr-1"></i>
-                    <strong>Apenas os atendentes marcados com presença confirmada</strong> serão movidos para o final da fila de rodízio (MAX + 1). Caso o atendente tenha faltado por doença ou motivo justificado, desmarque a caixa para que a posição dele seja preservada no rodízio.
+                    <span id="presencas-info-text">
+                        <strong>Apenas os atendentes marcados com presença confirmada</strong> serão movidos para o final da fila de rodízio (MAX + 1). Caso o atendente tenha faltado por doença ou motivo justificado, desmarque a caixa para que a posição dele seja preservada no rodízio.
+                    </span>
                 </div>
                 <form id="presencasForm">
                     <div id="presencas-candidatos-list" class="list-group mb-3">
@@ -191,7 +208,7 @@ include_once('./include/admin_sidebar.php');
             <div class="modal-footer justify-content-between">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-success font-weight-bold" id="salvar-presencas-btn">
-                    <i class="fas fa-check-double mr-1"></i> Confirmar Presenças e Atualizar Rodízio
+                    <i class="fas fa-check-double mr-1"></i> <span id="salvar-presencas-btn-text">Confirmar Presenças e Atualizar Rodízio</span>
                 </button>
             </div>
         </div>
@@ -689,6 +706,53 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             const modalEl = document.getElementById('presencasModal');
             const listContainer = document.getElementById('presencas-candidatos-list');
+            const switchRodizio = document.getElementById('realizar-rodizio-switch');
+            const helpRodizio = document.getElementById('realizar-rodizio-help');
+            const infoText = document.getElementById('presencas-info-text');
+            const btnText = document.getElementById('salvar-presencas-btn-text');
+            const salvarBtn = document.getElementById('salvar-presencas-btn');
+
+            const isCurso = (dataDetails && (dataDetails.event_tipo === 'Curso' || dataDetails.event_tipo === 'Treinamento' || dataDetails.event_tipo_evento === 'curso'));
+
+            function updateRodizioUI(rodizioAtivo) {
+                if (rodizioAtivo) {
+                    if (salvarBtn) {
+                        salvarBtn.classList.remove('btn-info');
+                        salvarBtn.classList.add('btn-success');
+                    }
+                    if (btnText) btnText.textContent = 'Confirmar Presenças e Atualizar Rodízio';
+                    if (helpRodizio) {
+                        helpRodizio.innerHTML = '<span class="text-success font-weight-bold"><i class="fas fa-check-circle mr-1"></i> Atividade de Trabalho:</span> Atendentes presentes serão movidos para o final da fila de rodízio (MAX + 1).';
+                    }
+                    if (infoText) {
+                        infoText.innerHTML = '<strong>Apenas os atendentes marcados com presença confirmada</strong> serão movidos para o final da fila de rodízio (MAX + 1). Caso o atendente tenha faltado por doença ou motivo justificado, desmarque a caixa para que a posição dele seja preservada no rodízio.';
+                    }
+                } else {
+                    if (salvarBtn) {
+                        salvarBtn.classList.remove('btn-success');
+                        salvarBtn.classList.add('btn-info');
+                    }
+                    if (btnText) btnText.textContent = 'Confirmar Presenças (Sem Alterar Rodízio)';
+                    if (helpRodizio) {
+                        helpRodizio.innerHTML = isCurso 
+                            ? '<span class="badge badge-warning text-dark px-2 py-1"><i class="fas fa-graduation-cap mr-1"></i> Curso / Treinamento Detectado:</span> O rodízio vem desligado por padrão para que os alunos não percam sua vez na fila de trabalho.'
+                            : '<span class="text-info font-weight-bold"><i class="fas fa-pause-circle mr-1"></i> Rodízio Desativado:</span> As presenças serão registradas normalmente, mas a posição de rodízio de todos os atendentes permanecerá inalterada.';
+                    }
+                    if (infoText) {
+                        infoText.innerHTML = '<strong>Presença sem Rodízio:</strong> As presenças serão registradas para fins de histórico e emissão de atestados/certificados, mas <strong>a posição de rodízio de nenhum participante será modificada</strong>.';
+                    }
+                }
+            }
+
+            if (switchRodizio) {
+                // Se for Curso/Treinamento, desmarca por padrão! Se for Trabalho, marca por padrão.
+                switchRodizio.checked = !isCurso;
+                updateRodizioUI(switchRodizio.checked);
+
+                switchRodizio.onchange = function() {
+                    updateRodizioUI(this.checked);
+                };
+            }
 
             const escaladosMap = new Map();
             if (dataDetails && dataDetails.candidatos) {
@@ -791,6 +855,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 presencas[cb.value] = cb.checked ? 1 : 0;
             });
 
+            const switchRodizio = document.getElementById('realizar-rodizio-switch');
+            const realizarRodizioVal = switchRodizio ? (switchRodizio.checked ? 1 : 0) : 1;
+
             salvarPresencasBtn.disabled = true;
             salvarPresencasBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Processando...';
 
@@ -800,13 +867,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 body: JSON.stringify({
                     action: 'confirmar_presencas',
                     evento_id: eventoId,
-                    presencas: presencas
+                    presencas: presencas,
+                    realizar_rodizio: realizarRodizioVal
                 })
             })
             .then(r => r.json())
             .then(res => {
                 salvarPresencasBtn.disabled = false;
-                salvarPresencasBtn.innerHTML = '<i class="fas fa-check-double mr-1"></i> Confirmar Presenças e Atualizar Rodízio';
+                const txt = realizarRodizioVal ? 'Confirmar Presenças e Atualizar Rodízio' : 'Confirmar Presenças (Sem Alterar Rodízio)';
+                salvarPresencasBtn.innerHTML = '<i class="fas fa-check-double mr-1"></i> <span id="salvar-presencas-btn-text">' + txt + '</span>';
 
                 if (window.jQuery && typeof $('#presencasModal').modal === 'function') {
                     $('#presencasModal').modal('hide');
@@ -823,7 +892,8 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .catch(err => {
                 salvarPresencasBtn.disabled = false;
-                salvarPresencasBtn.innerHTML = '<i class="fas fa-check-double mr-1"></i> Confirmar Presenças e Atualizar Rodízio';
+                const txt = realizarRodizioVal ? 'Confirmar Presenças e Atualizar Rodízio' : 'Confirmar Presenças (Sem Alterar Rodízio)';
+                salvarPresencasBtn.innerHTML = '<i class="fas fa-check-double mr-1"></i> <span id="salvar-presencas-btn-text">' + txt + '</span>';
                 alert('Erro ao processar presenças: ' + err.message);
             });
         });

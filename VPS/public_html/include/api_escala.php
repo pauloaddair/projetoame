@@ -29,12 +29,16 @@ try {
         $event_image_url = null;
         $event_uuid = null;
         $event_nome = '';
-        $query_event_info = "SELECT e.nome, e.uuid, i.url FROM eventos_marcados e LEFT JOIN imagens i ON e.imagem_id = i.imagem_id WHERE e.id = {$evento_id}";
+        $event_tipo = 'Trabalho';
+        $event_tipo_evento = 'atendimento';
+        $query_event_info = "SELECT e.nome, e.uuid, e.tipo, e.tipo_evento, i.url FROM eventos_marcados e LEFT JOIN imagens i ON e.imagem_id = i.imagem_id WHERE e.id = {$evento_id}";
         $result_event_info = mysqli_query($conexao, $query_event_info);
         if ($result_event_info && $row_info = mysqli_fetch_assoc($result_event_info)) {
             $event_image_url = $row_info['url'];
             $event_uuid = $row_info['uuid'];
             $event_nome = $row_info['nome'];
+            $event_tipo = !empty($row_info['tipo']) ? $row_info['tipo'] : 'Trabalho';
+            $event_tipo_evento = !empty($row_info['tipo_evento']) ? $row_info['tipo_evento'] : 'atendimento';
         }
         
         // 1. Fetch all horarios for the event
@@ -145,6 +149,8 @@ try {
         'event_image_url' => $event_image_url,
         'event_uuid' => $event_uuid,
         'event_nome' => $event_nome,
+        'event_tipo' => $event_tipo,
+        'event_tipo_evento' => $event_tipo_evento,
         'link_avaliacao_contratante' => "https://projetoame.org/avaliacao/{$event_uuid}"
     ]);
     exit;
@@ -306,9 +312,11 @@ if (isset($data['action']) && $data['action'] === 'toggle_escala_status') {
 if (isset($data['action']) && $data['action'] === 'confirmar_presencas') {
     $evento_id = intval($data['evento_id']);
     $presencas = $data['presencas'] ?? []; // [candidato_id => 1 (compareceu) ou 0 (ausente/justificado)]
+    $realizar_rodizio = isset($data['realizar_rodizio']) ? (intval($data['realizar_rodizio']) === 1) : true;
     
-    $q_ev = mysqli_query($conexao, "SELECT nome FROM eventos_marcados WHERE id = {$evento_id}");
-    $ev_nome = ($q_ev && $r_ev = mysqli_fetch_assoc($q_ev)) ? $r_ev['nome'] : "Evento #{$evento_id}";
+    $q_ev = mysqli_query($conexao, "SELECT nome, tipo, tipo_evento FROM eventos_marcados WHERE id = {$evento_id}");
+    $ev_info = ($q_ev && $r_ev = mysqli_fetch_assoc($q_ev)) ? $r_ev : ['nome' => "Evento #{$evento_id}", 'tipo' => 'Trabalho', 'tipo_evento' => 'atendimento'];
+    $ev_nome = $ev_info['nome'];
 
     $processados_sucesso = 0;
     $preservados_ausencia = 0;
@@ -317,40 +325,56 @@ if (isset($data['action']) && $data['action'] === 'confirmar_presencas') {
         $candidato_id = intval($cand_id);
         $compareceu = intval($compareceu);
 
-        // Grava registro na tabela oficial de presencas
-        mysqli_query($conexao, "INSERT INTO presenca (evento_id, candidato_id, presente, data_confirmacao, confirmadopor) 
-                                VALUES ({$evento_id}, {$candidato_id}, {$compareceu}, NOW(), 'coordenacao') 
-                                ON DUPLICATE KEY UPDATE presente = {$compareceu}, data_confirmacao = NOW()");
-
-        $q_cand = mysqli_query($conexao, "SELECT rodizio, nome FROM candidatos WHERE candidato_id = {$candidato_id}");
+        $q_cand = mysqli_query($conexao, "SELECT rodizio, nome, Email, Telefone FROM candidatos WHERE candidato_id = {$candidato_id}");
         if ($q_cand && $cand_data = mysqli_fetch_assoc($q_cand)) {
             $rodizio_atual = intval($cand_data['rodizio']);
             $cand_nome = mysqli_real_escape_string($conexao, $cand_data['nome']);
+            $cand_email = mysqli_real_escape_string($conexao, $cand_data['Email'] ?? '');
+            $cand_tel = mysqli_real_escape_string($conexao, $cand_data['Telefone'] ?? '');
 
-            if ($compareceu === 1) {
-                // Atendente COMPARECEU: move para o final da fila (MAX + 1)
-                $res_max = mysqli_query($conexao, "SELECT MAX(rodizio) as max_rodizio FROM candidatos");
-                $max_rodizio = intval(mysqli_fetch_assoc($res_max)['max_rodizio']) + 1;
+            // Grava registro na tabela oficial de presencas
+            mysqli_query($conexao, "INSERT INTO presenca (evento_id, candidato_id, presente, data_confirmacao, confirmadopor, nome, responsavel, email, telefone, comentario) 
+                                    VALUES ({$evento_id}, {$candidato_id}, {$compareceu}, NOW(), 'coordenacao', '{$cand_nome}', 0, '{$cand_email}', '{$cand_tel}', '') 
+                                    ON DUPLICATE KEY UPDATE presente = {$compareceu}, data_confirmacao = NOW()");
 
-                mysqli_query($conexao, "UPDATE candidatos SET rodizio = {$max_rodizio} WHERE candidato_id = {$candidato_id}");
-
-                $obs = mysqli_real_escape_string($conexao, "Presença confirmada no evento {$ev_nome} (ID #{$evento_id})");
-                mysqli_query($conexao, "INSERT INTO historico_rodizio (candidato_id, rodizio_anterior, rodizio_novo, evento_id, tipo_movimento, observacao) VALUES ({$candidato_id}, {$rodizio_atual}, {$max_rodizio}, {$evento_id}, 'pos_evento', '{$obs}')");
+            if (!$realizar_rodizio) {
+                // NÃO REALIZAR RODÍZIO (Curso, Treinamento ou opção desmarcada)
+                $tipo_mov = ($compareceu === 1) ? 'curso_presenca' : 'curso_ausencia';
+                $status_desc = ($compareceu === 1) ? 'Presença confirmada' : 'Ausência registrada';
+                $obs = mysqli_real_escape_string($conexao, "{$status_desc} no curso/evento {$ev_nome} (ID #{$evento_id}) - Rodízio mantido em #{$rodizio_atual} (sem movimentação de fila)");
+                mysqli_query($conexao, "INSERT INTO historico_rodizio (candidato_id, rodizio_anterior, rodizio_novo, evento_id, tipo_movimento, observacao) VALUES ({$candidato_id}, {$rodizio_atual}, {$rodizio_atual}, {$evento_id}, '{$tipo_mov}', '{$obs}')");
                 $processados_sucesso++;
             } else {
-                // Atendente FALTOU / AUSÊNCIA JUSTIFICADA: rodízio mantido!
-                $obs = mysqli_real_escape_string($conexao, "Ausência justificada no evento {$ev_nome} (ID #{$evento_id}) - rodízio preservado em #{$rodizio_atual}");
-                mysqli_query($conexao, "INSERT INTO historico_rodizio (candidato_id, rodizio_anterior, rodizio_novo, evento_id, tipo_movimento, observacao) VALUES ({$candidato_id}, {$rodizio_atual}, {$rodizio_atual}, {$evento_id}, 'ausencia_justificada', '{$obs}')");
-                $preservados_ausencia++;
+                if ($compareceu === 1) {
+                    // Atendente COMPARECEU em atividade com rodízio: move para o final da fila (MAX + 1)
+                    $res_max = mysqli_query($conexao, "SELECT MAX(rodizio) as max_rodizio FROM candidatos");
+                    $max_rodizio = intval(mysqli_fetch_assoc($res_max)['max_rodizio']) + 1;
+
+                    mysqli_query($conexao, "UPDATE candidatos SET rodizio = {$max_rodizio} WHERE candidato_id = {$candidato_id}");
+
+                    $obs = mysqli_real_escape_string($conexao, "Presença confirmada no evento {$ev_nome} (ID #{$evento_id})");
+                    mysqli_query($conexao, "INSERT INTO historico_rodizio (candidato_id, rodizio_anterior, rodizio_novo, evento_id, tipo_movimento, observacao) VALUES ({$candidato_id}, {$rodizio_atual}, {$max_rodizio}, {$evento_id}, 'pos_evento', '{$obs}')");
+                    $processados_sucesso++;
+                } else {
+                    // Atendente FALTOU / AUSÊNCIA JUSTIFICADA: rodízio mantido!
+                    $obs = mysqli_real_escape_string($conexao, "Ausência justificada no evento {$ev_nome} (ID #{$evento_id}) - rodízio preservado em #{$rodizio_atual}");
+                    mysqli_query($conexao, "INSERT INTO historico_rodizio (candidato_id, rodizio_anterior, rodizio_novo, evento_id, tipo_movimento, observacao) VALUES ({$candidato_id}, {$rodizio_atual}, {$rodizio_atual}, {$evento_id}, 'ausencia_justificada', '{$obs}')");
+                    $preservados_ausencia++;
+                }
             }
         }
     }
 
     mysqli_query($conexao, "UPDATE eventos_marcados SET rodizio_processado = 1, status_evento = 'realizado' WHERE id = {$evento_id}");
 
+    $msg = $realizar_rodizio 
+        ? "Confirmação de presenças concluída com sucesso! {$processados_sucesso} atendente(s) presente(s) com fichas de avaliação liberadas e rodízio atualizado."
+        : "Presenças registradas com sucesso! Como a opção de rodízio não foi aplicada (curso/capacitação), a posição de rodízio de todos os {$processados_sucesso} participantes foi preservada intacta.";
+
     echo json_encode([
         'success' => true, 
-        'message' => "Confirmação de presenças concluída com sucesso! {$processados_sucesso} atendente(s) presente(s) com fichas de avaliação liberadas e rodízio atualizado."
+        'message' => $msg,
+        'realizar_rodizio' => $realizar_rodizio
     ]);
     exit;
 }

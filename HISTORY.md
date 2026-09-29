@@ -17,6 +17,17 @@ relacionados:
 
 # Histórico de Trabalho - Projeto AME
 
+- **29/09/2026 - Preservação de Rodízio em Atividades de Capacitação (Cursos & Treinamentos):**
+    - **Regra de Negócio Implementada:** Cursos e capacitações (como o 3º Curso de DJ) não representam atividades de trabalho e, portanto, a presença dos participantes não deve rotacionar a fila de oportunidades de atendimento.
+    - **Interface Administrativa (`pages/adminescala.php`):**
+        - Inserido switch comutador "Realizar Rodízio ao Confirmar Presenças" no modal de confirmação de presenças pós-evento (`#presencasModal`).
+        - Detecção inteligente automática: quando o evento for de capacitação (`tipo = 'Curso'` ou `tipo_evento = 'curso'`), o switch inicia **desmarcado por padrão**, alterando o botão de confirmação para *"Confirmar Presenças (Sem Alterar Rodízio)"* e exibindo alerta contextual. Em eventos de trabalho, permanece ativado por padrão, com total liberdade para alternância manual.
+    - **Backend & Auditoria (`include/api_escala.php`):**
+        - Action `confirmar_presencas` atualizada para respeitar `realizar_rodizio`.
+        - Quando desmarcado, registra a presença na tabela `presenca` e audita o log em `historico_rodizio` (`curso_presenca`), mantendo o número de rodízio dos participantes 100% inalterado.
+        - Tratamento de campos da tabela `presenca` para garantir persistência robusta em modo estrito.
+    - **Deploy & Homologação:** Código sincronizado na VPS1, verificado com `php -l` e validado com simulação transacional (rollback).
+
 - **29/09/2026 - Mapeamento, Integração Visual e Melhorias no Módulo de Atestados & Certificados:**
     - **Localização e Diagnóstico:** Identificado que o sistema de emissão de atestados e confirmações de matrícula já estava implementado em `pages/atestados.php` e `pages/gerar_atestado.php` (com geração via FPDF e assinatura digital da presidência), porém não estava acessível na interface por ausência de links no menu.
     - **Acessibilidade na Interface (UI/UX):**
