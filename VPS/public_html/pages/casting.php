@@ -182,44 +182,46 @@ if (isset($_SESSION['nivel']) && $_SESSION['nivel'] >= 3) {
 	<?php
 	include_once('./include/admin_sidebar_footer.php');
 	include_once('./include/footer-database.php');
+	?>
+	<script type="text/javascript">
+	$(document).ready(function () {
+		// Filtro personalizado do DataTables por status (Ativo / Todos / Inativo)
+		if ($.fn.dataTable && $.fn.dataTable.ext) {
+			$.fn.dataTable.ext.search.push(
+				function (settings, data, dataIndex) {
+					var filtroSelecionado = $('input[name="filtro_status"]:checked').val();
+					if (!filtroSelecionado || filtroSelecionado === 'todos') {
+						return true;
+					}
+					var rowNode = settings.aoData[dataIndex].nTr;
+					var statusLinha = $(rowNode).attr('data-status');
+					return statusLinha === filtroSelecionado;
+				}
+			);
+
+			$('input[name="filtro_status"]').on('change', function () {
+				if ($.fn.DataTable.isDataTable('#table')) {
+					$('#table').DataTable().draw();
+				}
+			});
+
+			// Aplica o filtro padrão (Apenas Ativos)
+			setTimeout(function () {
+				if ($.fn.DataTable.isDataTable('#table')) {
+					$('#table').DataTable().draw();
+				}
+			}, 100);
+		}
+	});
+	</script>
+	</body>
+	<?php
+	include_once('./include/scripts.php');
+	include_once('./include/end.php');
 } else {
 	include_once('pages/restrito.php');
+	include_once('./include/scripts.php');
+	include_once('./include/end.php');
 }
-?>
-<script type="text/javascript">
-$(document).ready(function () {
-	// Filtro personalizado do DataTables por status (Ativo / Todos / Inativo)
-	if ($.fn.dataTable && $.fn.dataTable.ext) {
-		$.fn.dataTable.ext.search.push(
-			function (settings, data, dataIndex) {
-				var filtroSelecionado = $('input[name="filtro_status"]:checked').val();
-				if (!filtroSelecionado || filtroSelecionado === 'todos') {
-					return true;
-				}
-				var rowNode = settings.aoData[dataIndex].nTr;
-				var statusLinha = $(rowNode).attr('data-status');
-				return statusLinha === filtroSelecionado;
-			}
-		);
-
-		$('input[name="filtro_status"]').on('change', function () {
-			if ($.fn.DataTable.isDataTable('#table')) {
-				$('#table').DataTable().draw();
-			}
-		});
-
-		// Aplica o filtro padrão (Apenas Ativos)
-		setTimeout(function () {
-			if ($.fn.DataTable.isDataTable('#table')) {
-				$('#table').DataTable().draw();
-			}
-		}, 100);
-	}
-});
-</script>
-</body>
-<?php
-include_once('./include/scripts.php');
-include_once('./include/end.php');
 ?>
 

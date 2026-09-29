@@ -86,7 +86,13 @@ if ($result && mysqli_num_rows($result) == 1) {
         $_SESSION['nivel'] = $row1["nivel"];
         $_SESSION['perfil'] = $row1["url"];
         
-        header("Location: $ref");
+        $app_root = $GLOBALS['app_web_root'] ?? '/';
+        $destino = $ref;
+        if (empty($destino) || strpos($destino, 'login') !== false) {
+            $destino = ((int)$row1["nivel"] >= 3) ? ($app_root . 'admin') : ($app_root . 'meuperfil');
+        }
+        
+        header("Location: $destino");
         exit();
     }
 }
@@ -96,6 +102,8 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 $_SESSION['nao_autenticado'] = true;
-header('Location: ' . $ref);
+$app_root = $GLOBALS['app_web_root'] ?? '/';
+$destino_falha = (!empty($ref) && strpos($ref, 'login') === false) ? $ref : ($app_root . 'login');
+header('Location: ' . $destino_falha);
 exit();
 

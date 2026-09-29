@@ -20,25 +20,34 @@ $titulo = "Login";
 //	echo $titulo.'<br>-pages/'.$parametros[0].'.php'.'<br>'. $url . "<br>". $ref;
 //	exit;
 	if(isset($_COOKIE['usuario_id'])){
-		$usuario_id = $_COOKIE['usuario_id'];
-		$query = "select usuario_ID, login, nome, nivel, imagens.url 
-		from usuarios 
-		LEFT JOIN imagens
-		ON usuarios.imagem_id = imagens.imagem_id
-		WHERE usuario_id =".$usuario_id;
-		$result = mysqli_query($conexao, $query);
-		if ($result && mysqli_num_rows($result) > 0) {
-			$row1 = mysqli_fetch_assoc($result);
-			setcookie("usuario_id", $row1["usuario_ID"], time()+14*24*60*60, "/");
-			$_SESSION['id'] = $row1["usuario_ID"];
-			$_SESSION['usuario'] =  $row1["login"];
-			$_SESSION['nome'] = $row1["nome"];
-			$_SESSION['nivel'] = $row1["nivel"];
-			$_SESSION['perfil'] = $row1["url"];
-			header("Location: $ref");
-			exit();
+		$usuario_id = (int)$_COOKIE['usuario_id'];
+		if ($usuario_id > 0) {
+			$query = "select usuario_ID, login, nome, nivel, imagens.url 
+			from usuarios 
+			LEFT JOIN imagens
+			ON usuarios.imagem_id = imagens.imagem_id
+			WHERE usuario_id = " . $usuario_id;
+			$result = mysqli_query($conexao, $query);
+			if ($result && mysqli_num_rows($result) > 0) {
+				$row1 = mysqli_fetch_assoc($result);
+				setcookie("usuario_id", $row1["usuario_ID"], time()+14*24*60*60, "/");
+				$_SESSION['id'] = $row1["usuario_ID"];
+				$_SESSION['usuario'] =  $row1["login"];
+				$_SESSION['nome'] = $row1["nome"];
+				$_SESSION['nivel'] = $row1["nivel"];
+				$_SESSION['perfil'] = $row1["url"];
+
+				$app_root = $GLOBALS['app_web_root'] ?? '/';
+				$destino = $ref;
+				if (empty($destino) || strpos($destino, 'login') !== false) {
+					$destino = ((int)$row1["nivel"] >= 3) ? ($app_root . 'admin') : ($app_root . 'meuperfil');
+				}
+				header("Location: $destino");
+				exit();
+			}
 		}
 	}
+
 
 ?>
 <body>

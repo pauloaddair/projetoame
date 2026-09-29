@@ -76,7 +76,7 @@ def main():
         api_base = None
     else:
         # Fallback to LiteLLM proxy
-        api_key = "sk-q9jlSjI9QLZavKEmQbUHrw"
+        api_key = "sk-q9j...UHrw (valor no NASANET Vault)"
         model_name = "openai/text-chat"
         api_base = "https://llm.netmailing.com.br"
         

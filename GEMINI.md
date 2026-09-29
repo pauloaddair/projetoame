@@ -37,7 +37,7 @@ skills:
 | **Stack**       | PHP 8.x / MariaDB / Bootstrap 4 / FPDF / PHPMailer            |
 | **Framework**   | Vanilla PHP — Front Controller em `index.php`                  |
 | **MVP Status**  | ✅ **LIVE** — `projetoame.org`                                 |
-| **Job ID**      | `item_17`                                                      |
+| **Job ID**      | `item_projetoame`                                              |
 | **AGO 2026**    | 🏛️ **Adiada para 03/10/2026** (fim do mandato: **17/10/2026**) — **edital a publicar até 25/09/2026** |
 | **Governança**  | Estatuto integral (38 arts.) em `ESTATUTO_VIGENTE_TEXTO_INTEGRAL.md` · reforma proposta em `ANALISE_ESTATUTO_E_REFORMA_2026.md` · **handoff/retomada em `RELATORIO_ENCERRAMENTO_GOVERNANCA_15SET2026.md`** |
 | **Domínios**    | `projetoame.org`, `abiat.org.br`, `projetoame.ong.br`, `projetoame.org.br` |
