@@ -17,6 +17,19 @@ relacionados:
 
 # Histórico de Trabalho - Projeto AME
 
+- **30/09/2026 - Correção da Frequência no 3º Curso de DJ (#73) e Aprimoramento da Interface de Chamada por Aula/Turno (`pages/adminescala.php`, banco `presenca`):**
+    - **Diagnóstico da Inconsistência:** No 3º Curso de DJ (evento #73), haviam ocorrido 3 aulas (15/09, 22/09 e 29/09), porém no banco de dados apenas a Aula 1 (horário 196) possuía registros inseridos na tabela `presenca`. No modal de presenças, ao navegar para as abas das aulas 2 e 3, o checkbox vinha pré-marcado visualmente por default (`isChecked = true`), dando a falsa impressão ao usuário de que já estavam gravadas no sistema, enquanto o badge de cálculo real marcava 1/4 aulas (25%). Além disso, a troca de abas no modal descartava alterações locais e exigia múltiplos reloads de página.
+    - **Regularização de Dados no Banco (VPS1):**
+        - Inseridos e confirmados os registros de presença dos 8 alunos nas Aulas 2 (horário 197 - 22/09) e 3 (horário 198 - 29/09) na tabela `presenca` com `presente = 1`, `valor_pago = 0.00` e `confirmadopor = 'coordenacao'`.
+        - A frequência de todos os 8 alunos (Marcella, Caio, Isadora, Patrick, João Paulo, Lucas, Henry e Anna Gabriela) passou imediatamente para **3/4 aulas (75%)**, qualificando-os como **Aptos p/ Certificado Pleno** (linha de corte de 75%).
+    - **Aprimoramento da Interface de Presenças (`pages/adminescala.php`):**
+        - **Badges de Status nos Pills de Aulas/Turnos:** Cada botão de aula agora exibe seu status em tempo real: Salvo com contagem (`✔ 8`), Pendente para aulas passadas não gravadas (`clock Pendente`) ou Futura (`calendar Futura`).
+        - **Banners Informativos por Horário:** Banner verde superior destacando presenças confirmadas no banco ou banner amarelo de alerta indicando que a aula ainda está pendente de confirmação.
+        - **Persistência de Estado Local em Memória (`localPresencasMap`):** O usuário pode navegar entre aulas e alternar checkboxes sem perder seleções feitas em outras abas.
+        - **Gravação Assíncrona via AJAX (sem recarga forçada):** O botão de salvar grava no banco, recalcula imediatamente os totais, porcentagens e badges de certificado na tela, atualiza os pills e exibe mensagem de sucesso sem fechar o modal. Ao fechar o modal, a tabela principal da escala é sincronizada.
+        - **Rótulo Dinâmico no Botão de Ação:** O texto do botão reflete exatamente a aula selecionada (ex: *"Confirmar Presenças da Aula 2"* ou *"Confirmar Presenças (Todos os Horários)"*).
+    - **Deploy & Homologação:** Código implantado na VPS1 (`projetoame.org`), validado com `php -l` e conferido no banco de dados e nos atestados.
+
 - **30/09/2026 - Formalização Institucional e Jurídica em Atestados e Certificados (`pages/gerar_atestado.php`, `pages/atestados.php`):**
     - **Demanda:** Atestados de matrícula, certificados de conclusão e declarações parciais emitidos pelo sistema utilizavam apenas o nome fantasia *"PROJETO AME - Atendentes Muito Especiais"*, sem menção à Razão Social de registro em cartório nem ao CNPJ da entidade no timbrado e na assinatura.
     - **Reestruturação do Documento Oficial (`pages/gerar_atestado.php`):**

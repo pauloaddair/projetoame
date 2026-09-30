@@ -253,6 +253,7 @@ include_once('./include/admin_sidebar.php');
                         <strong>Apenas os atendentes marcados com presença confirmada</strong> serão movidos para o final da fila de rodízio (MAX + 1). Caso o atendente tenha faltado por doença ou motivo justificado, desmarque a caixa para que a posição dele seja preservada no rodízio.
                     </span>
                 </div>
+                <div id="presencas-notif-area"></div>
                 <!-- Seletor de Horários / Aulas (para chamadas por turno ou por aula) -->
                 <div id="presencas-horarios-nav-container" class="mb-2 d-none">
                     <label class="font-weight-bold text-dark d-block mb-1">
@@ -961,27 +962,165 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
 
+            let localPresencasMap = {};
+            let hasMadePresencaChanges = false;
+
+            // Função para consultar informações resumidas de um horário
+            function getHorarioInfo(hId) {
+                if (!activeData.horarios) return null;
+                const idx = activeData.horarios.findIndex(h => parseInt(h.horario_id) === hId);
+                if (idx === -1) return null;
+                const h = activeData.horarios[idx];
+                let dtLabel = '';
+                let isPast = false;
+                if (h.data_inicio) {
+                    const d = new Date(h.data_inicio.replace(' ', 'T'));
+                    if (!isNaN(d)) {
+                        dtLabel = d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+                        isPast = d <= new Date();
+                    }
+                }
+                const prefix = isCurso ? `Aula ${idx + 1}` : `Turno ${idx + 1}`;
+                const labelText = dtLabel ? `${prefix} (${dtLabel})` : `${prefix} #${h.horario_id}`;
+
+                // Verifica se já possui presenças salvas no banco
+                let hSaved = false;
+                let hCount = 0;
+                escaladosMap.forEach(cand => {
+                    if (cand.presencas_por_horario && cand.presencas_por_horario[h.horario_id] !== undefined) {
+                        hSaved = true;
+                        if (cand.presencas_por_horario[h.horario_id] == 1) hCount++;
+                    }
+                });
+
+                return { idx, h, prefix, dtLabel, labelText, isPast, hSaved, hCount };
+            }
+
+            // Atualiza dinamicamente o texto do botão de salvar de acordo com a aba/aula ativa
+            function updateSaveButtonText() {
+                const switchRodizio = document.getElementById('realizar-rodizio-switch');
+                const rodizioAtivo = switchRodizio ? switchRodizio.checked : false;
+                if (!btnText) return;
+
+                if (currentSelectedPresencaHorarioId > 0) {
+                    const info = getHorarioInfo(currentSelectedPresencaHorarioId);
+                    const label = info ? info.prefix : 'Horário Selecionado';
+                    btnText.textContent = rodizioAtivo
+                        ? `Confirmar Presenças da ${label} e Atualizar Rodízio`
+                        : `Confirmar Presenças da ${label}`;
+                } else {
+                    btnText.textContent = rodizioAtivo
+                        ? 'Confirmar Presenças e Atualizar Rodízio (Todos os Horários)'
+                        : 'Confirmar Presenças (Todos os Horários)';
+                }
+            }
+
+            // Renderiza os pills de horários/aulas com badges de status visual (Salvo, Pendente, Futura)
+            function renderPillsUI() {
+                if (!pillsContainer || !activeData.horarios || activeData.horarios.length <= 1) return;
+
+                const isGeralActive = (currentSelectedPresencaHorarioId === 0);
+                let pillsHtml = `
+                    <button type="button" class="btn btn-sm ${isGeralActive ? 'btn-primary' : 'btn-outline-primary'} font-weight-bold presenca-horario-pill" data-horario-id="0">
+                        <i class="fas fa-layer-group mr-1"></i> Todos os Horários (Geral)
+                    </button>
+                `;
+
+                activeData.horarios.forEach(h => {
+                    const hId = parseInt(h.horario_id);
+                    const info = getHorarioInfo(hId);
+                    if (!info) return;
+
+                    let statusBadge = '';
+                    if (info.hSaved) {
+                        statusBadge = `<span class="badge badge-success ml-1 shadow-sm"><i class="fas fa-check"></i> ${info.hCount}</span>`;
+                    } else if (info.isPast) {
+                        statusBadge = `<span class="badge badge-warning text-dark ml-1 shadow-sm"><i class="fas fa-clock"></i> Pendente</span>`;
+                    } else {
+                        statusBadge = `<span class="badge badge-secondary ml-1 shadow-sm"><i class="fas fa-calendar-day"></i> Futura</span>`;
+                    }
+
+                    const isActive = (currentSelectedPresencaHorarioId === hId);
+                    pillsHtml += `
+                        <button type="button" class="btn btn-sm ${isActive ? 'btn-primary' : 'btn-outline-primary'} font-weight-bold presenca-horario-pill" data-horario-id="${hId}">
+                            <i class="fas fa-clock mr-1"></i> ${info.labelText} ${statusBadge}
+                        </button>
+                    `;
+                });
+
+                pillsContainer.innerHTML = pillsHtml;
+
+                pillsContainer.querySelectorAll('.presenca-horario-pill').forEach(pill => {
+                    pill.addEventListener('click', function() {
+                        const hId = parseInt(this.getAttribute('data-horario-id')) || 0;
+                        renderListaPresencas(hId);
+                        renderPillsUI();
+                    });
+                });
+            }
+
             // Função para renderizar a lista de candidatos de acordo com o horário selecionado
             function renderListaPresencas(targetHorarioId) {
                 currentSelectedPresencaHorarioId = targetHorarioId;
-                let html = '';
+                updateSaveButtonText();
+
+                // Inicializa o estado local para este horário se ainda não existir
+                if (!localPresencasMap[targetHorarioId]) {
+                    localPresencasMap[targetHorarioId] = {};
+                    escaladosMap.forEach(c => {
+                        let isChk = false;
+                        if (targetHorarioId > 0) {
+                            if (c.presencas_por_horario && c.presencas_por_horario[targetHorarioId] !== undefined) {
+                                isChk = (c.presencas_por_horario[targetHorarioId] == 1);
+                            } else {
+                                const isEsc = (c.horarios_status && c.horarios_status[targetHorarioId] && c.horarios_status[targetHorarioId].is_escalado == 1);
+                                isChk = isEsc ? true : false;
+                            }
+                        } else {
+                            isChk = (c.presenca_confirmada == 1);
+                        }
+                        localPresencasMap[targetHorarioId][c.candidato_id] = isChk ? 1 : 0;
+                    });
+                }
+
+                // Banner de status da aula/horário selecionado
+                let statusHeaderHtml = '';
+                if (targetHorarioId > 0) {
+                    const info = getHorarioInfo(targetHorarioId);
+                    if (info && info.hSaved) {
+                        statusHeaderHtml = `
+                            <div class="alert alert-success py-2 px-3 mb-2 font-weight-bold d-flex align-items-center justify-content-between shadow-sm" style="font-size: 0.85rem;">
+                                <div><i class="fas fa-check-circle mr-1"></i> <strong>Presenças Confirmadas no Banco:</strong> ${info.hCount} presença(s) registrada(s) na ${info.labelText}.</div>
+                                <span class="badge badge-success px-2 py-1"><i class="fas fa-check mr-1"></i>Já Salvo</span>
+                            </div>
+                        `;
+                    } else if (info) {
+                        const pendTxt = info.isPast 
+                            ? 'Aula já ocorrida. Os alunos estão pré-marcados para facilitar a conferência. Clique em <u>Confirmar Presenças</u> para gravar.' 
+                            : 'Aula futura programada. Você pode antecipar presenças ou aguardar a realização.';
+                        statusHeaderHtml = `
+                            <div class="alert alert-warning py-2 px-3 mb-2 font-weight-bold d-flex align-items-center justify-content-between shadow-sm" style="font-size: 0.85rem;">
+                                <div><i class="fas fa-exclamation-triangle mr-1"></i> <strong>Atenção - Presenças desta aula ainda NÃO foram gravadas no banco:</strong> ${pendTxt}</div>
+                                <span class="badge badge-warning text-dark px-2 py-1"><i class="fas fa-clock mr-1"></i>Pendente de Gravação</span>
+                            </div>
+                        `;
+                    }
+                } else {
+                    statusHeaderHtml = `
+                        <div class="alert alert-info py-2 px-3 mb-2 font-weight-bold shadow-sm" style="font-size: 0.85rem;">
+                            <i class="fas fa-layer-group mr-1"></i> <strong>Modo Geral:</strong> Ao salvar aqui, a presença selecionada será replicada simultaneamente para todos os horários e aulas do evento.
+                        </div>
+                    `;
+                }
+
+                let html = statusHeaderHtml;
 
                 escaladosMap.forEach(c => {
                     const imgUrl = c.url ? AppWebRoot + c.url : AppWebRoot + 'img/ame2023.jpg';
                     const linkAval = c.link_avaliacao ? AppWebRoot + c.link_avaliacao : '#';
                     const fullEvalUrl = window.location.origin + linkAval;
 
-                    // Determina se o candidato compareceu/está marcado presente
-                    let isChecked = true;
-                    if (targetHorarioId > 0) {
-                        if (c.presencas_por_horario && c.presencas_por_horario[targetHorarioId] !== undefined) {
-                            isChecked = (c.presencas_por_horario[targetHorarioId] == 1);
-                        } else {
-                            isChecked = true;
-                        }
-                    } else {
-                        isChecked = (c.presenca_confirmada == 1);
-                    }
+                    const isChecked = (localPresencasMap[targetHorarioId][c.candidato_id] === 1);
 
                     // Seletor de badges de frequência / certificado ou diárias
                     let badgeInfo = '';
@@ -1038,6 +1177,31 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 if (listContainer) listContainer.innerHTML = html;
 
+                // Evento de alteração de presença nos checkboxes
+                if (listContainer) {
+                    listContainer.querySelectorAll('.presenca-checkbox').forEach(cb => {
+                        cb.addEventListener('change', function() {
+                            const candId = this.value;
+                            const isChkd = this.checked ? 1 : 0;
+                            if (!localPresencasMap[currentSelectedPresencaHorarioId]) {
+                                localPresencasMap[currentSelectedPresencaHorarioId] = {};
+                            }
+                            localPresencasMap[currentSelectedPresencaHorarioId][candId] = isChkd;
+
+                            const label = listContainer.querySelector(`label[for="presenca-cand-${candId}"]`);
+                            if (label) {
+                                if (isChkd) {
+                                    label.classList.remove('text-muted');
+                                    label.classList.add('text-success');
+                                } else {
+                                    label.classList.remove('text-success');
+                                    label.classList.add('text-muted');
+                                }
+                            }
+                        });
+                    });
+                }
+
                 document.querySelectorAll('.btn-copy-cand-eval').forEach(btn => {
                     btn.addEventListener('click', function(e) {
                         e.preventDefault();
@@ -1055,51 +1219,38 @@ document.addEventListener('DOMContentLoaded', function() {
             // Configuração dos Botões / Pills de Horários / Aulas
             if (activeData.horarios && activeData.horarios.length > 1) {
                 if (navContainer) navContainer.classList.remove('d-none');
-                if (pillsContainer) {
-                    let pillsHtml = `
-                        <button type="button" class="btn btn-sm btn-primary font-weight-bold presenca-horario-pill" data-horario-id="0">
-                            <i class="fas fa-layer-group mr-1"></i> Todos os Horários (Geral)
-                        </button>
-                    `;
-
-                    activeData.horarios.forEach((h, idx) => {
-                        let dtLabel = '';
-                        if (h.data_inicio) {
-                            const d = new Date(h.data_inicio.replace(' ', 'T'));
-                            if (!isNaN(d)) {
-                                dtLabel = d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+                
+                // Determina o horário padrão para iniciar
+                let defaultHId = 0;
+                if (isCurso) {
+                    // Para cursos, procura o primeiro horário ainda pendente ou a última aula ocorrida
+                    let firstPending = null;
+                    let lastPast = null;
+                    const now = new Date();
+                    activeData.horarios.forEach(h => {
+                        let isSaved = false;
+                        escaladosMap.forEach(cand => {
+                            if (cand.presencas_por_horario && cand.presencas_por_horario[h.horario_id] !== undefined) {
+                                isSaved = true;
                             }
-                        }
-                        const prefix = isCurso ? `Aula ${idx + 1}` : `Turno ${idx + 1}`;
-                        const labelText = dtLabel ? `${prefix} (${dtLabel})` : `${prefix} #${h.horario_id}`;
-
-                        pillsHtml += `
-                            <button type="button" class="btn btn-sm btn-outline-primary font-weight-bold presenca-horario-pill" data-horario-id="${h.horario_id}">
-                                <i class="fas fa-clock mr-1"></i> ${labelText}
-                            </button>
-                        `;
-                    });
-
-                    pillsContainer.innerHTML = pillsHtml;
-
-                    pillsContainer.querySelectorAll('.presenca-horario-pill').forEach(pill => {
-                        pill.addEventListener('click', function() {
-                            pillsContainer.querySelectorAll('.presenca-horario-pill').forEach(p => {
-                                p.classList.remove('btn-primary');
-                                p.classList.add('btn-outline-primary');
-                            });
-                            this.classList.remove('btn-outline-primary');
-                            this.classList.add('btn-primary');
-
-                            const hId = parseInt(this.getAttribute('data-horario-id')) || 0;
-                            renderListaPresencas(hId);
                         });
+                        let d = h.data_inicio ? new Date(h.data_inicio.replace(' ', 'T')) : null;
+                        if (!isSaved && (!firstPending || (d && d <= now))) {
+                            firstPending = parseInt(h.horario_id);
+                        }
+                        if (d && d <= now) {
+                            lastPast = parseInt(h.horario_id);
+                        }
                     });
+                    defaultHId = firstPending || lastPast || parseInt(activeData.horarios[0].horario_id);
                 }
-                renderListaPresencas(0);
+                currentSelectedPresencaHorarioId = defaultHId;
+                renderPillsUI();
+                renderListaPresencas(defaultHId);
             } else {
                 if (navContainer) navContainer.classList.add('d-none');
                 const defaultHId = (activeData.horarios && activeData.horarios[0]) ? parseInt(activeData.horarios[0].horario_id) : 0;
+                currentSelectedPresencaHorarioId = defaultHId;
                 renderListaPresencas(defaultHId);
             }
 
@@ -1124,6 +1275,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     modalEl.style.display = 'none';
                 }
             }
+            if (hasMadePresencaChanges) {
+                hasMadePresencaChanges = false;
+                carregarDetalhesEvento(eventoId);
+            }
         });
     });
 
@@ -1134,6 +1289,8 @@ document.addEventListener('DOMContentLoaded', function() {
             let presencas = {};
             checkboxes.forEach(cb => {
                 presencas[cb.value] = cb.checked ? 1 : 0;
+                if (!localPresencasMap[currentSelectedPresencaHorarioId]) localPresencasMap[currentSelectedPresencaHorarioId] = {};
+                localPresencasMap[currentSelectedPresencaHorarioId][cb.value] = cb.checked ? 1 : 0;
             });
 
             const switchRodizio = document.getElementById('realizar-rodizio-switch');
@@ -1151,7 +1308,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             salvarPresencasBtn.disabled = true;
-            salvarPresencasBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Processando...';
+            salvarPresencasBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Gravando presenças...';
 
             fetch(AppWebRoot + 'include/api_escala.php', {
                 method: 'POST',
@@ -1168,26 +1325,66 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(r => r.json())
             .then(res => {
                 salvarPresencasBtn.disabled = false;
-                const txt = realizarRodizioVal ? 'Confirmar Presenças e Atualizar Rodízio' : 'Confirmar Presenças (Sem Alterar Rodízio)';
-                salvarPresencasBtn.innerHTML = '<i class="fas fa-check-double mr-1"></i> <span id="salvar-presencas-btn-text">' + txt + '</span>';
+                updateSaveButtonText();
 
-                if (window.jQuery && typeof $('#presencasModal').modal === 'function') {
-                    $('#presencasModal').modal('hide');
-                } else {
-                    const modalEl = document.getElementById('presencasModal');
-                    if (modalEl) {
-                        modalEl.classList.remove('show');
-                        modalEl.style.display = 'none';
+                if (res.success) {
+                    hasMadePresencaChanges = true;
+
+                    // Atualiza os dados em memória imediatamente
+                    if (activeData && activeData.candidatos) {
+                        activeData.candidatos.forEach(c => {
+                            const cId = c.candidato_id;
+                            if (presencas[cId] !== undefined) {
+                                if (!c.presencas_por_horario) c.presencas_por_horario = {};
+                                if (currentSelectedPresencaHorarioId > 0) {
+                                    c.presencas_por_horario[currentSelectedPresencaHorarioId] = presencas[cId];
+                                } else if (activeData.horarios) {
+                                    activeData.horarios.forEach(h => {
+                                        c.presencas_por_horario[h.horario_id] = presencas[cId];
+                                    });
+                                }
+                            }
+
+                            // Recalcula totais e frequência
+                            let totEsc = 0;
+                            let totPres = 0;
+                            for (const hId in c.horarios_status) {
+                                if (c.horarios_status[hId].is_escalado == 1) {
+                                    totEsc++;
+                                    if (c.presencas_por_horario && c.presencas_por_horario[hId] == 1) {
+                                        totPres++;
+                                    }
+                                }
+                            }
+                            c.total_escalas = totEsc;
+                            c.total_presencas = totPres;
+                            c.frequencia_pct = (totEsc > 0) ? Math.round((totPres / totEsc) * 100) : 0;
+                            const corte = activeData.event_linha_corte || 75;
+                            c.apto_certificado = (c.frequencia_pct >= corte);
+                        });
                     }
-                }
 
-                alert(res.message || 'Presenças processadas com sucesso!');
-                location.reload();
+                    // Notificação de sucesso no topo do modal
+                    const notifArea = document.getElementById('presencas-notif-area');
+                    if (notifArea) {
+                        notifArea.innerHTML = `
+                            <div class="alert alert-success alert-dismissible fade show py-2 px-3 mb-2 font-weight-bold shadow-sm" role="alert">
+                                <i class="fas fa-check-circle mr-1"></i> ${res.message || 'Presenças processadas com sucesso!'}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            </div>
+                        `;
+                    }
+
+                    // Atualiza os pills e a lista imediatamente
+                    renderPillsUI();
+                    renderListaPresencas(currentSelectedPresencaHorarioId);
+                } else {
+                    alert('Erro ao processar presenças: ' + (res.message || 'Falha desconhecida.'));
+                }
             })
             .catch(err => {
                 salvarPresencasBtn.disabled = false;
-                const txt = realizarRodizioVal ? 'Confirmar Presenças e Atualizar Rodízio' : 'Confirmar Presenças (Sem Alterar Rodízio)';
-                salvarPresencasBtn.innerHTML = '<i class="fas fa-check-double mr-1"></i> <span id="salvar-presencas-btn-text">' + txt + '</span>';
+                updateSaveButtonText();
                 alert('Erro ao processar presenças: ' + err.message);
             });
         });
