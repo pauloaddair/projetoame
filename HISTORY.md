@@ -17,6 +17,21 @@ relacionados:
 
 # Histórico de Trabalho - Projeto AME
 
+- **30/09/2026 - Correção da Rota de Moderação (`/admin/ativarcandidato`) e Liberação dos 8 Inscritos do 3º Curso de DJ (Evento #73):**
+    - **Diagnóstico da Falha na Ativação:** O botão de moderação rápida enviado por e-mail (`https://projetoame.org/admin/ativarcandidato/{id}`) retornava o erro *"Ops! ID de candidato inválido."* porque `pages/adminativarcandidato.php` lia `$parametros[1]`. Ao acessar com o prefixo `/admin/...`, o Front Controller `index.php` preenche `$parametros[0] = 'admin'`, `$parametros[1] = 'ativarcandidato'` e o ID em `$parametros[2]`. Como `$parametros[1]` não era numérico, o script abortava sem ativar o candidato.
+    - **Correção da Rota e Atribuição de Rodízio (`pages/adminativarcandidato.php` e `pages/excluircandidato.php`):**
+        - Tratada a extração do ID verificando `$parametros[2]` (chamadas via `/admin/`), `$parametros[1]` (chamadas diretas) e parâmetros GET (`$_GET['candidato_id']` / `$_GET['id']`).
+        - Ao ativar o candidato, caso este possua `rodizio <= 0` ou nulo, o script calcula e atribui automaticamente o próximo número na fila (`MAX(rodizio) + 1`), inserindo o participante diretamente na fila ativa.
+        - Links de navegação pós-ativação direcionados para `admin/candidatos` e `admin/atividades`.
+        - Mesma robustez de extração de ID aplicada em `pages/excluircandidato.php`.
+    - **Causa Raiz dos Alunos Faltantes no Evento #73 (Curso de DJ):**
+        - O evento possuía 8 disponibilidades cadastradas para o horário 196: Caio Henrique (47), Isadora Brigo (69), Marcella Provenzano (106), Patrick Romano (234), João Paulo (221), Lucas Andrade (231), Henry Rodrigues (230) e Anna Gabriela (243).
+        - Anna Gabriela (#243) e Henry Rodrigues (#230) estavam com `ativo = -1` (bloqueados pela consulta `c.ativo != -1` de `api_escala.php`), pois a moderação via e-mail falhava com o bug acima.
+        - João Paulo (#221) e Lucas Andrade (#231) estavam cadastrados como `ativo = 0` (Treinamento), enquanto os outros 4 constavam como `ativo = 1` (Atendente pleno). Por padrão, apenas os 4 com `ativo = 1` apareciam agrupados no topo como disponíveis.
+    - **Homologação e Ativação:**
+        - Anna Gabriela (#243) e Henry Rodrigues (#230) foram ativados com sucesso pelo endpoint oficial corrigido. João Paulo (#221) e Lucas Andrade (#231) também foram aprovados para `ativo = 1`.
+        - Verificação em `api_escala.php` para o evento #73 confirmou que **todos os 8 alunos** agora constam como ativos e disponíveis (`is_disponivel = 1`), permitindo escalonamento imediato.
+
 - **29/09/2026 - Preservação de Rodízio em Atividades de Capacitação (Cursos & Treinamentos):**
     - **Regra de Negócio Implementada:** Cursos e capacitações (como o 3º Curso de DJ) não representam atividades de trabalho e, portanto, a presença dos participantes não deve rotacionar a fila de oportunidades de atendimento.
     - **Interface Administrativa (`pages/adminescala.php`):**

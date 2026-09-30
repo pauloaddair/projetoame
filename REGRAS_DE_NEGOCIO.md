@@ -28,6 +28,7 @@ Este documento centraliza as diretrizes de integração de escalas, reconhecimen
   - `candidatos.ativo = -1`: **Inativo / Spam / Desativado** (novas inscrições entram como `-1` até moderação; completamente ocultos das escalas públicas).
   - `candidatos.ativo = 0`: **Treinamento** (atendente em capacitação).
   - `candidatos.ativo = 1`: **Ativo** (atendente pleno qualificado).
+  - **Moderação Rápida via Link (`/admin/ativarcandidato/{id}`)**: Ao receber a notificação por e-mail de nova inscrição (`inscrever.php`), o link de aprovação ativa o candidato (`ativo = 1`), assegura que ele possua `rodizio > 0` (atribuindo `MAX(rodizio) + 1` se nulo ou zerado) e o torna imediatamente elegível para seleção e acompanhamento nas escalas.
 - **Algoritmo de Fila e Rodízio (`candidatos.rodizio`)**:
   - **Entrada na Fila ao Se Inscrever**: Ao realizar a inscrição inicial no sistema (`inscrever.php`), o novo candidato recebe automaticamente o valor `rodizio = MAX(rodizio) + 1`, ingressando no final da fila de prioridades.
   - **Fila Única por Precedência**: Tanto para atendentes ativos (`ativo = 1 AND rodizio > 0`) quanto em treinamento (`ativo = 0 AND rodizio > 0`), a convocação e exibição seguem a ordem estritamente crescente do campo `rodizio` (do menor valor para o maior).

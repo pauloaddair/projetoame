@@ -8,10 +8,14 @@ if (!isset($conexao)) {
 $db = isset($conexao) ? $conexao : (isset($conn) ? $conn : null);
 
 $candidato_id = 0;
-if (isset($parametros[1]) && is_numeric($parametros[1])) {
+if (isset($parametros[2]) && is_numeric($parametros[2])) {
+    $candidato_id = (int)$parametros[2];
+} elseif (isset($parametros[1]) && is_numeric($parametros[1])) {
     $candidato_id = (int)$parametros[1];
 } elseif (isset($_GET['candidato_id']) && is_numeric($_GET['candidato_id'])) {
     $candidato_id = (int)$_GET['candidato_id'];
+} elseif (isset($_GET['id']) && is_numeric($_GET['id'])) {
+    $candidato_id = (int)$_GET['id'];
 }
 
 $msg = "";
@@ -19,12 +23,22 @@ $sucesso = false;
 
 if ($candidato_id > 0) {
     // Busca candidato
-    $q_cand = "SELECT candidato_id, nome, Email FROM candidatos WHERE candidato_id = '$candidato_id'";
+    $q_cand = "SELECT candidato_id, nome, Email, rodizio, ativo FROM candidatos WHERE candidato_id = '$candidato_id'";
     $res_cand = mysqli_query($db, $q_cand);
     
     if ($res_cand && $cand = mysqli_fetch_assoc($res_cand)) {
+        // Se o candidato não tiver rodízio válido (<= 0 ou null), calcula o próximo da fila
+        $rodizio_update = "";
+        if (empty($cand['rodizio']) || (int)$cand['rodizio'] <= 0) {
+            $q_max = "SELECT (COALESCE(MAX(rodizio), 0) + 1) AS max_rod FROM candidatos WHERE rodizio >= 1";
+            $r_max = mysqli_query($db, $q_max);
+            $row_max = mysqli_fetch_assoc($r_max);
+            $novo_rod = (int)$row_max['max_rod'];
+            $rodizio_update = ", rodizio = $novo_rod";
+        }
+
         // Ativa o candidato
-        $q_update = "UPDATE candidatos SET ativo = 1 WHERE candidato_id = '$candidato_id'";
+        $q_update = "UPDATE candidatos SET ativo = 1 $rodizio_update WHERE candidato_id = '$candidato_id'";
         if (mysqli_query($db, $q_update)) {
             $sucesso = true;
             $msg = "O candidato <strong>" . htmlspecialchars($cand['nome']) . "</strong> (ID #$candidato_id) foi <strong>APROVADO E ATIVADO</strong> com sucesso no sistema!";
@@ -48,8 +62,11 @@ if ($candidato_id > 0) {
                         <div class="display-1 text-success mb-3"><i class="bi bi-check-circle-fill"></i></div>
                         <h3 class="fw-bold text-dark mb-3">Candidato Ativado!</h3>
                         <p class="text-secondary fs-6 mb-4"><?php echo $msg; ?></p>
-                        <a href="<?php echo $GLOBALS['app_web_root']; ?>admin/atendentes" class="btn btn-primary rounded-pill px-4 py-2">
+                        <a href="<?php echo $GLOBALS['app_web_root']; ?>admin/candidatos" class="btn btn-primary rounded-pill px-4 py-2">
                             Ver Lista de Atendentes ➔
+                        </a>
+                        <a href="<?php echo $GLOBALS['app_web_root']; ?>admin/atividades" class="btn btn-outline-secondary rounded-pill px-4 py-2 ml-2">
+                            Ver Atividades & Escalas
                         </a>
                     <?php else: ?>
                         <div class="display-1 text-danger mb-3"><i class="bi bi-exclamation-triangle-fill"></i></div>

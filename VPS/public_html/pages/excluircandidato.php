@@ -4,8 +4,12 @@ include_once('./include/funcoes.php');
 // include_once('./include/head.php');
 $id = 0;
 $msg = "Nenhum candidato a excluir";
-if (array_key_exists(1,$parametros)){
+if (isset($parametros[2]) && is_numeric($parametros[2])) {
+	$id = intval($parametros[2]);
+} elseif (isset($parametros[1]) && is_numeric($parametros[1])) {
 	$id = intval($parametros[1]);
+} elseif (isset($_GET['id']) && is_numeric($_GET['id'])) {
+	$id = intval($_GET['id']);
 }
 if ($id>0){
 	$query = "SELECT nome, candidato_id FROM candidatos WHERE candidato_id = ".$id;
