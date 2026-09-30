@@ -54,7 +54,7 @@ include 'include/funcoes.php';
 	$msgs = mysqli_query($conexao,$sql);
 	?>
 	<div class="modal fade" id="mensagemModal" tabindex="-1" aria-labelledby="mensagemModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
+		<div class="modal-dialog modal-dialog-scrollable">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title" id="mensagemModalLabel">Enviar Mensagem</h5>

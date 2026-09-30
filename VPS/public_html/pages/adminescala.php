@@ -102,9 +102,63 @@ include_once('./include/admin_sidebar.php');
     </div>
 </div>
 
+<style>
+.modal-dialog-scrollable {
+    display: flex;
+    max-height: calc(100vh - 3.5rem);
+}
+.modal-dialog-scrollable .modal-content {
+    max-height: calc(100vh - 3.5rem);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+.modal-dialog-scrollable .modal-header,
+.modal-dialog-scrollable .modal-footer {
+    flex-shrink: 0;
+}
+.modal-dialog-scrollable .modal-body {
+    overflow-y: auto;
+}
+#presencas-candidatos-list::-webkit-scrollbar,
+#credenciamento-container::-webkit-scrollbar,
+#diarias-table-container::-webkit-scrollbar,
+.modal-body::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+#presencas-candidatos-list::-webkit-scrollbar-thumb,
+#credenciamento-container::-webkit-scrollbar-thumb,
+#diarias-table-container::-webkit-scrollbar-thumb,
+.modal-body::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+#presencas-candidatos-list::-webkit-scrollbar-thumb:hover,
+#credenciamento-container::-webkit-scrollbar-thumb:hover,
+#diarias-table-container::-webkit-scrollbar-thumb:hover,
+.modal-body::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+.table-sticky-header thead th {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background-color: #343a40;
+    color: #fff;
+}
+.table-sticky-header-light thead th {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background-color: #f8f9fa;
+    color: #333;
+}
+</style>
+
 <!-- Modal de Mensagens -->
 <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="messageModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="messageModalLabel">Mensagem</h5>
@@ -124,7 +178,7 @@ include_once('./include/admin_sidebar.php');
 
 <!-- Modal de Credenciamento -->
 <div class="modal fade" id="credenciamentoModal" tabindex="-1" role="dialog" aria-labelledby="credenciamentoModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-dialog modal-dialog-scrollable modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info text-white">
                 <h5 class="modal-title font-weight-bold" id="credenciamentoModalLabel">
@@ -143,7 +197,7 @@ include_once('./include/admin_sidebar.php');
                     <span class="badge badge-info p-2" id="cred-total-badge" style="font-size: 0.9rem;">Carregando...</span>
                 </div>
                 
-                <div id="credenciamento-container" class="table-responsive">
+                <div id="credenciamento-container" class="table-responsive" style="max-height: 60vh; overflow-y: auto;">
                     <!-- Tabela de Credenciamento gerada via JavaScript -->
                 </div>
             </div>
@@ -167,7 +221,7 @@ include_once('./include/admin_sidebar.php');
 
 <!-- Modal de Confirmação de Presenças (Pós-Evento) -->
 <div class="modal fade" id="presencasModal" tabindex="-1" role="dialog" aria-labelledby="presencasModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-success text-white">
                 <h5 class="modal-title font-weight-bold" id="presencasModalLabel">
@@ -179,7 +233,7 @@ include_once('./include/admin_sidebar.php');
             </div>
             <div class="modal-body">
                 <!-- Controle de Realização de Rodízio -->
-                <div class="card mb-3 border-primary shadow-sm" style="background-color: #f8faff;">
+                <div class="card mb-2 border-primary shadow-sm" style="background-color: #f8faff;">
                     <div class="card-body py-2 px-3">
                         <div class="custom-control custom-switch">
                             <input type="checkbox" class="custom-control-input" id="realizar-rodizio-switch" checked>
@@ -193,14 +247,14 @@ include_once('./include/admin_sidebar.php');
                     </div>
                 </div>
 
-                <div class="alert alert-info border shadow-sm mb-3" id="presencas-info-alert">
+                <div class="alert alert-info border shadow-sm mb-2 py-2 px-3" id="presencas-info-alert" style="font-size: 0.88rem;">
                     <i class="fas fa-info-circle mr-1"></i>
                     <span id="presencas-info-text">
                         <strong>Apenas os atendentes marcados com presença confirmada</strong> serão movidos para o final da fila de rodízio (MAX + 1). Caso o atendente tenha faltado por doença ou motivo justificado, desmarque a caixa para que a posição dele seja preservada no rodízio.
                     </span>
                 </div>
                 <!-- Seletor de Horários / Aulas (para chamadas por turno ou por aula) -->
-                <div id="presencas-horarios-nav-container" class="mb-3 d-none">
+                <div id="presencas-horarios-nav-container" class="mb-2 d-none">
                     <label class="font-weight-bold text-dark d-block mb-1">
                         <i class="fas fa-calendar-alt text-info mr-1"></i> Selecione a Aula / Turno para Chamada:
                     </label>
@@ -208,7 +262,7 @@ include_once('./include/admin_sidebar.php');
                 </div>
 
                 <form id="presencasForm">
-                    <div id="presencas-candidatos-list" class="list-group mb-3">
+                    <div id="presencas-candidatos-list" class="list-group mb-2" style="max-height: 52vh; overflow-y: auto; padding-right: 4px; border: 1px solid #e9ecef; border-radius: 6px;">
                         <!-- Lista de atendentes escalados -->
                     </div>
                 </form>
@@ -225,7 +279,7 @@ include_once('./include/admin_sidebar.php');
 
 <!-- Modal de Envio de Avaliação ao Contratante (WhatsApp) -->
 <div class="modal fade" id="contratanteModal" tabindex="-1" role="dialog" aria-labelledby="contratanteModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-warning text-dark">
                 <h5 class="modal-title font-weight-bold" id="contratanteModalLabel">
@@ -277,7 +331,7 @@ include_once('./include/admin_sidebar.php');
 
 <!-- Modal de Folha de Fechamento / Diárias (PIX) -->
 <div class="modal fade" id="diariasModal" tabindex="-1" role="dialog" aria-labelledby="diariasModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-dialog modal-dialog-scrollable modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header bg-dark text-white">
                 <h5 class="modal-title font-weight-bold" id="diariasModalLabel">
@@ -315,8 +369,8 @@ include_once('./include/admin_sidebar.php');
                     </div>
                 </div>
 
-                <div class="table-responsive" id="diarias-table-container">
-                    <table class="table table-hover table-bordered align-middle" id="diarias-table">
+                <div class="table-responsive" id="diarias-table-container" style="max-height: 55vh; overflow-y: auto;">
+                    <table class="table table-hover table-bordered align-middle table-sticky-header-light" id="diarias-table">
                         <thead class="thead-light">
                             <tr>
                                 <th style="width: 50px;" class="text-center">#</th>
@@ -721,7 +775,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (container) {
                         container.innerHTML = `
                             <div id="credenciamento-print-area">
-                                <table class="table table-bordered table-striped table-hover align-middle mb-0">
+                                <table class="table table-bordered table-striped table-hover align-middle mb-0 table-sticky-header">
                                     <thead class="thead-dark">
                                         <tr>
                                             <th class="text-center" style="width: 50px;">#</th>
@@ -949,9 +1003,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     const checkLabel = targetHorarioId > 0 ? 'Presente nesta Aula/Turno' : 'Compareceu ao Evento (Geral)';
 
                     html += `
-                        <div class="list-group-item d-flex align-items-center justify-content-between flex-wrap gap-2 p-3">
+                        <div class="list-group-item d-flex align-items-center justify-content-between flex-wrap gap-2 py-2 px-3">
                             <div class="d-flex align-items-center">
-                                <img src="${imgUrl}" class="rounded-circle mr-3 shadow-sm" width="46" height="46" style="object-fit:cover;" onerror="this.src='${AppWebRoot}img/ame2023.jpg';">
+                                <img src="${imgUrl}" class="rounded-circle mr-3 shadow-sm" width="42" height="42" style="object-fit:cover;" onerror="this.src='${AppWebRoot}img/ame2023.jpg';">
                                 <div>
                                     <div class="d-flex align-items-center flex-wrap">
                                         <strong class="text-dark mr-1">${c.nome}</strong>
@@ -968,10 +1022,10 @@ document.addEventListener('DOMContentLoaded', function() {
                                 <button type="button" class="btn btn-sm btn-outline-secondary btn-copy-cand-eval mr-1" data-url="${fullEvalUrl}" title="Copiar link de avaliação deste atendente">
                                     <i class="fas fa-copy"></i>
                                 </button>
-                                <a href="${AppWebRoot}atestados/${c.candidato_id}" target="_blank" class="btn btn-sm btn-outline-success font-weight-bold mr-3" title="Emitir Atestado de Matrícula ou Certificado deste participante">
+                                <a href="${AppWebRoot}atestados/${c.candidato_id}" target="_blank" class="btn btn-sm btn-outline-success font-weight-bold mr-2" title="Emitir Atestado de Matrícula ou Certificado deste participante">
                                     <i class="fas fa-certificate mr-1"></i> Atestado
                                 </a>
-                                <div class="custom-control custom-checkbox custom-control-inline">
+                                <div class="custom-control custom-checkbox custom-control-inline ml-1">
                                     <input type="checkbox" class="custom-control-input presenca-checkbox" id="presenca-cand-${c.candidato_id}" value="${c.candidato_id}" ${isChecked ? 'checked' : ''}>
                                     <label class="custom-control-label font-weight-bold ${isChecked ? 'text-success' : 'text-muted'}" for="presenca-cand-${c.candidato_id}">
                                         <i class="fas fa-check-circle mr-1"></i> ${checkLabel}

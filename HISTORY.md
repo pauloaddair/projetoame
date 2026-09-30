@@ -17,6 +17,26 @@ relacionados:
 
 # Histórico de Trabalho - Projeto AME
 
+- **30/09/2026 - Otimização de Viewport e Rolagem Interna em Modais (`modal-dialog-scrollable`):**
+    - **Diagnóstico do Overflow em `#presencasModal`:** Em telas convencionais ou notebooks (1366x768 ou 1080p com barras do navegador), a lista de presença com 8+ alunos somada ao switch de rodízio, alerta explicativo, pills de horários e botões de ação ultrapassava a altura da viewport (`100vh`), empurrando os participantes inferiores e o botão *"Confirmar Presenças e Atualizar Rodízio"* para fora da tela.
+    - **Correção em `pages/adminescala.php`:**
+        - Adicionada a classe `modal-dialog-scrollable` nos modais `#presencasModal`, `#credenciamentoModal`, `#diariasModal`, `#contratanteModal` e `#messageModal`.
+        - Implementada estilização CSS dedicada com `max-height: calc(100vh - 3.5rem)`, fixação de header/footer (sticky) e barras de rolagem elegantes (`::-webkit-scrollbar`).
+        - Aplicado `max-height: 52vh; overflow-y: auto;` na lista `#presencas-candidatos-list`, permitindo que os controles superiores (switch de rodízio e seleção de aulas/turnos) e os botões inferiores fiquem permanentemente visíveis e acessíveis na tela.
+        - Compactado o padding vertical (`py-2 px-3`) dos cards dos alunos e ajustada a imagem para `42x42`, acomodando confortavelmente mais alunos por tela.
+        - Aplicado `max-height: 60vh; overflow-y: auto;` com `table-sticky-header` na Ficha de Credenciamento (`#credenciamentoModal`) e `max-height: 55vh; overflow-y: auto;` com cabeçalho fixo na Folha de Diárias (`#diariasModal`).
+    - **Varredura e Padronização Global em Demais Modais do Sistema:**
+        - Auditados e atualizados com `modal-dialog-scrollable` todos os modais do projeto:
+            - `pages/adminprospeccao.php` (`#modalContato` - registro de interação com leads)
+            - `pages/adminindex.php` (`#runFolderModal` - processamento de pastas de eventos)
+            - `pages/meuperfil.php` (`#inviteModal` - convite de co-responsável)
+            - `pages/prospects.php` e `pages/prospect.php` (`#mensagemModal` - envio de mensagens aos prospects)
+            - `CRM/events/index.php` (`#addEventModal` - cadastro de novos eventos)
+            - `CRM/exhibitors/index.php` (`#addExhibitorModal` - cadastro de expositores)
+            - `CRM/kanban/index.php` (`#newOpportunityModal` - criação de oportunidades no pipeline)
+            - `CRM/promoters/index.php` (`#addPromoterModal` - cadastro de promotores de feiras)
+    - **Deploy & Validação:** Todos os 10 arquivos validados sintaticamente (`php -l`), implantados na VPS1 de produção e homologados.
+
 - **30/09/2026 - Controle de Presença por Horário/Aula, Certificação com Linha de Corte e Folha de Diárias (PIX):**
     - **Reestruturação do 3º Curso de DJ (Evento #73):**
         - O curso foi reestruturado no banco de dados para contemplar suas 4 aulas oficiais (todas as terças-feiras das 14:00 às 15:30: Aula 1 em 15/09, Aula 2 em 22/09, Aula 3 em 29/09 e Aula 4 em 06/10).

@@ -59,7 +59,7 @@ $promoters_result = $conn->query($promoters_sql);
 
 <!-- Modal Adicionar Evento -->
 <div class="modal fade" id="addEventModal" tabindex="-1">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Adicionar Evento</h5>

@@ -221,7 +221,7 @@ $result_eventos = mysqli_query($conexao, $query_eventos);
 
 <!-- Modal Registrar Contato -->
 <div class="modal fade" id="modalContato" tabindex="-1" role="dialog" aria-labelledby="modalContatoLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <form id="formRegistrarContato" method="POST">
                 <div class="modal-header bg-primary text-white">

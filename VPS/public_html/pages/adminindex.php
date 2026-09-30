@@ -703,7 +703,7 @@ include_once('./include/footer-database-noorder.php');
 
 <!-- Modal Processar Pasta Local -->
 <div class="modal fade" id="runFolderModal" tabindex="-1" role="dialog" aria-labelledby="runFolderModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-dialog-scrollable" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="runFolderModalLabel"><i class="fas fa-robot mr-2"></i>Processar Pasta de Evento</h5>
