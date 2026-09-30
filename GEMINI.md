@@ -76,7 +76,9 @@ skills:
 | `include/funcoes.php`           | Helpers globais (`formataDataEventoBR` etc.) |
 | `include/funcoes-eventos.php`   | Lógica de eventos, escala e presença         |
 | `pages/atendentes.php`          | Disponibilidade pública de atendentes        |
-| `pages/adminescala.php`         | Painel admin de escala (41 KB)               |
+| `pages/adminescala.php`         | Painel admin de escala, chamada por horário e diárias PIX |
+| `pages/atestados.php`           | Painel de gestão e emissão de atestados/certificados      |
+| `pages/gerar_atestado.php`     | Gerador FPDF de matrícula, certificado pleno ou parcial   |
 | `pages/adminindex.php`          | Dashboard administrativo                     |
 | `pages/meuperfil.php`           | Portal do Associado (abas + dependentes)     |
 | `pages/curriculo.php`           | Currículo inclusivo + geração PDF            |

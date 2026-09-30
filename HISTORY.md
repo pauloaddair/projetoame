@@ -17,6 +17,28 @@ relacionados:
 
 # Histórico de Trabalho - Projeto AME
 
+- **30/09/2026 - Controle de Presença por Horário/Aula, Certificação com Linha de Corte e Folha de Diárias (PIX):**
+    - **Reestruturação do 3º Curso de DJ (Evento #73):**
+        - O curso foi reestruturado no banco de dados para contemplar suas 4 aulas oficiais (todas as terças-feiras das 14:00 às 15:30: Aula 1 em 15/09, Aula 2 em 22/09, Aula 3 em 29/09 e Aula 4 em 06/10).
+        - Os horários 196 (ajustado), 197, 198 e 199 foram criados em `horarios`, e todos os 8 alunos inscritos foram escalados em todas as aulas.
+    - **Migração e Modelagem de Dados (VPS1 & `include/funcoes.php`):**
+        - Tabela `presenca`: adicionados os campos `horario_id INT(11) NULL` e `valor_pago DECIMAL(10,2) NOT NULL DEFAULT 0.00`, com índice único redefinido para `idx_evento_cand_horario (evento_id, candidato_id, horario_id)`.
+        - Tabela `eventos_marcados`: adicionados `linha_corte_presenca INT NOT NULL DEFAULT 75` e `valor_diaria_padrao DECIMAL(10,2) NOT NULL DEFAULT 200.00`.
+        - Tabela `horarios`: adicionado `valor_diaria DECIMAL(10,2) NULL DEFAULT NULL`.
+        - Rotina de auto-healing em `include/funcoes.php` atualizada para garantir essas colunas e índices em qualquer ambiente.
+    - **Backend API (`include/api_escala.php`):**
+        - `get_escala_details`: retorna presenças indexadas por `horario_id`, dados bancários (`PIX`, `CPF`, `Telefone`), calcula métricas em tempo real por participante (`total_presencas`, `total_escalas`, `frequencia_pct`, `apto_certificado`, `total_valor_diarias`).
+        - `confirmar_presencas`: suporta chamadas granulares por `horario_id`. Em cursos, mantém o rodízio de trabalho congelado (`realizar_rodizio = 0`). Em eventos de trabalho, calcula as diárias devidas conforme as presenças confirmadas.
+    - **Interface da Escala (`pages/adminescala.php`):**
+        - Seletor dinâmico em Pills para navegar entre as aulas/turnos no modal de presenças (`#presencasModal`).
+        - Badges dinâmicos indicando frequência percentual e elegibilidade ao certificado por aluno.
+        - Criação do modal e botão *"Folha de Diárias (PIX)"* (`#diariasModal`): listagem consolidada de turnos trabalhados, valor da diária, total a pagar, exibição da chave PIX com botão de cópia com 1 clique, cópia de resumo para WhatsApp e exportação TSV para Excel.
+    - **Emissão de Atestados e Certificados (`pages/atestados.php`, `pages/gerar_atestado.php`):**
+        - Confronto dinâmico da frequência com a linha de corte do evento (75%).
+        - Participantes com frequência $\ge 75\%$: emite **Certificado de Conclusão / Atestado de Participação Plena**.
+        - Participantes com frequência $< 75\%$: emite **Declaração de Horas Parciais**, discriminando a carga horária cumprida com ressalva institucional de que a participação parcial não confere o certificado pleno.
+    - **Deploy & Validação:** Arquivos sincronizados na VPS1 (`public_html`), verificados com `php -l` e validados via requisições com dados reais.
+
 - **30/09/2026 - Correção da Sincronização de Escala com Modal de Presenças e Rodízio (`pages/adminescala.php`, `include/api_escala.php`):**
     - **Diagnóstico da Mensagem de Alerta:** Ao clicar no botão "Confirmar Presença (No Dia / Pós-Evento)", o sistema exibia o alerta *"Nenhum atendente está marcado como escalado para este evento."*, mesmo com o usuário tendo acabado de marcar os candidatos na tabela. A causa raiz era que a função `attachPresencasListener(dataDetails)` inspecionava apenas a cópia em memória inicial (`dataDetails`) capturada no carregamento da página, sem verificar os checkboxes marcados ao vivo no DOM (`input[type="checkbox"]:checked`) nem o estado dinâmico atualizado.
     - **Solução no Frontend (`pages/adminescala.php`):**

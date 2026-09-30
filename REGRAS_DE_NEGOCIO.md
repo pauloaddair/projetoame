@@ -99,7 +99,51 @@ graph TD
 
 ---
 
-## 7. Diretrizes Futuras de Governança
+## 7. Controle de Presenças por Horário, Certificação de Cursos e Fechamento de Diárias (PIX)
+
+### 7.1 Presença Granular por Horário (`horario_id`)
+- A tabela `presenca` opera com a chave única `(evento_id, candidato_id, horario_id)`.
+- Isso permite chamadas individuais por aula (em cursos com múltiplas terças-feiras) ou por turno de trabalho (em feiras de múltiplos dias ou turnos diários).
+- O painel `/admin/escala` exibe botões dinâmicos (pills) para cada aula/turno cadastrado no evento, permitindo conferência individual e cálculo acumulado de presença.
+
+### 7.2 Cursos & Capacitações (Certificado vs Declaração Parcial)
+- **Linha de Corte Customizável (`eventos_marcados.linha_corte_presenca`)**: Padrão regulamentar de **75%**.
+- **Fórmula de Frequência**:
+  $$\text{frequencia\_pct} = \left(\frac{\text{total de presenças confirmadas}}{\text{total de aulas escaladas}}\right) \times 100$$
+- **Critério de Emissão**:
+  - $\ge 75\%$: Emissão de **Certificado de Conclusão Integral / Atestado de Participação Plena**.
+  - $< 75\%$: Emissão com ressalva institucional de **Declaração de Horas Parciais**, discriminando as aulas comparecidas e a carga horária cumprida, com ressalva explícita de não concessão do certificado integral por não atingimento da frequência mínima regulamentar.
+- **Congelamento do Rodízio**: Cursos e treinamentos não alteram a fila de prioridade de trabalho dos participantes (`realizar_rodizio = 0` por padrão).
+
+### 7.3 Eventos de Trabalho (Remuneração & Fechamento PIX)
+- **Diária Padrão (`valor_diaria_padrao`)**: Valor padrão de **R$ 200,00** por turno/dia trabalhado (customizável por evento e por turno em `horarios.valor_diaria`).
+- **Remuneração Efetiva**: Cada falta no turno impede o recebimento da diária daquele horário.
+- **Folha de Diárias (PIX)**: Modal integrado `/admin/escala` contendo:
+  - Listagem dos atendentes com turnos confirmados e total acumulado (R$).
+  - Chave PIX cadastrada (`candidatos.PIX`) com botão de cópia rápida com 1 clique.
+  - Exportação de resumo formatado para WhatsApp/Financeiro e exportação TSV para planilhas Excel.
+- **Atualização do Rodízio**: Atendentes que compareceram ao trabalho têm o rodízio atualizado para o final da fila (`MAX(rodizio) + 1`). Faltas justificadas preservam a posição.
+
+```mermaid
+flowchart TD
+    A["Chamada no Painel (/admin/escala)"] --> B{"Tipo de Atividade"}
+    
+    B -->|"Curso / Treinamento"| C["Chamada por Aula (Aula 1, 2, 3, 4)"]
+    C --> D["Cálculo de Frequência (%)"]
+    D --> E{"Frequência >= 75%?"}
+    E -->|"Sim"| F["Certificado de Conclusão Pleno"]
+    E -->|"Não"| G["Declaração de Horas Parciais (com Ressalva)"]
+    C --> H["Rodízio de Trabalho Congelado (0)"]
+    
+    B -->|"Trabalho / Feira"| I["Chamada por Turno (Diária R$ 200,00)"]
+    I --> J["Cômputo de Diárias por Presença"]
+    J --> K["Folha de Fechamento PIX (Cópia 1-Clique)"]
+    I --> L["Rodízio Atualizado (MAX + 1) para Presentes"]
+```
+
+---
+
+## 8. Diretrizes Futuras de Governança
 - **Efetivação de Rodízio Pós-Atendimento:** A atualização da posição do rodízio (`rodizio = MAX(rodizio) + 1`) ocorre após a confirmação presencial de atendimento no evento (check-in), prevenindo prejuízos em casos de faltas ou substituições.
 - **População Retroativa de Histórico:** A tabela `historico_rodizio` pode ser alimentada retroativamente via script Python/PHP processando o histórico das planilhas anteriores para preservar a linha do tempo desde a fundação do projeto.
 

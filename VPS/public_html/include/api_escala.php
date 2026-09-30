@@ -20,7 +20,11 @@ function format_data_nascimento($date_str) {
 }
 
 try {
-    $data = json_decode(file_get_contents('php://input'), true);
+    $raw_input = file_get_contents('php://input');
+    $data = json_decode($raw_input, true);
+    if (!is_array($data) && !empty($_POST)) {
+        $data = $_POST;
+    }
 
     if (isset($data['action']) && $data['action'] === 'get_escala_details') {
         $evento_id = intval($data['evento_id']);
@@ -31,7 +35,9 @@ try {
         $event_nome = '';
         $event_tipo = 'Trabalho';
         $event_tipo_evento = 'atendimento';
-        $query_event_info = "SELECT e.nome, e.uuid, e.tipo, e.tipo_evento, i.url FROM eventos_marcados e LEFT JOIN imagens i ON e.imagem_id = i.imagem_id WHERE e.id = {$evento_id}";
+        $event_linha_corte = 75;
+        $event_valor_diaria_padrao = 200.00;
+        $query_event_info = "SELECT e.nome, e.uuid, e.tipo, e.tipo_evento, e.linha_corte_presenca, e.valor_diaria_padrao, i.url FROM eventos_marcados e LEFT JOIN imagens i ON e.imagem_id = i.imagem_id WHERE e.id = {$evento_id}";
         $result_event_info = mysqli_query($conexao, $query_event_info);
         if ($result_event_info && $row_info = mysqli_fetch_assoc($result_event_info)) {
             $event_image_url = $row_info['url'];
@@ -39,10 +45,12 @@ try {
             $event_nome = $row_info['nome'];
             $event_tipo = !empty($row_info['tipo']) ? $row_info['tipo'] : 'Trabalho';
             $event_tipo_evento = !empty($row_info['tipo_evento']) ? $row_info['tipo_evento'] : 'atendimento';
+            $event_linha_corte = !empty($row_info['linha_corte_presenca']) ? intval($row_info['linha_corte_presenca']) : 75;
+            $event_valor_diaria_padrao = !empty($row_info['valor_diaria_padrao']) ? floatval($row_info['valor_diaria_padrao']) : 200.00;
         }
         
         // 1. Fetch all horarios for the event
-        $query_horarios = "SELECT horario_id, data_inicio, data_final, vagas FROM horarios WHERE evento_id = {$evento_id} ORDER BY data_inicio ASC";
+        $query_horarios = "SELECT horario_id, data_inicio, data_final, vagas, valor_diaria FROM horarios WHERE evento_id = {$evento_id} ORDER BY data_inicio ASC";
         $result_horarios = mysqli_query($conexao, $query_horarios);
         if (!$result_horarios) {
             echo json_encode(['success' => false, 'message' => 'Erro na consulta de horários: ' . mysqli_error($conexao)]);
@@ -51,17 +59,30 @@ try {
         $horarios_data = [];
         $horario_ids_in_event = []; // To store all horario_ids for the event
         while ($horario = mysqli_fetch_assoc($result_horarios)) {
+            $horario['valor_diaria'] = !empty($horario['valor_diaria']) ? floatval($horario['valor_diaria']) : $event_valor_diaria_padrao;
             $horarios_data[] = $horario;
             $horario_ids_in_event[] = $horario['horario_id'];
         }
 
-        // Fetch presenca and avaliacao status for this event com proteção contra erro de schema
-        $presencas_map = [];
+        // Fetch presenca por horario e valor_pago para este evento
+        $presencas_map = []; // [candidato_id => [horario_id => presente (1/0)]]
+        $presencas_geral = []; // [candidato_id => 1 se teve presenca em algum horario]
+        $valor_pago_map = []; // [candidato_id => total_pago]
         try {
-            $q_pres = mysqli_query($conexao, "SELECT candidato_id, presente FROM presenca WHERE evento_id = {$evento_id}");
+            $q_pres = mysqli_query($conexao, "SELECT candidato_id, horario_id, presente, valor_pago FROM presenca WHERE evento_id = {$evento_id}");
             if ($q_pres) {
                 while ($p = mysqli_fetch_assoc($q_pres)) {
-                    $presencas_map[$p['candidato_id']] = intval($p['presente']);
+                    $c_id = (int)$p['candidato_id'];
+                    $h_id = (int)($p['horario_id'] ?? 0);
+                    $pres_val = intval($p['presente']);
+                    if (!isset($presencas_map[$c_id])) {
+                        $presencas_map[$c_id] = [];
+                    }
+                    $presencas_map[$c_id][$h_id] = $pres_val;
+                    if ($pres_val === 1) {
+                        $presencas_geral[$c_id] = 1;
+                        $valor_pago_map[$c_id] = ($valor_pago_map[$c_id] ?? 0) + floatval($p['valor_pago']);
+                    }
                 }
             }
         } catch (Throwable $e) {
@@ -80,81 +101,105 @@ try {
             $avaliados_map = [];
         }
 
-    // 2. Fetch all candidates (active and training) with rodizio >= 1
-    $query_candidatos = "SELECT c.candidato_id, c.nome, c.rodizio, i.url, c.ativo
-                         FROM candidatos c
-                         LEFT JOIN imagens i ON c.imagem_id = i.imagem_id
-                         WHERE c.ativo != -1 AND c.rodizio >= 1
-                         ORDER BY c.ativo DESC, c.rodizio ASC"; // Order by rodizio for consistent display
-    $result_candidatos = mysqli_query($conexao, $query_candidatos);
-    if (!$result_candidatos) {
-        echo json_encode(['success' => false, 'message' => 'Erro na consulta de candidatos: ' . mysqli_error($conexao)]);
-        exit;
-    }
-    $candidatos_data = [];
-    $candidatos_map = []; // Map for quick lookup by candidato_id
-    while ($candidato = mysqli_fetch_assoc($result_candidatos)) {
-        $c_id = $candidato['candidato_id'];
-        $data_string = "evento_id={$evento_id}&candidato_id={$c_id}";
-        $sig = hash_hmac('sha256', $data_string, 'ProjetoAME_ChaveSecreta_#2025@');
-        $candidato['link_avaliacao'] = "avaliar_atendente?evento_id={$evento_id}&candidato_id={$c_id}&sig={$sig}";
-        $candidato['presenca_confirmada'] = $presencas_map[$c_id] ?? 0;
-        $candidato['ja_avaliado'] = $avaliados_map[$c_id] ?? 0;
-        $candidato['horarios_status'] = []; // Initialize status for each horario
-        $candidatos_data[] = $candidato;
-        $candidatos_map[$c_id] = &$candidatos_data[count($candidatos_data) - 1]; // Reference to the last added candidate
-    }
-
-    // 3. Fetch all disponibilidade records for the event's horarios
-    if (!empty($horario_ids_in_event)) {
-        $horario_ids_string = implode(',', $horario_ids_in_event);
-        $query_disponibilidade = "SELECT candidato_id, atividade_id, escalado
-                                  FROM disponibilidade
-                                  WHERE atividade_id IN ({$horario_ids_string})";
-        $result_disponibilidade = mysqli_query($conexao, $query_disponibilidade);
-        if (!$result_disponibilidade) {
-            echo json_encode(['success' => false, 'message' => 'Erro na consulta de disponibilidade: ' . mysqli_error($conexao)]);
+        // 2. Fetch all candidates (active and training) with rodizio >= 1
+        $query_candidatos = "SELECT c.candidato_id, c.nome, c.rodizio, i.url, c.ativo, c.PIX, c.Telefone, c.CPF
+                             FROM candidatos c
+                             LEFT JOIN imagens i ON c.imagem_id = i.imagem_id
+                             WHERE c.ativo != -1 AND c.rodizio >= 1
+                             ORDER BY c.ativo DESC, c.rodizio ASC"; // Order by rodizio for consistent display
+        $result_candidatos = mysqli_query($conexao, $query_candidatos);
+        if (!$result_candidatos) {
+            echo json_encode(['success' => false, 'message' => 'Erro na consulta de candidatos: ' . mysqli_error($conexao)]);
             exit;
         }
-        while ($disp = mysqli_fetch_assoc($result_disponibilidade)) {
-            $candidato_id = $disp['candidato_id'];
-            $horario_id = $disp['atividade_id'];
-            if (isset($candidatos_map[$candidato_id])) {
-                $candidatos_map[$candidato_id]['horarios_status'][$horario_id] = [
-                    'is_disponivel' => 1, // If a record exists, they are available
-                    'is_escalado' => $disp['escalado']
-                ];
+        $candidatos_data = [];
+        $candidatos_map = []; // Map for quick lookup by candidato_id
+        while ($candidato = mysqli_fetch_assoc($result_candidatos)) {
+            $c_id = $candidato['candidato_id'];
+            $data_string = "evento_id={$evento_id}&candidato_id={$c_id}";
+            $sig = hash_hmac('sha256', $data_string, 'ProjetoAME_ChaveSecreta_#2025@');
+            $candidato['link_avaliacao'] = "avaliar_atendente?evento_id={$evento_id}&candidato_id={$c_id}&sig={$sig}";
+            $candidato['presencas_por_horario'] = $presencas_map[$c_id] ?? [];
+            $candidato['presenca_confirmada'] = $presencas_geral[$c_id] ?? 0;
+            $candidato['ja_avaliado'] = $avaliados_map[$c_id] ?? 0;
+            $candidato['total_valor_diarias'] = $valor_pago_map[$c_id] ?? 0.00;
+            $candidato['horarios_status'] = []; // Initialize status for each horario
+            $candidatos_data[] = $candidato;
+            $candidatos_map[$c_id] = &$candidatos_data[count($candidatos_data) - 1]; // Reference to the last added candidate
+        }
+
+        // 3. Fetch all disponibilidade records for the event's horarios
+        if (!empty($horario_ids_in_event)) {
+            $horario_ids_string = implode(',', $horario_ids_in_event);
+            $query_disponibilidade = "SELECT candidato_id, atividade_id, escalado
+                                      FROM disponibilidade
+                                      WHERE atividade_id IN ({$horario_ids_string})";
+            $result_disponibilidade = mysqli_query($conexao, $query_disponibilidade);
+            if (!$result_disponibilidade) {
+                echo json_encode(['success' => false, 'message' => 'Erro na consulta de disponibilidade: ' . mysqli_error($conexao)]);
+                exit;
+            }
+            while ($disp = mysqli_fetch_assoc($result_disponibilidade)) {
+                $candidato_id = $disp['candidato_id'];
+                $horario_id = $disp['atividade_id'];
+                if (isset($candidatos_map[$candidato_id])) {
+                    $candidatos_map[$candidato_id]['horarios_status'][$horario_id] = [
+                        'is_disponivel' => 1, // If a record exists, they are available
+                        'is_escalado' => $disp['escalado']
+                    ];
+                }
             }
         }
-    }
 
-    // For candidates not found in disponibilidade for a specific horario, set default status
-    foreach ($candidatos_data as &$candidato) {
-        foreach ($horarios_data as $horario) {
-            $horario_id = $horario['horario_id'];
-            if (!isset($candidato['horarios_status'][$horario_id])) {
-                $candidato['horarios_status'][$horario_id] = [
-                    'is_disponivel' => 0,
-                    'is_escalado' => 0
-                ];
+        // For candidates not found in disponibilidade for a specific horario, set default status
+        foreach ($candidatos_data as &$candidato) {
+            foreach ($horarios_data as $horario) {
+                $horario_id = $horario['horario_id'];
+                if (!isset($candidato['horarios_status'][$horario_id])) {
+                    $candidato['horarios_status'][$horario_id] = [
+                        'is_disponivel' => 0,
+                        'is_escalado' => 0
+                    ];
+                }
             }
-        }
-    }
-    unset($candidato); // Break the reference
 
-    echo json_encode([
-        'success' => true,
-        'horarios' => $horarios_data,
-        'candidatos' => $candidatos_data,
-        'event_image_url' => $event_image_url,
-        'event_uuid' => $event_uuid,
-        'event_nome' => $event_nome,
-        'event_tipo' => $event_tipo,
-        'event_tipo_evento' => $event_tipo_evento,
-        'link_avaliacao_contratante' => "https://projetoame.org/avaliacao/{$event_uuid}"
-    ]);
-    exit;
-}
+            // Computa frequência e métricas por aluno/atendente
+            $tot_escalado = 0;
+            $tot_presente = 0;
+            foreach ($candidato['horarios_status'] as $hId => $st) {
+                if ($st['is_escalado'] == 1) {
+                    $tot_escalado++;
+                    if (!empty($candidato['presencas_por_horario'][$hId]) && $candidato['presencas_por_horario'][$hId] == 1) {
+                        $tot_presente++;
+                    }
+                }
+            }
+            // Se o evento tiver presenças confirmadas sem horario_id específico (legado)
+            if ($tot_presente === 0 && !empty($candidato['presencas_por_horario'][0])) {
+                $tot_presente = $candidato['presencas_por_horario'][0] == 1 ? $tot_escalado : 0;
+            }
+            $candidato['total_escalas'] = $tot_escalado;
+            $candidato['total_presencas'] = $tot_presente;
+            $candidato['frequencia_pct'] = ($tot_escalado > 0) ? round(($tot_presente / $tot_escalado) * 100) : 0;
+            $candidato['apto_certificado'] = ($candidato['frequencia_pct'] >= $event_linha_corte);
+        }
+        unset($candidato); // Break the reference
+
+        echo json_encode([
+            'success' => true,
+            'horarios' => $horarios_data,
+            'candidatos' => $candidatos_data,
+            'event_image_url' => $event_image_url,
+            'event_uuid' => $event_uuid,
+            'event_nome' => $event_nome,
+            'event_tipo' => $event_tipo,
+            'event_tipo_evento' => $event_tipo_evento,
+            'event_linha_corte' => $event_linha_corte,
+            'event_valor_diaria_padrao' => $event_valor_diaria_padrao,
+            'link_avaliacao_contratante' => "https://projetoame.org/avaliacao/{$event_uuid}"
+        ]);
+        exit;
+    }
 
 if (isset($data['action']) && $data['action'] === 'get_credenciamento') {
     $evento_id = intval($data['evento_id']);
@@ -311,12 +356,34 @@ if (isset($data['action']) && $data['action'] === 'toggle_escala_status') {
 
 if (isset($data['action']) && $data['action'] === 'confirmar_presencas') {
     $evento_id = intval($data['evento_id']);
+    $horario_id = isset($data['horario_id']) ? intval($data['horario_id']) : 0;
     $presencas = $data['presencas'] ?? []; // [candidato_id => 1 (compareceu) ou 0 (ausente/justificado)]
     $realizar_rodizio = isset($data['realizar_rodizio']) ? (intval($data['realizar_rodizio']) === 1) : true;
     
-    $q_ev = mysqli_query($conexao, "SELECT nome, tipo, tipo_evento FROM eventos_marcados WHERE id = {$evento_id}");
-    $ev_info = ($q_ev && $r_ev = mysqli_fetch_assoc($q_ev)) ? $r_ev : ['nome' => "Evento #{$evento_id}", 'tipo' => 'Trabalho', 'tipo_evento' => 'atendimento'];
+    $q_ev = mysqli_query($conexao, "SELECT nome, tipo, tipo_evento, linha_corte_presenca, valor_diaria_padrao FROM eventos_marcados WHERE id = {$evento_id}");
+    $ev_info = ($q_ev && $r_ev = mysqli_fetch_assoc($q_ev)) ? $r_ev : [
+        'nome' => "Evento #{$evento_id}", 
+        'tipo' => 'Trabalho', 
+        'tipo_evento' => 'atendimento',
+        'linha_corte_presenca' => 75,
+        'valor_diaria_padrao' => 200.00
+    ];
     $ev_nome = $ev_info['nome'];
+    $valor_diaria_padrao = floatval($ev_info['valor_diaria_padrao'] ?? 200.00);
+
+    // Identifica os horários afetados
+    $horarios_alvo = [];
+    if ($horario_id > 0) {
+        $q_h = mysqli_query($conexao, "SELECT horario_id, valor_diaria, data_inicio FROM horarios WHERE horario_id = {$horario_id}");
+        if ($q_h && $r_h = mysqli_fetch_assoc($q_h)) {
+            $horarios_alvo[] = $r_h;
+        }
+    } else {
+        $q_h = mysqli_query($conexao, "SELECT horario_id, valor_diaria, data_inicio FROM horarios WHERE evento_id = {$evento_id} ORDER BY data_inicio ASC");
+        while ($r_h = mysqli_fetch_assoc($q_h)) {
+            $horarios_alvo[] = $r_h;
+        }
+    }
 
     $processados_sucesso = 0;
     $preservados_ausencia = 0;
@@ -325,29 +392,29 @@ if (isset($data['action']) && $data['action'] === 'confirmar_presencas') {
         $candidato_id = intval($cand_id);
         $compareceu = intval($compareceu);
 
-        $q_cand = mysqli_query($conexao, "SELECT rodizio, nome, Email, Telefone FROM candidatos WHERE candidato_id = {$candidato_id}");
+        $q_cand = mysqli_query($conexao, "SELECT rodizio, nome, Email, Telefone, PIX FROM candidatos WHERE candidato_id = {$candidato_id}");
         if ($q_cand && $cand_data = mysqli_fetch_assoc($q_cand)) {
             $rodizio_atual = intval($cand_data['rodizio']);
             $cand_nome = mysqli_real_escape_string($conexao, $cand_data['nome']);
             $cand_email = mysqli_real_escape_string($conexao, $cand_data['Email'] ?? '');
             $cand_tel = mysqli_real_escape_string($conexao, $cand_data['Telefone'] ?? '');
 
-            // Grava registro na tabela oficial de presencas
-            mysqli_query($conexao, "INSERT INTO presenca (evento_id, candidato_id, presente, data_confirmacao, confirmadopor, nome, responsavel, email, telefone, comentario) 
-                                    VALUES ({$evento_id}, {$candidato_id}, {$compareceu}, NOW(), 'coordenacao', '{$cand_nome}', 0, '{$cand_email}', '{$cand_tel}', '') 
-                                    ON DUPLICATE KEY UPDATE presente = {$compareceu}, data_confirmacao = NOW()");
+            foreach ($horarios_alvo as $h_info) {
+                $h_id = intval($h_info['horario_id']);
+                $v_diaria = !empty($h_info['valor_diaria']) ? floatval($h_info['valor_diaria']) : $valor_diaria_padrao;
+                $valor_pago = ($ev_info['tipo'] === 'Trabalho' && $compareceu === 1) ? $v_diaria : 0.00;
 
-            // Garante que o candidato fique registrado como escalado nos horários deste evento
-            $q_hor = mysqli_query($conexao, "SELECT horario_id FROM horarios WHERE evento_id = {$evento_id}");
-            if ($q_hor) {
-                while ($h_row = mysqli_fetch_assoc($q_hor)) {
-                    $h_id = intval($h_row['horario_id']);
-                    $check_disp = mysqli_query($conexao, "SELECT id FROM disponibilidade WHERE atividade_id = {$h_id} AND candidato_id = {$candidato_id} LIMIT 1");
-                    if ($check_disp && mysqli_num_rows($check_disp) > 0) {
-                        mysqli_query($conexao, "UPDATE disponibilidade SET escalado = 1 WHERE atividade_id = {$h_id} AND candidato_id = {$candidato_id}");
-                    } else {
-                        mysqli_query($conexao, "INSERT INTO disponibilidade (candidato_id, atividade_id, disponivel, escalado) VALUES ({$candidato_id}, {$h_id}, 1, 1)");
-                    }
+                // Grava registro na tabela oficial de presencas por horário
+                mysqli_query($conexao, "INSERT INTO presenca (evento_id, horario_id, candidato_id, presente, valor_pago, data_confirmacao, confirmadopor, nome, responsavel, email, telefone, comentario) 
+                                        VALUES ({$evento_id}, {$h_id}, {$candidato_id}, {$compareceu}, {$valor_pago}, NOW(), 'coordenacao', '{$cand_nome}', 0, '{$cand_email}', '{$cand_tel}', '') 
+                                        ON DUPLICATE KEY UPDATE presente = {$compareceu}, valor_pago = {$valor_pago}, data_confirmacao = NOW()");
+
+                // Garante que o candidato fique registrado como escalado neste horário
+                $check_disp = mysqli_query($conexao, "SELECT id FROM disponibilidade WHERE atividade_id = {$h_id} AND candidato_id = {$candidato_id} LIMIT 1");
+                if ($check_disp && mysqli_num_rows($check_disp) > 0) {
+                    mysqli_query($conexao, "UPDATE disponibilidade SET escalado = 1 WHERE atividade_id = {$h_id} AND candidato_id = {$candidato_id}");
+                } else {
+                    mysqli_query($conexao, "INSERT INTO disponibilidade (candidato_id, atividade_id, disponivel, escalado) VALUES ({$candidato_id}, {$h_id}, 1, 1)");
                 }
             }
 
@@ -355,7 +422,8 @@ if (isset($data['action']) && $data['action'] === 'confirmar_presencas') {
                 // NÃO REALIZAR RODÍZIO (Curso, Treinamento ou opção desmarcada)
                 $tipo_mov = ($compareceu === 1) ? 'curso_presenca' : 'curso_ausencia';
                 $status_desc = ($compareceu === 1) ? 'Presença confirmada' : 'Ausência registrada';
-                $obs = mysqli_real_escape_string($conexao, "{$status_desc} no curso/evento {$ev_nome} (ID #{$evento_id}) - Rodízio mantido em #{$rodizio_atual} (sem movimentação de fila)");
+                $desc_hor = ($horario_id > 0) ? " (Aula/Horário ID #{$horario_id})" : "";
+                $obs = mysqli_real_escape_string($conexao, "{$status_desc} no curso/evento {$ev_nome}{$desc_hor} - Rodízio mantido em #{$rodizio_atual} (sem movimentação de fila)");
                 mysqli_query($conexao, "INSERT INTO historico_rodizio (candidato_id, rodizio_anterior, rodizio_novo, evento_id, tipo_movimento, observacao) VALUES ({$candidato_id}, {$rodizio_atual}, {$rodizio_atual}, {$evento_id}, '{$tipo_mov}', '{$obs}')");
                 $processados_sucesso++;
             } else {
@@ -366,12 +434,14 @@ if (isset($data['action']) && $data['action'] === 'confirmar_presencas') {
 
                     mysqli_query($conexao, "UPDATE candidatos SET rodizio = {$max_rodizio} WHERE candidato_id = {$candidato_id}");
 
-                    $obs = mysqli_real_escape_string($conexao, "Presença confirmada no evento {$ev_nome} (ID #{$evento_id})");
+                    $desc_hor = ($horario_id > 0) ? " (Turno ID #{$horario_id})" : "";
+                    $obs = mysqli_real_escape_string($conexao, "Presença confirmada no evento {$ev_nome}{$desc_hor}");
                     mysqli_query($conexao, "INSERT INTO historico_rodizio (candidato_id, rodizio_anterior, rodizio_novo, evento_id, tipo_movimento, observacao) VALUES ({$candidato_id}, {$rodizio_atual}, {$max_rodizio}, {$evento_id}, 'pos_evento', '{$obs}')");
                     $processados_sucesso++;
                 } else {
                     // Atendente FALTOU / AUSÊNCIA JUSTIFICADA: rodízio mantido!
-                    $obs = mysqli_real_escape_string($conexao, "Ausência justificada no evento {$ev_nome} (ID #{$evento_id}) - rodízio preservado em #{$rodizio_atual}");
+                    $desc_hor = ($horario_id > 0) ? " (Turno ID #{$horario_id})" : "";
+                    $obs = mysqli_real_escape_string($conexao, "Ausência justificada no evento {$ev_nome}{$desc_hor} - rodízio preservado em #{$rodizio_atual}");
                     mysqli_query($conexao, "INSERT INTO historico_rodizio (candidato_id, rodizio_anterior, rodizio_novo, evento_id, tipo_movimento, observacao) VALUES ({$candidato_id}, {$rodizio_atual}, {$rodizio_atual}, {$evento_id}, 'ausencia_justificada', '{$obs}')");
                     $preservados_ausencia++;
                 }
@@ -382,13 +452,14 @@ if (isset($data['action']) && $data['action'] === 'confirmar_presencas') {
     mysqli_query($conexao, "UPDATE eventos_marcados SET rodizio_processado = 1, status_evento = 'realizado' WHERE id = {$evento_id}");
 
     $msg = $realizar_rodizio 
-        ? "Confirmação de presenças concluída com sucesso! {$processados_sucesso} atendente(s) presente(s) com fichas de avaliação liberadas e rodízio atualizado."
+        ? "Confirmação de presenças concluída com sucesso! {$processados_sucesso} participante(s) com presenças/diárias computadas e rodízio atualizado."
         : "Presenças registradas com sucesso! Como a opção de rodízio não foi aplicada (curso/capacitação), a posição de rodízio de todos os {$processados_sucesso} participantes foi preservada intacta.";
 
     echo json_encode([
         'success' => true, 
         'message' => $msg,
-        'realizar_rodizio' => $realizar_rodizio
+        'realizar_rodizio' => $realizar_rodizio,
+        'horario_id' => $horario_id
     ]);
     exit;
 }

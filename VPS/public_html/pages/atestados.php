@@ -79,7 +79,7 @@ if ($candidato_id > 0) {
                                 <tbody>
                                     <?php
                                     // Busca eventos onde o aluno tem disponibilidade
-                                    $sql_ev = "SELECT DISTINCT em.id, em.nome, em.inicio, em.final 
+                                    $sql_ev = "SELECT DISTINCT em.id, em.nome, em.inicio, em.final, em.tipo, em.tipo_evento, em.linha_corte_presenca 
                                                FROM eventos_marcados em
                                                JOIN horarios h ON em.id = h.evento_id
                                                JOIN disponibilidade d ON h.horario_id = d.atividade_id
@@ -91,33 +91,73 @@ if ($candidato_id > 0) {
                                         $id_ev = $ev['id'];
                                         $data_ini = date('d/m/Y', strtotime($ev['inicio']));
                                         $data_fim = date('d/m/Y', strtotime($ev['final']));
+                                        $linha_corte = !empty($ev['linha_corte_presenca']) ? intval($ev['linha_corte_presenca']) : 75;
                                         
-                                        // Verifica se foi escalado em alguma aula desse evento
+                                        // Total de aulas/horarios escalados
                                         $sql_esc = "SELECT COUNT(*) as total FROM disponibilidade d 
                                                     JOIN horarios h ON d.atividade_id = h.horario_id 
                                                     WHERE d.candidato_id = $candidato_id AND h.evento_id = $id_ev AND d.escalado = 1";
                                         $res_esc = mysqli_query($conexao, $sql_esc);
                                         $esc = mysqli_fetch_assoc($res_esc);
-                                        $foi_escalado = ($esc['total'] > 0);
+                                        $tot_escalado = intval($esc['total'] ?? 0);
+                                        $foi_escalado = ($tot_escalado > 0);
+
+                                        // Total de presenças confirmadas
+                                        $sql_pres = "SELECT COUNT(*) as total FROM presenca 
+                                                     WHERE candidato_id = $candidato_id AND evento_id = $id_ev AND presente = 1";
+                                        $res_pres = mysqli_query($conexao, $sql_pres);
+                                        $pres_row = mysqli_fetch_assoc($res_pres);
+                                        $tot_presencas = intval($pres_row['total'] ?? 0);
+
+                                        // Fallback para eventos confirmados no modelo legado (sem horario_id preenchido)
+                                        if ($tot_presencas === 0 && $foi_escalado) {
+                                            $sql_leg = "SELECT presente FROM presenca WHERE candidato_id = $candidato_id AND evento_id = $id_ev AND (horario_id IS NULL OR horario_id = 0) AND presente = 1 LIMIT 1";
+                                            $res_leg = mysqli_query($conexao, $sql_leg);
+                                            if ($res_leg && mysqli_num_rows($res_leg) > 0) {
+                                                $tot_presencas = $tot_escalado;
+                                            }
+                                        }
+
+                                        $frequencia_pct = ($tot_escalado > 0) ? round(($tot_presencas / $tot_escalado) * 100) : 0;
+                                        $apto_pleno = ($frequencia_pct >= $linha_corte && $tot_presencas > 0);
+
+                                        if (!$foi_escalado) {
+                                            $status_badge = '<span class="badge badge-info">Inscrito</span>';
+                                        } elseif ($apto_pleno) {
+                                            $status_badge = '<span class="badge badge-success"><i class="fas fa-check-circle mr-1"></i>Apto Certificado ('.$tot_presencas.'/'.$tot_escalado.' - '.$frequencia_pct.'%)</span>';
+                                        } else {
+                                            $status_badge = '<span class="badge badge-warning text-dark"><i class="fas fa-exclamation-triangle mr-1"></i>Frequência '.$frequencia_pct.'% ('.$tot_presencas.'/'.$tot_escalado.')</span>';
+                                        }
                                         
                                         echo "<tr>";
-                                        echo "<td>".$ev['nome']."</td>";
+                                        echo "<td><strong>".$ev['nome']."</strong></td>";
                                         echo "<td>$data_ini a $data_fim</td>";
-                                        echo "<td>".($foi_escalado ? '<span class="badge badge-success">Escalado/Participou</span>' : '<span class="badge badge-info">Inscrito</span>')."</td>";
+                                        echo "<td>$status_badge</td>";
                                         echo "<td>
                                                 <form action='/gerar_atestado' method='POST' target='_blank' style='display:inline;'>
                                                     <input type='hidden' name='candidato_id' value='$candidato_id'>
                                                     <input type='hidden' name='evento_id' value='$id_ev'>
                                                     <input type='hidden' name='tipo' value='matricula'>
                                                     <button type='submit' class='btn btn-xs btn-primary' title='Atestado de Matrícula'><i class='fas fa-file-contract'></i> Matrícula</button>
-                                                </form>
-                                                <form action='/gerar_atestado' method='POST' target='_blank' style='display:inline;'>
+                                                </form>";
+
+                                        if ($apto_pleno) {
+                                            echo " <form action='/gerar_atestado' method='POST' target='_blank' style='display:inline;'>
                                                     <input type='hidden' name='candidato_id' value='$candidato_id'>
                                                     <input type='hidden' name='evento_id' value='$id_ev'>
                                                     <input type='hidden' name='tipo' value='participacao'>
-                                                    <button type='submit' class='btn btn-xs btn-success' title='Atestado de Participação'><i class='fas fa-certificate'></i> Participação</button>
-                                                </form>
-                                              </td>";
+                                                    <button type='submit' class='btn btn-xs btn-success' title='Certificado de Conclusão Integral (Freq. {$frequencia_pct}%)'><i class='fas fa-certificate'></i> Certificado Pleno</button>
+                                                  </form>";
+                                        } elseif ($foi_escalado) {
+                                            echo " <form action='/gerar_atestado' method='POST' target='_blank' style='display:inline;'>
+                                                    <input type='hidden' name='candidato_id' value='$candidato_id'>
+                                                    <input type='hidden' name='evento_id' value='$id_ev'>
+                                                    <input type='hidden' name='tipo' value='parcial'>
+                                                    <button type='submit' class='btn btn-xs btn-warning text-dark font-weight-bold' title='Declaração de Horas Parciais (Freq. {$frequencia_pct}% abaixo do corte de {$linha_corte}%)'><i class='fas fa-file-alt'></i> Declaração Parcial</button>
+                                                  </form>";
+                                        }
+
+                                        echo "</td>";
                                         echo "</tr>";
                                     }
                                     ?>

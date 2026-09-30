@@ -199,6 +199,14 @@ include_once('./include/admin_sidebar.php');
                         <strong>Apenas os atendentes marcados com presença confirmada</strong> serão movidos para o final da fila de rodízio (MAX + 1). Caso o atendente tenha faltado por doença ou motivo justificado, desmarque a caixa para que a posição dele seja preservada no rodízio.
                     </span>
                 </div>
+                <!-- Seletor de Horários / Aulas (para chamadas por turno ou por aula) -->
+                <div id="presencas-horarios-nav-container" class="mb-3 d-none">
+                    <label class="font-weight-bold text-dark d-block mb-1">
+                        <i class="fas fa-calendar-alt text-info mr-1"></i> Selecione a Aula / Turno para Chamada:
+                    </label>
+                    <div id="presencas-horarios-pills" class="d-flex flex-wrap gap-2"></div>
+                </div>
+
                 <form id="presencasForm">
                     <div id="presencas-candidatos-list" class="list-group mb-3">
                         <!-- Lista de atendentes escalados -->
@@ -267,6 +275,77 @@ include_once('./include/admin_sidebar.php');
     </div>
 </div>
 
+<!-- Modal de Folha de Fechamento / Diárias (PIX) -->
+<div class="modal fade" id="diariasModal" tabindex="-1" role="dialog" aria-labelledby="diariasModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title font-weight-bold" id="diariasModalLabel">
+                    <i class="fas fa-money-bill-wave text-success mr-2"></i> Folha de Diárias e Fechamento PIX
+                </h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-3">
+                    <div class="col-md-7">
+                        <h4 id="diarias-evento-nome" class="font-weight-bold text-dark mb-1">Nome do Evento</h4>
+                        <p class="text-muted mb-0" id="diarias-evento-subtitulo">Fechamento de remuneração por turnos/aulas cumpridas.</p>
+                    </div>
+                    <div class="col-md-5 text-md-right mt-2 mt-md-0">
+                        <span class="badge badge-success px-3 py-2 font-weight-bold" style="font-size: 1.1rem;" id="diarias-total-geral-badge">
+                            Total Geral: R$ 0,00
+                        </span>
+                    </div>
+                </div>
+
+                <div class="alert alert-light border shadow-sm mb-3 d-flex align-items-center justify-content-between flex-wrap gap-2">
+                    <div>
+                        <i class="fas fa-info-circle text-primary mr-1"></i>
+                        <span>Diária Padrão: <strong id="diarias-valor-padrao-txt">R$ 200,00</strong> por turno/dia trabalhado. As diárias são calculadas sobre as presenças confirmadas.</span>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-sm btn-outline-success font-weight-bold" id="copy-diarias-resumo-btn">
+                            <i class="fab fa-whatsapp mr-1"></i> Copiar Resumo (Financeiro)
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-primary font-weight-bold ml-2" id="copy-diarias-tsv-btn">
+                            <i class="fas fa-file-excel mr-1"></i> Copiar TSV (Excel)
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-responsive" id="diarias-table-container">
+                    <table class="table table-hover table-bordered align-middle" id="diarias-table">
+                        <thead class="thead-light">
+                            <tr>
+                                <th style="width: 50px;" class="text-center">#</th>
+                                <th>Atendente</th>
+                                <th class="text-center">Turnos Cumpridos</th>
+                                <th class="text-right">Valor Unitário</th>
+                                <th class="text-right">Total a Pagar</th>
+                                <th>Chave PIX Cadastrada</th>
+                                <th class="text-center" style="width: 140px;">Ação</th>
+                            </tr>
+                        </thead>
+                        <tbody id="diarias-tbody">
+                            <!-- Inserido dinamicamente via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                <div>
+                    <button type="button" class="btn btn-outline-secondary font-weight-bold mr-2" id="print-diarias-btn">
+                        <i class="fas fa-print mr-1"></i> Imprimir Folha
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const escalaContainer = document.getElementById('escala-container');
@@ -274,6 +353,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const eventoId = urlParams.get('evento_id');
     var AppWebRoot = '<?php echo $GLOBALS["app_web_root"]; ?>';
     let currentEscalaData = null;
+    let currentSelectedPresencaHorarioId = 0;
 
     function carregarDetalhesEvento(id) {
         if (!id) return;
@@ -418,6 +498,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 contratanteButton.innerHTML = '<i class="fab fa-whatsapp mr-1"></i> Enviar Avaliação (Contratante)';
                 btnContainer.appendChild(contratanteButton);
 
+                const diariasButton = document.createElement('button');
+                diariasButton.className = 'btn btn-dark font-weight-bold ml-2';
+                diariasButton.id = 'diarias-btn';
+                diariasButton.innerHTML = '<i class="fas fa-money-bill-wave text-success mr-1"></i> Folha de Diárias (PIX)';
+                btnContainer.appendChild(diariasButton);
+
                 escalaContainer.appendChild(btnContainer);
 
                 // Sincronização em tempo real dos switches da tabela com currentEscalaData
@@ -441,6 +527,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 attachCredenciamentoListener();
                 attachPresencasListener(data);
                 attachContratanteListener(data);
+                attachDiariasListener(data);
             } else {
                 escalaContainer.innerHTML = '<div class="alert alert-danger">Erro ao carregar detalhes da escala: ' + (data.message || 'Resposta inválida.') + '</div>';
             }
@@ -740,6 +827,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const infoText = document.getElementById('presencas-info-text');
             const btnText = document.getElementById('salvar-presencas-btn-text');
             const salvarBtn = document.getElementById('salvar-presencas-btn');
+            const navContainer = document.getElementById('presencas-horarios-nav-container');
+            const pillsContainer = document.getElementById('presencas-horarios-pills');
 
             const activeData = currentEscalaData || dataDetails;
             const isCurso = (activeData && (activeData.event_tipo === 'Curso' || activeData.event_tipo === 'Treinamento' || activeData.event_tipo_evento === 'curso'));
@@ -818,52 +907,144 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
 
-            let html = '';
-            escaladosMap.forEach(c => {
-                const imgUrl = c.url ? AppWebRoot + c.url : AppWebRoot + 'img/ame2023.jpg';
-                const linkAval = c.link_avaliacao ? AppWebRoot + c.link_avaliacao : '#';
-                const fullEvalUrl = window.location.origin + linkAval;
-                html += `
-                    <div class="list-group-item d-flex align-items-center justify-content-between flex-wrap gap-2 p-3">
-                        <div class="d-flex align-items-center">
-                            <img src="${imgUrl}" class="rounded-circle mr-3 shadow-sm" width="46" height="46" style="object-fit:cover;" onerror="this.src='${AppWebRoot}img/ame2023.jpg';">
-                            <div>
-                                <strong class="d-block text-dark">${c.nome}</strong>
-                                <small class="text-muted">Rodízio: #${c.rodizio} | ${c.ativo == 1 ? 'Atendente' : 'Treinamento'}</small>
-                                ${c.ja_avaliado == 1 ? '<span class="badge badge-warning text-dark ml-1"><i class="fas fa-star mr-1"></i>Já Avaliado</span>' : ''}
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-center flex-wrap gap-2">
-                            <a href="${linkAval}" target="_blank" class="btn btn-sm btn-outline-info font-weight-bold mr-1" title="Preencher Ficha de Avaliação do Atendente">
-                                <i class="fas fa-star mr-1"></i> Avaliar Atendente
-                            </a>
-                            <button type="button" class="btn btn-sm btn-outline-secondary btn-copy-cand-eval mr-3" data-url="${fullEvalUrl}" title="Copiar link de avaliação deste atendente">
-                                <i class="fas fa-copy"></i>
-                            </button>
-                            <div class="custom-control custom-checkbox custom-control-inline">
-                                <input type="checkbox" class="custom-control-input presenca-checkbox" id="presenca-cand-${c.candidato_id}" value="${c.candidato_id}" checked>
-                                <label class="custom-control-label font-weight-bold text-success" for="presenca-cand-${c.candidato_id}">
-                                    <i class="fas fa-check-circle mr-1"></i> Compareceu ao Evento
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-            if (listContainer) listContainer.innerHTML = html;
+            // Função para renderizar a lista de candidatos de acordo com o horário selecionado
+            function renderListaPresencas(targetHorarioId) {
+                currentSelectedPresencaHorarioId = targetHorarioId;
+                let html = '';
 
-            document.querySelectorAll('.btn-copy-cand-eval').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const url = this.getAttribute('data-url');
-                    const originalHtml = this.innerHTML;
-                    const el = this;
-                    navigator.clipboard.writeText(url).then(() => {
-                        el.innerHTML = '<i class="fas fa-check text-success"></i>';
-                        setTimeout(() => { el.innerHTML = originalHtml; }, 1500);
+                escaladosMap.forEach(c => {
+                    const imgUrl = c.url ? AppWebRoot + c.url : AppWebRoot + 'img/ame2023.jpg';
+                    const linkAval = c.link_avaliacao ? AppWebRoot + c.link_avaliacao : '#';
+                    const fullEvalUrl = window.location.origin + linkAval;
+
+                    // Determina se o candidato compareceu/está marcado presente
+                    let isChecked = true;
+                    if (targetHorarioId > 0) {
+                        if (c.presencas_por_horario && c.presencas_por_horario[targetHorarioId] !== undefined) {
+                            isChecked = (c.presencas_por_horario[targetHorarioId] == 1);
+                        } else {
+                            isChecked = true;
+                        }
+                    } else {
+                        isChecked = (c.presenca_confirmada == 1);
+                    }
+
+                    // Seletor de badges de frequência / certificado ou diárias
+                    let badgeInfo = '';
+                    if (isCurso) {
+                        const freq = c.frequencia_pct !== undefined ? c.frequencia_pct : 0;
+                        const apto = c.apto_certificado;
+                        const presTot = c.total_presencas !== undefined ? c.total_presencas : 0;
+                        const escTot = c.total_escalas !== undefined ? c.total_escalas : 0;
+                        const badgeClass = apto ? 'badge-success' : (freq > 0 ? 'badge-warning text-dark' : 'badge-secondary');
+                        const statusTxt = apto ? 'Apto p/ Certificado' : (freq > 0 ? 'Horas Parciais' : 'Sem Presenças');
+                        badgeInfo = `<span class="badge ${badgeClass} ml-2 p-1" style="font-size: 0.8rem;"><i class="fas fa-graduation-cap mr-1"></i>${presTot}/${escTot} aulas (${freq}%) - ${statusTxt}</span>`;
+                    } else {
+                        const presTot = c.total_presencas !== undefined ? c.total_presencas : (c.presenca_confirmada == 1 ? 1 : 0);
+                        const escTot = c.total_escalas !== undefined ? c.total_escalas : 1;
+                        const valTotal = c.total_valor_diarias > 0 ? parseFloat(c.total_valor_diarias) : (presTot * parseFloat(activeData.event_valor_diaria_padrao || 200));
+                        badgeInfo = `<span class="badge badge-info ml-2 p-1" style="font-size: 0.8rem;"><i class="fas fa-money-bill-wave mr-1"></i>${presTot}/${escTot} turnos | R$ ${valTotal.toFixed(2).replace('.', ',')}</span>`;
+                    }
+
+                    const checkLabel = targetHorarioId > 0 ? 'Presente nesta Aula/Turno' : 'Compareceu ao Evento (Geral)';
+
+                    html += `
+                        <div class="list-group-item d-flex align-items-center justify-content-between flex-wrap gap-2 p-3">
+                            <div class="d-flex align-items-center">
+                                <img src="${imgUrl}" class="rounded-circle mr-3 shadow-sm" width="46" height="46" style="object-fit:cover;" onerror="this.src='${AppWebRoot}img/ame2023.jpg';">
+                                <div>
+                                    <div class="d-flex align-items-center flex-wrap">
+                                        <strong class="text-dark mr-1">${c.nome}</strong>
+                                        ${badgeInfo}
+                                    </div>
+                                    <small class="text-muted">Rodízio: #${c.rodizio} | ${c.ativo == 1 ? 'Atendente' : 'Treinamento'}</small>
+                                    ${c.ja_avaliado == 1 ? '<span class="badge badge-warning text-dark ml-1"><i class="fas fa-star mr-1"></i>Já Avaliado</span>' : ''}
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center flex-wrap gap-2">
+                                <a href="${linkAval}" target="_blank" class="btn btn-sm btn-outline-info font-weight-bold mr-1" title="Preencher Ficha de Avaliação do Atendente">
+                                    <i class="fas fa-star mr-1"></i> Avaliar
+                                </a>
+                                <button type="button" class="btn btn-sm btn-outline-secondary btn-copy-cand-eval mr-3" data-url="${fullEvalUrl}" title="Copiar link de avaliação deste atendente">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                                <div class="custom-control custom-checkbox custom-control-inline">
+                                    <input type="checkbox" class="custom-control-input presenca-checkbox" id="presenca-cand-${c.candidato_id}" value="${c.candidato_id}" ${isChecked ? 'checked' : ''}>
+                                    <label class="custom-control-label font-weight-bold ${isChecked ? 'text-success' : 'text-muted'}" for="presenca-cand-${c.candidato_id}">
+                                        <i class="fas fa-check-circle mr-1"></i> ${checkLabel}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                if (listContainer) listContainer.innerHTML = html;
+
+                document.querySelectorAll('.btn-copy-cand-eval').forEach(btn => {
+                    btn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const url = this.getAttribute('data-url');
+                        const originalHtml = this.innerHTML;
+                        const el = this;
+                        navigator.clipboard.writeText(url).then(() => {
+                            el.innerHTML = '<i class="fas fa-check text-success"></i>';
+                            setTimeout(() => { el.innerHTML = originalHtml; }, 1500);
+                        });
                     });
                 });
-            });
+            }
+
+            // Configuração dos Botões / Pills de Horários / Aulas
+            if (activeData.horarios && activeData.horarios.length > 1) {
+                if (navContainer) navContainer.classList.remove('d-none');
+                if (pillsContainer) {
+                    let pillsHtml = `
+                        <button type="button" class="btn btn-sm btn-primary font-weight-bold presenca-horario-pill" data-horario-id="0">
+                            <i class="fas fa-layer-group mr-1"></i> Todos os Horários (Geral)
+                        </button>
+                    `;
+
+                    activeData.horarios.forEach((h, idx) => {
+                        let dtLabel = '';
+                        if (h.data_inicio) {
+                            const d = new Date(h.data_inicio.replace(' ', 'T'));
+                            if (!isNaN(d)) {
+                                dtLabel = d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+                            }
+                        }
+                        const prefix = isCurso ? `Aula ${idx + 1}` : `Turno ${idx + 1}`;
+                        const labelText = dtLabel ? `${prefix} (${dtLabel})` : `${prefix} #${h.horario_id}`;
+
+                        pillsHtml += `
+                            <button type="button" class="btn btn-sm btn-outline-primary font-weight-bold presenca-horario-pill" data-horario-id="${h.horario_id}">
+                                <i class="fas fa-clock mr-1"></i> ${labelText}
+                            </button>
+                        `;
+                    });
+
+                    pillsContainer.innerHTML = pillsHtml;
+
+                    pillsContainer.querySelectorAll('.presenca-horario-pill').forEach(pill => {
+                        pill.addEventListener('click', function() {
+                            pillsContainer.querySelectorAll('.presenca-horario-pill').forEach(p => {
+                                p.classList.remove('btn-primary');
+                                p.classList.add('btn-outline-primary');
+                            });
+                            this.classList.remove('btn-outline-primary');
+                            this.classList.add('btn-primary');
+
+                            const hId = parseInt(this.getAttribute('data-horario-id')) || 0;
+                            renderListaPresencas(hId);
+                        });
+                    });
+                }
+                renderListaPresencas(0);
+            } else {
+                if (navContainer) navContainer.classList.add('d-none');
+                const defaultHId = (activeData.horarios && activeData.horarios[0]) ? parseInt(activeData.horarios[0].horario_id) : 0;
+                renderListaPresencas(defaultHId);
+            }
 
             if (window.jQuery && typeof $('#presencasModal').modal === 'function') {
                 $('#presencasModal').modal('show');
@@ -921,6 +1102,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 body: JSON.stringify({
                     action: 'confirmar_presencas',
                     evento_id: eventoId,
+                    horario_id: currentSelectedPresencaHorarioId,
                     presencas: presencas,
                     realizar_rodizio: realizarRodizioVal,
                     escalados: escaladosObj
@@ -953,6 +1135,195 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
+
+    function attachDiariasListener(dataDetails) {
+        const btn = document.getElementById('diarias-btn');
+        if (!btn) return;
+
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const activeData = currentEscalaData || dataDetails;
+            if (!activeData) return;
+
+            const modalEl = document.getElementById('diariasModal');
+            const nomeEl = document.getElementById('diarias-evento-nome');
+            const subEl = document.getElementById('diarias-evento-subtitulo');
+            const badgeGeral = document.getElementById('diarias-total-geral-badge');
+            const valPadraoTxt = document.getElementById('diarias-valor-padrao-txt');
+            const tbody = document.getElementById('diarias-tbody');
+            const copyResumoBtn = document.getElementById('copy-diarias-resumo-btn');
+            const copyTsvBtn = document.getElementById('copy-diarias-tsv-btn');
+            const printBtn = document.getElementById('print-diarias-btn');
+
+            const vPadrao = parseFloat(activeData.event_valor_diaria_padrao || 200.00);
+            if (nomeEl) nomeEl.textContent = activeData.event_nome || `Evento #${eventoId}`;
+            if (subEl) subEl.textContent = `Fechamento de diárias e remuneração da equipe (${activeData.event_tipo || 'Trabalho'}).`;
+            if (valPadraoTxt) valPadraoTxt.textContent = `R$ ${vPadrao.toFixed(2).replace('.', ',')}`;
+
+            // Filtra participantes escalados ou com presença confirmada
+            const participantes = [];
+            if (activeData.candidatos) {
+                activeData.candidatos.forEach(c => {
+                    let isEscalado = false;
+                    for (const hId in c.horarios_status) {
+                        if (c.horarios_status[hId].is_escalado == 1) {
+                            isEscalado = true;
+                            break;
+                        }
+                    }
+                    if (isEscalado || c.presenca_confirmada == 1 || (c.total_presencas && c.total_presencas > 0)) {
+                        participantes.push(c);
+                    }
+                });
+            }
+
+            let totalGeral = 0;
+            let htmlRows = '';
+            let seq = 1;
+
+            participantes.forEach(c => {
+                const imgUrl = c.url ? AppWebRoot + c.url : AppWebRoot + 'img/ame2023.jpg';
+                const turnosPres = c.total_presencas !== undefined ? c.total_presencas : (c.presenca_confirmada == 1 ? 1 : 0);
+                const totalCand = c.total_valor_diarias > 0 ? parseFloat(c.total_valor_diarias) : (turnosPres * vPadrao);
+                totalGeral += totalCand;
+                const pixVal = (c.PIX && c.PIX.trim() !== '') ? c.PIX.trim() : '';
+
+                htmlRows += `
+                    <tr>
+                        <td class="text-center font-weight-bold text-muted">${seq++}</td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <img src="${imgUrl}" class="rounded-circle mr-2 shadow-sm" width="36" height="36" style="object-fit:cover;" onerror="this.src='${AppWebRoot}img/ame2023.jpg';">
+                                <div>
+                                    <strong class="text-dark d-block">${c.nome}</strong>
+                                    <small class="text-muted">CPF: ${c.CPF || 'Não informado'} | ${c.ativo == 1 ? 'Atendente' : 'Treinamento'}</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <span class="badge ${turnosPres > 0 ? 'badge-success' : 'badge-light border'} px-2 py-1 font-weight-bold">
+                                ${turnosPres} turno(s)
+                            </span>
+                        </td>
+                        <td class="text-right font-weight-bold text-muted">
+                            R$ ${vPadrao.toFixed(2).replace('.', ',')}
+                        </td>
+                        <td class="text-right font-weight-bold text-success" style="font-size: 1.05rem;">
+                            R$ ${totalCand.toFixed(2).replace('.', ',')}
+                        </td>
+                        <td>
+                            ${pixVal ? `<code class="bg-light px-2 py-1 text-dark border rounded font-weight-bold" style="font-size:0.95rem;">${pixVal}</code>` : '<span class="text-danger small font-italic"><i class="fas fa-exclamation-circle mr-1"></i>PIX não informado</span>'}
+                        </td>
+                        <td class="text-center">
+                            ${pixVal ? `<button type="button" class="btn btn-sm btn-outline-success font-weight-bold btn-copy-pix" data-pix="${pixVal}"><i class="fas fa-copy mr-1"></i> Copiar PIX</button>` : '<button type="button" class="btn btn-sm btn-outline-secondary" disabled>Sem PIX</button>'}
+                        </td>
+                    </tr>
+                `;
+            });
+
+            if (participantes.length === 0) {
+                htmlRows = '<tr><td colspan="7" class="text-center text-muted py-4">Nenhum participante escalado ou com presença registrada para este evento.</td></tr>';
+            }
+
+            if (tbody) tbody.innerHTML = htmlRows;
+            if (badgeGeral) badgeGeral.textContent = `Total Geral da Folha: R$ ${totalGeral.toFixed(2).replace('.', ',')}`;
+
+            // Bind copy PIX individual
+            document.querySelectorAll('.btn-copy-pix').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const pix = this.getAttribute('data-pix');
+                    const orig = this.innerHTML;
+                    const el = this;
+                    navigator.clipboard.writeText(pix).then(() => {
+                        el.innerHTML = '<i class="fas fa-check text-success mr-1"></i> Copiado!';
+                        setTimeout(() => { el.innerHTML = orig; }, 2000);
+                    });
+                });
+            });
+
+            // Copy resumo WhatsApp / Financeiro
+            if (copyResumoBtn) {
+                copyResumoBtn.onclick = function() {
+                    let msg = `*FOLHA DE FECHAMENTO / DIÁRIAS PIX*\n`;
+                    msg += `*Evento:* ${activeData.event_nome || 'Evento'}\n`;
+                    msg += `*Total Geral:* R$ ${totalGeral.toFixed(2).replace('.', ',')}\n`;
+                    msg += `*Data:* ${new Date().toLocaleDateString('pt-BR')}\n\n`;
+                    let s = 1;
+                    participantes.forEach(c => {
+                        const turnosPres = c.total_presencas !== undefined ? c.total_presencas : (c.presenca_confirmada == 1 ? 1 : 0);
+                        const totalCand = c.total_valor_diarias > 0 ? parseFloat(c.total_valor_diarias) : (turnosPres * vPadrao);
+                        const pixVal = (c.PIX && c.PIX.trim() !== '') ? c.PIX.trim() : 'NÃO INFORMADO';
+                        msg += `${s++}. *${c.nome}*\n   Turnos: ${turnosPres} | Total: R$ ${totalCand.toFixed(2).replace('.', ',')}\n   Chave PIX: \`${pixVal}\`\n\n`;
+                    });
+                    navigator.clipboard.writeText(msg).then(() => {
+                        const orig = copyResumoBtn.innerHTML;
+                        copyResumoBtn.innerHTML = '<i class="fas fa-check text-success mr-1"></i> Resumo Copiado!';
+                        setTimeout(() => { copyResumoBtn.innerHTML = orig; }, 2500);
+                    });
+                };
+            }
+
+            // Copy TSV (Excel)
+            if (copyTsvBtn) {
+                copyTsvBtn.onclick = function() {
+                    let tsv = "Seq\tNome\tCPF\tTurnos\tValor_Unitario\tTotal\tChave_PIX\n";
+                    let s = 1;
+                    participantes.forEach(c => {
+                        const turnosPres = c.total_presencas !== undefined ? c.total_presencas : (c.presenca_confirmada == 1 ? 1 : 0);
+                        const totalCand = c.total_valor_diarias > 0 ? parseFloat(c.total_valor_diarias) : (turnosPres * vPadrao);
+                        const pixVal = (c.PIX && c.PIX.trim() !== '') ? c.PIX.trim() : '';
+                        tsv += `${s++}\t${c.nome}\t${c.CPF || ''}\t${turnosPres}\tR$ ${vPadrao.toFixed(2)}\tR$ ${totalCand.toFixed(2)}\t${pixVal}\n`;
+                    });
+                    navigator.clipboard.writeText(tsv).then(() => {
+                        const orig = copyTsvBtn.innerHTML;
+                        copyTsvBtn.innerHTML = '<i class="fas fa-check text-success mr-1"></i> Tabela Copiada!';
+                        setTimeout(() => { copyTsvBtn.innerHTML = orig; }, 2500);
+                    });
+                };
+            }
+
+            // Print Folha
+            if (printBtn) {
+                printBtn.onclick = function() {
+                    const tableContents = document.getElementById('diarias-table-container').innerHTML;
+                    const origContents = document.body.innerHTML;
+                    document.body.innerHTML = `
+                        <div style="padding: 20px; font-family: Arial, sans-serif;">
+                            <h2>Folha de Fechamento de Diárias (PIX) - ${activeData.event_nome}</h2>
+                            <p><strong>Total Geral:</strong> R$ ${totalGeral.toFixed(2).replace('.', ',')} | <strong>Data:</strong> ${new Date().toLocaleDateString('pt-BR')}</p>
+                            ${tableContents}
+                        </div>
+                    `;
+                    window.print();
+                    document.body.innerHTML = origContents;
+                    location.reload();
+                };
+            }
+
+            if (window.jQuery && typeof $('#diariasModal').modal === 'function') {
+                $('#diariasModal').modal('show');
+            } else if (modalEl) {
+                modalEl.classList.add('show');
+                modalEl.style.display = 'block';
+                modalEl.style.backgroundColor = 'rgba(0,0,0,0.5)';
+            }
+        });
+    }
+
+    document.querySelectorAll('#diariasModal [data-dismiss="modal"]').forEach(btn => {
+        btn.addEventListener('click', function() {
+            if (window.jQuery && typeof $('#diariasModal').modal === 'function') {
+                $('#diariasModal').modal('hide');
+            } else {
+                const modalEl = document.getElementById('diariasModal');
+                if (modalEl) {
+                    modalEl.classList.remove('show');
+                    modalEl.style.display = 'none';
+                }
+            }
+        });
+    });
 
     function attachContratanteListener(dataDetails) {
         const contratanteBtn = document.getElementById('contratante-btn');

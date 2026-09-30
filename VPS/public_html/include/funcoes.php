@@ -462,19 +462,30 @@ function chave($d = 3){
             @mysqli_query($conexao, "CREATE TABLE IF NOT EXISTS `presenca` (
                 `id` INT AUTO_INCREMENT PRIMARY KEY,
                 `evento_id` INT NOT NULL,
+                `horario_id` INT DEFAULT NULL,
                 `candidato_id` INT NOT NULL,
                 `presente` TINYINT(1) NOT NULL DEFAULT 1,
+                `valor_pago` DECIMAL(10,2) NOT NULL DEFAULT 0.00,
                 `data_confirmacao` DATETIME DEFAULT CURRENT_TIMESTAMP,
                 `confirmadopor` VARCHAR(100) DEFAULT 'sistema',
-                UNIQUE KEY `idx_evento_candidato` (`evento_id`, `candidato_id`),
+                UNIQUE KEY `idx_evento_cand_horario` (`evento_id`, `candidato_id`, `horario_id`),
                 KEY `idx_evento` (`evento_id`),
-                KEY `idx_candidato` (`candidato_id`)
+                KEY `idx_candidato` (`candidato_id`),
+                KEY `idx_horario` (`horario_id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
 
             // 2. Valida e adiciona colunas faltantes na tabela presenca se ela já existia
+            $res_hor = @mysqli_query($conexao, "SHOW COLUMNS FROM `presenca` LIKE 'horario_id'");
+            if ($res_hor && mysqli_num_rows($res_hor) === 0) {
+                @mysqli_query($conexao, "ALTER TABLE `presenca` ADD `horario_id` INT(11) NULL AFTER `evento_id`");
+            }
             $res_col = @mysqli_query($conexao, "SHOW COLUMNS FROM `presenca` LIKE 'presente'");
             if ($res_col && mysqli_num_rows($res_col) === 0) {
                 @mysqli_query($conexao, "ALTER TABLE `presenca` ADD `presente` TINYINT(1) NOT NULL DEFAULT 1 AFTER `candidato_id`");
+            }
+            $res_vp = @mysqli_query($conexao, "SHOW COLUMNS FROM `presenca` LIKE 'valor_pago'");
+            if ($res_vp && mysqli_num_rows($res_vp) === 0) {
+                @mysqli_query($conexao, "ALTER TABLE `presenca` ADD `valor_pago` DECIMAL(10,2) NOT NULL DEFAULT 0.00 AFTER `presente`");
             }
             $res_dt = @mysqli_query($conexao, "SHOW COLUMNS FROM `presenca` LIKE 'data_confirmacao'");
             if ($res_dt && mysqli_num_rows($res_dt) === 0) {
@@ -483,6 +494,29 @@ function chave($d = 3){
             $res_cp = @mysqli_query($conexao, "SHOW COLUMNS FROM `presenca` LIKE 'confirmadopor'");
             if ($res_cp && mysqli_num_rows($res_cp) === 0) {
                 @mysqli_query($conexao, "ALTER TABLE `presenca` ADD `confirmadopor` VARCHAR(100) DEFAULT 'sistema'");
+            }
+            // Garante índice por horario
+            $res_idx_old = @mysqli_query($conexao, "SHOW INDEX FROM `presenca` WHERE Key_name = 'idx_evento_candidato'");
+            if ($res_idx_old && mysqli_num_rows($res_idx_old) > 0) {
+                @mysqli_query($conexao, "ALTER TABLE `presenca` DROP INDEX `idx_evento_candidato`");
+            }
+            $res_idx_new = @mysqli_query($conexao, "SHOW INDEX FROM `presenca` WHERE Key_name = 'idx_evento_cand_horario'");
+            if (!$res_idx_new || mysqli_num_rows($res_idx_new) === 0) {
+                @mysqli_query($conexao, "ALTER TABLE `presenca` ADD UNIQUE KEY `idx_evento_cand_horario` (`evento_id`, `candidato_id`, `horario_id`)");
+            }
+
+            // Garante colunas de suporte em eventos_marcados e horarios
+            $res_em_corte = @mysqli_query($conexao, "SHOW COLUMNS FROM `eventos_marcados` LIKE 'linha_corte_presenca'");
+            if ($res_em_corte && mysqli_num_rows($res_em_corte) === 0) {
+                @mysqli_query($conexao, "ALTER TABLE `eventos_marcados` ADD `linha_corte_presenca` INT NOT NULL DEFAULT 75");
+            }
+            $res_em_diaria = @mysqli_query($conexao, "SHOW COLUMNS FROM `eventos_marcados` LIKE 'valor_diaria_padrao'");
+            if ($res_em_diaria && mysqli_num_rows($res_em_diaria) === 0) {
+                @mysqli_query($conexao, "ALTER TABLE `eventos_marcados` ADD `valor_diaria_padrao` DECIMAL(10,2) NOT NULL DEFAULT 200.00");
+            }
+            $res_h_diaria = @mysqli_query($conexao, "SHOW COLUMNS FROM `horarios` LIKE 'valor_diaria'");
+            if ($res_h_diaria && mysqli_num_rows($res_h_diaria) === 0) {
+                @mysqli_query($conexao, "ALTER TABLE `horarios` ADD `valor_diaria` DECIMAL(10,2) NULL DEFAULT NULL");
             }
 
             // 3. Cria tabela historico_rodizio se não existir
