@@ -27,8 +27,11 @@ if ($candidato_id > 0) {
 <body>
     <?php include_once('./include/nav.php'); ?>
     <div class="container mt-5">
-        <header class="p-4 bg-light rounded mb-4">
-            <h1 class="text-center">Gerenciamento de Atestados</h1>
+        <header class="p-4 bg-light rounded mb-4 text-center border shadow-sm">
+            <h1 class="font-weight-bold text-dark mb-1"><i class="fas fa-file-signature text-primary mr-2"></i>Gerenciamento de Atestados e Certificados</h1>
+            <p class="text-muted mb-0 font-weight-bold" style="font-size: 0.95rem;">
+                Associação Brasileira de Inclusão pelo Trabalho – Atendentes Muito Especiais (AME) &bull; CNPJ nº 32.131.752/0001-88
+            </p>
         </header>
 
         <?php if (!$candidato): ?>

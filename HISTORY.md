@@ -17,6 +17,19 @@ relacionados:
 
 # Histórico de Trabalho - Projeto AME
 
+- **30/09/2026 - Formalização Institucional e Jurídica em Atestados e Certificados (`pages/gerar_atestado.php`, `pages/atestados.php`):**
+    - **Demanda:** Atestados de matrícula, certificados de conclusão e declarações parciais emitidos pelo sistema utilizavam apenas o nome fantasia *"PROJETO AME - Atendentes Muito Especiais"*, sem menção à Razão Social de registro em cartório nem ao CNPJ da entidade no timbrado e na assinatura.
+    - **Reestruturação do Documento Oficial (`pages/gerar_atestado.php`):**
+        - Criada a classe especializada `AtestadoPDF extends PDF` com layout de papel timbrado institucional formal:
+            - **Cabeçalho Timbrado Oficial:** Logotipo colorido oficial do Projeto AME, Razão Social completa: **ASSOCIAÇÃO BRASILEIRA DE INCLUSÃO PELO TRABALHO**, nome fantasia: **ATENDENTES MUITO ESPECIAIS — PROJETO A.M.E.**, **CNPJ nº 32.131.752/0001-88**, qualificação de entidade civil sem fins lucrativos e canais oficiais de contato e transparência (`contato@projetoame.org`, `https://projetoame.org`).
+            - **Faixa Divisória Dupla Estilizada:** Traço institucional com as cores oficiais (dourado/âmbar `#d97706` e azul `#1e3a8a`).
+            - **Corpo Textual Formalizado:** O texto de todos os tipos de documentos (Confirmação de Matrícula, Certificado Pleno e Declaração de Horas Parciais) passou a qualificar formalmente a pessoa jurídica outorgante, seus fins estatutários e os dados completos do aluno/atendente (Nome e CPF).
+            - **Bloco de Assinatura Centralizado:** Assinatura gráfica do Presidente sobreposta à linha de assinatura elegante, identificação nominal: **Paulo Addair Daniel Filho - Presidente**, Razão Social da entidade e CNPJ oficial.
+            - **Rodapé Institucional:** Marcação oficial de emissão eletrônica pelo sistema e paginação contínua em todas as folhas.
+    - **Interface de Gestão (`pages/atestados.php`):**
+        - Atualizado o cabeçalho da página de gerenciamento de atestados com a Razão Social completa e o CNPJ nº 32.131.752/0001-88.
+    - **Deploy & Validação:** Arquivos validados com `php -l`, sincronizados para a VPS1 (`projetoame.org`) e homologados.
+
 - **30/09/2026 - Otimização de Viewport e Rolagem Interna em Modais (`modal-dialog-scrollable`):**
     - **Diagnóstico do Overflow em `#presencasModal`:** Em telas convencionais ou notebooks (1366x768 ou 1080p com barras do navegador), a lista de presença com 8+ alunos somada ao switch de rodízio, alerta explicativo, pills de horários e botões de ação ultrapassava a altura da viewport (`100vh`), empurrando os participantes inferiores e o botão *"Confirmar Presenças e Atualizar Rodízio"* para fora da tela.
     - **Correção em `pages/adminescala.php`:**

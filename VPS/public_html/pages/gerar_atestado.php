@@ -52,7 +52,83 @@ if (!$candidato || !$evento) {
     exit;
 }
 
-$pdf = new PDF();
+// Classe especializada para Atestados e Certificados com Timbrado Oficial e Assinatura Formal
+class AtestadoPDF extends PDF
+{
+    public $documentTitle = '';
+
+    function Header()
+    {
+        // Logotipo Oficial (22mm de largura)
+        if (file_exists('img/ame2023.jpg')) {
+            $this->Image('img/ame2023.jpg', 20, 13, 22);
+        } elseif (file_exists('img/card-2x1nobg.png')) {
+            $this->Image('img/card-2x1nobg.png', 20, 13, 28);
+        }
+
+        // Cabeçalho Institucional Oficial
+        $this->SetXY(46, 13);
+        $this->SetFont('Arial', 'B', 10.5);
+        $this->SetTextColor(30, 41, 59);
+        $this->Cell(0, 4.5, iconv("UTF-8", "ISO-8859-1//TRANSLIT", "ASSOCIAÇÃO BRASILEIRA DE INCLUSÃO PELO TRABALHO"), 0, 1, 'L');
+
+        $this->SetX(46);
+        $this->SetFont('Arial', 'B', 9.5);
+        $this->SetTextColor(217, 119, 6); // Âmbar Projeto AME (#d97706)
+        $this->Cell(0, 4.5, iconv("UTF-8", "ISO-8859-1//TRANSLIT", "ATENDENTES MUITO ESPECIAIS — PROJETO A.M.E."), 0, 1, 'L');
+
+        $this->SetX(46);
+        $this->SetFont('Arial', '', 8);
+        $this->SetTextColor(100, 116, 139);
+        $this->Cell(0, 4, iconv("UTF-8", "ISO-8859-1//TRANSLIT", "CNPJ: 32.131.752/0001-88 | Entidade Civil Sem Fins Lucrativos"), 0, 1, 'L');
+
+        $this->SetX(46);
+        $this->SetFont('Arial', '', 7.5);
+        $this->SetTextColor(100, 116, 139);
+        $this->Cell(0, 3.5, iconv("UTF-8", "ISO-8859-1//TRANSLIT", "São Paulo - SP | contato@projetoame.org | https://projetoame.org"), 0, 1, 'L');
+
+        // Linha divisória institucional dupla
+        $this->SetY(40);
+        $this->SetDrawColor(217, 119, 6);
+        $this->SetLineWidth(0.8);
+        $this->Line(20, 40, 190, 40);
+
+        $this->SetDrawColor(30, 58, 138);
+        $this->SetLineWidth(0.3);
+        $this->Line(20, 41.2, 190, 41.2);
+
+        $this->Ln(13);
+
+        // Título do Documento com destaque
+        if (!empty($this->documentTitle)) {
+            $this->SetFont('Arial', 'B', 15);
+            $this->SetTextColor(30, 41, 59);
+            $this->Cell(0, 8, iconv("UTF-8", "ISO-8859-1//TRANSLIT", $this->documentTitle), 0, 1, 'C');
+            $this->Ln(6);
+        }
+    }
+
+    function Footer()
+    {
+        $this->SetY(-22);
+        $this->SetDrawColor(203, 213, 225);
+        $this->SetLineWidth(0.3);
+        $this->Line(20, $this->GetY(), 190, $this->GetY());
+        $this->Ln(2);
+
+        $this->SetFont('Arial', '', 7.5);
+        $this->SetTextColor(100, 116, 139);
+        $txt_rodape = "Associação Brasileira de Inclusão pelo Trabalho - Atendentes Muito Especiais (AME) | CNPJ: 32.131.752/0001-88\nDocumento oficial emitido eletronicamente pelo Projeto AME — projetoame.org";
+        $this->MultiCell(0, 3.5, iconv("UTF-8", "ISO-8859-1//TRANSLIT", $txt_rodape), 0, 'C');
+
+        $this->SetY(-10);
+        $this->SetFont('Arial', 'I', 8);
+        $this->SetTextColor(148, 163, 184);
+        $this->Cell(0, 5, iconv("UTF-8", "ISO-8859-1//TRANSLIT", 'Página ' . $this->PageNo() . ' de {nb}'), 0, 0, 'R');
+    }
+}
+
+$pdf = new AtestadoPDF();
 $pdf->AliasNbPages();
 $pdf->SetMargins(20, 20, 20);
 
@@ -63,9 +139,11 @@ if ($tipo === 'matricula') {
     $descritivo = "Confirmação de Matrícula - " . $evento['nome'];
     $arquivo_nome = "matricula_" . $candidato_id . "_" . $evento_id . "_" . time() . ".pdf";
     
-    $texto = "Declaramos para os devidos fins que o(a) aluno(a) <b>" . $candidato['nome'] . "</b>, inscrito(a) sob o CPF nº <b>" . $candidato['CPF'] . "</b>, encontra-se devidamente matriculado(a) e frequenta regularmente as atividades de: <b>" . $evento['nome'] . "</b>, realizadas no período de " . date('d/m/Y', strtotime($evento['inicio'])) . " a " . date('d/m/Y', strtotime($evento['final'])) . ".
+    $texto = "A <b>ASSOCIAÇÃO BRASILEIRA DE INCLUSÃO PELO TRABALHO – ATENDENTES MUITO ESPECIAIS (AME)</b>, pessoa jurídica de direito privado sem fins lucrativos, inscrita no CNPJ/MF sob o nº <b>32.131.752/0001-88</b>, com sede na Cidade de São Paulo - SP, declara para os devidos fins e a quem possa interessar que o(a) aluno(a) / atendente <b>" . $candidato['nome'] . "</b>, inscrito(a) no CPF sob o nº <b>" . $candidato['CPF'] . "</b>, encontra-se devidamente matriculado(a) e com participação ativa nas atividades de capacitação e inclusão produtiva referentes ao projeto: <b>" . $evento['nome'] . "</b>, ministrado no período de " . date('d/m/Y', strtotime($evento['inicio'])) . " a " . date('d/m/Y', strtotime($evento['final'])) . ".
     <br><br>
-    Por ser verdade, firmamos a presente.";
+    O programa tem por objetivo o desenvolvimento de competências socioemocionais, técnicas e comportamentais para o trabalho e a autonomia social, em conformidade com as diretrizes estatutárias da entidade.
+    <br><br>
+    Por ser a expressão da verdade, firmamos a presente declaração.";
 } else {
     $linha_corte = !empty($evento['linha_corte_presenca']) ? intval($evento['linha_corte_presenca']) : 75;
     $is_curso = (in_array(strtolower($evento['tipo'] ?? ''), ['curso', 'treinamento']) || in_array(strtolower($evento['tipo_evento'] ?? ''), ['curso', 'treinamento']));
@@ -128,15 +206,15 @@ if ($tipo === 'matricula') {
         $arquivo_nome = "parcial_" . $candidato_id . "_" . $evento_id . "_" . time() . ".pdf";
 
         if ($participacoes === "") {
-            $texto = "Declaramos que o(a) participante <b>" . $candidato['nome'] . "</b>, CPF nº <b>" . $candidato['CPF'] . "</b>, esteve inscrito(a) na atividade <b>" . $evento['nome'] . "</b>, não constando presenças confirmadas no sistema até a presente data.";
+            $texto = "A <b>ASSOCIAÇÃO BRASILEIRA DE INCLUSÃO PELO TRABALHO – ATENDENTES MUITO ESPECIAIS (AME)</b>, pessoa jurídica de direito privado sem fins lucrativos, inscrita no CNPJ sob o nº <b>32.131.752/0001-88</b>, com sede na Cidade de São Paulo - SP, declara que o(a) participante <b>" . $candidato['nome'] . "</b>, CPF nº <b>" . $candidato['CPF'] . "</b>, esteve inscrito(a) na atividade <b>" . $evento['nome'] . "</b>, não constando presenças confirmadas no sistema até a presente data.";
         } else {
-            $texto = "Declaramos para os devidos fins que o(a) participante <b>" . $candidato['nome'] . "</b>, portador(a) do CPF nº <b>" . $candidato['CPF'] . "</b>, participou de <b>{$tot_presencas}</b> de um total de <b>{$tot_aulas}</b> aulas/turnos programados na atividade <b>" . $evento['nome'] . "</b>, perfazendo uma frequência de <b>{$frequencia_pct}%</b>, conforme cronograma cumprido abaixo:
+            $texto = "A <b>ASSOCIAÇÃO BRASILEIRA DE INCLUSÃO PELO TRABALHO – ATENDENTES MUITO ESPECIAIS (AME)</b>, pessoa jurídica de direito privado sem fins lucrativos, inscrita no CNPJ sob o nº <b>32.131.752/0001-88</b>, com sede na Cidade de São Paulo - SP, declara para os devidos fins que o(a) participante <b>" . $candidato['nome'] . "</b>, portador(a) do CPF nº <b>" . $candidato['CPF'] . "</b>, participou de <b>{$tot_presencas}</b> de um total de <b>{$tot_aulas}</b> aulas/turnos programados na atividade <b>" . $evento['nome'] . "</b>, perfazendo uma frequência de <b>{$frequencia_pct}%</b>, conforme cronograma cumprido discriminado abaixo:
             <br><ul>" . $participacoes . "</ul>
             <br>Perfazendo uma carga horária efetivamente cumprida de <b>" . $total_horas_fmt . " horas</b>.
             <br><br>
-            <b>Ressalva Institucional:</b> O presente documento atesta formalmente as horas e atividades efetivamente cursadas pelo(a) participante. Por não ter atingido a linha de corte mínima regulamentar de frequência exigida pela coordenação ({$linha_corte}%), esta declaração <b>não confere o Certificado de Conclusão Integral</b> da referida atividade, servindo como comprovação de horas parciais.
+            <b>Ressalva Institucional:</b> O presente documento atesta formalmente as horas e atividades efetivamente cursadas pelo(a) participante. Por não ter atingido a linha de corte mínima regulamentar de frequência exigida pela coordenação institucional ({$linha_corte}%), esta declaração <b>não confere o Certificado de Conclusão Integral</b> da referida atividade, servindo como comprovação legal de frequência e horas parciais.
             <br><br>
-            Por ser verdade, firmamos a presente.";
+            Por ser a expressão da verdade, firmamos a presente declaração.";
         }
     } else {
         // CERTIFICADO DE CONCLUSÃO / ATESTADO DE PARTICIPAÇÃO PLENA
@@ -145,41 +223,63 @@ if ($tipo === 'matricula') {
         $arquivo_nome = "certificado_" . $candidato_id . "_" . $evento_id . "_" . time() . ".pdf";
 
         if ($participacoes === "") {
-            $texto = "Não constam registros de participação efetiva confirmada para o(a) atendente/aluno(a) <b>" . $candidato['nome'] . "</b> no evento <b>" . $evento['nome'] . "</b> até a presente data.";
+            $texto = "A <b>ASSOCIAÇÃO BRASILEIRA DE INCLUSÃO PELO TRABALHO – ATENDENTES MUITO ESPECIAIS (AME)</b>, inscrita no CNPJ sob o nº <b>32.131.752/0001-88</b>, informa que não constam registros de participação efetiva confirmada para o(a) atendente/aluno(a) <b>" . $candidato['nome'] . "</b> no evento <b>" . $evento['nome'] . "</b> até a presente data.";
         } else {
-            $texto = "Certificamos e atestamos para os devidos fins que <b>" . $candidato['nome'] . "</b>, portador(a) do CPF nº <b>" . $candidato['CPF'] . "</b>, concluiu com êxito as atividades do projeto <b>" . $evento['nome'] . "</b>, realizadas no período de " . date('d/m/Y', strtotime($evento['inicio'])) . " a " . date('d/m/Y', strtotime($evento['final'])) . ", atingindo frequência de <b>{$frequencia_pct}%</b> (linha de corte regulamentar de {$linha_corte}%), com o seguinte cronograma cumprido:
+            $texto = "A <b>ASSOCIAÇÃO BRASILEIRA DE INCLUSÃO PELO TRABALHO – ATENDENTES MUITO ESPECIAIS (AME)</b>, pessoa jurídica de direito privado sem fins lucrativos, inscrita no CNPJ sob o nº <b>32.131.752/0001-88</b>, com sede na Cidade de São Paulo - SP, certifica e atesta para os devidos fins que <b>" . $candidato['nome'] . "</b>, portador(a) do CPF nº <b>" . $candidato['CPF'] . "</b>, concluiu com êxito todas as etapas e atividades do projeto <b>" . $evento['nome'] . "</b>, ministrado no período de " . date('d/m/Y', strtotime($evento['inicio'])) . " a " . date('d/m/Y', strtotime($evento['final'])) . ", atingindo frequência de <b>{$frequencia_pct}%</b> (linha de corte regulamentar de {$linha_corte}%), com o seguinte cronograma cumprido:
             <br><ul>" . $participacoes . "</ul>
-            <br>Perfazendo uma carga horária total de aproximadamente <b>" . $total_horas_fmt . " horas</b>.
+            <br>Perfazendo uma carga horária total de <b>" . $total_horas_fmt . " horas</b>.
             <br><br>
-            O(A) participante demonstrou pleno comprometimento, pontualidade e aptidão nas práticas e conteúdos ministrados.
+            O(A) participante demonstrou pleno comprometimento, pontualidade, assiduidade e excelente desenvolvimento nas práticas e conteúdos ministrados.
             <br><br>
-            Por ser verdade, firmamos a presente.";
+            Por ser a expressão da verdade, firmamos o presente documento.";
         }
     }
 }
 
-// Converte a variável global $title para ISO-8859-1 para o Header()
 $title_utf8 = $title;
-$title = iconv("UTF-8", "ISO-8859-1//TRANSLIT", $title);
+$pdf->SetTitle(iconv("UTF-8", "ISO-8859-1//TRANSLIT", $title));
+$pdf->documentTitle = $title_utf8;
 
-$pdf->SetTitle($title);
-$pdf->PrintChapter(1, $title_utf8, $texto);
+$pdf->AddPage();
+$pdf->SetFont('Arial', '', 11.5);
+$pdf->SetTextColor(30, 41, 59);
+$pdf->WriteHTML(iconv("UTF-8", "ISO-8859-1//TRANSLIT", $texto));
 
-$pdf->Ln(20);
-$cidade_data = iconv("UTF-8", "ISO-8859-1//TRANSLIT", "São Paulo, " . $hoje_extenso);
-$pdf->Cell(0, 10, $cidade_data, 0, 1, 'R');
+$pdf->Ln(12);
+$cidade_data = iconv("UTF-8", "ISO-8859-1//TRANSLIT", "São Paulo, " . $hoje_extenso . ".");
+$pdf->Cell(0, 8, $cidade_data, 0, 1, 'R');
 
-$pdf->Ln(20);
-if (file_exists('img/assinatura.png')) {
-    $pdf->Image('img/assinatura.png', 85, $pdf->GetY(), 40);
+$pdf->Ln(6);
+if ($pdf->GetY() > 215) {
+    $pdf->AddPage();
 }
-$pdf->Ln(15);
-$pdf->Cell(0, 0, '', 'T'); 
-$pdf->Ln(2);
-$pdf->SetFont('Arial', 'B', 12);
-$pdf->Cell(0, 10, iconv("UTF-8", "ISO-8859-1//TRANSLIT", "Paulo Addair Daniel Filho - Presidente"), 0, 1, 'C');
-$pdf->SetFont('Arial', '', 10);
-$pdf->Cell(0, 5, iconv("UTF-8", "ISO-8859-1//TRANSLIT", "PROJETO AME - Atendentes Muito Especiais"), 0, 1, 'C');
+
+$sig_y = $pdf->GetY();
+if (file_exists('img/assinatura.png')) {
+    $pdf->Image('img/assinatura.png', 80, $sig_y - 6, 50);
+}
+
+// Linha de Assinatura Centralizada (largura 120mm)
+$pdf->SetDrawColor(100, 116, 139);
+$pdf->SetLineWidth(0.4);
+$pdf->Line(45, $sig_y + 14, 165, $sig_y + 14);
+
+$pdf->SetY($sig_y + 16);
+$pdf->SetFont('Arial', 'B', 11);
+$pdf->SetTextColor(30, 41, 59);
+$pdf->Cell(0, 5, iconv("UTF-8", "ISO-8859-1//TRANSLIT", "Paulo Addair Daniel Filho"), 0, 1, 'C');
+
+$pdf->SetFont('Arial', '', 9.5);
+$pdf->SetTextColor(71, 85, 105);
+$pdf->Cell(0, 4.5, iconv("UTF-8", "ISO-8859-1//TRANSLIT", "Presidente"), 0, 1, 'C');
+
+$pdf->SetFont('Arial', 'B', 9);
+$pdf->SetTextColor(30, 41, 59);
+$pdf->Cell(0, 4.5, iconv("UTF-8", "ISO-8859-1//TRANSLIT", "Associação Brasileira de Inclusão pelo Trabalho - Atendentes Muito Especiais"), 0, 1, 'C');
+
+$pdf->SetFont('Arial', '', 8.5);
+$pdf->SetTextColor(100, 116, 139);
+$pdf->Cell(0, 4, iconv("UTF-8", "ISO-8859-1//TRANSLIT", "CNPJ nº 32.131.752/0001-88 | Projeto AME"), 0, 1, 'C');
 
 $diretorio = "docs/atestados/";
 if (!is_dir($diretorio)) {
