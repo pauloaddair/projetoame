@@ -965,9 +965,12 @@ document.addEventListener('DOMContentLoaded', function() {
                                 <a href="${linkAval}" target="_blank" class="btn btn-sm btn-outline-info font-weight-bold mr-1" title="Preencher Ficha de Avaliação do Atendente">
                                     <i class="fas fa-star mr-1"></i> Avaliar
                                 </a>
-                                <button type="button" class="btn btn-sm btn-outline-secondary btn-copy-cand-eval mr-3" data-url="${fullEvalUrl}" title="Copiar link de avaliação deste atendente">
+                                <button type="button" class="btn btn-sm btn-outline-secondary btn-copy-cand-eval mr-1" data-url="${fullEvalUrl}" title="Copiar link de avaliação deste atendente">
                                     <i class="fas fa-copy"></i>
                                 </button>
+                                <a href="${AppWebRoot}atestados/${c.candidato_id}" target="_blank" class="btn btn-sm btn-outline-success font-weight-bold mr-3" title="Emitir Atestado de Matrícula ou Certificado deste participante">
+                                    <i class="fas fa-certificate mr-1"></i> Atestado
+                                </a>
                                 <div class="custom-control custom-checkbox custom-control-inline">
                                     <input type="checkbox" class="custom-control-input presenca-checkbox" id="presenca-cand-${c.candidato_id}" value="${c.candidato_id}" ${isChecked ? 'checked' : ''}>
                                     <label class="custom-control-label font-weight-bold ${isChecked ? 'text-success' : 'text-muted'}" for="presenca-cand-${c.candidato_id}">
