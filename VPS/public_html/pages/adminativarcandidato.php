@@ -20,6 +20,22 @@ if (isset($parametros[2]) && is_numeric($parametros[2])) {
 
 $msg = "";
 $sucesso = false;
+$target_status = 0; // Padrão: Treinando para novas inscrições (ainda sem capacitação)
+if (isset($_GET['status'])) {
+    $st = strtolower(trim($_GET['status']));
+    if ($st === '1' || $st === 'atendente' || $st === 'ativo') {
+        $target_status = 1;
+    } elseif ($st === '0' || $st === 'treinando' || $st === 'treinamento') {
+        $target_status = 0;
+    }
+} elseif (isset($_GET['tipo'])) {
+    $st = strtolower(trim($_GET['tipo']));
+    if ($st === '1' || $st === 'atendente' || $st === 'ativo') {
+        $target_status = 1;
+    } elseif ($st === '0' || $st === 'treinando' || $st === 'treinamento') {
+        $target_status = 0;
+    }
+}
 
 if ($candidato_id > 0) {
     // Busca candidato
@@ -37,13 +53,16 @@ if ($candidato_id > 0) {
             $rodizio_update = ", rodizio = $novo_rod";
         }
 
-        // Ativa o candidato
-        $q_update = "UPDATE candidatos SET ativo = 1 $rodizio_update WHERE candidato_id = '$candidato_id'";
+        $status_label = ($target_status === 1) ? 'Atendente Pleno' : 'Treinando';
+        $badge_class = ($target_status === 1) ? 'badge-primary' : 'badge-warning text-dark';
+
+        // Atualiza o status do candidato
+        $q_update = "UPDATE candidatos SET ativo = $target_status $rodizio_update WHERE candidato_id = '$candidato_id'";
         if (mysqli_query($db, $q_update)) {
             $sucesso = true;
-            $msg = "O candidato <strong>" . htmlspecialchars($cand['nome']) . "</strong> (ID #$candidato_id) foi <strong>APROVADO E ATIVADO</strong> com sucesso no sistema!";
+            $msg = "O candidato <strong>" . htmlspecialchars($cand['nome']) . "</strong> (ID #$candidato_id) foi cadastrado como <span class='badge {$badge_class} px-2 py-1'>" . $status_label . "</span> com sucesso no sistema!";
         } else {
-            $msg = "Erro ao ativar candidato: " . mysqli_error($db);
+            $msg = "Erro ao atualizar candidato: " . mysqli_error($db);
         }
     } else {
         $msg = "Candidato ID #$candidato_id não foi localizado no banco de dados.";
@@ -60,14 +79,29 @@ if ($candidato_id > 0) {
                 <div class="card-body">
                     <?php if ($sucesso): ?>
                         <div class="display-1 text-success mb-3"><i class="bi bi-check-circle-fill"></i></div>
-                        <h3 class="fw-bold text-dark mb-3">Candidato Ativado!</h3>
+                        <h3 class="fw-bold text-dark mb-3">Status Atualizado!</h3>
                         <p class="text-secondary fs-6 mb-4"><?php echo $msg; ?></p>
-                        <a href="<?php echo $GLOBALS['app_web_root']; ?>admin/candidatos" class="btn btn-primary rounded-pill px-4 py-2">
-                            Ver Lista de Atendentes ➔
-                        </a>
-                        <a href="<?php echo $GLOBALS['app_web_root']; ?>admin/atividades" class="btn btn-outline-secondary rounded-pill px-4 py-2 ml-2">
-                            Ver Atividades & Escalas
-                        </a>
+                        
+                        <div class="mb-4">
+                            <?php if ($target_status === 0): ?>
+                                <a href="<?php echo $GLOBALS['app_web_root']; ?>admin/ativarcandidato/<?php echo $candidato_id; ?>?status=atendente" class="btn btn-outline-success btn-sm rounded-pill px-3 shadow-sm">
+                                    <i class="fas fa-star mr-1"></i> Promover para Atendente Pleno
+                                </a>
+                            <?php else: ?>
+                                <a href="<?php echo $GLOBALS['app_web_root']; ?>admin/ativarcandidato/<?php echo $candidato_id; ?>?status=treinando" class="btn btn-outline-warning btn-sm rounded-pill px-3 text-dark shadow-sm">
+                                    <i class="fas fa-graduation-cap mr-1"></i> Mudar para Em Treinamento
+                                </a>
+                            <?php endif; ?>
+                        </div>
+
+                        <div class="d-flex justify-content-center flex-wrap gap-2">
+                            <a href="<?php echo $GLOBALS['app_web_root']; ?>admin/candidatos" class="btn btn-primary rounded-pill px-4 py-2">
+                                Ver Lista de Candidatos ➔
+                            </a>
+                            <a href="<?php echo $GLOBALS['app_web_root']; ?>admin/atividades" class="btn btn-outline-secondary rounded-pill px-4 py-2 ml-2">
+                                Ver Atividades & Escalas
+                            </a>
+                        </div>
                     <?php else: ?>
                         <div class="display-1 text-danger mb-3"><i class="bi bi-exclamation-triangle-fill"></i></div>
                         <h3 class="fw-bold text-dark mb-3">Ops!</h3>

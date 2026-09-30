@@ -160,7 +160,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Botões de moderação rápida para o administrador
         $body .= '<br><hr><h3>⚡ Ações Rápidas de Moderação:</h3>';
         $body .= '<p style="margin-top:10px;">';
-        $body .= '<a href="https://projetoame.org/admin/ativarcandidato/' . $candidato_id . '" style="background:#28a745; color:#ffffff; padding:10px 18px; border-radius:6px; text-decoration:none; font-weight:bold; display:inline-block; margin-right:10px;">✅ Aprovar e Ativar Candidato</a> ';
+        $body .= '<a href="https://projetoame.org/admin/ativarcandidato/' . $candidato_id . '?status=treinando" style="background:#ffc107; color:#212529; padding:10px 18px; border-radius:6px; text-decoration:none; font-weight:bold; display:inline-block; margin-right:10px;">🎓 Aprovar como Treinando</a> ';
+        $body .= '<a href="https://projetoame.org/admin/ativarcandidato/' . $candidato_id . '?status=atendente" style="background:#28a745; color:#ffffff; padding:10px 18px; border-radius:6px; text-decoration:none; font-weight:bold; display:inline-block; margin-right:10px;">⭐ Aprovar como Atendente</a> ';
         $body .= '<a href="https://projetoame.org/excluircandidato/' . $candidato_id . '" style="background:#dc3545; color:#ffffff; padding:10px 18px; border-radius:6px; text-decoration:none; font-weight:bold; display:inline-block;">❌ Excluir Registro</a>';
         $body .= '</p>';
 
