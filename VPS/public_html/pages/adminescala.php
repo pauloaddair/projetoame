@@ -273,6 +273,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const urlParams = new URLSearchParams(window.location.search);
     const eventoId = urlParams.get('evento_id');
     var AppWebRoot = '<?php echo $GLOBALS["app_web_root"]; ?>';
+    let currentEscalaData = null;
 
     function carregarDetalhesEvento(id) {
         if (!id) return;
@@ -296,6 +297,7 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(data => {
             if (data.success && data.horarios && data.candidatos) {
+                currentEscalaData = data;
                 let isScheduleSaved = false;
                 data.candidatos.forEach(candidato => {
                     for (const horarioId in candidato.horarios_status) {
@@ -418,6 +420,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 escalaContainer.appendChild(btnContainer);
 
+                // Sincronização em tempo real dos switches da tabela com currentEscalaData
+                escalaContainer.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                    cb.addEventListener('change', function() {
+                        const candId = this.value;
+                        const hId = this.dataset.horarioId;
+                        if (currentEscalaData && currentEscalaData.candidatos) {
+                            const c = currentEscalaData.candidatos.find(item => String(item.candidato_id) === String(candId));
+                            if (c) {
+                                if (!c.horarios_status) c.horarios_status = {};
+                                if (!c.horarios_status[hId]) c.horarios_status[hId] = { is_disponivel: 1, is_escalado: 0 };
+                                c.horarios_status[hId].is_escalado = this.checked ? 1 : 0;
+                            }
+                        }
+                    });
+                });
+
                 attachSaveListener();
                 attachSuggestListener();
                 attachCredenciamentoListener();
@@ -475,6 +493,17 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
                     }
                     if (data.success) {
+                        // Sincroniza o estado em memória para que o modal de presenças e credenciamento reflitam imediatamente
+                        if (currentEscalaData && currentEscalaData.candidatos) {
+                            currentEscalaData.candidatos.forEach(c => {
+                                for (const hId in c.horarios_status) {
+                                    const cb = document.getElementById(`switch-${c.candidato_id}-${hId}`);
+                                    if (cb) {
+                                        c.horarios_status[hId].is_escalado = cb.checked ? 1 : 0;
+                                    }
+                                }
+                            });
+                        }
                         mensagemDiv.innerHTML = '<div class="alert alert-success alert-dismissible fade show"><i class="fas fa-check-circle mr-2"></i>Escala salva com sucesso!<button type="button" class="close" data-dismiss="alert">&times;</button></div>';
                         window.scrollTo({ top: 0, behavior: 'smooth' });
                     } else {
@@ -712,7 +741,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const btnText = document.getElementById('salvar-presencas-btn-text');
             const salvarBtn = document.getElementById('salvar-presencas-btn');
 
-            const isCurso = (dataDetails && (dataDetails.event_tipo === 'Curso' || dataDetails.event_tipo === 'Treinamento' || dataDetails.event_tipo_evento === 'curso'));
+            const activeData = currentEscalaData || dataDetails;
+            const isCurso = (activeData && (activeData.event_tipo === 'Curso' || activeData.event_tipo === 'Treinamento' || activeData.event_tipo_evento === 'curso'));
 
             function updateRodizioUI(rodizioAtivo) {
                 if (rodizioAtivo) {
@@ -754,24 +784,37 @@ document.addEventListener('DOMContentLoaded', function() {
                 };
             }
 
+            // Identifica candidatos marcados na tabela (DOM) e/ou no objeto de dados
+            const checkedCandIds = new Set();
+            document.querySelectorAll('#escala-container input[type="checkbox"]:checked').forEach(cb => {
+                if (cb.value) {
+                    checkedCandIds.add(String(cb.value));
+                }
+            });
+
             const escaladosMap = new Map();
-            if (dataDetails && dataDetails.candidatos) {
-                dataDetails.candidatos.forEach(c => {
-                    let escalado = false;
-                    for (const hId in c.horarios_status) {
-                        if (c.horarios_status[hId].is_escalado == 1) {
-                            escalado = true;
-                            break;
+            if (activeData && activeData.candidatos) {
+                activeData.candidatos.forEach(c => {
+                    let isEscalado = checkedCandIds.has(String(c.candidato_id));
+                    if (!isEscalado) {
+                        for (const hId in c.horarios_status) {
+                            if (c.horarios_status[hId].is_escalado == 1) {
+                                isEscalado = true;
+                                break;
+                            }
                         }
                     }
-                    if (escalado) {
+                    if (!isEscalado && c.presenca_confirmada == 1) {
+                        isEscalado = true;
+                    }
+                    if (isEscalado) {
                         escaladosMap.set(c.candidato_id, c);
                     }
                 });
             }
 
             if (escaladosMap.size === 0) {
-                alert('Nenhum atendente está marcado como escalado para este evento.');
+                alert('Nenhum atendente está marcado como escalado ou selecionado na tabela. Por favor, marque os participantes na tabela antes de confirmar presenças.');
                 return;
             }
 
@@ -858,6 +901,17 @@ document.addEventListener('DOMContentLoaded', function() {
             const switchRodizio = document.getElementById('realizar-rodizio-switch');
             const realizarRodizioVal = switchRodizio ? (switchRodizio.checked ? 1 : 0) : 1;
 
+            // Coleta também os switches da tabela para garantir sincronismo
+            const checkedBoxes = document.querySelectorAll('#escala-container input[type="checkbox"]:checked');
+            let escaladosObj = {};
+            checkedBoxes.forEach(cb => {
+                const horarioId = cb.dataset.horarioId;
+                if (horarioId) {
+                    if (!escaladosObj[horarioId]) escaladosObj[horarioId] = [];
+                    escaladosObj[horarioId].push(cb.value);
+                }
+            });
+
             salvarPresencasBtn.disabled = true;
             salvarPresencasBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Processando...';
 
@@ -868,7 +922,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     action: 'confirmar_presencas',
                     evento_id: eventoId,
                     presencas: presencas,
-                    realizar_rodizio: realizarRodizioVal
+                    realizar_rodizio: realizarRodizioVal,
+                    escalados: escaladosObj
                 })
             })
             .then(r => r.json())

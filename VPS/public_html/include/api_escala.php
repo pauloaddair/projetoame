@@ -337,6 +337,20 @@ if (isset($data['action']) && $data['action'] === 'confirmar_presencas') {
                                     VALUES ({$evento_id}, {$candidato_id}, {$compareceu}, NOW(), 'coordenacao', '{$cand_nome}', 0, '{$cand_email}', '{$cand_tel}', '') 
                                     ON DUPLICATE KEY UPDATE presente = {$compareceu}, data_confirmacao = NOW()");
 
+            // Garante que o candidato fique registrado como escalado nos horários deste evento
+            $q_hor = mysqli_query($conexao, "SELECT horario_id FROM horarios WHERE evento_id = {$evento_id}");
+            if ($q_hor) {
+                while ($h_row = mysqli_fetch_assoc($q_hor)) {
+                    $h_id = intval($h_row['horario_id']);
+                    $check_disp = mysqli_query($conexao, "SELECT id FROM disponibilidade WHERE atividade_id = {$h_id} AND candidato_id = {$candidato_id} LIMIT 1");
+                    if ($check_disp && mysqli_num_rows($check_disp) > 0) {
+                        mysqli_query($conexao, "UPDATE disponibilidade SET escalado = 1 WHERE atividade_id = {$h_id} AND candidato_id = {$candidato_id}");
+                    } else {
+                        mysqli_query($conexao, "INSERT INTO disponibilidade (candidato_id, atividade_id, disponivel, escalado) VALUES ({$candidato_id}, {$h_id}, 1, 1)");
+                    }
+                }
+            }
+
             if (!$realizar_rodizio) {
                 // NÃO REALIZAR RODÍZIO (Curso, Treinamento ou opção desmarcada)
                 $tipo_mov = ($compareceu === 1) ? 'curso_presenca' : 'curso_ausencia';
