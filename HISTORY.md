@@ -17,6 +17,16 @@ relacionados:
 
 # Histórico de Trabalho - Projeto AME
 
+- **30/09/2026 - Correção da Sincronização de Escala com Modal de Presenças e Rodízio (`pages/adminescala.php`, `include/api_escala.php`):**
+    - **Diagnóstico da Mensagem de Alerta:** Ao clicar no botão "Confirmar Presença (No Dia / Pós-Evento)", o sistema exibia o alerta *"Nenhum atendente está marcado como escalado para este evento."*, mesmo com o usuário tendo acabado de marcar os candidatos na tabela. A causa raiz era que a função `attachPresencasListener(dataDetails)` inspecionava apenas a cópia em memória inicial (`dataDetails`) capturada no carregamento da página, sem verificar os checkboxes marcados ao vivo no DOM (`input[type="checkbox"]:checked`) nem o estado dinâmico atualizado.
+    - **Solução no Frontend (`pages/adminescala.php`):**
+        - Implementado listener em tempo real nos switches da tabela que sincroniza imediatamente qualquer clique com o objeto global `currentEscalaData`.
+        - A rotina de abertura do modal de presenças agora inspeciona simultaneamente os switches checados no DOM (`checkedCandIds`) e o estado em memória (`activeData.candidatos`), garantindo que todos os participantes marcados apareçam no modal `#presencasModal`.
+        - No salvamento das presenças, o frontend agora também envia o mapa de candidatos selecionados na tabela (`escalados: escaladosObj`), garantindo persistência atômica.
+    - **Sincronização no Backend (`include/api_escala.php`):**
+        - A action `confirmar_presencas` agora assegura automaticamente que todos os participantes que tiveram presença confirmada recebam `escalado = 1` na tabela `disponibilidade` para os horários do evento, mantendo escala, ficha de credenciamento e presenças em perfeita consonância.
+    - **Deploy & Homologação:** Arquivos validados com `php -l` na VPS1 e commitados/enviados no branch `staging`.
+
 - **30/09/2026 - Correção da Rota de Moderação (`/admin/ativarcandidato`) e Classificação de Treinandos no Curso de DJ:**
     - **Diagnóstico da Falha na Ativação:** O botão de moderação rápida enviado por e-mail (`https://projetoame.org/admin/ativarcandidato/{id}`) retornava o erro *"Ops! ID de candidato inválido."* porque `pages/adminativarcandidato.php` lia `$parametros[1]`. Ao acessar com o prefixo `/admin/...`, o Front Controller `index.php` preenche `$parametros[0] = 'admin'`, `$parametros[1] = 'ativarcandidato'` e o ID em `$parametros[2]`. Como `$parametros[1]` não era numérico, o script abortava sem ativar o candidato.
     - **Correção da Rota, Atribuição de Rodízio e Moderação Dupla (`pages/adminativarcandidato.php`, `pages/inscrever.php` e `pages/excluircandidato.php`):**
