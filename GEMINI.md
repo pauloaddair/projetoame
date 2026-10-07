@@ -38,10 +38,10 @@ skills:
 | **Framework**   | Vanilla PHP — Front Controller em `index.php`                  |
 | **MVP Status**  | ✅ **LIVE** — `projetoame.org`                                 |
 | **Job ID**      | `item_projetoame`                                              |
-| **AGO 2026**    | 🏛️ **Adiada para 03/10/2026** (fim do mandato: **17/10/2026**) — **edital a publicar até 25/09/2026** |
-| **Governança**  | Estatuto integral (38 arts.) em `ESTATUTO_VIGENTE_TEXTO_INTEGRAL.md` · reforma proposta em `ANALISE_ESTATUTO_E_REFORMA_2026.md` · **handoff/retomada em `RELATORIO_ENCERRAMENTO_GOVERNANCA_15SET2026.md`** |
-| **Domínios**    | `projetoame.org`, `abiat.org.br`, `projetoame.ong.br`, `projetoame.org.br` |
-| **Última Atualização** | 30/09/2026: Presenças por aula/turno (AJAX/Pills), Certificados Plenos (corte 75%) vs Parciais, Folha de Diárias PIX, Atestados em Papel Timbrado Oficial (CNPJ) e Modais Scrollables |
+| **AGO 2026**    | 🏛️ **Convocada para 17/10/2026 (Híbrida — SENAI / Google Meet)** — Edital publicado em `/edital_ago_2026` em 07/10/2026 |
+| **Governança**  | Estatuto integral (38 arts.) em `ESTATUTO_VIGENTE_TEXTO_INTEGRAL.md` · reforma proposta em `ANALISE_ESTATUTO_E_REFORMA_2026.md` · Edital formal em `EDITAL_CONVOCACAO_AGO_17OUT2026.md` |
+| **Domínios**    | `projetoame.org`, `abiat.org.br`, `projetoame.ong.br`, `projetoame.org.br`, `amedjs.ong.br`, `lovecoffee.ong.br` |
+| **Última Atualização** | 07/10/2026: Convocação AGO 17/10 (híbrida), Lançamento AMEDJs (`amedjs.ong.br`), Dossiê Patrocínio LOVE Coffee (`lovecoffee.ong.br`) e CNPJ 32.131.752/0001-88 padronizado |
 
 ### 🖥️ Ambiente Local (SOHO)
 | Campo         | Valor                                                                   |

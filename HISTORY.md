@@ -17,6 +17,20 @@ relacionados:
 
 # Histórico de Trabalho - Projeto AME
 
+- **07/10/2026 - Convocação da AGO Híbrida 2026, Lançamento do AMEDJs e Dossiê de Patrocínio LOVE Coffee:**
+    - **Edital de Convocação da AGO (Híbrida — 17/10/2026):**
+        - Redigido e publicado o edital de convocação para a Assembleia Geral Ordinária e Extraordinária a ser realizada no dia 17/10/2026 no modelo híbrido (Auditório do SENAI Theobaldo de Nigris + ambiente virtual no Google Meet).
+        - Ordem do dia contemplando: ratificação da AGO de 04/10/2024, prestação de contas do biênio 2024–2026, reforma estatutária global artigo por artigo (com inclusão dos Blocos VI de marcas/derivados e XI de gestão profissional CLT), aprovação do Regimento Interno/Livro de Associados, eleição e posse da Diretoria/Conselho Fiscal 2026–2028 e autorização expressa para operação dos projetos derivados AMEDJs e LOVE Coffee.
+        - Artefatos gerados: `EDITAL_CONVOCACAO_AGO_17OUT2026.md`, versão compilada `.docx` via Pandoc e página web pública em `pages/edital_ago_2026.php` no ar em `https://projetoame.org/edital_ago_2026`.
+    - **Lançamento do Projeto Derivado AMEDJs (`https://amedjs.ong.br`):**
+        - Criado o repositório e landing page oficial para contratação B2B do coletivo de DJs com Síndrome de Down e neurodivergentes.
+        - Destaque para as 3 turmas capacitadas com o instrutor DJ Pedro Vieira nas dependências do SENAI Theobaldo de Nigris.
+        - Formulário B2B de solicitação de orçamentos, contraste dark com tipografia estilizada, botão "Fale com a nossa equipe" direcionando para a instância oficial do WhatsApp da AME (`5511961631200`) e CNPJ institucional `32.131.752/0001-88`. Deploy concluído no Virtualmin da VPS1 com HTTPS via Cloudflare.
+    - **Dossiê Comercial de Patrocínio ESG do LOVE Coffee (`https://lovecoffee.ong.br`):**
+        - Elaborada proposta institucional completa para captação de patrocínio junto a marcas de café, bebidas e tecnologia de barismo (`PROPOSTA_PATROCINIO_LOVE_COFFEE_2026.md` e `.docx`).
+        - Estruturação em 4 cotas (Master Naming Rights, Equipamentos/Tecnologia, Insumos e Apoiador "Adote uma Turma de Baristas"), com regras de conformidade e segregação contábil.
+
+
 - **30/09/2026 - Correção da Frequência no 3º Curso de DJ (#73) e Aprimoramento da Interface de Chamada por Aula/Turno (`pages/adminescala.php`, banco `presenca`):**
     - **Diagnóstico da Inconsistência:** No 3º Curso de DJ (evento #73), haviam ocorrido 3 aulas (15/09, 22/09 e 29/09), porém no banco de dados apenas a Aula 1 (horário 196) possuía registros inseridos na tabela `presenca`. No modal de presenças, ao navegar para as abas das aulas 2 e 3, o checkbox vinha pré-marcado visualmente por default (`isChecked = true`), dando a falsa impressão ao usuário de que já estavam gravadas no sistema, enquanto o badge de cálculo real marcava 1/4 aulas (25%). Além disso, a troca de abas no modal descartava alterações locais e exigia múltiplos reloads de página.
     - **Regularização de Dados no Banco (VPS1):**
