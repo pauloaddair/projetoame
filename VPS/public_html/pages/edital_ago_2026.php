@@ -28,7 +28,7 @@
                 <div class="card-body p-4 p-md-5">
                     <div class="text-center mb-5 pb-3 border-bottom">
                         <h4 class="font-weight-bold text-dark mb-1">ASSOCIAÇÃO PROJETO A.M.E. — ATENDIMENTO MULTIDISCIPLINAR ESPECIALIZADO</h4>
-                        <p class="text-muted mb-1"><strong>CNPJ/MF nº 31.815.736/0001-44</strong> | Registro 6º RTDPJ sob o nº 173.633</p>
+                        <p class="text-muted mb-1"><strong>CNPJ/MF nº 32.131.752/0001-88</strong> | Registro 6º RTDPJ sob o nº 173.633</p>
                         <p class="small text-muted mb-0">Sede Social: Av. Paula Ferreira, 2571 — Pirituba — São Paulo/SP</p>
                     </div>
 

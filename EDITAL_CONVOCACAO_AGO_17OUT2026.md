@@ -18,7 +18,7 @@ formato: "Híbrido (Presencial no SENAI Theobaldo de Nigris + Transmissão/Vota�
 # EDITAL DE CONVOCAÇÃO DE ASSEMBLEIA GERAL ORDINÁRIA E EXTRAORDINÁRIA
 
 ## ASSOCIAÇÃO PROJETO A.M.E. — ATENDIMENTO MULTIDISCIPLINAR ESPECIALIZADO
-**CNPJ/MF nº 31.815.736/0001-44**  
+**CNPJ/MF nº 32.131.752/0001-88**  
 *Registro Civil de Pessoas Jurídicas sob o nº 173.633 (6º RTDPJ de São Paulo/SP)*  
 **Sede Social:** Av. Paula Ferreira, 2571 — Pirituba — São Paulo/SP — CEP 02915-100  
 **Sede Eletrônica Oficial:** https://www.projetoame.org  

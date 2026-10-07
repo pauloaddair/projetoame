@@ -11,7 +11,7 @@ relacionados:
   - "[[EDITAL_CONVOCACAO_AGO_17OUT2026]]"
   - "[[AMEDJs]]"
 criado: "2026-10-07"
-proponente: "Associação Projeto A.M.E. (CNPJ 31.815.736/0001-44)"
+proponente: "Associação Projeto A.M.E. (CNPJ 32.131.752/0001-88)"
 iniciativa: "LOVE Coffee — O Café Escola e Quiosque Inclusivo"
 ---
 
@@ -19,7 +19,7 @@ iniciativa: "LOVE Coffee — O Café Escola e Quiosque Inclusivo"
 
 ## PROJETO LOVE COFFEE — O CAFÉ ESCOLA & ITINERANTE DA INCLUSÃO
 **Uma iniciativa de impacto social da Associação Projeto A.M.E.**  
-*CNPJ/MF nº 31.815.736/0001-44*  
+*CNPJ/MF nº 32.131.752/0001-88*  
 *Portal Oficial:* [lovecoffee.ong.br](https://lovecoffee.ong.br) | [projetoame.org](https://www.projetoame.org)  
 *Contato Institucional:* diretoria@projetoame.org | (11) 98000-0000  
 
@@ -86,7 +86,7 @@ Estruturamos modelos flexíveis de parceria, combinando aportes financeiros, equ
 
 ## 5. GOVERNANÇA, TRANSPARÊNCIA & DESTINAÇÃO DOS RECURSOS
 
-A Associação Projeto A.M.E. é uma organização da sociedade civil (OSC) sem fins lucrativos constituída em 2018, inscrita no CNPJ sob o nº **31.815.736/0001-44**.
+A Associação Projeto A.M.E. é uma organização da sociedade civil (OSC) sem fins lucrativos constituída em 2018, inscrita no CNPJ sob o nº **32.131.752/0001-88**.
 
 * **Segregação Contábil Estrita:** Todos os recursos arrecadados via patrocínio do LOVE Coffee são administrados em conta segregada auditável, destinados exclusivamente à:
   * Aquisição e manutenção de infraestrutura do quiosque móvel.
