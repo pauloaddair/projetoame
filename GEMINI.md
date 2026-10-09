@@ -41,7 +41,7 @@ skills:
 | **AGO 2026**    | 🏛️ **Convocada para 17/10/2026 (Híbrida — SENAI / Google Meet)** — Edital publicado em `/edital_ago_2026` em 07/10/2026 |
 | **Governança**  | Estatuto integral (38 arts.) em `ESTATUTO_VIGENTE_TEXTO_INTEGRAL.md` · reforma proposta em `ANALISE_ESTATUTO_E_REFORMA_2026.md` · Edital formal em `EDITAL_CONVOCACAO_AGO_17OUT2026.md` |
 | **Domínios**    | `projetoame.org`, `abiat.org.br`, `projetoame.ong.br`, `projetoame.org.br`, `amedjs.ong.br`, `lovecoffee.ong.br` |
-| **Última Atualização** | 07/10/2026: Convocação AGO 17/10 (híbrida), Lançamento AMEDJs (`amedjs.ong.br`), Dossiê Patrocínio LOVE Coffee (`lovecoffee.ong.br`) e CNPJ 32.131.752/0001-88 padronizado |
+| **Última Atualização** | 09/10/2026: Articulação institucional com a FCEM / FEBRATÊXTIL (Hélvio Pompeo e Ricardo - Projetos Especiais) para capacitação em passarela/desfiles de moda inclusiva dos jovens da AME |
 
 ### 🖥️ Ambiente Local (SOHO)
 | Campo         | Valor                                                                   |

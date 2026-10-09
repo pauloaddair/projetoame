@@ -17,6 +17,15 @@ relacionados:
 
 # Histórico de Trabalho - Projeto AME
 
+- **09/10/2026 - Envio de Proposta à FCEM e Correção/Modernização da Rota `/eventos`:**
+    - **Articulação com a FCEM (FEBRATÊXTIL):** Concluído e enviado o e-mail institucional ao Sr. Ricardo (Gerente de Projetos Especiais da FCEM - `ricardo@fcem.com.br`), com cópia para Regina e Paulo Addair, formalizando o histórico de parceria na FEBRATÊXTIL e detalhando a proposta de capacitação dos jovens do Projeto AME em modelagem/desfiles de moda inclusiva.
+    - **Diagnóstico e Correção da Rota `/eventos`:**
+        - **Causa Raiz:** A página `pages/eventos.php` era um arquivo legado pré-2023 ("Converte telefones") que consultava uma tabela legada `eventos` com colunas obsoletas (`codigo`, `feira_completo`), bloqueava o acesso público redirecionando para `/restrito` (exigia `nivel >= 3`), gerava duplicação de cabeçalhos HTML (`html_head.php` do roteador + `head-table.php` interno) e quebrava o layout.
+        - **Solução Implementada:** O arquivo `pages/eventos.php` foi completamente refatorado e modernizado:
+            - **Visão Pública (Visitantes / Famílias / Contratantes):** Carrega nativamente a vitrine institucional completa de atividades (`pages/atividades.php`), exibindo indicadores de impacto, cards de feiras futuras confirmadas, histórico de eventos passados e CTAs de contratação e portal.
+            - **Visão Administrativa (Coordenadores com nível >= 3):** Exibe a tabela operacional conectada à tabela oficial `eventos_marcados`, com contagem dinâmica de atendentes escalados via `disponibilidade` + `horarios`, status em tempo real, badges de tipo (Trabalho/Curso) e links diretos para a gestão de escalas (`/admin/escala?evento_id=X`) e visualização pública.
+        - **Deploy & Homologação:** Validado via `php -l`, implantado na VPS1 em `/home/projetoame/public_html/pages/eventos.php` e testado com retorno HTTP 200 limpo e sem erros.
+
 - **07/10/2026 - Convocação da AGO Híbrida 2026, Lançamento do AMEDJs e Dossiê de Patrocínio LOVE Coffee:**
     - **Edital de Convocação da AGO (Híbrida — 17/10/2026):**
         - Redigido e publicado o edital de convocação para a Assembleia Geral Ordinária e Extraordinária a ser realizada no dia 17/10/2026 no modelo híbrido (Auditório do SENAI Theobaldo de Nigris + ambiente virtual no Google Meet).
