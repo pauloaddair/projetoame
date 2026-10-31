@@ -1,0 +1,62 @@
+# Ignorar tudo na raiz
+/*
+
+# Nao ignorar documentacao raiz
+!/GEMINI.md
+!/HISTORY.md
+!/REGRAS_DE_NEGOCIO.md
+!/PLANO_AME_MAGAZINE_WEB_TO_PRINT.md
+!/PLANO_ANALISE_COMPLIANCE_ASSEMBLEIA_26SET.md
+!/PARECER_CONVOCACAO_ASSEMBLEIA_26SET.md
+!/PLANO_FORMALIZACAO_QUADRO_SOCIAL_E_GOVERNANCA.md
+!/ESTATUTO_VIGENTE_TEXTO_INTEGRAL.md
+!/ANALISE_ESTATUTO_E_REFORMA_2026.md
+!/RELATORIO_ENCERRAMENTO_GOVERNANCA_15SET2026.md
+!/PROPOSTA_PARCERIA_ALPHAGRAPHICS.md
+!/PROPOSTA_PARCERIA_ALPHAGRAPHICS.docx
+!/RELATORIO_COBERTURA_BLOG_ATIVIDADES_18SET2026.md
+!/PLANO_ESTEIRA_COBERTURA_BLOG_AME.md
+!/RELATORIO_MIDIA_EXIF_ATIVIDADES_18SET2026.md
+!/PLANO_DIREITOS_DE_IMAGEM_AME.md
+!/EDITAL_CONVOCACAO_AGO_17OUT2026.md
+!/EDITAL_CONVOCACAO_AGO_17OUT2026.docx
+!/PROPOSTA_PATROCINIO_LOVE_COFFEE_2026.md
+!/PROPOSTA_PATROCINIO_LOVE_COFFEE_2026.docx
+
+# Nao ignorar a pasta tools (utilitarios de auditoria e pipeline de midia)
+!/tools/
+!/tools/**
+# Nunca versionar bytecode Python
+__pycache__/
+*.pyc
+
+# Nao ignorar o diretorio VPS
+!/VPS/
+
+# Ignorar tudo dentro de VPS, exceto public_html
+/VPS/*
+!/VPS/public_html/
+!/VPS/public_html/**
+# Dependency directories (added by auto cleanup script)
+vendor/
+node_modules/
+
+# Credencial NAO pertence ao Git. Precisa vir DEPOIS da negacao !/VPS/public_html/**
+# (linha 35): a ultima regra que casa e a que vence, e a negação re-incluia o arquivo.
+# Auditoria de 22/09/2026 (tools/proj/verify.ps1).
+wp-config.php
+**/__pycache__/
+*.pyc
+
+
+
+# Duplicados do OneDrive na reinstalacao do Windows (padrao *-SOHO-* / *-SOHO.*,
+# criados porque o OneDrive nao sobrescreveu o original). NAO versionar.
+# Excecao legitima: arquivos em que "SOHO" e o nome da MAQUINA (ex.: ask_soho.py).
+*-SOHO-*
+*-SOHO.*
+*-DESKTOP-SOHO*
+
+# --- Higiene de 30/10/2026: segredo/dump/backup destrackeado (git rm --cached) ---
+/VPS/public_html/docs/backup_projetoAME_2025-01-14-13-46-48.zip
+/VPS/public_html/docs/backup_projetoAME_2025-03-12-14-45-24.zip
