@@ -585,3 +585,9 @@ odizio = MAX(rodizio) + 1 no ato da inscrio inicial do candidato.
 - **Documentação Local:** [[GEMINI.md]], [[REGRAS_DE_NEGOCIO.md]], [[docs/UX_PAINEL_DO_RESPONSAVEL_IMPECCABLE.md]].
 
 
+
+## [30/10/2026] - AMEDJs reconhecido como sub-projeto (nao e projeto independente)
+- **AMEDJs nao e projeto autonomo:** e sub-projeto do PROJETO_AME, com pasta propria em `Ativos\AMEDJs` (`apoio/`, `local/`, `public_html/`), porem **sem job_id e sem card no painel** -- decisao de Paulo em 30/10/2026.
+- **Pendente de definicao:** os detalhes da atuacao junto ao **DJ Pedro Vieira** precisam ser definidos antes de o sub-projeto ganhar escopo, prazo e registro proprio. Ate la, nao criar item no `PAINEL_DE_CONTROLE.json`.
+- **Repositorio:** o remote `origin` apontava para um repositorio inexistente no GitHub (`remote: Repository not found`). Em 30/10/2026 o repositorio privado `pauloaddair/AMEDJs` foi recriado e o historico local (12 commits, 178 arquivos) empurrado com upstream configurado. A esteira noturna do VPS3 volta a auditar.
+- **Nota de arquitetura:** se e sub-projeto do AME, avaliar no futuro se o codigo deve migrar para dentro de `Ativos\PROJETO_AME` em vez de viver em pasta-irma. A separacao atual e historica, nao deliberada.
