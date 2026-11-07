@@ -124,6 +124,10 @@ graph TD
   - Exportação de resumo formatado para WhatsApp/Financeiro e exportação TSV para planilhas Excel.
 - **Atualização do Rodízio**: Atendentes que compareceram ao trabalho têm o rodízio atualizado para o final da fila (`MAX(rodizio) + 1`). Faltas justificadas preservam a posição.
 
+### 7.4 Atividades Voluntárias e Apresentações Não Remuneradas (Imunidade de Fila)
+- **Regra de Imunidade do Rodízio:** Qualquer evento ou turno com diária zerada (`valor_diaria == 0.00`) ou de caráter voluntário/apresentação cultural **NÃO altera a posição de rodízio dos participantes (`realizar_rodizio = 0`)**.
+- **Justificativa de Justiça Social:** A participação em apresentações voluntárias ou datas festivas/cívicas (ex: Chegada do Papai Noel com os AMEDJs) proporciona visibilidade e prática de palco, mas não pode consumir ou rebaixar a prioridade do jovem na fila de feiras e eventos corporativos remunerados (R$ 200,00).
+
 ```mermaid
 flowchart TD
     A["Chamada no Painel (/admin/escala)"] --> B{"Tipo de Atividade"}
