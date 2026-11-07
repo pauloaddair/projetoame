@@ -50,8 +50,25 @@ if (isset($_GET['gerar_pdf']) && isset($_GET['candidato_id'])) {
         if (!empty($candidato['imagem_url'])) {
             $img_path = __DIR__ . '/../' . ltrim($candidato['imagem_url'], '/');
             if (file_exists($img_path)) {
-                $pdf->Image($img_path, 160, 10, 30, 40);
-                $tem_foto = true;
+                try {
+                    $img_to_use = $img_path;
+                    // FPDF não suporta PNG entrelaçado; se for PNG, sanitiza via GD
+                    if (strtolower(pathinfo($img_path, PATHINFO_EXTENSION)) === 'png' && function_exists('imagecreatefrompng')) {
+                        $im = @imagecreatefrompng($img_path);
+                        if ($im) {
+                            imageinterlace($im, false);
+                            $tmp_img = sys_get_temp_dir() . '/ame_cv_' . $candidato_id . '.png';
+                            if (@imagepng($im, $tmp_img, 6)) {
+                                $img_to_use = $tmp_img;
+                            }
+                            imagedestroy($im);
+                        }
+                    }
+                    $pdf->Image($img_to_use, 160, 10, 30, 40);
+                    $tem_foto = true;
+                } catch (Throwable $e) {
+                    $tem_foto = false;
+                }
             }
         }
         
@@ -126,16 +143,58 @@ if (isset($_GET['gerar_pdf']) && isset($_GET['candidato_id'])) {
             $pdf->Ln(5);
         }
         
-        // Qualificações
-        if (!empty($candidato['cursos_externos']) || !empty($candidato['detalhes'])) {
-            $pdf->SetFont('Arial', 'B', 14);
-            $pdf->Cell(0, 8, iconv("UTF-8", "ISO-8859-1", 'CURSOS & QUALIFICAÇÕES'), 0, 1);
-            $pdf->SetFont('Arial', '', 12);
-            if (!empty($candidato['cursos_externos'])) {
-                $pdf->MultiCell(0, 6, iconv("UTF-8", "ISO-8859-1", $candidato['cursos_externos']));
+        // Qualificações & Certificações
+        $especialidades = [];
+        $stmt_esp_pdf = mysqli_prepare($conexao, "SELECT especialidade, turma, observacao, data_capacitacao FROM candidatos_especialidades WHERE candidato_id = ? ORDER BY especialidade ASC");
+        if ($stmt_esp_pdf) {
+            mysqli_stmt_bind_param($stmt_esp_pdf, "i", $candidato_id);
+            mysqli_stmt_execute($stmt_esp_pdf);
+            $res_esp_pdf = mysqli_stmt_get_result($stmt_esp_pdf);
+            while ($esp = mysqli_fetch_assoc($res_esp_pdf)) {
+                $especialidades[] = $esp;
             }
-            if (!empty($candidato['detalhes'])) {
-                $pdf->MultiCell(0, 6, iconv("UTF-8", "ISO-8859-1", $candidato['detalhes']));
+        }
+
+        if (!empty($especialidades) || !empty($candidato['cursos_externos']) || !empty($candidato['detalhes'])) {
+            $pdf->SetFont('Arial', 'B', 14);
+            $pdf->Cell(0, 8, iconv("UTF-8", "ISO-8859-1", 'FORMAÇÃO TÉCNICA & QUALIFICAÇÕES'), 0, 1);
+            $pdf->SetFont('Arial', '', 12);
+            
+            // Certificações Oficiais Projeto AME
+            if (!empty($especialidades)) {
+                $pdf->SetFont('Arial', 'B', 11);
+                $pdf->Cell(0, 6, iconv("UTF-8", "ISO-8859-1", 'Certificações Oficiais (Projeto AME / SENAI):'), 0, 1);
+                $pdf->SetFont('Arial', '', 11);
+                foreach ($especialidades as $esp) {
+                    $nome_cert = $esp['especialidade'];
+                    $inst = 'Projeto A.M.E.';
+                    if ($esp['especialidade'] === 'AMEDJ') {
+                        $nome_cert = 'Capacitação Técnica de DJ para Eventos (AMEDJ)';
+                        $inst = 'Projeto A.M.E. / DJ Pedro Vieira';
+                    } elseif ($esp['especialidade'] === 'FOTOGRAFIA') {
+                        $nome_cert = 'Capacitação em Fotografia Profissional';
+                        $inst = 'Faculdade SENAI Theobaldo de Nigris / Projeto A.M.E.';
+                    }
+                    $turma_str = !empty($esp['turma']) ? ' (' . $esp['turma'] . ')' : '';
+                    $texto_cert = iconv("UTF-8", "ISO-8859-1//TRANSLIT", "- {$nome_cert} - {$inst}{$turma_str}");
+                    $pdf->MultiCell(0, 6, $texto_cert);
+                }
+                $pdf->Ln(2);
+            }
+            
+            // Cursos e qualificações adicionais
+            if (!empty($candidato['cursos_externos']) || !empty($candidato['detalhes'])) {
+                if (!empty($especialidades)) {
+                    $pdf->SetFont('Arial', 'B', 11);
+                    $pdf->Cell(0, 6, iconv("UTF-8", "ISO-8859-1", 'Cursos e Habilidades Complementares:'), 0, 1);
+                    $pdf->SetFont('Arial', '', 11);
+                }
+                if (!empty($candidato['cursos_externos'])) {
+                    $pdf->MultiCell(0, 6, iconv("UTF-8", "ISO-8859-1", $candidato['cursos_externos']));
+                }
+                if (!empty($candidato['detalhes'])) {
+                    $pdf->MultiCell(0, 6, iconv("UTF-8", "ISO-8859-1", $candidato['detalhes']));
+                }
             }
             $pdf->Ln(5);
         }
@@ -269,6 +328,18 @@ $result_candidatos = mysqli_query($conexao, $query_candidatos);
       
       if ($candidato):
         $perfil_img = !empty($candidato['imagem_url']) ? $app_web_root . ltrim($candidato['imagem_url'], '/') : $app_web_root . 'img/profile.png';
+        
+        // Buscar certificações e especialidades oficiais
+        $especialidades = [];
+        $stmt_esp_view = mysqli_prepare($conexao, "SELECT especialidade, turma, observacao, data_capacitacao FROM candidatos_especialidades WHERE candidato_id = ? ORDER BY especialidade ASC");
+        if ($stmt_esp_view) {
+            mysqli_stmt_bind_param($stmt_esp_view, "i", $candidato_id);
+            mysqli_stmt_execute($stmt_esp_view);
+            $res_esp_view = mysqli_stmt_get_result($stmt_esp_view);
+            while ($esp = mysqli_fetch_assoc($res_esp_view)) {
+                $especialidades[] = $esp;
+            }
+        }
       ?>
       
       <!-- Detalhes e Qualificações -->
@@ -309,6 +380,15 @@ $result_candidatos = mysqli_query($conexao, $query_candidatos);
               <p class="text-muted mb-2">
                 <i class="fas fa-id-badge mr-1"></i> ID: <?php echo $candidato['candidato_id']; ?> &bull; 
                 <?php echo (isset($candidato['ativo']) && $candidato['ativo'] == 1) ? '<span class="text-success font-weight-bold">Atendente Ativo</span>' : '<span class="text-secondary">Cadastro em Treinamento</span>'; ?>
+                <?php foreach ($especialidades as $esp): ?>
+                  <?php if ($esp['especialidade'] === 'AMEDJ'): ?>
+                    <span class="badge badge-dark text-white ml-1 px-2 py-1 shadow-sm"><i class="fas fa-headphones mr-1 text-warning"></i>AMEDJ</span>
+                  <?php elseif ($esp['especialidade'] === 'FOTOGRAFIA'): ?>
+                    <span class="badge badge-info text-white ml-1 px-2 py-1 shadow-sm"><i class="fas fa-camera mr-1"></i>Fotógrafo(a)</span>
+                  <?php else: ?>
+                    <span class="badge badge-primary text-white ml-1 px-2 py-1 shadow-sm"><i class="fas fa-certificate mr-1"></i><?php echo htmlspecialchars($esp['especialidade']); ?></span>
+                  <?php endif; ?>
+                <?php endforeach; ?>
               </p>
               <a href="https://contacte.me/projetoame?a=<?php echo $candidato['candidato_id']; ?>" target="_blank" class="btn btn-outline-primary btn-sm rounded-pill">
                 <i class="fas fa-qrcode mr-1"></i> Ver Crachá Virtual
@@ -360,17 +440,69 @@ $result_candidatos = mysqli_query($conexao, $query_candidatos);
             </div>
           </div>
           
-          <!-- Cursos e Qualificações -->
-          <?php if (!empty($candidato['cursos_externos']) || !empty($candidato['detalhes'])): ?>
+          <!-- Cursos, Certificações e Qualificações -->
+          <?php if (!empty($especialidades) || !empty($candidato['cursos_externos']) || !empty($candidato['detalhes'])): ?>
           <div class="mb-4">
-            <h5 class="font-weight-bold text-dark mb-2"><i class="fas fa-graduation-cap text-primary mr-2"></i>Cursos & Qualificações</h5>
+            <h5 class="font-weight-bold text-dark mb-2"><i class="fas fa-graduation-cap text-primary mr-2"></i>Formação Técnica & Qualificações</h5>
             <div class="alert alert-light border bg-white p-3 rounded">
-              <?php if (!empty($candidato['cursos_externos'])): ?>
-                <div class="mb-2"><?php echo nl2br(htmlspecialchars($candidato['cursos_externos'])); ?></div>
+              
+              <?php if (!empty($especialidades)): ?>
+                <div class="mb-3">
+                  <h6 class="font-weight-bold text-success mb-2">
+                    <i class="fas fa-certificate mr-1"></i>Certificações Oficiais (Projeto AME / Parceiros):
+                  </h6>
+                  <div class="row">
+                    <?php foreach ($especialidades as $esp): ?>
+                      <?php
+                      $badge_color = 'primary';
+                      $icone = 'fa-certificate';
+                      $titulo_esp = $esp['especialidade'];
+                      $instituicao = 'Projeto A.M.E.';
+                      if ($esp['especialidade'] === 'AMEDJ') {
+                          $badge_color = 'dark';
+                          $icone = 'fa-headphones';
+                          $titulo_esp = 'Capacitação Técnica de DJ para Eventos (AMEDJ)';
+                          $instituicao = 'Projeto A.M.E. / DJ Pedro Vieira';
+                      } elseif ($esp['especialidade'] === 'FOTOGRAFIA') {
+                          $badge_color = 'info';
+                          $icone = 'fa-camera';
+                          $titulo_esp = 'Capacitação em Fotografia Profissional';
+                          $instituicao = 'Faculdade SENAI Theobaldo de Nigris / Projeto A.M.E.';
+                      }
+                      ?>
+                      <div class="col-md-12 mb-2">
+                        <div class="p-2 border rounded bg-light d-flex align-items-center">
+                          <span class="badge badge-<?php echo $badge_color; ?> p-2 mr-3 shadow-sm">
+                            <i class="fas <?php echo $icone; ?> fa-lg"></i>
+                          </span>
+                          <div>
+                            <strong class="text-dark d-block"><?php echo htmlspecialchars($titulo_esp); ?></strong>
+                            <small class="text-muted">
+                              <i class="fas fa-university mr-1"></i><?php echo htmlspecialchars($instituicao); ?>
+                              <?php if (!empty($esp['turma'])): ?> &bull; <strong><?php echo htmlspecialchars($esp['turma']); ?></strong><?php endif; ?>
+                            </small>
+                          </div>
+                        </div>
+                      </div>
+                    <?php endforeach; ?>
+                  </div>
+                </div>
               <?php endif; ?>
-              <?php if (!empty($candidato['detalhes'])): ?>
-                <div><?php echo nl2br(htmlspecialchars($candidato['detalhes'])); ?></div>
+
+              <?php if (!empty($candidato['cursos_externos']) || !empty($candidato['detalhes'])): ?>
+                <?php if (!empty($especialidades)): ?>
+                  <h6 class="font-weight-bold text-secondary mb-2 mt-2">
+                    <i class="fas fa-book-open mr-1"></i>Cursos e Habilidades Complementares:
+                  </h6>
+                <?php endif; ?>
+                <?php if (!empty($candidato['cursos_externos'])): ?>
+                  <div class="mb-2"><?php echo nl2br(htmlspecialchars($candidato['cursos_externos'])); ?></div>
+                <?php endif; ?>
+                <?php if (!empty($candidato['detalhes'])): ?>
+                  <div><?php echo nl2br(htmlspecialchars($candidato['detalhes'])); ?></div>
+                <?php endif; ?>
               <?php endif; ?>
+
             </div>
           </div>
           <?php endif; ?>

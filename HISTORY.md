@@ -17,6 +17,14 @@ relacionados:
 
 # Histórico de Trabalho - Projeto AME
 
+- **07/11/2026 - Integração Dinâmica de Certificações Oficiais no Currículo Inclusivo (`pages/curriculo.php`):**
+    - **Exibição Dinâmica de Especialidades (Web e PDF):**
+        - Atualizada a página `pages/curriculo.php` para consultar a nova tabela `candidatos_especialidades`.
+        - **Visualização Web (Preview):** Badges modernos de especialidade exibidos logo abaixo do nome do candidato (ex: badge escuro com ícone de fone para `AMEDJ`, badge azul com câmera para `Fotógrafo(a)`). Na seção de qualificações, os cursos concluídos com chancela oficial do Projeto AME / SENAI são renderizados em cards dedicados com ícones, turmas e instituições parceiras.
+        - **Emissão em PDF (FPDF):** Bloco *"FORMAÇÃO TÉCNICA & QUALIFICAÇÕES"* enriquecido com as certificações oficiais (ex: *"Capacitação Técnica de DJ para Eventos (AMEDJ) - Projeto A.M.E. / DJ Pedro Vieira"* e *"Capacitação em Fotografia Profissional - Faculdade SENAI Theobaldo de Nigris / Projeto A.M.E."*), seguido dos cursos complementares informados pela família.
+        - **Robustez no Tratamento de Fotos:** Implementada rotina de sanitização automática via GD (`imageinterlace($im, false)`) e proteção contra exceções em PNGs entrelaçados, prevenindo quebras fatais do FPDF na geração do PDF com fotos de perfil.
+        - **Deploy & Teste:** Implantado na VPS1 e validado ao vivo (HTTP 200 e geração de PDF com 308 KB com fotos e certificações atestadas no stream).
+
 - **07/11/2026 - Estruturação de Múltiplas Trilhas de Especialidades (`candidatos_especialidades`), Mapeamento de FOTOGRAFIA SENAI e Registro da ALESP:**
     - **Criação da Tabela Centralizadora de Especialidades (`candidatos_especialidades`):**
         - Criada a tabela tanto na VPS1 (produção) quanto no MySQL local, com campos `id`, `candidato_id`, `especialidade`, `data_capacitacao`, `turma`, `observacao`, `criado_em` e constraint única (`candidato_id`, `especialidade`).

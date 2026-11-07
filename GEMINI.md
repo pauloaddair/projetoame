@@ -41,7 +41,7 @@ skills:
 | **AGO 2026**    | 🏛️ **Convocada para 17/10/2026 (Híbrida — SENAI / Google Meet)** — Edital publicado em `/edital_ago_2026` em 07/10/2026 |
 | **Governança**  | Estatuto integral (38 arts.) em `ESTATUTO_VIGENTE_TEXTO_INTEGRAL.md` · reforma proposta em `ANALISE_ESTATUTO_E_REFORMA_2026.md` · Edital formal em `EDITAL_CONVOCACAO_AGO_17OUT2026.md` |
 | **Domínios**    | `projetoame.org`, `abiat.org.br`, `projetoame.ong.br`, `projetoame.org.br`, `amedjs.ong.br`, `lovecoffee.ong.br` |
-| **Última Atualização** | 07/11/2026: Criada tabela `candidatos_especialidades` com 25 formandos em DJ (`AMEDJ`) e 13 fotógrafos formados pelo SENAI (`FOTOGRAFIA` - Turmas 1 e 2, excluída Cibele por não conclusão). Cadastrada retroativamente a Solenidade ALESP 20/03/2026 (Evento #78) como atividade voluntária (imunidade de rodízio). Cadastrado evento #77 (Papai Noel Morumbi Town 14/11) na página /atendentes. |
+| **Última Atualização** | 07/11/2026: Integração de certificações oficiais (`candidatos_especialidades`) no Currículo Inclusivo (`/curriculo` web e PDF/FPDF com sanitização de fotos). Criada tabela `candidatos_especialidades` com 25 DJs e 13 fotógrafos SENAI (excluída Cibele com parecer sigiloso arquivado em `docs/26`). Cadastrada Solenidade ALESP 20/03/2026 (Evento #78) e Morumbi Town 14/11 (Evento #77). |
 
 ### 🖥️ Ambiente Local (SOHO)
 | Campo         | Valor                                                                   |
