@@ -126,7 +126,16 @@ graph TD
 
 ### 7.4 Atividades Voluntárias e Apresentações Não Remuneradas (Imunidade de Fila)
 - **Regra de Imunidade do Rodízio:** Qualquer evento ou turno com diária zerada (`valor_diaria == 0.00`) ou de caráter voluntário/apresentação cultural **NÃO altera a posição de rodízio dos participantes (`realizar_rodizio = 0`)**.
-- **Justificativa de Justiça Social:** A participação em apresentações voluntárias ou datas festivas/cívicas (ex: Chegada do Papai Noel com os AMEDJs) proporciona visibilidade e prática de palco, mas não pode consumir ou rebaixar a prioridade do jovem na fila de feiras e eventos corporativos remunerados (R$ 200,00).
+- **Justificativa de Justiça Social:** A participação em apresentações voluntárias ou datas festivas/cívicas (ex: Chegada do Papai Noel com os AMEDJs, Solenidade da ALESP) proporciona visibilidade e prática de palco, mas não pode consumir ou rebaixar a prioridade do jovem na fila de feiras e eventos corporativos remunerados (R$ 200,00).
+
+### 7.5 Especialidades e Múltiplas Trilhas de Capacitação (`candidatos_especialidades`)
+- **Tabela Centralizadora:** `candidatos_especialidades` armazena as qualificações técnicas dos atendentes (`candidato_id`, `especialidade`, `turma`, `observacao`, `criado_em`).
+- **Trilhas Ativas Cadastradas:**
+  - `AMEDJ`: Formandos dos Cursos de DJ para Eventos (Turmas 1, 2, 3 e participações oficiais na mesa de som).
+  - `FOTOGRAFIA`: Formandos das Turmas de Fotografia SENAI (Turma 1 - 2025 e Turma 2 - 2026).
+  - `RECEPCAO`: Atendentes gerais de recepção e credenciamento em feiras corporativas.
+- **Regra de Conclusão e Habilitação:** Apenas alunos que concluíram a carga horária e atividades práticas recebem a tag da especialidade. Alunos não concluintes ou descontinuados por razões médicas/adaptação (ex: caso Cibele Andaluz) não recebem a habilitação técnica.
+- **Rodízios Independentes por Especialidade:** Eventos que demandem habilitações específicas (ex: 4 DJs no Morumbi Town) filtram os candidatos aptos em `candidatos_especialidades`, mantendo a transparência e equidade técnica.
 
 ```mermaid
 flowchart TD
@@ -135,8 +144,8 @@ flowchart TD
     B -->|"Curso / Treinamento"| C["Chamada por Aula (Aula 1, 2, 3, 4)"]
     C --> D["Cálculo de Frequência (%)"]
     D --> E{"Frequência >= 75%?"}
-    E -->|"Sim"| F["Certificado de Conclusão Pleno"]
-    E -->|"Não"| G["Declaração de Horas Parciais (com Ressalva)"]
+    E -->|"Sim"| F["Certificado + Tag Especialidade (candidatos_especialidades)"]
+    E -->|"Não"| G["Declaração de Horas (Sem Habilitação)"]
     C --> H["Rodízio de Trabalho Congelado (0)"]
     
     B -->|"Trabalho / Feira"| I["Chamada por Turno (Diária R$ 200,00)"]

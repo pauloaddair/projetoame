@@ -17,6 +17,19 @@ relacionados:
 
 # Histórico de Trabalho - Projeto AME
 
+- **07/11/2026 - Estruturação de Múltiplas Trilhas de Especialidades (`candidatos_especialidades`), Mapeamento de FOTOGRAFIA SENAI e Registro da ALESP:**
+    - **Criação da Tabela Centralizadora de Especialidades (`candidatos_especialidades`):**
+        - Criada a tabela tanto na VPS1 (produção) quanto no MySQL local, com campos `id`, `candidato_id`, `especialidade`, `data_capacitacao`, `turma`, `observacao`, `criado_em` e constraint única (`candidato_id`, `especialidade`).
+    - **Povoamento das Especialidades Ativas:**
+        - **Trilha AMEDJ (25 formandos vinculados):** Mapeados todos os DJs formados nas turmas 1, 2, 3 e participações oficiais em mesa de som (Caio Camargo, Caio Henrique, Daniel Chusyd, Danielle Carnavale, Felippe Vieira, Giovana Monden, Isabelle Maia, Isadora Brigo, João Paulo Marques, Juliana Bessa, Larissa Pelarin, Leandro Cunha, Leandro Palhares, Luiz Guilherme, Matheus Gabrielli, Paulo de Souza, Raphael Konno, Anna Gabriela, Henry Dal Zotto, João Paulo Moreira, Lucas Antongiovanni, Marcella Provenzano, Patrick Gibim, Carolina Kanashiro, Alessandra Chiocchetti).
+        - **Trilha FOTOGRAFIA SENAI (13 formandos vinculados):**
+            - *Turma 1 - SENAI (Set/Out 2025 - Evento #29):* Isadora Brigo (69), João Paulo Moreira Rodrigues Leite (221), Leandro Ferreira Palhares (204), Luiz Renato Justo Daniel (45), Marcella Provenzano Daniel (106).
+            - *Turma 2 - SENAI (Fev/Mai 2026 - Eventos #31 e #32):* Beatriz vitória de Jesus Rocha (233), Carolina Kanashiro Silva (104), Gustavo Henrique Albuquerque Caiado (71), Juliana Bessa Adorno (14), Lucas Andrade Antongiovanni (231), Patrick Romano Gibim (234), Pedro Cardeal Salvadori (209), Rafaela Fiori Ramos (91).
+            - *Exclusão por Não Conclusão:* Aluna Cibele Andaluz E Dias (26) não concluiu o curso por motivos de saúde e adaptação, não recebendo a habilitação técnica, conforme diretriz da coordenação.
+    - **Registro Retroativo da Solenidade ALESP 20/03/2026 (`eventos_marcados` / `horarios`):**
+        - Cadastrada a ALESP como parceiro institucional na tabela `empresas`.
+        - Cadastrado o Evento #78 na VPS1 (e #69 no Local) *"Solenidade ALESP - Dia Internacional da Síndrome de Down"* com horário #204 (18:00 às 21:00, 7 vagas, valor R$ 0,00, voluntário, `status_evento = 'realizado'`, `rodizio_processado = 1`), preservando a imunidade de fila e documentando a apresentação histórica dos AMEDJs e discurso solene no Plenário 9 de Julho.
+
 - **07/11/2026 - Cadastro de Novo Evento: Chegada do Papai Noel no Morumbi Town (AMEDJs) & Atualização da Downlândia:**
     - **Criação do Evento #77 (`eventos_marcados`):**
         - Cadastrado o evento *"Chegada do Papai Noel no Morumbi Town - AMEDJs"* (`id: 77`, slug: `chegada-papai-noel-morumbi-town-2026`) agendado para **14/11/2026 das 13:30 às 16:00** no Morumbi Town Shopping (Av. Giovanni Gronchi, 5930).
