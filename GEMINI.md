@@ -41,7 +41,7 @@ skills:
 | **AGO 2026**    | 🏛️ **Convocada para 17/10/2026 (Híbrida — SENAI / Google Meet)** — Edital publicado em `/edital_ago_2026` em 07/10/2026 |
 | **Governança**  | Estatuto integral (38 arts.) em `ESTATUTO_VIGENTE_TEXTO_INTEGRAL.md` · reforma proposta em `ANALISE_ESTATUTO_E_REFORMA_2026.md` · Edital formal em `EDITAL_CONVOCACAO_AGO_17OUT2026.md` |
 | **Domínios**    | `projetoame.org`, `abiat.org.br`, `projetoame.ong.br`, `projetoame.org.br`, `amedjs.ong.br`, `lovecoffee.ong.br` |
-| **Última Atualização** | 07/11/2026: Auditoria de formulário de disponibilidade (/atendentes), detecção de IP real (Cloudflare), bloqueio de página sem eventos e trava anti-duplo clique com comprovante explicativo no e-mail |
+| **Última Atualização** | 07/11/2026: Cadastrado evento #77 (Chegada do Papai Noel no Morumbi Town - AMEDJs p/ 14/11 das 13:30 às 16:00, 4 vagas voluntárias a convite da Downlândia / Pâmela Galvão) com abertura na página /atendentes |
 
 ### 🖥️ Ambiente Local (SOHO)
 | Campo         | Valor                                                                   |

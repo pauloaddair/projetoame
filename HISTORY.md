@@ -17,6 +17,19 @@ relacionados:
 
 # Histórico de Trabalho - Projeto AME
 
+- **07/11/2026 - Cadastro de Novo Evento: Chegada do Papai Noel no Morumbi Town (AMEDJs) & Atualização da Downlândia:**
+    - **Criação do Evento #77 (`eventos_marcados`):**
+        - Cadastrado o evento *"Chegada do Papai Noel no Morumbi Town - AMEDJs"* (`id: 77`, slug: `chegada-papai-noel-morumbi-town-2026`) agendado para **14/11/2026 das 13:30 às 16:00** no Morumbi Town Shopping (Av. Giovanni Gronchi, 5930).
+        - Apresentação de 30 minutos (14:30 às 15:00) com 1h de antecedência para montagem/passagem de som com o DJ Pedro Vieira e desmobilização.
+        - Apresentação voluntária (sem remuneração, diária R$ 0,00).
+        - Vinculada a imagem existente do shopping (`imagem_id: 98` - `img/morumbi_town.jpg`) e link do Google Maps.
+    - **Criação do Turno de Disponibilidade (`horarios`):**
+        - Criado o horário `id: 203` associado ao evento 77 e à empresa 350, configurado com **4 vagas** para *"apresentação AME DJ"* em status aberto (`preenchido = 0`), entrando no ar imediatamente em `https://projetoame.org/atendentes`.
+    - **Atualização do Parceiro DOWNLANDIA (`empresas` e `contatos`):**
+        - Empresa ID 350 atualizada com o contato principal da **Pâmela Galvão (Pâm)** — WhatsApp/Tel: `(11) 94792-4609`, cargo Coordenadora, marcando `is_parceiro = 1` e `is_contratante = 1`.
+        - Na tabela `contatos`, foi preservado o histórico anterior (`LUIS HENRIQUE MENEGUELLI 08794832889`) e registrado o novo contato formal da Pâmela Galvão, suportando múltiplos contatos por contratante.
+        - Sincronização executada na VPS1 (produção) e replicada na base local.
+
 - **07/11/2026 - Auditoria de Envio de Formulário, Detecção de IP Real e Blindagem de Disponibilidade (`pages/atendentes.php`):**
     - **Diagnóstico do Incidente:** Usuário relatou o recebimento de 4 e-mails consecutivos da atendente Senielly Costa Silva (responsável Maria Cicera Alves Da Silva) com bloco de disponibilidade vazio e IP `191.101.235.83`. A responsável havia entrado em contato perguntando o motivo de ter recebido aquela mensagem.
     - **Causas Raiz Identificadas:**
