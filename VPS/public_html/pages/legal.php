@@ -105,11 +105,12 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 	$body = ' <strong>Nome: '.$atendente.'</strong><br>'; // Nomes do atendente
 	$body .= ' <strong>Responsavel: '.$resp.'</strong><br>'; // Nomes dos noivos
 	$body .= "<a href='https://projetoame.org/".$arquivo."'>Autorização</a><br>";
-	$body .= '<br><hr> DADOS DE AUDITORIA:<br>IP: '.$_SERVER['SERVER_ADDR'].'<br>'; // IP do visitante
-	$body .= ' Navegador: '.$_SERVER['HTTP_USER_AGENT'].'<br>'; // IP do visitante
+	$ip_visitante = function_exists('obter_ip_visitante') ? obter_ip_visitante() : ($_SERVER['HTTP_CF_CONNECTING_IP'] ?? $_SERVER['REMOTE_ADDR']);
+	$body .= '<br><hr> DADOS DE AUDITORIA:<br>IP: '.htmlspecialchars($ip_visitante).'<br>'; // IP do visitante
+	$body .= ' Navegador: '.htmlspecialchars($_SERVER['HTTP_USER_AGENT'] ?? 'Não informado').'<br>'; // User Agent
 	$body .= ' Enviado em: '. date('d/m/Y H:i').'<br>'; // Texto da mensagem
 		$message = $body;
-	$dados['server'] = $_SERVER['SERVER_ADDR'];
+	$dados['server'] = $ip_visitante;
 	$dados['agent'] = $_SERVER['HTTP_USER_AGENT'];
 	$dados['data_atual'] = date('d/m/Y H:i');
 	if (mail($to,$subject,$message, implode("\r\n", $headers))) {

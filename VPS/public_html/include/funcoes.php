@@ -557,4 +557,22 @@ function chave($d = 3){
         }
     }
 
+    /**
+     * Retorna o IP real do visitante considerando Cloudflare e proxies reversos
+     */
+    if (!function_exists('obter_ip_visitante')) {
+        function obter_ip_visitante() {
+            $ip = $_SERVER['HTTP_CF_CONNECTING_IP'] 
+                ?? $_SERVER['HTTP_X_FORWARDED_FOR'] 
+                ?? $_SERVER['REMOTE_ADDR'] 
+                ?? 'IP não identificado';
+
+            if (strpos($ip, ',') !== false) {
+                $ips = explode(',', $ip);
+                $ip = trim($ips[0]);
+            }
+            return $ip;
+        }
+    }
+
 ?>

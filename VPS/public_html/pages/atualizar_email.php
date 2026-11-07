@@ -76,8 +76,9 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                         $body .= "<li><strong>Novo E-mail:</strong> " . $email_novo . "</li>";
                         $body .= "</ul>";
                         $body .= "<hr><p><strong>Dados de Auditoria:</strong></p>";
-                        $body .= "<ul><li><strong>IP:</strong> " . $_SERVER['SERVER_ADDR'] . "</li>";
-                        $body .= "<li><strong>Navegador:</strong> " . $_SERVER['HTTP_USER_AGENT'] . "</li>";
+                        $ip_visitante = function_exists('obter_ip_visitante') ? obter_ip_visitante() : ($_SERVER['HTTP_CF_CONNECTING_IP'] ?? $_SERVER['REMOTE_ADDR']);
+                        $body .= "<ul><li><strong>IP:</strong> " . htmlspecialchars($ip_visitante) . "</li>";
+                        $body .= "<li><strong>Navegador:</strong> " . htmlspecialchars($_SERVER['HTTP_USER_AGENT'] ?? 'Não informado') . "</li>";
                         $body .= "<li><strong>Data/Hora:</strong> " . date('d/m/Y H:i:s') . "</li></ul>";
 
                         $mail->Body = $body;

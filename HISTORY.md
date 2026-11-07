@@ -17,6 +17,21 @@ relacionados:
 
 # Histórico de Trabalho - Projeto AME
 
+- **07/11/2026 - Auditoria de Envio de Formulário, Detecção de IP Real e Blindagem de Disponibilidade (`pages/atendentes.php`):**
+    - **Diagnóstico do Incidente:** Usuário relatou o recebimento de 4 e-mails consecutivos da atendente Senielly Costa Silva (responsável Maria Cicera Alves Da Silva) com bloco de disponibilidade vazio e IP `191.101.235.83`. A responsável havia entrado em contato perguntando o motivo de ter recebido aquela mensagem.
+    - **Causas Raiz Identificadas:**
+        1. **Falso IP no Log de Auditoria:** O script utilizava `$_SERVER['SERVER_ADDR']`, imprimindo o IP do próprio servidor de hospedagem Hostinger da VPS1 (`srv775980.hstgr.cloud`), mascarando o visitante real (um celular Android via Google Chrome).
+        2. **Disparo Quádruplo por Cliques Múltiplos:** O botão "Enviar" não possuía trava de duplo clique nem desabilitação no client-side; devido à latência da conexão SMTP autenticada TLS (2-3s), o usuário tocou repetidamente no botão.
+        3. **Falta de Contexto no E-mail ao Responsável:** O formulário envia cópia automática para o e-mail cadastrado, porém sem aviso explícito de que se tratava de um comprovante automatizado gerado por ação no site, levando a mãe a acreditar que se tratava de um contato manual da coordenação.
+        4. **Formulário Ativo sem Eventos:** O formulário permitia submissão mesmo quando nenhum evento futuro estava disponível na grade.
+    - **Melhorias e Blindagens Implementadas:**
+        - **Função Global de Resolução de IP (`include/funcoes.php`):** Criada `obter_ip_visitante()` com priorização de `HTTP_CF_CONNECTING_IP` (Cloudflare), `HTTP_X_FORWARDED_FOR` e `REMOTE_ADDR`. Propagada a correção também para `pages/atualizar_email.php` e `pages/legal.php`.
+        - **Bloqueio de Formulário sem Eventos:** Caso não existam eventos ativos (`final >= CURDATE()`), a página exibe o aviso institucional *"Nenhum evento programado. Aguarde nova programação"* e oculta completamente o `<form>` e os campos de envio. No backend, requisições POST sem eventos ativos são sumariamente rejeitadas.
+        - **Validação de Seleção Mínima de Horário:** Bloqueia submissão se nenhum horário for marcado, tanto no front-end (alerta JS) quanto no PHP, impedindo gravações vazias ou e-mails em branco.
+        - **Trava Anti-Múltiplos Cliques:** Desabilitação imediata do botão ao enviar com indicador visual de progresso (*spinner* + "Enviando...").
+        - **Clareza no E-mail de Confirmação:** Inclusão de banner no topo destacando *"Comprovante de envio pelo site — Recebemos através do site projetoame.org o registro de disponibilidade para o atendente..."* e assunto com prefixo explícito `[Projeto AME] Comprovante de Disponibilidade: {Nome}`.
+    - **Deploy & Homologação:** Arquivos validados com `php -l`, implantados via SCP na VPS1 (`projetoame.org`), permissões ajustadas (`chown projetoame:projetoame`) e testados em produção com resposta HTTP 200 limpa e mensagem de agenda vazia ativa.
+
 - **09/10/2026 - Envio de Proposta à FCEM e Correção/Modernização da Rota `/eventos`:**
     - **Articulação com a FCEM (FEBRATÊXTIL):** Concluído e enviado o e-mail institucional ao Sr. Ricardo (Gerente de Projetos Especiais da FCEM - `ricardo@fcem.com.br`), com cópia para Regina e Paulo Addair, formalizando o histórico de parceria na FEBRATÊXTIL e detalhando a proposta de capacitação dos jovens do Projeto AME em modelagem/desfiles de moda inclusiva.
     - **Diagnóstico e Correção da Rota `/eventos`:**
